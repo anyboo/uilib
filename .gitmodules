@@ -1,3 +1,6 @@
 [submodule "library"]
 	path = library
 	url = https://github.com/duilib/duilib.git
+[submodule "OBS"]
+	path = OBS
+	url = https://github.com/jp9000/OBS.git
