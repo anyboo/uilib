@@ -24,7 +24,8 @@ public:
 				return;
 			}
 			if (msg.pSender->GetName() == _T("minbtn")) {
-				return;
+				SendMessage(WM_SYSCOMMAND, SC_MINIMIZE, 0);
+					return;
 			}
 
 			if (msg.pSender->GetName() == _T("btlz")) {
@@ -177,7 +178,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 
 	CRecord* pFrame = new CRecord();
     if( pFrame == NULL ) return 0;
-	pFrame->Create(NULL, NULL, UI_WNDSTYLE_DIALOG, 0);
+	pFrame->Create(NULL, NULL, UI_WNDSTYLE_DIALOG, WS_EX_WINDOWEDGE | WS_EX_ACCEPTFILES);
     pFrame->CenterWindow();
     pFrame->ShowWindow(true);
     CPaintManagerUI::MessageLoop();
