@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "flash10a.tlh"
+//#include "flash10a.tlh"
 
 class CRecord : public CWindowWnd, public INotifyUI
 {
@@ -29,40 +29,25 @@ public:
 			}
 
 			if (msg.pSender->GetName() == _T("btlz")) {
-				MessageBox(NULL, "录制", NULL, 0);
+				MessageBox(NULL, _T("Record"), _T("message"), MB_OK);
 			}
 			if (msg.pSender->GetName() == _T("btpmbh")) {
-				MessageBox(NULL, "屏幕捕获", NULL, 0);
+				MessageBox(NULL, _T("Record Capture"), _T("message"), MB_OK);
 			}
 			if (msg.pSender->GetName() == _T("btlzqy")) {
-				MessageBox(NULL, "录制区域", NULL, 0);
+				MessageBox(NULL, _T("Record Area"), _T("message"), MB_OK);
 			}
 			if (msg.pSender->GetName() == _T("btopen")) {
-				MessageBox(NULL, "打开", NULL, 0);
+				MessageBox(NULL, _T("open"), _T("message"), MB_OK);
 			}
 			if (msg.pSender->GetName() == _T("btencode")) {
-				MessageBox(NULL, "编码", NULL, 0);
+				MessageBox(NULL, _T("coding"), _T("message"), MB_OK);
 			}
 			if (msg.pSender->GetName() == _T("btvoice")) {
-				MessageBox(NULL, "声音", NULL, 0);
+				MessageBox(NULL, _T("sound"), _T("message"), MB_OK);
 			}
 			if (msg.pSender->GetName() == _T("btlzyx")) {
-				MessageBox(NULL, "录制游戏", NULL, 0);
-			}
-		}
-		else if (msg.sType == _T("showactivex")) {
-			if (msg.pSender->GetName() != _T("flash")) return;
-			IShockwaveFlash* pFlash = NULL;
-			CActiveXUI* pActiveX = static_cast<CActiveXUI*>(msg.pSender);
-			pActiveX->GetControl(IID_IUnknown, (void**)&pFlash);
-			if (pFlash != NULL) {
-				pFlash->put_WMode(_bstr_t(_T("Transparent")));
-				pFlash->put_Movie(_bstr_t(CPaintManagerUI::GetInstancePath() + _T("\\skin\\FlashRes\\test.swf")));
-				pFlash->DisableLocalSecurity();
-				pFlash->put_AllowScriptAccess(L"always");
-				BSTR response;
-				pFlash->CallFunction(L"<invoke name=\"setButtonText\" returntype=\"xml\"><arguments><string>Click me!</string></arguments></invoke>", &response);
-				pFlash->Release();
+				MessageBox(NULL, _T("Record Game"), _T("message"), MB_OK);
 			}
 		}
 	}
