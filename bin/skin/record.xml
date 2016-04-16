@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="512,108" caption="0,0,0,30" roundcorner="4,4" >
+	<Font shared="true" id="0" name="微软雅黑" size="12" bold="false" />
+	<VerticalLayout bkimage="file='record/bg_above.png'">
+		<HorizontalLayout height="30" >
+			<Label width="20" height="20" />
+			<Label text="  录屏工具" textcolor="#FFFFFFFF" font="0" width="412" />
+			<Button name="minbtb" width="35" height="19" padding="1,5,1,6" tooltip="最小化" normalimage="file='record/btn_min_normal.png' mask='#00FFFFFF'" hotimage="file='record/btn_min_hot.png'" pushedimage="file='record/btn_min_pushed.png'"/>
+			<Button name="closebtn" width="35" height="19" padding="1,5,3,6" tooltip="点击这里直接退出游戏" normalimage="file='record/btn_close_normal.png'" hotimage="file='record/btn_close_hot.png'" pushedimage="file='record/btn_close_pushed.png'"/>
+		</HorizontalLayout>
+		<HorizontalLayout bkimage="file='record/bg.png'" >
+			<Control bkcolor="#FF393939" width="5" />
+			<HorizontalLayout width="68"  padding="10,5,10,5" >
+				<VerticalLayout width="48" >
+					<Button name="btlz" normalimage="file='record/movie.png'" height="48" />
+					<Label text="录制" align="center" font="0" height="15" />
+				</VerticalLayout>
+				<Combo width="14" dropboxsize="100,50" bkimage="file='record/Combo_ver.png'" >
+					<ListLabelElement text="select1" width="50" />
+					<ListLabelElement text="select2" width="50" />
+				</Combo>
+			</HorizontalLayout>
+			<HorizontalLayout width="410" bkimage="file='record/bg.png'" >
+				<VerticalLayout padding="10,5,10,5" width="48" >
+					<Button name="btpmbh" normalimage="file='record/display.png'" height="48" />
+					<Label text="屏幕捕获" align="center" font="0" height="15" />
+				</VerticalLayout>
+				<VerticalLayout padding="10,5,10,5" width="48" >
+					<Button name="btlzqy" normalimage="file='record/area.png'" height="48" />
+					<Label text="录制区域" align="center" font="0" height="15" />
+				</VerticalLayout>
+				<VerticalLayout padding="10,5,10,5" width="48" >
+					<Button name="btopen" normalimage="file='record/folder.png'" height="48" />
+					<Label text="打开" align="center" font="0" height="15" />
+				</VerticalLayout>
+				<VerticalLayout padding="10,5,10,5" width="48" >
+					<Button name="btencode" normalimage="file='record/coding.png'" height="48" />
+					<Label text="编码" align="center" font="0" height="15" />
+				</VerticalLayout>
+				<VerticalLayout padding="10,5,10,5" width="48" >
+					<Button name="btvoice" normalimage="file='record/sound.png'" height="48" />
+					<Label text="声音" align="center" font="0" height="15" />
+				</VerticalLayout>
+				<VerticalLayout padding="10,5,5,5" width="48" >
+					<Button name="btlzyx" normalimage="file='record/games.png'" height="48" />
+					<Label text="录制游戏" align="center" font="0" height="15" />
+				</VerticalLayout>
+			</HorizontalLayout>
+			<Control bkcolor="#FF393939" width="20" />
+		</HorizontalLayout>
+		<Control bkcolor="#FF393939" height="5" />
+	</VerticalLayout>		
+</Window>
