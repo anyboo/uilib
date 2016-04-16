@@ -4,3 +4,6 @@
 [submodule "OBS"]
 	path = OBS
 	url = https://github.com/jp9000/OBS.git
+[submodule "JSON"]
+	path = JSON
+	url = https://github.com/miloyip/rapidjson.git
