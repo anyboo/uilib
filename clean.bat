@@ -1,5 +1,6 @@
 @echo off
 setlocal
+call "%VS120COMNTOOLS%vsvars32.bat
 MSBUILD TopUI.sln /t:Clean /p:Configuration=Debug
 MSBUILD TopUI.sln /t:Clean /p:Configuration=Release
 MSBUILD TopUI.sln /t:Clean /p:Configuration=UnicodeDebug
