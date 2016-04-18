@@ -5,7 +5,7 @@
 		<HorizontalLayout height="30" >
 			<Label width="20" height="20" />
 			<Label text="  录屏工具" textcolor="#FFFFFFFF" font="0" width="412" />
-			<Button name="minbtb" width="35" height="19" padding="1,5,1,6" tooltip="最小化" normalimage="file='record/btn_min_normal.png' mask='#00FFFFFF'" hotimage="file='record/btn_min_hot.png'" pushedimage="file='record/btn_min_pushed.png'"/>
+			<Button name="minbtn" width="35" height="19" padding="1,5,1,6" tooltip="最小化" normalimage="file='record/btn_min_normal.png' mask='#00FFFFFF'" hotimage="file='record/btn_min_hot.png'" pushedimage="file='record/btn_min_pushed.png'"/>
 			<Button name="closebtn" width="35" height="19" padding="1,5,3,6" tooltip="点击这里直接退出游戏" normalimage="file='record/btn_close_normal.png'" hotimage="file='record/btn_close_hot.png'" pushedimage="file='record/btn_close_pushed.png'"/>
 		</HorizontalLayout>
 		<HorizontalLayout bkimage="file='record/bg.png'" >
