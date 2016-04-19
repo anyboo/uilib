@@ -2,6 +2,9 @@
 //
 
 #include "stdafx.h"
+#include <wtypes.h>
+#include <shellapi.h>
+#include "resource.h"
 //#include "flash10a.tlh"
 
 class CRecord : public CWindowWnd, public INotifyUI
@@ -129,6 +132,44 @@ public:
 		return 0;
 	}
 
+	LRESULT OnDropFiles(UINT uMsg, HDROP hDrop, LPARAM lParam, BOOL& bHandled)
+	{
+		WORD wNumFilesDropped = DragQueryFile(hDrop, -1, NULL, 0);
+		WORD wPathnameSize = 0;
+		LPSTR lpFileName = NULL;
+		WCHAR * pFilePathName = NULL;
+		wstring strFirstFile = L"";
+		struct _stat64i32 info;
+		HICON hIcon = NULL;
+
+		//there may be many, but we'll only use the first
+		if (wNumFilesDropped > 0)
+		{
+			wPathnameSize = DragQueryFile(hDrop, 0, NULL, 0);
+			wPathnameSize++;
+			pFilePathName = new WCHAR[wPathnameSize];
+			if (NULL == pFilePathName)
+			{
+				_ASSERT(0);
+				DragFinish(hDrop);
+				return 0;
+			}
+			lpFileName = (LPSTR)pFilePathName;
+
+			::ZeroMemory(pFilePathName, wPathnameSize);
+			DragQueryFile(hDrop, 0, lpFileName, wPathnameSize);
+			hIcon = QueryFileIcon((LPCTSTR)lpFileName);
+
+			//此处打开可以看到是否真的获取到了图标
+//			if (!DrawIcon(GetDC(m_hWnd), 10, 10, hIcon))
+//			{
+//				MessageBox(NULL, _T("fail to get the file icon"), _T("message"), MB_OK);
+//			}
+			delete(pFilePathName);
+		}
+		return 0;
+	}
+
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		LRESULT lRes = 0;
@@ -141,12 +182,25 @@ public:
 		case WM_NCPAINT:       lRes = OnNcPaint(uMsg, wParam, lParam, bHandled); break;
 		case WM_NCHITTEST:     lRes = OnNcHitTest(uMsg, wParam, lParam, bHandled); break;
 		case WM_SIZE:          lRes = OnSize(uMsg, wParam, lParam, bHandled); break;
+		case WM_DROPFILES:	   lRes = OnDropFiles(uMsg, (HDROP)wParam, lParam, bHandled); break;
 		default:
 			bHandled = FALSE;
 		}
 		if (bHandled) return lRes;
 		if (m_pm.MessageHandler(uMsg, wParam, lParam, lRes)) return lRes;
 		return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+	}
+
+	HICON QueryFileIcon(LPCTSTR lpszFilePath)
+	{
+		HICON hIcon = NULL;
+		SHFILEINFO FileInfo;
+		DWORD_PTR dwRet = ::SHGetFileInfo(lpszFilePath, 0, &FileInfo, sizeof(SHFILEINFO), SHGFI_ICON);
+		if (dwRet)
+		{
+			hIcon = FileInfo.hIcon;
+		}
+		return hIcon;
 	}
 
 public:
@@ -164,6 +218,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	CRecord* pFrame = new CRecord();
     if( pFrame == NULL ) return 0;
 	pFrame->Create(NULL, NULL, UI_WNDSTYLE_DIALOG, WS_EX_WINDOWEDGE | WS_EX_ACCEPTFILES);
+	pFrame->SetIcon(IDI_ICON1);
     pFrame->CenterWindow();
     pFrame->ShowWindow(true);
     CPaintManagerUI::MessageLoop();
