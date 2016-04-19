@@ -3,8 +3,8 @@
 	<Font shared="true" id="0" name="微软雅黑" size="12" bold="false" />
 	<VerticalLayout bkimage="file='record/bg_above.png'">
 		<HorizontalLayout height="30" >
-			<Label width="20" height="20" />
-			<Label text="  录屏工具" textcolor="#FFFFFFFF" font="0" width="412" />
+						<VerticalLayout width="20" height="20" bkimage="file='record/camera_LOGO.png'" padding="4,2,5,8" />
+			<Label text="录屏工具" textcolor="#FFFFFFFF" font="0" width="401" />
 			<Button name="minbtn" width="35" height="19" padding="1,5,1,6" tooltip="最小化" normalimage="file='record/btn_min_normal.png' mask='#00FFFFFF'" hotimage="file='record/btn_min_hot.png'" pushedimage="file='record/btn_min_pushed.png'"/>
 			<Button name="closebtn" width="35" height="19" padding="1,5,3,6" tooltip="点击这里直接退出游戏" normalimage="file='record/btn_close_normal.png'" hotimage="file='record/btn_close_hot.png'" pushedimage="file='record/btn_close_pushed.png'"/>
 		</HorizontalLayout>
@@ -15,6 +15,7 @@
 					<Button name="btlz" normalimage="file='record/movie.png'" height="48" />
 					<Label text="录制" align="center" font="0" height="15" />
 				</VerticalLayout>
+				<Control width="5" />
 				<Combo width="14" dropboxsize="100,50" bkimage="file='record/Combo_ver.png'" >
 					<ListLabelElement text="select1" width="50" />
 					<ListLabelElement text="select2" width="50" />
