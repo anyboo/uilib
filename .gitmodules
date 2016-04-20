@@ -7,3 +7,6 @@
 [submodule "JSON"]
 	path = JSON
 	url = https://github.com/miloyip/rapidjson.git
+[submodule "demo/UKey"]
+	path = demo/UKey
+	url = https://github.com/wwang13/ukey.git
