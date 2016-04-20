@@ -134,39 +134,6 @@ public:
 
 	LRESULT OnDropFiles(UINT uMsg, HDROP hDrop, LPARAM lParam, BOOL& bHandled)
 	{
-		WORD wNumFilesDropped = DragQueryFile(hDrop, -1, NULL, 0);
-		WORD wPathnameSize = 0;
-		LPSTR lpFileName = NULL;
-		WCHAR * pFilePathName = NULL;
-		wstring strFirstFile = L"";
-		struct _stat64i32 info;
-		HICON hIcon = NULL;
-
-		//there may be many, but we'll only use the first
-		if (wNumFilesDropped > 0)
-		{
-			wPathnameSize = DragQueryFile(hDrop, 0, NULL, 0);
-			wPathnameSize++;
-			pFilePathName = new WCHAR[wPathnameSize];
-			if (NULL == pFilePathName)
-			{
-				_ASSERT(0);
-				DragFinish(hDrop);
-				return 0;
-			}
-			lpFileName = (LPSTR)pFilePathName;
-
-			::ZeroMemory(pFilePathName, wPathnameSize);
-			DragQueryFile(hDrop, 0, lpFileName, wPathnameSize);
-			hIcon = QueryFileIcon((LPCTSTR)lpFileName);
-
-			//此处打开可以看到是否真的获取到了图标
-//			if (!DrawIcon(GetDC(m_hWnd), 10, 10, hIcon))
-//			{
-//				MessageBox(NULL, _T("fail to get the file icon"), _T("message"), MB_OK);
-//			}
-			delete(pFilePathName);
-		}
 		return 0;
 	}
 
