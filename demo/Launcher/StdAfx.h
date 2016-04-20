@@ -10,7 +10,9 @@
 #include <windows.h>
 #include <objbase.h>
 
+#include "resource.h"
 #include "DuiLib\UIlib.h"
+
 using namespace DuiLib;
 
 #ifdef _DEBUG

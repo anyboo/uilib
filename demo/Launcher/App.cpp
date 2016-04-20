@@ -11,6 +11,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 {
     CPaintManagerUI::SetInstance(hInstance);
     CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skin") );
+#ifdef _NDEBUG
+	CPaintManagerUI::SetResourceZip(_T("launcher.zip"));
+#endif
 
 	LoadConfiguration();
     HRESULT Hr = ::CoInitialize(NULL);
@@ -19,6 +22,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	Launcher* pFrame = new Launcher();
     if( pFrame == NULL ) return 0;
 	pFrame->Create(NULL, NULL, UI_WNDSTYLE_DIALOG, WS_EX_WINDOWEDGE | WS_EX_ACCEPTFILES);
+	pFrame->SetIcon(IDI_ICON);
     pFrame->CenterWindow();
     pFrame->ShowWindow(true);
     CPaintManagerUI::MessageLoop();
