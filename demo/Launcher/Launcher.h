@@ -10,8 +10,9 @@ protected:
 	LPCTSTR GetWindowClassName() const { return _T("UILauncher"); };
 	UINT GetClassStyle() const { return UI_CLASSSTYLE_DIALOG; };
 	void OnFinalMessage(HWND /*hWnd*/) { delete this; };
-	void Init(){};
+	void Init();
 	void Notify(TNotifyUI& msg);
+	void Add(CDuiString& path);
 
 	LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);

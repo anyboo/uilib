@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Window size="512,108" caption="0,0,0,30" roundcorner="4,4" >
-	<Font shared="true" id="0" name="微软雅黑" size="12" bold="false" />
+<Window size="300,108" caption="0,0,0,30" roundcorner="4,4" >
+	<Font shared="true" id="0" name="微软雅黑" size="14" bold="false" />
 	<VerticalLayout bkimage="file='launcher/bg_above.png'">
 		<HorizontalLayout height="30" >
-			<Label width="20" height="20" />
-			<Label text="  启动器" textcolor="#FFFFFFFF" font="0" width="412" />
-			<Button name="minbtn" width="35" height="19" padding="1,5,1,6" tooltip="最小化" normalimage="file='launcher/btn_min_normal.png' mask='#00FFFFFF'" hotimage="file='launcher/btn_min_hot.png'" pushedimage="file='launcher/btn_min_pushed.png'"/>
-			<Button name="closebtn" width="35" height="19" padding="1,5,3,6" tooltip="点击这里直接退出" normalimage="file='launcher/btn_close_normal.png'" hotimage="file='launcher/btn_close_hot.png'" pushedimage="file='launcher/btn_close_pushed.png'"/>
+      <VerticalLayout width="20" height="20" bkimage="file='launcher/launcher.png'" padding="12,8,-5,6"/>
+			<Label text="  启动器" textcolor="#FFFFFFFF" font="0" width="200" />
+			<Button name="minbtn" width="30" height="19" padding="1,8,1,6" tooltip="最小化" normalimage="file='launcher/btn_min_normal.png' mask='#00FFFFFF'" hotimage="file='launcher/btn_min_hot.png'" pushedimage="file='launcher/btn_min_pushed.png'"/>
+			<Button name="closebtn" width="30" height="19" padding="1,8,3,6" tooltip="点击这里直接退出" normalimage="file='launcher/btn_close_normal.png'" hotimage="file='launcher/btn_close_hot.png'" pushedimage="file='launcher/btn_close_pushed.png'"/>
 		</HorizontalLayout>
 		<HorizontalLayout bkimage="file='launcher/bg.png'" >
 			<Control bkcolor="#FF393939" width="5" />
-			<HorizontalLayout width="68"  padding="10,5,10,5" >
+			<HorizontalLayout width="68"  padding="50,5,50,5" >
 				<VerticalLayout width="48" >
 					<Button name="btlz" normalimage="file='launcher/movie.png'" height="48" />
-					<Label text="程序1" align="center" font="0" height="15" />
+					<Label text="播放器" align="center" font="16" height="15" />
 				</VerticalLayout>
 			</HorizontalLayout>
-			<HorizontalLayout width="410" bkimage="file='launcher/bg.png'" >
+			<HorizontalLayout width="120" bkimage="file='launcher/bg.png'" >
 				<VerticalLayout padding="10,5,10,5" width="48" >
 					<Button name="btpmbh" normalimage="file='launcher/display.png'" height="48" />
-					<Label text="程序2" align="center" font="0" height="15" />
+					<Label text="录屏工具" align="center" font="16" height="15" />
 				</VerticalLayout>
-				<VerticalLayout padding="10,5,10,5" width="48" >
+				<!--<VerticalLayout padding="10,5,10,5" width="48" >
 					<Button name="btlzqy" normalimage="file='launcher/area.png'" height="48" />
 					<Label text="程序3" align="center" font="0" height="15" />
 				</VerticalLayout>
@@ -40,7 +40,7 @@
 				<VerticalLayout padding="10,5,5,5" width="48" >
 					<Button name="btlzyx" normalimage="file='launcher/games.png'" height="48" />
 					<Label text="程序7" align="center" font="0" height="15" />
-				</VerticalLayout>
+				</VerticalLayout>-->
 			</HorizontalLayout>
 			<Control bkcolor="#FF393939" width="20" />
 		</HorizontalLayout>

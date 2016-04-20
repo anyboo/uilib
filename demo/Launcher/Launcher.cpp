@@ -20,10 +20,16 @@ void Launcher::Notify(TNotifyUI& msg)
 		else if (msg.pSender->GetName() == _T("minbtn")) {
 			SendMessage(WM_SYSCOMMAND, SC_MINIMIZE, 0);
 		}
-		else
+		else if (msg.pSender->GetName() == _T("btlz"))
 		{
-			//launcher special app
-			MessageBox(NULL, _T("execute_shell"), _T("shell"), MB_OK);
+			CDuiString path = CPaintManagerUI::GetInstancePath();
+			ShellExecute(NULL, NULL, path + _T("OVPlayer\\OVPlayer.exe"), NULL, NULL, 0);
+
+		}
+		else if (msg.pSender->GetName() == _T("btpmbh"))
+		{
+			CDuiString path = CPaintManagerUI::GetInstancePath();
+			ShellExecute(NULL, NULL, path + _T("ScreenRecord\\ScreenRecord.exe"), NULL, NULL, 0);
 		}
 	}
 }
@@ -106,10 +112,22 @@ LRESULT Launcher::OnDropFiles(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 		DragQueryFile(hDropInfo, c, path, sizeof(path));
 		OutputDebugString(path);
 		OutputDebugString(_T("\n"));
+		//Add(path);
 	}
 
 	DragFinish(hDropInfo);
 	return 0;
+}
+
+void Launcher::Init()
+{
+	//Add(path);
+}
+
+void Launcher::Add(CDuiString& path)
+{
+	//Add path & displayname to configuration
+	//Add link to UI
 }
 
 LRESULT Launcher::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
