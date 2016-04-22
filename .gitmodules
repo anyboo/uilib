@@ -10,3 +10,6 @@
 [submodule "demo/UKey"]
 	path = demo/UKey
 	url = https://github.com/wwang13/ukey.git
+[submodule "Test"]
+	path = Test
+	url = https://github.com/philsquared/Catch.git
