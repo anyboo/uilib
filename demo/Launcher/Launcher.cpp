@@ -117,7 +117,11 @@ LRESULT Launcher::OnDropFiles(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 	WCHAR * pFilePathName = NULL;
 	wstring strFirstFile = L"";
 	HICON hIcon = NULL;
-	LPCSTR pBmpFilename = "tmp.bmp";
+	char cName[16];
+	static int iNum = 0;
+	sprintf(cName, "tmp%d.bmp", iNum++);
+	string strName(cName);
+	LPCSTR pBmpFilename = strName.c_str();
 
 	//there may be many, but we'll only use the first
 	if (wNumFilesDropped > 0)
@@ -138,13 +142,8 @@ LRESULT Launcher::OnDropFiles(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 		hIcon = QueryFileIcon((LPCTSTR)lpFileName);
 		HBITMAP IconHbmp = IconToBitmap(hIcon);
 		SaveBmp(IconHbmp, pBmpFilename);
-		Vacated_position(iDropPos);
+		AddNewLayout(iDropPos, pBmpFilename);
 		remove(pBmpFilename);
-		//此处打开可以看到是否真的获取到了图标
-		//			if (!DrawIcon(GetDC(m_hWnd), 10, 10, hIcon))
-		//			{
-		//				MessageBox(NULL, _T("fail to get the file icon"), _T("message"), MB_OK);
-		//			}
 		delete(pFilePathName);
 	}
 	return 0;
@@ -202,9 +201,7 @@ void Launcher::MapInit()
 void Launcher::AddToMap(LPCTSTR LayoutName)
 {
 	CVerticalLayoutUI* cLyt = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(LayoutName));
-	RECT rPos = cLyt->GetPos();
-	int iCenterPos = (rPos.left + rPos.right) / 2;
-	m_layoutPos[cLyt] = iCenterPos;
+	m_layoutPos[cLyt] = cLyt->GetPos();;
 }
 
 //移动layout,左移，右移
@@ -214,19 +211,61 @@ void Launcher::LayMove(CVerticalLayoutUI* cLyt, int nMove)
 	rPos.left += nMove;
 	rPos.right += nMove;
 	cLyt->SetPos(rPos);
-	m_layoutPos[cLyt] = (rPos.left + rPos.right) / 2;
+	m_layoutPos[cLyt] = rPos;
 }
 
-//空出位置， 把文件拖进来时，空出相应的位置放置新的layout
-void Launcher::Vacated_position(int iPos)
+void Launcher::AddNewLayout(int nPosX, LPCTSTR pFileName)
 {
-	map<CVerticalLayoutUI*, int>::iterator it = m_layoutPos.begin();
-	for (; it != m_layoutPos.end(); ++it)
+	RECT newRect = { 0 };
+	std::map < CVerticalLayoutUI*, RECT> mapTmp;
+	CVerticalLayoutUI* cLyt = new CVerticalLayoutUI;
+	CButtonUI* cBtn = new CButtonUI;
+	CHorizontalLayoutUI* cListLyt = static_cast<CHorizontalLayoutUI*>(m_pm.FindControl(_T("ListLayout")));
+
+	//配置新layout的属性
+	RECT rPad;
+	rPad.left = 0;
+	rPad.right = 0;
+	rPad.top = 5;
+	rPad.bottom = 5;
+	cLyt->SetPadding(rPad);
+	cLyt->SetMaxWidth(68);
+	cLyt->Add(cBtn);
+	cBtn->SetFixedWidth(BUTTON_WIDTH);
+	cBtn->SetFixedHeight(BUTTON_HEIGHT);
+	cBtn->SetBkImage(pFileName);
+
+	//移出后边的layout
+	map<CVerticalLayoutUI*, RECT>::iterator it = m_layoutPos.begin();
+	for (; it != m_layoutPos.end();)
 	{
-		if (it->second > iPos)
+		if ((it->second.left + 34) > nPosX)
 		{
-			LayMove(it->first, CONTROL_LAYOUT_OUT);
+			cListLyt->Remove(it->first, true);
+			mapTmp[it->first] = it->second;
+			m_layoutPos.erase(it++);
 		}
+		else
+		{
+			newRect = it->second;
+			newRect.left += 34;
+			newRect.right += 34;
+			it++;
+		}
+	}
+
+	//添加新layout
+	cListLyt->Add(cLyt);
+	m_layoutPos[cLyt] = newRect;
+
+	//再把移出的layout加回去
+	for (it = mapTmp.begin(); it != mapTmp.end(); ++it)
+	{
+		it->second.left += 68;
+		it->second.right += 68;
+		m_layoutPos[it->first] = it->second;
+		RECT abc = it->second;
+		cListLyt->Add(it->first);
 	}
 }
 

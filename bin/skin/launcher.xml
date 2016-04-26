@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Window size="512,108" caption="0,0,0,30" roundcorner="4,4" >
+<Window size="812,108" caption="0,0,0,30" roundcorner="4,4" >
 	<Font shared="true" id="0" name="微软雅黑" size="12" bold="false" />
 	<VerticalLayout bkimage="file='launcher/bg_above.png'">
 		<HorizontalLayout height="30" >
@@ -16,28 +16,28 @@
 					<Label text="程序1" align="center" font="0" height="15" />
 				</VerticalLayout>
 			</HorizontalLayout>
-			<HorizontalLayout width="410" bkimage="file='launcher/bg.png'" >
-				<VerticalLayout padding="10,5,10,5" width="48" >
+			<HorizontalLayout name="ListLayout" width="610" bkimage="file='launcher/bg.png'" >
+				<VerticalLayout name="lytscreen" padding="10,5,10,5" width="48" >
 					<Button name="btpmbh" normalimage="file='launcher/display.png'" height="48" />
 					<Label text="程序2" align="center" font="0" height="15" />
 				</VerticalLayout>
-				<VerticalLayout padding="10,5,10,5" width="48" >
+				<VerticalLayout name="lytarea" padding="10,5,10,5" width="48" >
 					<Button name="btlzqy" normalimage="file='launcher/area.png'" height="48" />
 					<Label text="程序3" align="center" font="0" height="15" />
 				</VerticalLayout>
-				<VerticalLayout padding="10,5,10,5" width="48" >
+				<VerticalLayout name="lytopen" padding="10,5,10,5" width="48" >
 					<Button name="btopen" normalimage="file='launcher/folder.png'" height="48" />
 					<Label text="程序4" align="center" font="0" height="15" />
 				</VerticalLayout>
-				<VerticalLayout padding="10,5,10,5" width="48" >
+				<VerticalLayout name="lytcode" padding="10,5,10,5" width="48" >
 					<Button name="btencode" normalimage="file='launcher/coding.png'" height="48" />
 					<Label text="程序5" align="center" font="0" height="15" />
 				</VerticalLayout>
-				<VerticalLayout padding="10,5,10,5" width="48" >
+				<VerticalLayout name="lytsound" padding="10,5,10,5" width="48" >
 					<Button name="btvoice" normalimage="file='launcher/sound.png'" height="48" />
 					<Label text="程序6" align="center" font="0" height="15" />
 				</VerticalLayout>
-				<VerticalLayout padding="10,5,5,5" width="48" >
+				<VerticalLayout name="lytgame" padding="10,5,5,5" width="48" >
 					<Button name="btlzyx" normalimage="file='launcher/games.png'" height="48" />
 					<Label text="程序7" align="center" font="0" height="15" />
 				</VerticalLayout>
