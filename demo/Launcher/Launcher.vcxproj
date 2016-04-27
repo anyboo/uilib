@@ -179,7 +179,7 @@
       <TargetMachine>MachineX86</TargetMachine>
       <AdditionalDependencies>duilib_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <UACExecutionLevel>HighestAvailable</UACExecutionLevel>
+      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
       <UACUIAccess>false</UACUIAccess>
       <AdditionalManifestDependencies>
       </AdditionalManifestDependencies>

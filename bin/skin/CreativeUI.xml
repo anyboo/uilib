@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window bkcolor="#11111111" >
+	<Font shared="true" id="0" name="微软雅黑" size="30" bold="false" />
+	<Font shared="true" id="1" name="微软雅黑" size="9" bold="false" />
+	<VerticalLayout >
+		<HorizontalLayout height="45" >
+			<Button width="30" height = "30" bkimage="file='record/back.png'" padding="3,5,5,0" />
+			<VerticalLayout width="65" >
+				<Label height="20" text="abcdefg" textcolor="#FFFFFFFF" font="1" />
+				<Combo text="start" height="20" bkimage="file='record/start.png'" font="1" padding="0,2,0,3" />
+			</VerticalLayout>
+			<Control />
+			<VerticalLayout width="60" >
+				<Label height="25" text="abcdefg" textcolor="#FFFFFFFF" font="1" />
+				<Label height="25" text="abcdefg" textcolor="#FFFFFFFF" font="1" />
+			</VerticalLayout>
+			<Button width="30" height = "30" bkimage="file='record/user.png'" padding="3,5,2,0" />
+			<Control width="2" padding="5,5,5,10" bkcolor="#FFFFFFFF" />
+			<Button width="30" height = "30" bkimage="file='record/set.png'" padding="2,5,2,0" />
+		</HorizontalLayout>
+		<HorizontalLayout >
+			<Control width="50" />
+			<VerticalLayout padding="10,50,10,50" childpadding="10" >
+				<Label height="30" text="metroul demos" textcolor="#FFFFFFFF" font="0" />
+				<HorizontalLayout >
+					<Button bkcolor="#FF0000FF" />
+				</HorizontalLayout>
+				<HorizontalLayout >
+					<Button bkcolor="#FF00FF00" />
+				</HorizontalLayout>
+				<HorizontalLayout childpadding="10" >
+					<Button bkcolor="#FFFF0000" />
+					<Button bkcolor="#FF00FFFF" />
+				</HorizontalLayout>
+			</VerticalLayout>
+			<VerticalLayout padding="10,50,10,50" childpadding="10" >
+				<Control height="30" />
+				<HorizontalLayout >
+					<Button bkcolor="#FFFF00FF" />
+				</HorizontalLayout>
+				<HorizontalLayout childpadding="10" >
+					<Button bkcolor="#FFFFFF00" />
+					<Button bkcolor="#FF000FFF" />
+				</HorizontalLayout>
+				<HorizontalLayout />
+			</VerticalLayout>
+			<Control width="80" />
+			<VerticalLayout padding="10,50,10,50" childpadding="10" >
+				<Label height="30" text="bootstrap metro" textcolor="#FFFFFFFF" font="0" />
+				<HorizontalLayout >
+					<Button bkcolor="#FFE5E694" />
+				</HorizontalLayout>
+				<HorizontalLayout childpadding="10" >
+					<Button bkcolor="#FF123456" />
+					<Button bkcolor="#FF0EDC0F" />
+				</HorizontalLayout>
+				<HorizontalLayout />
+			</VerticalLayout>
+		</HorizontalLayout>
+	</VerticalLayout>		
+</Window>
