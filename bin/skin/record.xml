@@ -16,10 +16,7 @@
 					<Label text="录制" align="center" font="0" height="15" />
 				</VerticalLayout>
 				<Control width="5" />
-				<Combo width="14" dropboxsize="100,50" bkimage="file='record/Combo_ver.png'" >
-					<ListLabelElement text="select1" width="50" />
-					<ListLabelElement text="select2" width="50" />
-				</Combo>
+				<Button name="btnCombo" width="14" bkimage="file='record/Combo_ver.png'" />
 			</HorizontalLayout>
 			<HorizontalLayout width="410" bkimage="file='record/bg.png'" >
 				<VerticalLayout padding="10,5,10,5" width="48" >
@@ -44,7 +41,7 @@
 				</VerticalLayout>
 				<VerticalLayout padding="10,5,5,5" width="48" >
 					<Button name="btlzyx" normalimage="file='record/games.png'" height="48" />
-					<Label text="录制游戏" align="center" font="0" height="15" />
+					<Label text="关于" align="center" font="0" height="15" />
 				</VerticalLayout>
 			</HorizontalLayout>
 			<Control bkcolor="#FF393939" width="20" />

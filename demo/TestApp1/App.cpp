@@ -7,6 +7,7 @@
 #include <map>
 #include "resource.h"
 #include <vector>
+#include "MenuWnd.h"
 //#include "flash10a.tlh"
 using namespace std;
 
@@ -18,6 +19,9 @@ using namespace std;
 #define FONT_SIZE 12
 #define RECODE_LYT_WIDTH 83
 #define LYT_WIDTH 68
+
+#define ComboAdjLeft -20
+#define ComboAdjTop 12
 
 class CRecord : public CWindowWnd, public INotifyUI
 {
@@ -45,6 +49,15 @@ public:
 
 			if (msg.pSender->GetName() == _T("btlz")) {
 				MessageBox(NULL, _T("Record"), _T("message"), MB_OK);
+			}
+			if (msg.pSender->GetName() == _T("btnCombo")) {
+				CVerticalLayoutUI* cLyt = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(_T("btlz")));
+				POINT pt = { cLyt->GetPos().left + ComboAdjLeft, cLyt->GetPos().bottom + ComboAdjTop };
+				ClientToScreen(m_hWnd, &pt);
+
+				CMenuWnd* pMenu = new CMenuWnd();
+				if (pMenu == NULL) { return; }
+				pMenu->Init(msg.pSender, pt);
 			}
 			if (msg.pSender->GetName() == _T("btpmbh")) {
 				MessageBox(NULL, _T("Record Capture"), _T("message"), MB_OK);
