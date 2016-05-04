@@ -8,20 +8,20 @@
 #include "resource.h"
 #include <vector>
 #include "MenuWnd.h"
-//#include "flash10a.tlh"
 using namespace std;
 
-#define CONTROL_LAYOUT_OUT 68
-#define BUTTON_WIDTH 48
-#define BUTTON_HEIGHT 48
-#define LABLE_WIDTH 48
-#define LABLE_HEIGHT 15
-#define FONT_SIZE 12
-#define RECODE_LYT_WIDTH 83
-#define LYT_WIDTH 68
+#define DIALOGUE_ADJ_LEFT -20
+#define DIALOGUE_ADJ_TOP 12
 
-#define ComboAdjLeft -20
-#define ComboAdjTop 12
+#define LYT_TOP 35
+#define LYT_BUTTON 100
+#define LYT_LEFT 5
+#define LYT_RIGHT 512
+
+#define LYT_BK_COLOR 0xFFFF9999
+
+#define PAGE_RECORD 1
+#define PAGE_RECORDING 2
 
 class CRecord : public CWindowWnd, public INotifyUI
 {
@@ -48,14 +48,14 @@ public:
 			}
 
 			if (msg.pSender->GetName() == _T("btlz")) {
-				MessageBox(NULL, _T("Record"), _T("message"), MB_OK);
+				ChangePage();
 			}
 			if (msg.pSender->GetName() == _T("btnCombo")) {
 				CVerticalLayoutUI* cLyt = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(_T("btlz")));
-				POINT pt = { cLyt->GetPos().left + ComboAdjLeft, cLyt->GetPos().bottom + ComboAdjTop };
+				POINT pt = { cLyt->GetPos().left + DIALOGUE_ADJ_LEFT, cLyt->GetPos().bottom + DIALOGUE_ADJ_TOP };
 				ClientToScreen(m_hWnd, &pt);
 
-				CMenuWnd* pMenu = new CMenuWnd();
+				CMenuWnd* pMenu = new CMenuWnd(_T("Combo.xml"));
 				if (pMenu == NULL) { return; }
 				pMenu->Init(msg.pSender, pt);
 			}
@@ -63,19 +63,37 @@ public:
 				MessageBox(NULL, _T("Record Capture"), _T("message"), MB_OK);
 			}
 			if (msg.pSender->GetName() == _T("btlzqy")) {
-				MessageBox(NULL, _T("Record Area"), _T("message"), MB_OK);
+				CVerticalLayoutUI* cLyt = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(_T("btlzqy")));
+				POINT pt = { cLyt->GetPos().left + DIALOGUE_ADJ_LEFT, cLyt->GetPos().bottom + DIALOGUE_ADJ_TOP };
+				ClientToScreen(m_hWnd, &pt);
+
+				CMenuWnd* pMenu = new CMenuWnd(_T("area.xml"));
+				if (pMenu == NULL) { return; }
+				pMenu->Init(msg.pSender, pt);
 			}
 			if (msg.pSender->GetName() == _T("btopen")) {
 				MessageBox(NULL, _T("open"), _T("message"), MB_OK);
 			}
 			if (msg.pSender->GetName() == _T("btencode")) {
-				MessageBox(NULL, _T("coding"), _T("message"), MB_OK);
+				CVerticalLayoutUI* cLyt = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(_T("btencode")));
+				POINT pt = { cLyt->GetPos().left + DIALOGUE_ADJ_LEFT, cLyt->GetPos().bottom + DIALOGUE_ADJ_TOP };
+				ClientToScreen(m_hWnd, &pt);
+
+				CMenuWnd* pMenu = new CMenuWnd(_T("code.xml"));
+				if (pMenu == NULL) { return; }
+				pMenu->Init(msg.pSender, pt);
 			}
 			if (msg.pSender->GetName() == _T("btvoice")) {
-				MessageBox(NULL, _T("sound"), _T("message"), MB_OK);
+				CVerticalLayoutUI* cLyt = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(_T("btvoice")));
+				POINT pt = { cLyt->GetPos().left + DIALOGUE_ADJ_LEFT, cLyt->GetPos().bottom + DIALOGUE_ADJ_TOP };
+				ClientToScreen(m_hWnd, &pt);
+
+				CMenuWnd* pMenu = new CMenuWnd(_T("sound.xml"));
+				if (pMenu == NULL) { return; }
+				pMenu->Init(msg.pSender, pt);
 			}
-			if (msg.pSender->GetName() == _T("btlzyx")) {
-				MessageBox(NULL, _T("Record Game"), _T("message"), MB_OK);
+			if (msg.pSender->GetName() == _T("btabout")) {
+				MessageBox(NULL, _T("版本 V1.0"), _T("关于"), MB_OK);
 			}
 		}
 	}
@@ -90,6 +108,12 @@ public:
 		CDialogBuilder builder;
 		CControlUI* pRoot = builder.Create(_T("record.xml"), (UINT)0, NULL, &m_pm);
 		ASSERT(pRoot && "Failed to parse XML");
+
+		CDialogBuilder builder2;
+		CControlUI* pPage2 = builder2.Create(_T("recording.xml"), (UINT)0, NULL, &m_pm);
+		ASSERT(pRoot && "Failed to parse XML");
+		m_pPage2 = pPage2;
+
 		m_pm.AttachDialog(pRoot);
 		m_pm.AddNotifier(this);
 
@@ -157,53 +181,63 @@ public:
 		return 0;
 	}
 
-	LRESULT OnDropFiles(UINT uMsg, HDROP hDrop, LPARAM lParam, BOOL& bHandled)
+	void OnMouseMove(UINT uMsg, HDROP hDrop, LPARAM lParam, BOOL& bHandled)
 	{
-		if (m_Nbmp == 1)
-			MapInit();
-		//获取拖动文件松开鼠标时的x坐标
-		POINT* ptDropPos = new POINT;
-		DragQueryPoint(hDrop, ptDropPos);	//把文件拖动到的位置存到ptDropPos中
-		int iDropPos = ptDropPos->x;
-		delete(ptDropPos);
-
-		WORD wNumFilesDropped = DragQueryFile(hDrop, -1, NULL, 0);
-		WORD wPathnameSize = 0;
-		LPSTR lpFileName = NULL;
-		WCHAR * pFilePathName = NULL;
-		wstring strFirstFile = L"";
-		HICON hIcon = NULL;
-		
-		char strTmp[20] = { 0 };
-		_itoa(m_Nbmp, strTmp, 2);
-		strcat_s(strTmp, "tem.bmp");
-		LPCSTR pBmpFilename = strTmp;
-		m_Nbmp++;
-		//there may be many, but we'll only use the first
-		if (wNumFilesDropped > 0)
+		POINT pt;
+		GetCursorPos(&pt);
+		ScreenToClient(m_hWnd, &pt);
+		if ( (pt.y < LYT_TOP) || (pt.y > LYT_BUTTON) || (pt.x < LYT_LEFT) || (pt.x >LYT_RIGHT) )
+			pt.x = 0;
+		if (PAGE_RECORD == m_nPageState)
 		{
-			wPathnameSize = DragQueryFile(hDrop, 0, NULL, 0);
-			wPathnameSize++;
-			pFilePathName = new WCHAR[wPathnameSize];
-			if (NULL == pFilePathName)
-			{
-				_ASSERT(0);
-				DragFinish(hDrop);
-				return 0;
-			}
-			lpFileName = (LPSTR)pFilePathName;
-
-			::ZeroMemory(pFilePathName, wPathnameSize);
-			DragQueryFile(hDrop, 0, lpFileName, wPathnameSize);
-			hIcon = QueryFileIcon((LPCTSTR)lpFileName);
-			HBITMAP IconHbmp = IconToBitmap(hIcon);
-			SaveBmp(IconHbmp, pBmpFilename);
-
-			AddLayout(iDropPos, pBmpFilename, lpFileName);
-			remove(pBmpFilename);
-			delete(pFilePathName);
+			SetLytBkColor(_T("lytlz"), pt.x);
+			SetLytBkColor(_T("lytPmbh"), pt.x);
+			SetLytBkColor(_T("lytArea"), pt.x);
+			SetLytBkColor(_T("lytOpen"), pt.x);
+			SetLytBkColor(_T("lytCode"), pt.x);
+			SetLytBkColor(_T("lytSound"), pt.x);
+			SetLytBkColor(_T("lytAbout"), pt.x);
 		}
-		return 0;
+		else
+		{
+			SetLytBkColor(_T("lytpause"), pt.x);
+			SetLytBkColor(_T("lytstop"), pt.x);
+			SetLytBkColor(_T("lytAbout"), pt.x);
+		}
+	}
+
+	void SetLytBkColor(LPCTSTR pLytName, int nPosX)
+	{
+		if (pLytName == _T("lytlz"))
+		{
+			CHorizontalLayoutUI* cLytH = static_cast<CHorizontalLayoutUI*>(m_pm.FindControl(pLytName));
+			CVerticalLayoutUI* cLytLzV = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(_T("lytlzv")));
+			CButtonUI* cBtnCom = static_cast<CButtonUI*>(m_pm.FindControl(_T("btnCombo")));
+			if ((nPosX < cLytH->GetPos().right) && (nPosX > cLytH->GetPos().left))
+			{
+				cLytH->SetBkColor(0xFFDDDDDD);
+				cLytLzV->SetBkColor(LYT_BK_COLOR);
+				cBtnCom->SetBkColor(LYT_BK_COLOR);
+			}
+			else
+			{
+				cLytH->SetBkColor(NULL);
+				cLytLzV->SetBkColor(NULL);
+				cBtnCom->SetBkColor(NULL);
+			}
+		}
+		else
+		{
+			CVerticalLayoutUI* cLytV = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(pLytName));
+			if ((nPosX < cLytV->GetPos().right) && (nPosX > cLytV->GetPos().left))
+			{
+				cLytV->SetBkColor(LYT_BK_COLOR);
+			}
+			else
+			{
+				cLytV->SetBkColor(NULL);
+			}
+		}
 	}
 
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -218,7 +252,7 @@ public:
 		case WM_NCPAINT:       lRes = OnNcPaint(uMsg, wParam, lParam, bHandled); break;
 		case WM_NCHITTEST:     lRes = OnNcHitTest(uMsg, wParam, lParam, bHandled); break;
 		case WM_SIZE:          lRes = OnSize(uMsg, wParam, lParam, bHandled); break;
-		case WM_DROPFILES:	   lRes = OnDropFiles(uMsg, (HDROP)wParam, lParam, bHandled); break;
+		case WM_MOUSEMOVE:	   OnMouseMove(uMsg, (HDROP)wParam, lParam, bHandled); break;
 		default:
 			bHandled = FALSE;
 		}
@@ -227,333 +261,74 @@ public:
 		return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 	}
 
-	HICON QueryFileIcon(LPCTSTR lpszFilePath)
+	void ChangePage()
 	{
-		HICON hIcon = NULL;
-		SHFILEINFO FileInfo;
-		DWORD_PTR dwRet = ::SHGetFileInfo(lpszFilePath, 0, &FileInfo, sizeof(SHFILEINFO), SHGFI_ICON);
-		if (dwRet)
+		static int i = 0;
+		if (0 == i)
+			m_pPage1 = static_cast<CHorizontalLayoutUI*>(m_pm.FindControl(_T("page1")));
+		CHorizontalLayoutUI* cSelectPage = static_cast<CHorizontalLayoutUI*>(m_pm.FindControl(_T("selectPage")));
+		if (i % 2 == 0)
 		{
-			hIcon = FileInfo.hIcon;
+			cSelectPage->Remove(m_pPage1, true);
+			cSelectPage->Add(m_pPage2);
+			m_nPageState = PAGE_RECORDING;
 		}
-		return hIcon;
+		else
+		{
+			cSelectPage->Remove(m_pPage2, true);
+			cSelectPage->Add(m_pPage1);
+			m_nPageState = PAGE_RECORD;
+		}
+		i++;
 	}
 
-	void MapInit()
+	void ScreenToSound()
 	{
 		static int i = 0;
 		if (0 == i)
 		{
-			AddToMap(_T("lytscreen"));
-			AddToMap(_T("lytarea"));
-			AddToMap(_T("lytopen"));
-			AddToMap(_T("lytcode"));
-			AddToMap(_T("lytsound"));
-			AddToMap(_T("lytgame"));
-			i++;
+			m_JustScreenLyt[0] = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(_T("lytPmbh")));
+			m_JustScreenLyt[1] = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(_T("lytArea")));
+			m_JustScreenLyt[2] = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(_T("lytOpen")));
+			m_JustScreenLyt[3] = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(_T("lytCode")));
+			m_JustScreenLyt[4] = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(_T("lytSound")));
+			m_JustScreenLyt[5] = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(_T("lytAbout")));
 		}
+
+		CVerticalLayoutUI* cLyt = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(_T("lytWork")));
+		cLyt->Remove(m_JustScreenLyt[0], true);
+		cLyt->Remove(m_JustScreenLyt[1], true);
+
+		i++;
 	}
 
-	void AddToMap(LPCTSTR LayoutName)
+	void SoundToScreen()
 	{
-		CVerticalLayoutUI* cLyt = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(LayoutName));
-		m_AllLyt.push_back(cLyt);
-	}
+		CVerticalLayoutUI* cLyt = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(_T("lytWork")));
+		cLyt->Add(m_JustScreenLyt[0]);
+		cLyt->Add(m_JustScreenLyt[1]);
 
-	void AddLayout(int nPosX, LPCTSTR pFileName, const char* strName)
-	{
-		CVerticalLayoutUI* cLyt = new CVerticalLayoutUI;
-		CButtonUI* cBtn = new CButtonUI;
-		CLabelUI* Lab = new CLabelUI;
-		CHorizontalLayoutUI* cListLyt = static_cast<CHorizontalLayoutUI*>(m_pm.FindControl(_T("ListLayout")));
-		cListLyt->Add(cLyt);
-		cLyt->Add(cBtn);
-		cLyt->Add(Lab);
-		cBtn->SetFixedWidth(BUTTON_WIDTH);
-		cBtn->SetFixedHeight(BUTTON_HEIGHT);
-		cBtn->SetBkImage(pFileName);
+		cLyt->Remove(m_JustScreenLyt[2], true);
+		cLyt->Add(m_JustScreenLyt[2]);
 
-		LPCTSTR str = strName;
-		Lab->SetText(str);
-		Lab->SetFont(FONT_SIZE);
-		Lab->SetFixedWidth(LABLE_WIDTH);
-		Lab->SetFixedHeight(LABLE_HEIGHT);
+		cLyt->Remove(m_JustScreenLyt[3], true);
+		cLyt->Add(m_JustScreenLyt[3]);
 
-		UINT num = (nPosX - RECODE_LYT_WIDTH) / LYT_WIDTH + 1;
-		if (num > m_AllLyt.size())
-			m_AllLyt.push_back(cLyt);
-		else
-			m_AllLyt.insert(m_AllLyt.begin() + num - 1, cLyt);
-	
-		vector<CVerticalLayoutUI*>::iterator it = m_AllLyt.begin();
-		for (; it != m_AllLyt.end(); it++)
-		{
-				cListLyt->Remove((*it), true);
-		}
+		cLyt->Remove(m_JustScreenLyt[4], true);
+		cLyt->Add(m_JustScreenLyt[4]);
 
-		for (UINT i = 0; i < m_AllLyt.size(); i++)
-		{
-			cLyt = m_AllLyt[i];
-			cLyt->SetFixedWidth(BUTTON_WIDTH);
-			RECT rect;
-			rect.left = rect.right = 10;
-			rect.bottom = rect.top = 5;
-			cLyt->SetPadding(rect);
-			cListLyt->Add(cLyt);
-		}	
-	}
+		cLyt->Remove(m_JustScreenLyt[5], true);
+		cLyt->Add(m_JustScreenLyt[5]);
 
-	//把icon转成HBITMAP
-	HBITMAP IconToBitmap(HICON hIcon, SIZE* pTargetSize = NULL)
-	{
-		ICONINFO info = { 0 };
-		if (hIcon == NULL
-			|| !GetIconInfo(hIcon, &info)
-			|| !info.fIcon)
-		{
-			return NULL;
-		}
-
-		INT nWidth = 0;
-		INT nHeight = 0;
-		if (pTargetSize != NULL)
-		{
-			nWidth = pTargetSize->cx;
-			nHeight = pTargetSize->cy;
-		}
-		else
-		{
-			if (info.hbmColor != NULL)
-			{
-				BITMAP bmp = { 0 };
-				GetObject(info.hbmColor, sizeof(bmp), &bmp);
-
-				nWidth = bmp.bmWidth;
-				nHeight = bmp.bmHeight;
-			}
-		}
-
-		if (info.hbmColor != NULL)
-		{
-			DeleteObject(info.hbmColor);
-			info.hbmColor = NULL;
-		}
-
-		if (info.hbmMask != NULL)
-		{
-			DeleteObject(info.hbmMask);
-			info.hbmMask = NULL;
-		}
-
-		if (nWidth <= 0
-			|| nHeight <= 0)
-		{
-			return NULL;
-		}
-
-		INT nPixelCount = nWidth * nHeight;
-
-		HDC dc = GetDC(NULL);
-		INT* pData = NULL;
-		HDC dcMem = NULL;
-		HBITMAP hBmpOld = NULL;
-		bool* pOpaque = NULL;
-		HBITMAP dib = NULL;
-		BOOL bSuccess = FALSE;
-
-		do
-		{
-			BITMAPINFOHEADER bi = { 0 };
-			bi.biSize = sizeof(BITMAPINFOHEADER);
-			bi.biWidth = nWidth;
-			bi.biHeight = -nHeight;
-			bi.biPlanes = 1;
-			bi.biBitCount = 32;
-			bi.biCompression = BI_RGB;
-			dib = CreateDIBSection(dc, (BITMAPINFO*)&bi, DIB_RGB_COLORS, (VOID**)&pData, NULL, 0);
-			if (dib == NULL) break;
-
-			memset(pData, 0, nPixelCount * 4);
-
-			dcMem = CreateCompatibleDC(dc);
-			if (dcMem == NULL) break;
-
-			hBmpOld = (HBITMAP)SelectObject(dcMem, dib);
-			::DrawIconEx(dcMem, 0, 0, hIcon, nWidth, nHeight, 0, NULL, DI_MASK);
-
-			pOpaque = new(std::nothrow) bool[nPixelCount];
-			if (pOpaque == NULL) break;
-			for (INT i = 0; i < nPixelCount; ++i)
-			{
-				pOpaque[i] = !pData[i];
-			}
-
-			memset(pData, 0, nPixelCount * 4);
-			::DrawIconEx(dcMem, 0, 0, hIcon, nWidth, nHeight, 0, NULL, DI_NORMAL);
-
-			BOOL bPixelHasAlpha = FALSE;
-			UINT* pPixel = (UINT*)pData;
-			for (INT i = 0; i < nPixelCount; ++i, ++pPixel)
-			{
-				if ((*pPixel & 0xff000000) != 0)
-				{
-					bPixelHasAlpha = TRUE;
-					break;
-				}
-			}
-
-			if (!bPixelHasAlpha)
-			{
-				pPixel = (UINT*)pData;
-				for (INT i = 0; i < nPixelCount; ++i, ++pPixel)
-				{
-					if (pOpaque[i])
-					{
-						*pPixel |= 0xFF000000;
-					}
-					else
-					{
-						*pPixel &= 0x00FFFFFF;
-					}
-				}
-			}
-
-			bSuccess = TRUE;
-
-		} while (FALSE);
-
-
-		if (pOpaque != NULL)
-		{
-			delete[]pOpaque;
-			pOpaque = NULL;
-		}
-
-		if (dcMem != NULL)
-		{
-			SelectObject(dcMem, hBmpOld);
-			DeleteDC(dcMem);
-		}
-
-		ReleaseDC(NULL, dc);
-
-		if (!bSuccess)
-		{
-			if (dib != NULL)
-			{
-				DeleteObject(dib);
-				dib = NULL;
-			}
-		}
-
-		return dib;
-	}
-
-	//把hbitmap文件保存成bmp图片
-	BOOL  SaveBmp(HBITMAP     hBitmap, LPCSTR     FileName)
-	{
-		HDC     hDC;
-		//当前分辨率下每象素所占字节数         
-		int     iBits;
-		//位图中每象素所占字节数         
-		WORD     wBitCount;
-		//定义调色板大小，     位图中像素字节大小     ，位图文件大小     ，     写入文件字节数             
-		DWORD     dwPaletteSize = 0, dwBmBitsSize = 0, dwDIBSize = 0, dwWritten = 0;
-		//位图属性结构             
-		BITMAP     Bitmap;
-		//位图文件头结构         
-		BITMAPFILEHEADER     bmfHdr;
-		//位图信息头结构             
-		BITMAPINFOHEADER     bi;
-		//指向位图信息头结构                 
-		LPBITMAPINFOHEADER     lpbi;
-		//定义文件，分配内存句柄，调色板句柄             
-		HANDLE     fh, hDib, hPal, hOldPal = NULL;
-
-		//计算位图文件每个像素所占字节数             
-		hDC = CreateDC("DISPLAY", NULL, NULL, NULL);
-		iBits = GetDeviceCaps(hDC, BITSPIXEL)     *     GetDeviceCaps(hDC, PLANES);
-		DeleteDC(hDC);
-		if (iBits <= 1)
-			wBitCount = 1;
-		else  if (iBits <= 4)
-			wBitCount = 4;
-		else if (iBits <= 8)
-			wBitCount = 8;
-		else
-			wBitCount = 24;
-
-		GetObject(hBitmap, sizeof(Bitmap), (LPSTR)&Bitmap);
-		bi.biSize = sizeof(BITMAPINFOHEADER);
-		bi.biWidth = Bitmap.bmWidth;
-		bi.biHeight = Bitmap.bmHeight;
-		bi.biPlanes = 1;
-		bi.biBitCount = wBitCount;
-		bi.biCompression = BI_RGB;
-		bi.biSizeImage = 0;
-		bi.biXPelsPerMeter = 0;
-		bi.biYPelsPerMeter = 0;
-		bi.biClrImportant = 0;
-		bi.biClrUsed = 0;
-
-		dwBmBitsSize = ((Bitmap.bmWidth *wBitCount + 31) / 32) * 4 * Bitmap.bmHeight;
-
-		//为位图内容分配内存             
-		hDib = GlobalAlloc(GHND, dwBmBitsSize + dwPaletteSize + sizeof(BITMAPINFOHEADER));
-		lpbi = (LPBITMAPINFOHEADER)GlobalLock(hDib);
-		*lpbi = bi;
-
-		//     处理调色板                 
-		hPal = GetStockObject(DEFAULT_PALETTE);
-		if (hPal)
-		{
-			hDC = ::GetDC(NULL);
-			hOldPal = ::SelectPalette(hDC, (HPALETTE)hPal, FALSE);
-			RealizePalette(hDC);
-		}
-
-		//     获取该调色板下新的像素值             
-		GetDIBits(hDC, hBitmap, 0, (UINT)Bitmap.bmHeight,
-			(LPSTR)lpbi + sizeof(BITMAPINFOHEADER)+dwPaletteSize,
-			(BITMAPINFO *)lpbi, DIB_RGB_COLORS);
-
-		//恢复调色板                 
-		if (hOldPal)
-		{
-			::SelectPalette(hDC, (HPALETTE)hOldPal, TRUE);
-			RealizePalette(hDC);
-			::ReleaseDC(NULL, hDC);
-		}
-
-		//创建位图文件                 
-		fh = CreateFile(FileName, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
-			FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, NULL);
-
-		if (fh == INVALID_HANDLE_VALUE)         return     FALSE;
-
-		//     设置位图文件头             
-		bmfHdr.bfType = 0x4D42;     //     "BM"             
-		dwDIBSize = sizeof(BITMAPFILEHEADER)+sizeof(BITMAPINFOHEADER)+dwPaletteSize + dwBmBitsSize;
-		bmfHdr.bfSize = dwDIBSize;
-		bmfHdr.bfReserved1 = 0;
-		bmfHdr.bfReserved2 = 0;
-		bmfHdr.bfOffBits = (DWORD)sizeof(BITMAPFILEHEADER)+(DWORD)sizeof(BITMAPINFOHEADER)+dwPaletteSize;
-		//     写入位图文件头             
-		WriteFile(fh, (LPSTR)&bmfHdr, sizeof(BITMAPFILEHEADER), &dwWritten, NULL);
-		//     写入位图文件其余内容             
-		WriteFile(fh, (LPSTR)lpbi, dwDIBSize, &dwWritten, NULL);
-		//清除                 
-		GlobalUnlock(hDib);
-		GlobalFree(hDib);
-		CloseHandle(fh);
-
-		return     TRUE;
 	}
 
 public:
 	CPaintManagerUI m_pm;
-	int m_Nbmp = 1;
-	vector<CVerticalLayoutUI*> m_AllLyt;
+	CHorizontalLayoutUI* m_pSelectPage;
+	CHorizontalLayoutUI* m_pPage1;
+	CControlUI* m_pPage2;
+	CVerticalLayoutUI* m_JustScreenLyt[6];
+	int m_nPageState = PAGE_RECORD;
 };
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)

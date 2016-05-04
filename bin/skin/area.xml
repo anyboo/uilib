@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Window size="180,60" >
 <VerticalLayout >
-	<List header="hidden" inset="8,8,8,8" itemdisabledbkcolor="#FFEEEEFF" >
+	<List header="hidden" inset="8,8,8,8" >
 		<ListContainerElement height="22" inset="5,0,10,0" >
 			<HorizontalLayout>
-				<Label text="gou" textcolor="#FF00FFFF" />
-				<Control width="10" />
-				<Label text="录制屏幕和声音" textcolor="#FF00FFFF" />
+				<Label text="800x600" textcolor="#FF00FF00" />
 			</HorizontalLayout>
 		</ListContainerElement>
 		<ListContainerElement height="22" inset="5,0,10,0" >
 			<HorizontalLayout>
-				<Label text="gou" textcolor="#FF00FFFF" />
-				<Control width="10" />
-				<Label text="录制声音" textcolor="#FF00FFFF" />
+				<Label text="1024x768" textcolor="#FF00FF00" />
 			</HorizontalLayout>
 		</ListContainerElement>
 	</List>
