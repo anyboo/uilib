@@ -21,7 +21,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 
 	Launcher* pFrame = new Launcher();
     if( pFrame == NULL ) return 0;
-	pFrame->Create(NULL, NULL, UI_WNDSTYLE_DIALOG, WS_EX_WINDOWEDGE | WS_EX_ACCEPTFILES);
+	pFrame->Create(NULL, NULL, UI_WNDSTYLE_DIALOG, WS_EX_WINDOWEDGE | WS_EX_ACCEPTFILES | WS_EX_STATICEDGE | WS_EX_APPWINDOW);
 	pFrame->SetIcon(IDI_ICON);
     pFrame->CenterWindow();
     pFrame->ShowWindow(true);

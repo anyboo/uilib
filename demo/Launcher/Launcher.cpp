@@ -1,17 +1,21 @@
 #include "stdafx.h"
 #include "Launcher.h"
-#include <Shellapi.h>
+
 
 using namespace std;
 
 #define CONTROL_LAYOUT_OUT 68
 #define BUTTON_WIDTH 48
 #define BUTTON_HEIGHT 48
+#define LABLE_WIDTH 48
+#define LABLE_HEIGHT 15
+#define FONT_SIZE 12
+#define BORD_WIDTH 5
+#define LYT_WIDTH 68
 
 Launcher::Launcher()
 {
 }
-
 
 Launcher::~Launcher()
 {
@@ -26,12 +30,74 @@ void Launcher::Notify(TNotifyUI& msg)
 		else if (msg.pSender->GetName() == _T("minbtn")) {
 			SendMessage(WM_SYSCOMMAND, SC_MINIMIZE, 0);
 		}
-		else
-		{
-			//launcher special app
-			MessageBox(NULL, _T("execute_shell"), _T("shell"), MB_OK);
+		else if(msg.pSender->GetName() == _T("btlz")) {
+			MessageBox(NULL, _T("Record"), _T("message"), MB_OK);
+		}
+		else if(msg.pSender->GetName() == _T("btpmbh")) {
+			MessageBox(NULL, _T("Record Capture"), _T("message"), MB_OK);
+		}
+		else if(msg.pSender->GetName() == _T("btlzqy")) {
+			MessageBox(NULL, _T("Record Area"), _T("message"), MB_OK);
+		}
+		else if(msg.pSender->GetName() == _T("btopen")) {
+			MessageBox(NULL, _T("open"), _T("message"), MB_OK);
+		}
+		else if(msg.pSender->GetName() == _T("btencode")) {
+			MessageBox(NULL, _T("coding"), _T("message"), MB_OK);
+		}
+		else if(msg.pSender->GetName() == _T("btvoice")) {
+			MessageBox(NULL, _T("sound"), _T("message"), MB_OK);
+		}
+		else if(msg.pSender->GetName() == _T("btlzyx")) {
+			MessageBox(NULL, _T("Record Game"), _T("message"), MB_OK);
 		}
 	}
+	else if (msg.sType == DUI_MSGTYPE_MENU)
+	{
+		PopMenu(msg);
+	}
+	else if (msg.sType == _T("menu_Delete")) {
+		DeleteLyt();
+	}
+	else if (msg.sType == _T("menu_Open")) {
+		
+		if (m_Nbmp == 1)
+			MapInit();
+		int xPos = m_MenuPt.x;
+		int n = (xPos - BORD_WIDTH) / LYT_WIDTH;
+		
+		char * strPath = m_filePath[n];
+		int a = 0;
+	
+	}
+}
+
+
+void Launcher::PopMenu(TNotifyUI& msg)
+{
+	CMenuWnd* pMenu = new CMenuWnd();
+	if (pMenu == NULL) { return; }
+	m_MenuPt = { msg.ptMouse.x, msg.ptMouse.y };
+	POINT pt = m_MenuPt;
+	::ClientToScreen(m_hWnd, &pt);
+	pMenu->Init(msg.pSender, pt);
+}
+
+void Launcher::DeleteLyt()
+{
+	if (m_Nbmp == 1)
+		MapInit();
+	CHorizontalLayoutUI* cListLyt = static_cast<CHorizontalLayoutUI*>(m_pm.FindControl(_T("ListLayout")));
+
+	int xPos = m_MenuPt.x;
+	int n = (xPos - BORD_WIDTH) / LYT_WIDTH;
+	CVerticalLayoutUI* cLyt = new CVerticalLayoutUI;
+
+	cLyt = m_AllLyt[n];
+	cListLyt->Remove(cLyt);
+	m_AllLyt.erase(m_AllLyt.begin() + n);
+	m_filePath.erase(m_filePath.begin() + n);
+	m_Nbmp++;
 }
 
 LRESULT Launcher::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -101,12 +167,16 @@ LRESULT Launcher::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
 	return 0;
 }
 
-LRESULT Launcher::OnDropFiles(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT Launcher::OnDropFiles(UINT uMsg, HDROP hDrop, LPARAM lParam, BOOL& bHandled)
 {
-	MapInit();
+	if (m_Nbmp == 1)
+		MapInit();
+	if (m_AllLyt.size() >= 7){
+		MessageBox(NULL, _T("No more than 7 files you drop!"), _T("message"), MB_OK);
+		return 0;
+	}	
 	//获取拖动文件松开鼠标时的x坐标
 	POINT* ptDropPos = new POINT;
-	HDROP hDrop = (HDROP)wParam;
 	DragQueryPoint(hDrop, ptDropPos);	//把文件拖动到的位置存到ptDropPos中
 	int iDropPos = ptDropPos->x;
 	delete(ptDropPos);
@@ -117,12 +187,12 @@ LRESULT Launcher::OnDropFiles(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 	WCHAR * pFilePathName = NULL;
 	wstring strFirstFile = L"";
 	HICON hIcon = NULL;
-	char cName[16];
-	static int iNum = 0;
-	sprintf(cName, "tmp%d.bmp", iNum++);
-	string strName(cName);
-	LPCSTR pBmpFilename = strName.c_str();
 
+	char strTmp[20] = { 0 };
+	_itoa(m_Nbmp, strTmp, 2);
+	strcat_s(strTmp, "tem.bmp");
+	LPCSTR pBmpFilename = strTmp;
+	m_Nbmp++;
 	//there may be many, but we'll only use the first
 	if (wNumFilesDropped > 0)
 	{
@@ -142,7 +212,9 @@ LRESULT Launcher::OnDropFiles(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 		hIcon = QueryFileIcon((LPCTSTR)lpFileName);
 		HBITMAP IconHbmp = IconToBitmap(hIcon);
 		SaveBmp(IconHbmp, pBmpFilename);
-		AddNewLayout(iDropPos, pBmpFilename);
+
+		AddLayout(iDropPos, pBmpFilename, lpFileName);
+		//	Vacated_position(iDropPos);
 		remove(pBmpFilename);
 		delete(pFilePathName);
 	}
@@ -159,7 +231,7 @@ LRESULT Launcher::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_NCACTIVATE:    lRes = OnNcActivate(uMsg, wParam, lParam, bHandled); break;
 	/*case WM_NCCALCSIZE:    lRes = OnNcCalcSize(uMsg, wParam, lParam, bHandled); break;
 	case WM_NCPAINT:       lRes = OnNcPaint(uMsg, wParam, lParam, bHandled); break;*/
-	case WM_DROPFILES:		lRes = OnDropFiles(uMsg, wParam, lParam, bHandled); break;
+	case WM_DROPFILES:	    lRes = OnDropFiles(uMsg, HDROP(wParam), lParam, bHandled); break;
 	case WM_NCHITTEST:     lRes = OnNcHitTest(uMsg, wParam, lParam, bHandled); break;
 	case WM_SIZE:          lRes = OnSize(uMsg, wParam, lParam, bHandled); break;
 	default:
@@ -184,88 +256,73 @@ HICON Launcher::QueryFileIcon(LPCTSTR lpszFilePath)
 
 void Launcher::MapInit()
 {
-	static int i = 0;
+	/*static int i = 0;
 	if (0 == i)
 	{
-		AddToMap(_T("lytscreen"));
-		AddToMap(_T("lytarea"));
-		AddToMap(_T("lytopen"));
-		AddToMap(_T("lytcode"));
-		AddToMap(_T("lytsound"));
-		AddToMap(_T("lytgame"));
+		AddToMap(_T("btlz"));
 		i++;
-	}
+	}*/
 }
 
 //用于初始化时把已知的layout加进map
 void Launcher::AddToMap(LPCTSTR LayoutName)
 {
 	CVerticalLayoutUI* cLyt = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(LayoutName));
-	m_layoutPos[cLyt] = cLyt->GetPos();;
+	m_AllLyt.push_back(cLyt);
 }
 
-//移动layout,左移，右移
-void Launcher::LayMove(CVerticalLayoutUI* cLyt, int nMove)
-{
-	RECT rPos = cLyt->GetPos();
-	rPos.left += nMove;
-	rPos.right += nMove;
-	cLyt->SetPos(rPos);
-	m_layoutPos[cLyt] = rPos;
-}
 
-void Launcher::AddNewLayout(int nPosX, LPCTSTR pFileName)
+void Launcher::AddLayout(int nPosX, LPCTSTR pFileName, const char* strName)
 {
-	RECT newRect = { 0 };
-	std::map < CVerticalLayoutUI*, RECT> mapTmp;
 	CVerticalLayoutUI* cLyt = new CVerticalLayoutUI;
 	CButtonUI* cBtn = new CButtonUI;
+	CLabelUI* Lab = new CLabelUI;
 	CHorizontalLayoutUI* cListLyt = static_cast<CHorizontalLayoutUI*>(m_pm.FindControl(_T("ListLayout")));
-
-	//配置新layout的属性
-	RECT rPad;
-	rPad.left = 0;
-	rPad.right = 0;
-	rPad.top = 5;
-	rPad.bottom = 5;
-	cLyt->SetPadding(rPad);
-	cLyt->SetMaxWidth(68);
+	cListLyt->Add(cLyt);
 	cLyt->Add(cBtn);
+	cLyt->Add(Lab);
+	cLyt->SetContextMenuUsed(true);
+
 	cBtn->SetFixedWidth(BUTTON_WIDTH);
 	cBtn->SetFixedHeight(BUTTON_HEIGHT);
+	cBtn->SetContextMenuUsed(true);
 	cBtn->SetBkImage(pFileName);
+	//	cBtn->SetBkColor(0xFFFFFFFF);
 
-	//移出后边的layout
-	map<CVerticalLayoutUI*, RECT>::iterator it = m_layoutPos.begin();
-	for (; it != m_layoutPos.end();)
-	{
-		if ((it->second.left + 34) > nPosX)
-		{
-			cListLyt->Remove(it->first, true);
-			mapTmp[it->first] = it->second;
-			m_layoutPos.erase(it++);
-		}
-		else
-		{
-			newRect = it->second;
-			newRect.left += 34;
-			newRect.right += 34;
-			it++;
-		}
+
+	LPCTSTR str = strName;
+	char tmp[100] = { 0 };
+	memcpy(tmp, str, strlen(str));
+	Lab->SetText(str);
+	Lab->SetFont(FONT_SIZE);
+	Lab->SetFixedWidth(LABLE_WIDTH);
+	Lab->SetFixedHeight(LABLE_HEIGHT);
+
+	UINT num = (nPosX - BORD_WIDTH) / LYT_WIDTH + 1;
+	if (num > m_AllLyt.size()){
+		m_AllLyt.push_back(cLyt);
+		m_filePath.push_back(tmp);
+	}		
+	else{
+		m_AllLyt.insert(m_AllLyt.begin() + num - 1, cLyt);
+		m_filePath.push_back(tmp);
 	}
 
-	//添加新layout
-	cListLyt->Add(cLyt);
-	m_layoutPos[cLyt] = newRect;
-
-	//再把移出的layout加回去
-	for (it = mapTmp.begin(); it != mapTmp.end(); ++it)
+	vector<CVerticalLayoutUI*>::iterator it = m_AllLyt.begin();
+	for (; it != m_AllLyt.end(); it++)
 	{
-		it->second.left += 68;
-		it->second.right += 68;
-		m_layoutPos[it->first] = it->second;
-		RECT abc = it->second;
-		cListLyt->Add(it->first);
+		cListLyt->Remove((*it), true);
+	}
+
+	for (UINT i = 0; i < m_AllLyt.size(); i++)
+	{
+		cLyt = m_AllLyt[i];
+		cLyt->SetFixedWidth(BUTTON_WIDTH);
+		RECT rect;
+		rect.left = rect.right = 10;
+		rect.bottom = rect.top = 5;
+		cLyt->SetPadding(rect);
+		cListLyt->Add(cLyt);
 	}
 }
 
@@ -415,9 +472,35 @@ HBITMAP Launcher::IconToBitmap(HICON hIcon, SIZE* pTargetSize)
 	return dib;
 }
 
+
+HBITMAP TransparentImage(HBITMAP hBitmap)
+{
+	CImage Image;
+	Image.Attach(hBitmap);
+	int nPitch = Image.GetPitch(), nBPP = Image.GetBPP();
+	LPBYTE lpBits = reinterpret_cast<LPBYTE>(Image.GetBits());
+
+	for (int yPos = 0; yPos < Image.GetHeight(); yPos++)
+	{
+		LPBYTE lpBytes = lpBits + (yPos * nPitch);
+		PDWORD lpLines = reinterpret_cast<PDWORD>(lpBytes);
+		for (int xPos = 0; xPos < Image.GetWidth(); xPos++)
+		{
+			if (nBPP == 32 && lpLines[xPos] >> 24 != 0x000000FF)
+			{
+				lpLines[xPos] |= 0xFFFFFFFF;
+			}
+		}
+	}
+
+	return Image.Detach();
+}
+
+
 //把hbitmap文件保存成bmp图片
 BOOL Launcher::SaveBmp(HBITMAP hBitmap, LPCSTR FileName)
 {
+	hBitmap = TransparentImage(hBitmap);
 	HDC     hDC;
 	//当前分辨率下每象素所占字节数         
 	int     iBits;

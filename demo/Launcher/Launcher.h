@@ -1,5 +1,12 @@
 #pragma once
 #include <map>
+#include <wtypes.h>
+#include "resource.h"
+#include <vector>
+#include "atlimage.h"
+#include <Shellapi.h>
+
+#include "MenuWnd.h"
 
 class Launcher : public CWindowWnd, public INotifyUI
 {
@@ -14,12 +21,15 @@ protected:
 	void Init(){};
 	void Notify(TNotifyUI& msg);
 
+	void PopMenu(TNotifyUI& msg);
+	void DeleteLyt();
+
 	HICON QueryFileIcon(LPCTSTR lpszFilePath);
 	void MapInit();
 	void AddToMap(LPCTSTR LayoutName);
 	void LayMove(CVerticalLayoutUI* cLyt, int nMove);
 	void Vacated_position(int iPos);
-	void AddNewLayout(int nPosX, LPCTSTR pFileName);
+	void AddLayout(int nPosX, LPCTSTR pFileName, const char* strName);
 	HBITMAP IconToBitmap(HICON hIcon, SIZE* pTargetSize = NULL);
 	BOOL SaveBmp(HBITMAP hBitmap, LPCSTR FileName);
 
@@ -28,11 +38,14 @@ protected:
 	LRESULT OnNcActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-	LRESULT OnDropFiles(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	LRESULT OnDropFiles(UINT uMsg, HDROP hDrop, LPARAM lParam, BOOL& bHandled);
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
 	CPaintManagerUI m_pm;
-	map<CVerticalLayoutUI*, RECT> m_layoutPos;
+	POINT m_MenuPt;
+	int m_Nbmp = 1;
+	vector<CVerticalLayoutUI*> m_AllLyt;
+	vector<char*> m_filePath;
 };
 
