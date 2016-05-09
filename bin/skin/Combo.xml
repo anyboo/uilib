@@ -2,16 +2,16 @@
 <Window size="180,60" >
 <VerticalLayout >
 	<List header="hidden" inset="8,8,8,8" itemdisabledbkcolor="#FFEEEEFF" >
-		<ListContainerElement height="22" inset="5,0,10,0" >
+		<ListContainerElement name="ListScreen" height="22" inset="5,0,10,0" >
 			<HorizontalLayout>
 				<Control width="10" />
-				<Label text="录制屏幕和声音" textcolor="#FFAA2535" />
+				<Button name="LbScreen" text="录制屏幕和声音" textcolor="#FFAA2535" />
 			</HorizontalLayout>
 		</ListContainerElement>
-		<ListContainerElement height="22" inset="5,0,10,0" >
+		<ListContainerElement name="ListSound" height="22" inset="5,0,10,0" >
 			<HorizontalLayout>
 				<Control width="10" />
-				<Label text="录制声音" textcolor="#FFAA2535" />
+				<Button name="LbSound" text="录制声音" textcolor="#FFAA2535" />
 			</HorizontalLayout>
 		</ListContainerElement>
 	</List>
