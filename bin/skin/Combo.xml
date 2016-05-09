@@ -4,16 +4,14 @@
 	<List header="hidden" inset="8,8,8,8" itemdisabledbkcolor="#FFEEEEFF" >
 		<ListContainerElement height="22" inset="5,0,10,0" >
 			<HorizontalLayout>
-				<Label text="gou" textcolor="#FF00FFFF" />
 				<Control width="10" />
-				<Label text="录制屏幕和声音" textcolor="#FF00FFFF" />
+				<Label text="录制屏幕和声音" textcolor="#FFAA2535" />
 			</HorizontalLayout>
 		</ListContainerElement>
 		<ListContainerElement height="22" inset="5,0,10,0" >
 			<HorizontalLayout>
-				<Label text="gou" textcolor="#FF00FFFF" />
 				<Control width="10" />
-				<Label text="录制声音" textcolor="#FF00FFFF" />
+				<Label text="录制声音" textcolor="#FFAA2535" />
 			</HorizontalLayout>
 		</ListContainerElement>
 	</List>

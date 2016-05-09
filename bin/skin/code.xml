@@ -1,19 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Window size="180,60" >
+<Window size="280,310" >
 <VerticalLayout >
 	<List header="hidden" inset="8,8,8,8" >
-		<ListContainerElement height="22" inset="5,0,10,0" >
+		<ListContainerElement height="22" inset="20,5,10,5" >
 			<HorizontalLayout>
-				<Label text="gou" textcolor="#FF00FFFF" />
-				<Control width="10" />
-				<Label text="MPEG" textcolor="#FF00FFFF" />
+				<Label text="GIF动画（.GIF）" textcolor="#FFAA2535" />
 			</HorizontalLayout>
 		</ListContainerElement>
-		<ListContainerElement height="22" inset="5,0,10,0" >
+		<Control height="1" bkcolor="#FF777777" padding="20,0,0,0" />
+		<ListContainerElement height="22" inset="20,5,10,0" >
 			<HorizontalLayout>
-				<Label text="gou" textcolor="#FF00FFFF" />
-				<Control width="10" />
-				<Label text="AAC" textcolor="#FF00FFFF" />
+				<Label text="MP4(MPEG-4 Part 14)容器" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<ListContainerElement height="22" inset="20,0,10,0" >
+			<HorizontalLayout>
+				<Label text="MKV(Matroska)容器" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<ListContainerElement height="22" inset="20,0,10,0" >
+			<HorizontalLayout>
+				<Label text="M4V(iPod MP4)容器" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<ListContainerElement height="22" inset="20,0,10,0" >
+			<HorizontalLayout>
+				<Label text="MOV(QuickTime)容器" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<ListContainerElement height="22" inset="20,0,10,0" >
+			<HorizontalLayout>
+				<Label text="WMV(Windows Media Video)容器" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<ListContainerElement height="22" inset="20,0,10,0" >
+			<HorizontalLayout>
+				<Label text="FLV(Flash Video)容器" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<ListContainerElement height="22" inset="20,0,10,0" >
+			<HorizontalLayout>
+				<Label text="AVI(Audio Video Interleaved)容器" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<ListContainerElement height="22" inset="20,0,10,0" >
+			<HorizontalLayout>
+				<Label text="TS(MPEG-2 Transport Stream)容器" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<ListContainerElement height="22" inset="20,0,10,5" >
+			<HorizontalLayout>
+				<Label text="VOB(MPEG-2 PS)容器" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<Control height="1" bkcolor="#FF777777" padding="20,0,0,0" />
+		<ListContainerElement height="22" inset="20,5,10,0" >
+			<HorizontalLayout>
+				<Label text="硬件编码器设置..." textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<ListContainerElement height="22" inset="20,0,10,5" >
+			<HorizontalLayout>
+				<Label text="外部编解码器(.AVI）" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<Control height="1" bkcolor="#FF777777" padding="20,0,0,0" />
+		<ListContainerElement height="22" inset="20,5,10,0" >
+			<HorizontalLayout>
+				<Label text="音频编解码器设置..." textcolor="#FFAA2535" />
 			</HorizontalLayout>
 		</ListContainerElement>
 	</List>
