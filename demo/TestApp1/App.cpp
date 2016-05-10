@@ -12,6 +12,34 @@ void CALLBACK TimerProc(HWND hWnd, UINT nMsg, UINT nTimerid, DWORD dwTime)
 }
 
 
+wstring UTF8ToUnicode( const string& szSrcText )
+{
+int  len = 0;
+len = szSrcText.length();
+int  unicodeLen = ::MultiByteToWideChar( CP_UTF8,
+0,
+szSrcText.c_str(),
+-1,
+NULL,
+0 );  
+wchar_t *  pUnicode;  
+pUnicode = new  wchar_t[unicodeLen+1];  
+memset(pUnicode,0,(unicodeLen+1)*sizeof(wchar_t));  
+::MultiByteToWideChar( CP_UTF8,
+0,
+szSrcText.c_str(),
+-1,
+(LPWSTR)pUnicode,
+unicodeLen );  
+wstring  rt;  
+rt = ( wchar_t* )pUnicode;
+delete  pUnicode; 
+return  rt;  
+}
+
+
+
+
 CRecord::CRecord() {};
 
 LPCTSTR CRecord::GetWindowClassName() const 
@@ -298,10 +326,14 @@ void CRecord::OnTemer()
 	string strHour(cHour);
 
 	string strTime = strHour + ":" + strMnt + ":" + strSnd;
-	CLabelUI* cLbl = static_cast<CLabelUI*>(m_pm.FindControl(_T("LbTime")));
-	cLbl->SetText(strTime.c_str());
+#ifdef UNICODE
+	LPCTSTR lpTime = (LPCTSTR)UTF8ToUnicode(strTime).c_str();
+#else
+	LPCTSTR lpTime = strTime.c_str();
+#endif
 
-	//	MessageBox(NULL, _T("Record Capture ttttttimer"), _T("message"), MB_OK);
+	CLabelUI* cLbl = static_cast<CLabelUI*>(m_pm.FindControl(_T("LbTime")));
+	cLbl->SetText(lpTime);
 }
 
 void CRecord::ChangePage()
@@ -323,11 +355,12 @@ void CRecord::ChangePage()
 
 		m_nRecordSecond = 0;
 		CLabelUI* cLbl = static_cast<CLabelUI*>(m_pm.FindControl(_T("LbTime")));
-		cLbl->SetText("00:00:00");
+		cLbl->SetText(_T("00:00:00"));
 
 		cSelectPage->Remove(m_pPage2, true);
 		cSelectPage->Add(m_pPage1);
 		m_nPageState = PAGE_RECORD;
+		m_bPauseState = false;
 	}
 	i++;
 }
