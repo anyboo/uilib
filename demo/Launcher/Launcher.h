@@ -8,6 +8,12 @@
 
 #include "MenuWnd.h"
 
+typedef struct
+{
+	CVerticalLayoutUI* Layout;
+	char FilePath[100];
+}LayOut_Info;
+
 class Launcher : public CWindowWnd, public INotifyUI
 {
 public:
@@ -21,11 +27,16 @@ protected:
 	void Init(){};
 	void Notify(TNotifyUI& msg);
 
+	
+	void SaveLytToJsonFile();
 	void PopMenu(TNotifyUI& msg);
 	void DeleteLyt();
+	void OpenExeFile(int m_Point);
 
 	HICON QueryFileIcon(LPCTSTR lpszFilePath);
 	void MapInit();
+	LPCSTR GetIcon(const char* strPath);
+
 	void AddToMap(LPCTSTR LayoutName);
 	void LayMove(CVerticalLayoutUI* cLyt, int nMove);
 	void Vacated_position(int iPos);
@@ -40,12 +51,12 @@ protected:
 	LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnDropFiles(UINT uMsg, HDROP hDrop, LPARAM lParam, BOOL& bHandled);
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
-
+	LRESULT OnOpenFile(UINT uMsg, HDROP hDrop, LPARAM lParam, BOOL& bHandled);
 private:
 	CPaintManagerUI m_pm;
 	POINT m_MenuPt;
+	int m_xPos;
 	int m_Nbmp = 1;
-	vector<CVerticalLayoutUI*> m_AllLyt;
-	vector<char*> m_filePath;
+	vector<LayOut_Info> m_AllLyt;
 };
 
