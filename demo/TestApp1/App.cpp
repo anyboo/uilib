@@ -327,7 +327,8 @@ void CRecord::OnTemer()
 
 	string strTime = strHour + ":" + strMnt + ":" + strSnd;
 #ifdef UNICODE
-	LPCTSTR lpTime = (LPCTSTR)UTF8ToUnicode(strTime).c_str();
+	wstring wsTime = UTF8ToUnicode(strTime);
+	LPCTSTR lpTime = wsTime.c_str();
 #else
 	LPCTSTR lpTime = strTime.c_str();
 #endif
