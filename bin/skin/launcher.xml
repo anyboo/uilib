@@ -8,9 +8,8 @@
 			<Button name="minbtn" width="35" height="19" padding="1,5,1,6" tooltip="最小化" normalimage="file='launcher/btn_min_normal.png' mask='#00FFFFFF'" hotimage="file='launcher/btn_min_hot.png'" pushedimage="file='launcher/btn_min_pushed.png'"/>
 			<Button name="closebtn" width="35" height="19" padding="1,5,3,6" tooltip="点击这里直接退出" normalimage="file='launcher/btn_close_normal.png'" hotimage="file='launcher/btn_close_hot.png'" pushedimage="file='launcher/btn_close_pushed.png'"/>
 		</HorizontalLayout>		
-		<HorizontalLayout name="ListLayout" bkimage="file='record/bg.png'" width="504" >
+		<HorizontalLayout name="ListLayout" bkimage="file='record/bg.png'" width="504" vscrollbar="true">
 				<Control bkcolor="#FF393939" width="5" />
-				
 		</HorizontalLayout>
 		<Control bkcolor="#FF393939" height="5" />
 	</VerticalLayout>		
