@@ -4,6 +4,8 @@
 #include "record.h"
 #include "resource.h"
 #include "MenuWnd.h"
+#include <commdlg.h>
+#include <shlobj.h>
 using namespace std;
 
 void CALLBACK TimerProc(HWND hWnd, UINT nMsg, UINT nTimerid, DWORD dwTime)
@@ -14,27 +16,27 @@ void CALLBACK TimerProc(HWND hWnd, UINT nMsg, UINT nTimerid, DWORD dwTime)
 
 wstring UTF8ToUnicode( const string& szSrcText )
 {
-int  len = 0;
-len = szSrcText.length();
-int  unicodeLen = ::MultiByteToWideChar( CP_UTF8,
-0,
-szSrcText.c_str(),
--1,
-NULL,
-0 );  
-wchar_t *  pUnicode;  
-pUnicode = new  wchar_t[unicodeLen+1];  
-memset(pUnicode,0,(unicodeLen+1)*sizeof(wchar_t));  
-::MultiByteToWideChar( CP_UTF8,
-0,
-szSrcText.c_str(),
--1,
-(LPWSTR)pUnicode,
-unicodeLen );  
-wstring  rt;  
-rt = ( wchar_t* )pUnicode;
-delete  pUnicode; 
-return  rt;  
+	int  len = 0;
+	len = szSrcText.length();
+	int  unicodeLen = ::MultiByteToWideChar( CP_UTF8,
+	0,
+	szSrcText.c_str(),
+	-1,
+	NULL,
+	0 );  
+	wchar_t *  pUnicode;  
+	pUnicode = new  wchar_t[unicodeLen+1];  
+	memset(pUnicode,0,(unicodeLen+1)*sizeof(wchar_t));  
+	::MultiByteToWideChar( CP_UTF8,
+	0,
+	szSrcText.c_str(),
+	-1,
+	(LPWSTR)pUnicode,
+	unicodeLen );  
+	wstring  rt;
+	rt = (wchar_t*)pUnicode;
+	delete  pUnicode;
+	return  rt;
 }
 
 
@@ -72,12 +74,20 @@ void CRecord::Notify(TNotifyUI& msg)
 			SendMessage(WM_SYSCOMMAND, SC_MINIMIZE, 0);
 			return;
 		}
+		if (msg.pSender->GetName() == _T("savebtn")) {
+			SetSaveDir();
+			return;
+		}
 
 		if (msg.pSender->GetName() == _T("btlz")) {
 			ChangePage();
 		}
 
 		if (msg.pSender->GetName() == _T("btpause")) {
+			if (0 == m_bPauseState % 2)
+				SetPause();
+			else
+				SetGoon();
 			m_bPauseState++;
 		}
 
@@ -91,7 +101,7 @@ void CRecord::Notify(TNotifyUI& msg)
 			pMenu->Init(msg.pSender, pt);
 		}
 		if (msg.pSender->GetName() == _T("btpmbh")) {
-			MessageBox(NULL, _T("Record Capture"), _T("message"), MB_OK);
+			MessageBox(NULL, _T("btpmbh"), _T("message"), MB_OK);
 		}
 		if (msg.pSender->GetName() == _T("btlzqy")) {
 			CVerticalLayoutUI* cLyt = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(_T("btlzqy")));
@@ -103,7 +113,7 @@ void CRecord::Notify(TNotifyUI& msg)
 			pMenu->Init(msg.pSender, pt);
 		}
 		if (msg.pSender->GetName() == _T("btopen")) {
-			MessageBox(NULL, _T("open"), _T("message"), MB_OK);
+			OpenRecordFile();
 		}
 		if (msg.pSender->GetName() == _T("btencode")) {
 			CVerticalLayoutUI* cLyt = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(_T("btencode")));
@@ -124,7 +134,7 @@ void CRecord::Notify(TNotifyUI& msg)
 			pMenu->Init(msg.pSender, pt);
 		}
 		if (msg.pSender->GetName() == _T("btabout")) {
-			MessageBox(NULL, _T("版本 V1.0"), _T("关于"), MB_OK);
+			MessageBox(NULL, _T("版本 V1.1"), _T("关于"), MB_OK);
 		}
 	}
 }
@@ -293,6 +303,22 @@ LRESULT CRecord::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 }
 
+void CRecord::SetPause()
+{
+	CButtonUI* cBtnPause = static_cast<CButtonUI*>(m_pm.FindControl(_T("btpause")));
+	CLabelUI* cLbPause = static_cast<CLabelUI*>(m_pm.FindControl(_T("lbpause")));
+	cBtnPause->SetNormalImage(_T("record/goon.png"));
+	cLbPause->SetText(_T("继续"));
+}
+
+void CRecord::SetGoon()
+{
+	CButtonUI* cBtnPause = static_cast<CButtonUI*>(m_pm.FindControl(_T("btpause")));
+	CLabelUI* cLbPause = static_cast<CLabelUI*>(m_pm.FindControl(_T("lbpause")));
+	cBtnPause->SetNormalImage(_T("record/player_pause.png"));
+	cLbPause->SetText(_T("暂停"));
+}
+
 void CRecord::OnTemer()
 {
 	if (0 != m_bPauseState % 2)
@@ -361,6 +387,8 @@ void CRecord::ChangePage()
 		cSelectPage->Remove(m_pPage2, true);
 		cSelectPage->Add(m_pPage1);
 		m_nPageState = PAGE_RECORD;
+		if (0 != m_bPauseState % 2)
+			SetGoon();
 		m_bPauseState = false;
 	}
 	i++;
@@ -411,6 +439,39 @@ void CRecord::SoundToScreen()
 	cLyt->Remove(m_JustScreenLyt[5], true);
 	cLyt->Add(m_JustScreenLyt[5]);
 	m_nRecordState = STATE_RECORDSCREEN;
+}
+
+void CRecord::SetSaveDir()
+{
+	TCHAR szBuffer[MAX_PATH] = { 0 };
+	BROWSEINFO bi;
+	ZeroMemory(&bi, sizeof(BROWSEINFO));
+	bi.hwndOwner = NULL;
+	bi.pszDisplayName = szBuffer;
+	bi.lpszTitle = _T("设置存放目录:");
+	bi.ulFlags = BIF_RETURNFSANCESTORS;
+	LPITEMIDLIST idl = SHBrowseForFolder(&bi);
+	if (NULL == idl)
+	{
+		return;
+	}
+	SHGetPathFromIDList(idl, szBuffer);
+	memcpy(m_cSaveDir, szBuffer, MAX_PATH);
+}
+
+void CRecord::OpenRecordFile()
+{
+	TCHAR szBuffer[MAX_PATH] = { 0 };
+	OPENFILENAME ofn = { 0 };
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = m_hWnd;
+	ofn.lpstrFilter = _T("所有文件(*.*)\0*.*\0所有文件(*.*)\0*.*\0");//要选择的文件后缀   
+	ofn.lpstrInitialDir = _T("D:\\Program Files");//默认的文件路径   
+	ofn.lpstrFile = szBuffer;//存放文件的缓冲区   
+	ofn.nMaxFile = sizeof(szBuffer) / sizeof(*szBuffer);
+	ofn.nFilterIndex = 0;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_EXPLORER;//标志如果是多选要加上OFN_ALLOWMULTISELECT  
+	BOOL bSel = GetOpenFileName(&ofn);
 }
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)

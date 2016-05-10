@@ -55,9 +55,17 @@ public:
 
 	void ChangePage();
 
+	void SetPause();
+
+	void SetGoon();
+
 	void ScreenToSound();
 
 	void SoundToScreen();
+
+	void SetSaveDir();
+
+	void OpenRecordFile();
 
 	void OnTemer();
 
@@ -71,5 +79,6 @@ public:
 	int m_nRecordState = STATE_RECORDSCREEN;
 	int m_nRecordSecond = 0;
 	int m_bPauseState = 0;
+	TCHAR m_cSaveDir[MAX_PATH];
 };
 
