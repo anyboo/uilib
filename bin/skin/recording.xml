@@ -12,10 +12,6 @@
 				<Button name="btpause" normalimage="file='record/player_pause.png'" height="48" />
 				<Label text="暂停" align="center" font="0" height="15" />
 			</VerticalLayout>
-			<VerticalLayout name="lytAbout" padding="10,5,5,5" width="48" >
-				<Button name="btlzyx" normalimage="file='record/info.png'" height="48" />
-				<Label text="关于" align="center" font="0" height="15" />
-			</VerticalLayout>
 			<label name="LbTime" text="00:00:00" />
 		</HorizontalLayout>
 		<Control bkcolor="#FF393939" width="20" />
