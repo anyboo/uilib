@@ -80,5 +80,12 @@ public:
 	int m_nRecordSecond = 0;
 	int m_bPauseState = 0;
 	TCHAR m_cSaveDir[MAX_PATH];
+
+	bool m_bScreenRecord = true;
+	bool m_bSoundRecord = false;
+	RECT m_rArea;
+	int m_iCode;
+	bool m_bSysSound;
+	bool m_bMcf;
 };
 

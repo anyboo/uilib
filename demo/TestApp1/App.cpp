@@ -6,6 +6,7 @@
 #include "MenuWnd.h"
 #include <commdlg.h>
 #include <shlobj.h>
+#include "RecordWork.h"
 using namespace std;
 
 void CALLBACK TimerProc(HWND hWnd, UINT nMsg, UINT nTimerid, DWORD dwTime)
@@ -65,6 +66,7 @@ void CRecord::Init()
 
 void CRecord::Notify(TNotifyUI& msg)
 {
+	CRecordWork cRcdWk;
 	if (msg.sType == _T("click")) {
 		if (msg.pSender->GetName() == _T("closebtn")) {
 			PostQuitMessage(0);
@@ -85,9 +87,15 @@ void CRecord::Notify(TNotifyUI& msg)
 
 		if (msg.pSender->GetName() == _T("btpause")) {
 			if (0 == m_bPauseState % 2)
+			{
 				SetPause();
+				cRcdWk.OnPause();
+			}
 			else
+			{
 				SetGoon();
+				cRcdWk.OnGoon();
+			}
 			m_bPauseState++;
 		}
 
@@ -101,7 +109,7 @@ void CRecord::Notify(TNotifyUI& msg)
 			pMenu->Init(msg.pSender, pt);
 		}
 		if (msg.pSender->GetName() == _T("btpmbh")) {
-			MessageBox(NULL, _T("btpmbh"), _T("message"), MB_OK);
+			cRcdWk.OnGetScreen();
 		}
 		if (msg.pSender->GetName() == _T("btlzqy")) {
 			CVerticalLayoutUI* cLyt = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(_T("btlzqy")));
@@ -365,6 +373,7 @@ void CRecord::OnTemer()
 
 void CRecord::ChangePage()
 {
+	CRecordWork cRcdWk;
 	static int i = 0;
 	if (0 == i)
 		m_pPage1 = static_cast<CHorizontalLayoutUI*>(m_pm.FindControl(_T("page1")));
@@ -375,6 +384,14 @@ void CRecord::ChangePage()
 		cSelectPage->Add(m_pPage2);
 		m_nPageState = PAGE_RECORDING;
 		SetTimer(m_hWnd, 1, 1000, TimerProc);
+
+		cRcdWk.m_bMcf = m_bMcf;
+		cRcdWk.m_bScreenRecord = m_bScreenRecord;
+		cRcdWk.m_bSoundRecord = m_bSoundRecord;
+		cRcdWk.m_bSysSound = m_bSysSound;
+		cRcdWk.m_iCode = m_iCode;
+		cRcdWk.m_rArea = m_rArea;
+		cRcdWk.OnRecord();
 	}
 	else
 	{
@@ -389,6 +406,7 @@ void CRecord::ChangePage()
 		m_nPageState = PAGE_RECORD;
 		if (0 != m_bPauseState % 2)
 			SetGoon();
+		cRcdWk.OnStop();
 		m_bPauseState = false;
 	}
 	i++;
@@ -414,6 +432,8 @@ void CRecord::ScreenToSound()
 	cLyt->Remove(m_JustScreenLyt[0], true);
 	cLyt->Remove(m_JustScreenLyt[1], true);
 
+	m_bScreenRecord = false;
+	m_bSoundRecord = true;
 	m_nRecordState = STATE_RECORDSOUND;
 	i++;
 }
@@ -438,6 +458,9 @@ void CRecord::SoundToScreen()
 
 	cLyt->Remove(m_JustScreenLyt[5], true);
 	cLyt->Add(m_JustScreenLyt[5]);
+
+	m_bScreenRecord = true;
+	m_bSoundRecord = true;
 	m_nRecordState = STATE_RECORDSCREEN;
 }
 
