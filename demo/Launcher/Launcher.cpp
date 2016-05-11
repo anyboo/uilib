@@ -3,13 +3,13 @@
 
 #include "ostream"
 
-#include "Json\document.h"
-#include "Json\prettywriter.h"
-#include "Json\stringbuffer.h"
+#include "document.h"
+#include "prettywriter.h"
+#include "stringbuffer.h"
 #include "string"
 
-#include "Json\ostreamwrapper.h"
-#include "Json\istreamwrapper.h"
+#include "ostreamwrapper.h"
+#include "istreamwrapper.h"
 #include <fstream>
 
 using namespace std;
