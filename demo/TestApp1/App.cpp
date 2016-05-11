@@ -62,6 +62,7 @@ void CRecord::OnFinalMessage(HWND /*hWnd*/)
 
 void CRecord::Init()
 {
+	m_rArea = { 0 };
 }
 
 void CRecord::Notify(TNotifyUI& msg)
@@ -116,7 +117,7 @@ void CRecord::Notify(TNotifyUI& msg)
 			POINT pt = { cLyt->GetPos().left + DIALOGUE_ADJ_LEFT, cLyt->GetPos().bottom + DIALOGUE_ADJ_TOP };
 			ClientToScreen(m_hWnd, &pt);
 
-			CMenuWnd* pMenu = new CMenuWnd(_T("area.xml"));
+			CMenuWnd* pMenu = new CMenuWnd(_T("area.xml"), this);
 			if (pMenu == NULL) { return; }
 			pMenu->Init(msg.pSender, pt);
 		}
@@ -128,7 +129,7 @@ void CRecord::Notify(TNotifyUI& msg)
 			POINT pt = { cLyt->GetPos().left + DIALOGUE_ADJ_LEFT, cLyt->GetPos().bottom + DIALOGUE_ADJ_TOP };
 			ClientToScreen(m_hWnd, &pt);
 
-			CMenuWnd* pMenu = new CMenuWnd(_T("code.xml"));
+			CMenuWnd* pMenu = new CMenuWnd(_T("code.xml"), this);
 			if (pMenu == NULL) { return; }
 			pMenu->Init(msg.pSender, pt);
 		}
@@ -137,7 +138,7 @@ void CRecord::Notify(TNotifyUI& msg)
 			POINT pt = { cLyt->GetPos().left + DIALOGUE_ADJ_LEFT, cLyt->GetPos().bottom + DIALOGUE_ADJ_TOP };
 			ClientToScreen(m_hWnd, &pt);
 
-			CMenuWnd* pMenu = new CMenuWnd(_T("sound.xml"));
+			CMenuWnd* pMenu = new CMenuWnd(_T("sound.xml"), this);
 			if (pMenu == NULL) { return; }
 			pMenu->Init(msg.pSender, pt);
 		}
@@ -325,6 +326,21 @@ void CRecord::SetGoon()
 	CLabelUI* cLbPause = static_cast<CLabelUI*>(m_pm.FindControl(_T("lbpause")));
 	cBtnPause->SetNormalImage(_T("record/player_pause.png"));
 	cLbPause->SetText(_T("ÔÝÍ£"));
+}
+
+bool CRecord::SetArea(int iAreaX, int iAreaY)
+{
+	int cx = GetSystemMetrics(SM_CXSCREEN);
+	int cy = GetSystemMetrics(SM_CYSCREEN);
+	if ((cx < iAreaX) || (cy < iAreaY))
+		return false;
+
+	m_rArea.left = 0;
+	m_rArea.right = iAreaX;
+	m_rArea.top = 0;
+	m_rArea.bottom = iAreaY;
+
+	return true;
 }
 
 void CRecord::OnTemer()

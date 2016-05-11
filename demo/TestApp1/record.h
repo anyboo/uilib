@@ -21,6 +21,18 @@
 #define SND_PER_MIN 60
 #define MIN_PER_HOUR 60
 
+//Code model
+#define CODE_GIF 1
+#define CODE_MP4 2
+#define CODE_MKV 3
+#define CODE_M4V 4
+#define CODE_MOV 5
+#define CODE_WMV 6
+#define CODE_FLV 7
+#define CODE_AVI 8
+#define CODE_TS  9
+#define CODE_VOB 10
+
 class CRecord : public CWindowWnd, public INotifyUI
 {
 public:
@@ -69,6 +81,8 @@ public:
 
 	void OnTemer();
 
+	bool SetArea(int iAreaX, int iAreaY);
+
 public:
 	CPaintManagerUI m_pm;
 	CHorizontalLayoutUI* m_pSelectPage;
@@ -84,8 +98,8 @@ public:
 	bool m_bScreenRecord = true;
 	bool m_bSoundRecord = false;
 	RECT m_rArea;
-	int m_iCode;
-	bool m_bSysSound;
-	bool m_bMcf;
+	int m_iCode = CODE_GIF;
+	bool m_bSysSound = true;
+	bool m_bMcf = false;
 };
 

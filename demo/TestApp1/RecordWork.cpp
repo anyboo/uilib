@@ -18,7 +18,6 @@ void CRecordWork::OnGetScreen()
 
 void CRecordWork::OnRecord()
 {
-
 }
 
 void CRecordWork::OnPause()

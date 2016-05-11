@@ -4,18 +4,18 @@
 	<List header="hidden" inset="8,8,8,8" >
 		<ListContainerElement height="22" inset="20,5,10,5" >
 			<HorizontalLayout>
-				<Label text="录制系统音频" textcolor="#FFAA2535" />
+				<Button name="btnSysSound" text="录制系统音频" textcolor="#FFAA2535" />
 			</HorizontalLayout>
 		</ListContainerElement>
 		<Control height="1" bkcolor="#FF777777" padding="20,0,0,0" />
 		<ListContainerElement height="22" inset="20,5,10,0" >
 			<HorizontalLayout>
-				<Label text="麦克风(Realtek High Definition Audio)" textcolor="#FFAA2535" />
+				<Button name="btnMcf" text="麦克风(Realtek High Definition Audio)" textcolor="#FFAA2535" />
 			</HorizontalLayout>
 		</ListContainerElement>
 		<ListContainerElement height="22" inset="20,0,10,0" >
 			<HorizontalLayout>
-				<Label text="不录制麦克风" textcolor="#FFAA2535" />
+				<Button name="btnUnmcf" text="不录制麦克风" textcolor="#FFAA2535" />
 			</HorizontalLayout>
 		</ListContainerElement>
 	</List>

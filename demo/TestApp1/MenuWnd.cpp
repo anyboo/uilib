@@ -62,11 +62,91 @@ void CMenuWnd::OnFinalMessage(HWND /*hWnd*/)
 void CMenuWnd::Notify(TNotifyUI& msg)
 {
 	if (msg.sType == _T("click")) {
+		bool bClose = true;
+		//record model
 		if (msg.pSender->GetName() == _T("LbSound")) {
 			m_Record->ScreenToSound();
 		}
 		if (msg.pSender->GetName() == _T("LbScreen")) {
 			m_Record->SoundToScreen();
+		}
+
+		//sound model
+		if (msg.pSender->GetName() == _T("btnSysSound")) {
+			if (true == m_Record->m_bSysSound)
+				m_Record->m_bSysSound = false;
+			else
+				m_Record->m_bSysSound = true;
+		}
+		if (msg.pSender->GetName() == _T("btnMcf")) {
+			m_Record->m_bMcf = true;
+		}
+		if (msg.pSender->GetName() == _T("btnUnmcf")) {
+			m_Record->m_bMcf = false;
+		}
+
+		//Code model
+		if (msg.pSender->GetName() == _T("BtnGif")) {
+			m_Record->m_iCode = CODE_GIF;
+		}
+		if (msg.pSender->GetName() == _T("BtnMP4")) {
+			m_Record->m_iCode = CODE_MP4;
+		}
+		if (msg.pSender->GetName() == _T("BtnMkv")) {
+			m_Record->m_iCode = CODE_MKV;
+		}
+		if (msg.pSender->GetName() == _T("BtnM4v")) {
+			m_Record->m_iCode = CODE_M4V;
+		}
+		if (msg.pSender->GetName() == _T("BtnMov")) {
+			m_Record->m_iCode = CODE_MOV;
+		}
+		if (msg.pSender->GetName() == _T("BtnWmv")) {
+			m_Record->m_iCode = CODE_WMV;
+		}
+		if (msg.pSender->GetName() == _T("BtnFlv")) {
+			m_Record->m_iCode = CODE_FLV;
+		}
+		if (msg.pSender->GetName() == _T("BtnAvi")) {
+			m_Record->m_iCode = CODE_AVI;
+		}
+		if (msg.pSender->GetName() == _T("BtnTs")) {
+			m_Record->m_iCode = CODE_TS;
+		}
+		if (msg.pSender->GetName() == _T("BtnVob")) {
+			m_Record->m_iCode = CODE_VOB;
+		}
+
+		//area model
+		if (msg.pSender->GetName() == _T("btn_640_360")) {
+			bClose = m_Record->SetArea(640, 360);
+		}
+		if (msg.pSender->GetName() == _T("btn_800_450")) {
+			bClose = m_Record->SetArea(800, 450);
+		}
+		if (msg.pSender->GetName() == _T("btn_1024_576")) {
+			bClose = m_Record->SetArea(1024, 576);
+		}
+		if (msg.pSender->GetName() == _T("btn_1280_720")) {
+			bClose = m_Record->SetArea(1280, 720);
+		}
+		if (msg.pSender->GetName() == _T("btn_800_600")) {
+			bClose = m_Record->SetArea(800, 600);
+		}
+		if (msg.pSender->GetName() == _T("btn_1024_768")) {
+			bClose = m_Record->SetArea(1024, 768);
+		}
+		if (msg.pSender->GetName() == _T("btn_1920_1080")) {
+			bClose = m_Record->SetArea(1920, 1080);
+		}
+		if (msg.pSender->GetName() == _T("btn_2560_1440")) {
+			bClose = m_Record->SetArea(2560, 1440);
+		}
+		if (msg.pSender->GetName() == _T("btn_3840_2160")) {
+			bClose = m_Record->SetArea(3840, 2160);
+		}
+		if (msg.pSender->GetName() == _T("btn_7680_4320")) {
+			bClose = m_Record->SetArea(7680, 4320);
 		}
 		Close();
 	}
