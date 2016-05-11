@@ -13,3 +13,6 @@
 [submodule "Test"]
 	path = Test
 	url = https://github.com/philsquared/Catch.git
+[submodule "grpc"]
+	path = grpc
+	url = https://github.com/grpc/grpc.git
