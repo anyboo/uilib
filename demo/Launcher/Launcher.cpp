@@ -1,9 +1,16 @@
 #include "stdafx.h"
 #include "Launcher.h"
 
-#include "Json/json.h"
-#include "fstream"
 #include "ostream"
+
+#include "Json\document.h"
+#include "Json\prettywriter.h"
+#include "Json\stringbuffer.h"
+#include "string"
+
+#include "Json\ostreamwrapper.h"
+#include "Json\istreamwrapper.h"
+#include <fstream>
 
 using namespace std;
 
@@ -46,27 +53,50 @@ void Launcher::Notify(TNotifyUI& msg)
 	else if (msg.sType == _T("menu_Open")) {
 		OpenExeFile(m_MenuPt.x);
 	}
+	else if (msg.sType == _T("menu_Rename")){
+		//DeleteLyt();
+	}
 }
 
 void Launcher::SaveLytToJsonFile()
 {
-	Json::Reader reader;
-	Json::Value root; 
-	Json::Value arrayObj;
-	for (UINT i = 0; i < m_AllLyt.size(); i++)
-	{		
-		const char* strFilePath = m_AllLyt[i].FilePath;
+	rapidjson::Document document;
+	document.Parse("test.json");
+	ofstream ofs("test.json");
+	rapidjson::OStreamWrapper osw(ofs);
 
-		arrayObj["cLyt"].append(strFilePath); 
+	document.SetObject();
+	rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+	rapidjson::Value root(rapidjson::kObjectType);
+	const char* strFilePath = NULL;
+	for (UINT i = 0; i < m_AllLyt.size(); i++)
+	{
+		strFilePath = m_AllLyt[i].FilePath;
+
+		char strPath[100] = { 0 };
+		char strExName[100] = { 0 };
+		char strType[16] = { 0 };
+		_splitpath_s(strFilePath, NULL, 0, strPath, 100, strExName, 100, strType, 16);
+
+		rapidjson::Value array(rapidjson::kArrayType);
+
+		rapidjson::Value file_path(rapidjson::kObjectType);
+		rapidjson::Value file_name(rapidjson::kObjectType);
+		rapidjson::Value file_rename(rapidjson::kObjectType);
+
+		file_name.SetString(strExName, allocator);
+		file_path.SetString(strPath, allocator);
+		file_rename.SetString(strFilePath, allocator);
+
+		array.PushBack(file_path, allocator);
+		array.PushBack(file_rename, allocator);
+
+		root.AddMember(file_name, array, allocator);
 	}
-	 	
-	std::string out = root.toStyledString();
-	Json::FastWriter writer;
-	std::string strWrite = writer.write(arrayObj);
-	std::ofstream ofs;
-	ofs.open("Json.txt", std::ios::binary);
-	ofs << strWrite;
-	ofs.close();
+
+	rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
+	root.Accept(writer);
+
 }
 
 void Launcher::PopMenu(TNotifyUI& msg)
@@ -181,7 +211,7 @@ LRESULT Launcher::OnDropFiles(UINT uMsg, HDROP hDrop, LPARAM lParam, BOOL& bHand
 	if (m_AllLyt.size() >= 7){
 		MessageBox(NULL, _T("can't drop too many files!"), _T("message"), MB_OK);
 		return 0;
-	}	
+	}
 	//获取拖动文件松开鼠标时的x坐标
 	POINT* ptDropPos = new POINT;
 	DragQueryPoint(hDrop, ptDropPos);	//把文件拖动到的位置存到ptDropPos中
@@ -229,7 +259,7 @@ LRESULT Launcher::OnDropFiles(UINT uMsg, HDROP hDrop, LPARAM lParam, BOOL& bHand
 
 LRESULT Launcher::OnOpenFile(UINT uMsg, HDROP hDrop, LPARAM lParam, BOOL& bHandled)
 {
-	OpenExeFile(m_xPos);	
+	OpenExeFile(m_xPos);
 	return 0;
 }
 
@@ -245,7 +275,7 @@ LRESULT Launcher::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_NCHITTEST:     lRes = OnNcHitTest(uMsg, wParam, lParam, bHandled); break;
 	case WM_SIZE:          lRes = OnSize(uMsg, wParam, lParam, bHandled); break;
 	case WM_LBUTTONDBLCLK:	lRes = OnOpenFile(uMsg, HDROP(wParam), lParam, bHandled); break;
-		
+
 	default:
 		bHandled = FALSE;
 	}
@@ -268,25 +298,24 @@ HICON Launcher::QueryFileIcon(LPCTSTR lpszFilePath)
 
 void Launcher::MapInit()
 {
-	const char* strTmp = NULL;
-	LayOut_Info cLyt_info = { 0 };
-	Json::Reader reader;
-	Json::Value root;
-	std::ifstream is;
-	is.open("Json.txt", std::ios::out);
-	if (reader.parse(is, root, FALSE))
-	{
-		Json::Value add_value = root["cLyt"];
-		UINT A = add_value.size();
-	//	for (UINT i = 0; i < add_value.size(); ++i)
-		for (UINT i = add_value.size() - 1; i >= 0 && i < 100; --i)
-		{
-			std::string strPath = add_value[i].asString();
-			strTmp = strPath.c_str();
-			GetIcon(strTmp);
-		}
-	}
+	ifstream ifs("test.json");
+	rapidjson::IStreamWrapper isw(ifs);
+	rapidjson::Document d;
+	d.ParseStream(isw);
+	size_t file_size = isw.Tell();
+	if (isw.Tell() == 0)
+		return;
 
+	rapidjson::Value::ConstMemberIterator itr = d.MemberEnd();
+	while (itr != d.MemberBegin())
+	{
+		--itr;
+		string TypeName = itr->name.GetString();
+		const rapidjson::Value& a = d[TypeName.c_str()];
+		assert(a.IsArray());
+		string str = a[1].GetString();
+		GetIcon(str.c_str());
+	}
 }
 
 LPCSTR Launcher::GetIcon(const char* strPath)
@@ -295,8 +324,8 @@ LPCSTR Launcher::GetIcon(const char* strPath)
 	_itoa(m_Nbmp, strTmp, 10);
 	strcat_s(strTmp, "1tem.bmp");
 	LPCSTR pBmpFilename = strTmp;
-	m_Nbmp++;	
-	
+	m_Nbmp++;
+
 	HICON hIcon = QueryFileIcon((LPCTSTR)strPath);
 	HBITMAP IconHbmp = IconToBitmap(hIcon);
 	SaveBmp(IconHbmp, pBmpFilename);
@@ -310,7 +339,7 @@ LPCSTR Launcher::GetIcon(const char* strPath)
 void Launcher::AddToMap(LPCTSTR LayoutName)
 {
 	CVerticalLayoutUI* cLyt = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(LayoutName));
-//	m_AllLyt.push_back(cLyt);
+	//	m_AllLyt.push_back(cLyt);
 }
 
 void Launcher::AddLayout(int nPosX, LPCTSTR pFileName, const char* strName)
@@ -330,9 +359,12 @@ void Launcher::AddLayout(int nPosX, LPCTSTR pFileName, const char* strName)
 	cBtn->SetBkImage(pFileName);
 
 	LPCTSTR str = strName;
-	char tmp[100] = { 0 };
-	memcpy(tmp, str, strlen(str));
-	Lab->SetText(str);
+	char strExName[100] = { 0 };
+	char strType[16] = { 0 };
+	_splitpath_s(str, NULL, 0, NULL, 0, strExName, 100, strType, 16);
+	strcat_s(strExName, strType);
+
+	Lab->SetText(strExName);
 	Lab->SetFont(FONT_SIZE);
 	Lab->SetFixedWidth(LABLE_WIDTH);
 	Lab->SetFixedHeight(LABLE_HEIGHT);
@@ -344,7 +376,7 @@ void Launcher::AddLayout(int nPosX, LPCTSTR pFileName, const char* strName)
 	UINT num = (nPosX - BORD_WIDTH) / LYT_WIDTH + 1;
 	if (num > m_AllLyt.size()){
 		m_AllLyt.push_back(Lyt_info);
-	}		
+	}
 	else{
 		m_AllLyt.insert(m_AllLyt.begin() + num - 1, Lyt_info);
 	}
@@ -355,6 +387,7 @@ void Launcher::AddLayout(int nPosX, LPCTSTR pFileName, const char* strName)
 		cListLyt->Remove((it)->Layout, true);
 	}
 
+	UINT a = m_AllLyt.size();
 	for (UINT i = 0; i < m_AllLyt.size(); i++)
 	{
 		cLyt = m_AllLyt[i].Layout;
