@@ -208,10 +208,6 @@ LRESULT Launcher::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
 
 LRESULT Launcher::OnDropFiles(UINT uMsg, HDROP hDrop, LPARAM lParam, BOOL& bHandled)
 {
-	if (m_AllLyt.size() >= 7){
-		MessageBox(NULL, _T("can't drop too many files!"), _T("message"), MB_OK);
-		return 0;
-	}
 	//获取拖动文件松开鼠标时的x坐标
 	POINT* ptDropPos = new POINT;
 	DragQueryPoint(hDrop, ptDropPos);	//把文件拖动到的位置存到ptDropPos中
@@ -219,40 +215,29 @@ LRESULT Launcher::OnDropFiles(UINT uMsg, HDROP hDrop, LPARAM lParam, BOOL& bHand
 	delete(ptDropPos);
 
 	WORD wNumFilesDropped = DragQueryFile(hDrop, -1, NULL, 0);
-	WORD wPathnameSize = 0;
-	LPSTR lpFileName = NULL;
-	WCHAR * pFilePathName = NULL;
-	wstring strFirstFile = L"";
-	HICON hIcon = NULL;
 
-	char strTmp[20] = { 0 };
-	_itoa(m_Nbmp, strTmp, 10);
-	strcat_s(strTmp, "tem.bmp");
-	LPCSTR pBmpFilename = strTmp;
-	m_Nbmp++;
-	//there may be many, but we'll only use the first
-	if (wNumFilesDropped > 0)
+	if (m_AllLyt.size() + wNumFilesDropped > 7){
+		MessageBox(NULL, _T("can't drop too many files!"), _T("message"), MB_OK);
+		return 0;
+	}
+
+	TCHAR strFileName[MAX_PATH] = { 0 };
+	for (unsigned short i = 0; i < wNumFilesDropped; i++)
 	{
-		wPathnameSize = DragQueryFile(hDrop, 0, NULL, 0);
-		wPathnameSize++;
-		pFilePathName = new WCHAR[wPathnameSize];
-		if (NULL == pFilePathName)
-		{
-			_ASSERT(0);
-			DragFinish(hDrop);
-			return 0;
-		}
-		lpFileName = (LPSTR)pFilePathName;
+		HICON hIcon = NULL;
 
-		::ZeroMemory(pFilePathName, wPathnameSize);
-		DragQueryFile(hDrop, 0, lpFileName, wPathnameSize);
-		hIcon = QueryFileIcon((LPCTSTR)lpFileName);
+		char strTmp[20] = { 0 };
+		_itoa(m_Nbmp, strTmp, 10);
+		strcat_s(strTmp, "tem.bmp");
+		LPCSTR pBmpFilename = strTmp;
+		m_Nbmp++;
+
+		DragQueryFile(hDrop, i, strFileName, MAX_PATH);
+
+		hIcon = QueryFileIcon((LPCTSTR)strFileName);
 		HBITMAP IconHbmp = IconToBitmap(hIcon);
 		SaveBmp(IconHbmp, pBmpFilename);
-		AddLayout(iDropPos, pBmpFilename, lpFileName);
-		//	Vacated_position(iDropPos);
-		remove(pBmpFilename);
-		delete(pFilePathName);
+		AddLayout(iDropPos, pBmpFilename, strFileName);
 	}
 	return 0;
 }
