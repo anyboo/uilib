@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MenuWnd.h"
+#include "RecordWork.h"
 
 void CMenuWnd::Init(CControlUI* pOwner, POINT pt) {
 	if (pOwner == NULL) return;
@@ -147,6 +148,11 @@ void CMenuWnd::Notify(TNotifyUI& msg)
 		}
 		if (msg.pSender->GetName() == _T("btn_7680_4320")) {
 			bClose = m_Record->SetArea(7680, 4320);
+		}
+		if (PAGE_RECORDING == m_Record->m_nPageState)
+		{
+			m_Record->m_cRcdWk->OnSetChange(m_Record->m_bScreenRecord, m_Record->m_bSoundRecord, 
+				m_Record->m_rArea, m_Record->m_iCode, m_Record->m_bSysSound, m_Record->m_bMcf, m_Record->m_cSaveDir);
 		}
 		Close();
 	}

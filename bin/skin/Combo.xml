@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Window size="180,60" >
-<VerticalLayout >
+<VerticalLayout bkcolor="#FF000000" >
 	<List header="hidden" inset="8,8,8,8" itemdisabledbkcolor="#FFEEEEFF" >
 		<ListContainerElement name="ListScreen" height="22" inset="5,0,10,0" >
 			<HorizontalLayout>

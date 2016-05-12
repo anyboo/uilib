@@ -1,4 +1,16 @@
 #pragma once
+//Code model
+#define CODE_GIF 1
+#define CODE_MP4 2
+#define CODE_MKV 3
+#define CODE_M4V 4
+#define CODE_MOV 5
+#define CODE_WMV 6
+#define CODE_FLV 7
+#define CODE_AVI 8
+#define CODE_TS  9
+#define CODE_VOB 10
+
 class CRecordWork
 {
 public:
@@ -7,20 +19,15 @@ public:
 
 	void OnGetScreen();
 
-	void OnRecord();
+	void OnRecord(bool bScreenRecord, bool bSoundRecord, RECT rArea, int iCode, bool bSysSound, bool bMicrophone, char* cSaveDir);
 
-	void OnPause();
+	void OnPause(bool bScreenRecord, bool bSoundRecord, RECT rArea, int iCode, bool bSysSound, bool bMicrophone, char* cSaveDir);
 
-	void OnGoon();
+	void OnGoon(bool bScreenRecord, bool bSoundRecord, RECT rArea, int iCode, bool bSysSound, bool bMicrophone, char* cSaveDir);
 
-	void OnStop();
+	void OnStop(bool bScreenRecord, bool bSoundRecord, RECT rArea, int iCode, bool bSysSound, bool bMicrophone, char* cSaveDir);
 
-public:
-	bool m_bScreenRecord = true;
-	bool m_bSoundRecord = false;
-	RECT m_rArea;
-	int m_iCode;
-	bool m_bSysSound;
-	bool m_bMcf;
+	void OnSetChange(bool bScreenRecord, bool bSoundRecord, RECT rArea, int iCode, bool bSysSound, bool bMicrophone, char* cSaveDir);
+
 };
 

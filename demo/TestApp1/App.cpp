@@ -6,6 +6,18 @@
 #include "MenuWnd.h"
 #include <commdlg.h>
 #include <shlobj.h>
+
+#include "ostream"
+#include "document.h"
+#include "prettywriter.h"
+#include "stringbuffer.h"
+#include "string"
+
+#include "ostreamwrapper.h"
+#include "istreamwrapper.h"
+#include <fstream>
+
+
 #include "RecordWork.h"
 using namespace std;
 
@@ -63,13 +75,37 @@ void CRecord::OnFinalMessage(HWND /*hWnd*/)
 void CRecord::Init()
 {
 	m_rArea = { 0 };
+
+	//set save dir
+	ifstream ifs("SaveSet.json");
+	rapidjson::IStreamWrapper isw(ifs);
+	rapidjson::Document d;
+	d.ParseStream(isw);
+	size_t file_size = isw.Tell();
+	string str;
+	if (isw.Tell() == 0)
+	{
+		str = "E:\\";
+	}
+	else
+	{
+		str = d["path"].GetString();
+	}
+	memset(m_cSaveDir, 0, MAX_PATH);
+#ifndef UNICODE
+	strcpy(m_cSaveDir, str.c_str());
+#else
+	wstring wStr = UTF8ToUnicode(str);
+	memcpy(m_cSaveDir, wStr.c_str(), MAX_PATH);
+#endif
+
 }
 
 void CRecord::Notify(TNotifyUI& msg)
 {
-	CRecordWork cRcdWk;
 	if (msg.sType == _T("click")) {
 		if (msg.pSender->GetName() == _T("closebtn")) {
+			SaveSet();
 			PostQuitMessage(0);
 			return;
 		}
@@ -90,12 +126,12 @@ void CRecord::Notify(TNotifyUI& msg)
 			if (0 == m_bPauseState % 2)
 			{
 				SetPause();
-				cRcdWk.OnPause();
+				m_cRcdWk->OnPause(m_bScreenRecord, m_bSoundRecord, m_rArea, m_iCode, m_bSysSound, m_bMcf, m_cSaveDir);
 			}
 			else
 			{
 				SetGoon();
-				cRcdWk.OnGoon();
+				m_cRcdWk->OnGoon(m_bScreenRecord, m_bSoundRecord, m_rArea, m_iCode, m_bSysSound, m_bMcf, m_cSaveDir);
 			}
 			m_bPauseState++;
 		}
@@ -110,7 +146,7 @@ void CRecord::Notify(TNotifyUI& msg)
 			pMenu->Init(msg.pSender, pt);
 		}
 		if (msg.pSender->GetName() == _T("btpmbh")) {
-			cRcdWk.OnGetScreen();
+			m_cRcdWk->OnGetScreen();
 		}
 		if (msg.pSender->GetName() == _T("btlzqy")) {
 			CVerticalLayoutUI* cLyt = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(_T("btlzqy")));
@@ -389,7 +425,6 @@ void CRecord::OnTemer()
 
 void CRecord::ChangePage()
 {
-	CRecordWork cRcdWk;
 	static int i = 0;
 	if (0 == i)
 		m_pPage1 = static_cast<CHorizontalLayoutUI*>(m_pm.FindControl(_T("page1")));
@@ -401,13 +436,7 @@ void CRecord::ChangePage()
 		m_nPageState = PAGE_RECORDING;
 		SetTimer(m_hWnd, 1, 1000, TimerProc);
 
-		cRcdWk.m_bMcf = m_bMcf;
-		cRcdWk.m_bScreenRecord = m_bScreenRecord;
-		cRcdWk.m_bSoundRecord = m_bSoundRecord;
-		cRcdWk.m_bSysSound = m_bSysSound;
-		cRcdWk.m_iCode = m_iCode;
-		cRcdWk.m_rArea = m_rArea;
-		cRcdWk.OnRecord();
+		m_cRcdWk->OnRecord(m_bScreenRecord, m_bSoundRecord, m_rArea, m_iCode, m_bSysSound, m_bMcf, m_cSaveDir);
 	}
 	else
 	{
@@ -422,7 +451,7 @@ void CRecord::ChangePage()
 		m_nPageState = PAGE_RECORD;
 		if (0 != m_bPauseState % 2)
 			SetGoon();
-		cRcdWk.OnStop();
+		m_cRcdWk->OnStop(m_bScreenRecord, m_bSoundRecord, m_rArea, m_iCode, m_bSysSound, m_bMcf, m_cSaveDir);
 		m_bPauseState = false;
 	}
 	i++;
@@ -496,21 +525,45 @@ void CRecord::SetSaveDir()
 	}
 	SHGetPathFromIDList(idl, szBuffer);
 	memcpy(m_cSaveDir, szBuffer, MAX_PATH);
+	if (PAGE_RECORDING == m_nPageState)
+	{
+		m_cRcdWk->OnSetChange(m_bScreenRecord, m_bSoundRecord, m_rArea, m_iCode, m_bSysSound, m_bMcf, m_cSaveDir);
+	}
 }
 
 void CRecord::OpenRecordFile()
 {
-	TCHAR szBuffer[MAX_PATH] = { 0 };
-	OPENFILENAME ofn = { 0 };
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = m_hWnd;
-	ofn.lpstrFilter = _T("所有文件(*.*)\0*.*\0所有文件(*.*)\0*.*\0");//要选择的文件后缀   
-	ofn.lpstrInitialDir = _T("D:\\Program Files");//默认的文件路径   
-	ofn.lpstrFile = szBuffer;//存放文件的缓冲区   
-	ofn.nMaxFile = sizeof(szBuffer) / sizeof(*szBuffer);
-	ofn.nFilterIndex = 0;
-	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_EXPLORER;//标志如果是多选要加上OFN_ALLOWMULTISELECT  
-	BOOL bSel = GetOpenFileName(&ofn);
+	HINSTANCE hIns = ShellExecute(NULL, _T("Open"), m_cSaveDir, NULL, NULL, SW_SHOWNORMAL);
+	int dret = (int)hIns;
+	if (dret < 32)
+		MessageBox(NULL, _T("Open file Failure!"), _T("message"), MB_OK);
+
+}
+
+void CRecord::SaveSet()
+{
+	rapidjson::Document document;
+	document.Parse("SaveSet.json");
+	ofstream ofs("SaveSet.json");
+	rapidjson::OStreamWrapper osw(ofs);
+
+	document.SetObject();
+	rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+
+	rapidjson::Value file_path(rapidjson::kObjectType);
+	rapidjson::Value root(rapidjson::kObjectType);
+
+#ifndef UNICODE
+	file_path.SetString(m_cSaveDir, allocator);
+#else
+	char cSaveData[MAX_PATH];
+	memcpy(cSaveData, m_cSaveDir, MAX_PATH);
+	file_path.SetString(cSaveData, allocator);
+#endif
+	root.AddMember("path", file_path, allocator);
+	rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
+	root.Accept(writer);
+
 }
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)

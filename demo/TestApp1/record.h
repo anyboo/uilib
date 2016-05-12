@@ -2,6 +2,7 @@
 
 #include <wtypes.h>
 #include <shellapi.h>
+#include "RecordWork.h"
 
 #define DIALOGUE_ADJ_LEFT -20
 #define DIALOGUE_ADJ_TOP 12
@@ -20,18 +21,6 @@
 
 #define SND_PER_MIN 60
 #define MIN_PER_HOUR 60
-
-//Code model
-#define CODE_GIF 1
-#define CODE_MP4 2
-#define CODE_MKV 3
-#define CODE_M4V 4
-#define CODE_MOV 5
-#define CODE_WMV 6
-#define CODE_FLV 7
-#define CODE_AVI 8
-#define CODE_TS  9
-#define CODE_VOB 10
 
 class CRecord : public CWindowWnd, public INotifyUI
 {
@@ -83,6 +72,8 @@ public:
 
 	bool SetArea(int iAreaX, int iAreaY);
 
+	void SaveSet();
+
 public:
 	CPaintManagerUI m_pm;
 	CHorizontalLayoutUI* m_pSelectPage;
@@ -93,13 +84,18 @@ public:
 	int m_nRecordState = STATE_RECORDSCREEN;
 	int m_nRecordSecond = 0;
 	int m_bPauseState = 0;
+#ifndef UNICODE
+	CHAR m_cSaveDir[MAX_PATH]; 
+#else
 	TCHAR m_cSaveDir[MAX_PATH];
-
+#endif // UNICODE
 	bool m_bScreenRecord = true;
 	bool m_bSoundRecord = false;
 	RECT m_rArea;
 	int m_iCode = CODE_GIF;
 	bool m_bSysSound = true;
 	bool m_bMcf = false;
+
+	CRecordWork* m_cRcdWk;
 };
 

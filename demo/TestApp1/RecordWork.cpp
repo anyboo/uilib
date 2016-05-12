@@ -16,21 +16,26 @@ void CRecordWork::OnGetScreen()
 
 }
 
-void CRecordWork::OnRecord()
+void CRecordWork::OnRecord(bool bScreenRecord, bool bSoundRecord, RECT rArea, int iCode, bool bSysSound, bool bMicrophone, char* cSaveDir)
 {
 }
 
-void CRecordWork::OnPause()
-{
-
-}
-
-void CRecordWork::OnGoon()
+void CRecordWork::OnPause(bool bScreenRecord, bool bSoundRecord, RECT rArea, int iCode, bool bSysSound, bool bMicrophone, char* cSaveDir)
 {
 
 }
 
-void CRecordWork::OnStop()
+void CRecordWork::OnGoon(bool bScreenRecord, bool bSoundRecord, RECT rArea, int iCode, bool bSysSound, bool bMicrophone, char* cSaveDir)
+{
+
+}
+
+void CRecordWork::OnStop(bool bScreenRecord, bool bSoundRecord, RECT rArea, int iCode, bool bSysSound, bool bMicrophone, char* cSaveDir)
+{
+
+}
+
+void CRecordWork::OnSetChange(bool bScreenRecord, bool bSoundRecord, RECT rArea, int iCode, bool bSysSound, bool bMicrophone, char* cSaveDir)
 {
 
 }
