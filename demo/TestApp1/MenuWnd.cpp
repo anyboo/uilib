@@ -62,13 +62,16 @@ void CMenuWnd::OnFinalMessage(HWND /*hWnd*/)
 
 void CMenuWnd::Notify(TNotifyUI& msg)
 {
+	if (msg.sType == _T("windowinit")) OnPrepare();
 	if (msg.sType == _T("click")) {
 		bool bClose = true;
 		//record model
-		if (msg.pSender->GetName() == _T("LbSound")) {
+		if (msg.pSender->GetName() == _T("btnSound")) {
+			m_Record->m_pLzPageName = _T("LbSound");
 			m_Record->ScreenToSound();
 		}
-		if (msg.pSender->GetName() == _T("LbScreen")) {
+		if (msg.pSender->GetName() == _T("btnScreen")) {
+			m_Record->m_pLzPageName = _T("LbScreen");
 			m_Record->SoundToScreen();
 		}
 
@@ -89,33 +92,43 @@ void CMenuWnd::Notify(TNotifyUI& msg)
 		//Code model
 		if (msg.pSender->GetName() == _T("BtnGif")) {
 			m_Record->m_iCode = CODE_GIF;
+			m_Record->m_pCodeName = _T("LbGif");
 		}
 		if (msg.pSender->GetName() == _T("BtnMP4")) {
+			m_Record->m_pCodeName = _T("LbMp4");
 			m_Record->m_iCode = CODE_MP4;
 		}
 		if (msg.pSender->GetName() == _T("BtnMkv")) {
 			m_Record->m_iCode = CODE_MKV;
+			m_Record->m_pCodeName = _T("LbMkv");
 		}
 		if (msg.pSender->GetName() == _T("BtnM4v")) {
 			m_Record->m_iCode = CODE_M4V;
+			m_Record->m_pCodeName = _T("LbM4v");
 		}
 		if (msg.pSender->GetName() == _T("BtnMov")) {
 			m_Record->m_iCode = CODE_MOV;
+			m_Record->m_pCodeName = _T("LbMov");
 		}
 		if (msg.pSender->GetName() == _T("BtnWmv")) {
 			m_Record->m_iCode = CODE_WMV;
+			m_Record->m_pCodeName = _T("LbWmv");
 		}
 		if (msg.pSender->GetName() == _T("BtnFlv")) {
 			m_Record->m_iCode = CODE_FLV;
+			m_Record->m_pCodeName = _T("LbFlv");
 		}
 		if (msg.pSender->GetName() == _T("BtnAvi")) {
 			m_Record->m_iCode = CODE_AVI;
+			m_Record->m_pCodeName = _T("LbAvi");
 		}
 		if (msg.pSender->GetName() == _T("BtnTs")) {
 			m_Record->m_iCode = CODE_TS;
+			m_Record->m_pCodeName = _T("LbTs");
 		}
 		if (msg.pSender->GetName() == _T("BtnVob")) {
 			m_Record->m_iCode = CODE_VOB;
+			m_Record->m_pCodeName = _T("LbVob");
 		}
 
 		//area model
@@ -272,4 +285,71 @@ LRESULT CMenuWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	if (bHandled) return lRes;
 	if (m_pm.MessageHandler(uMsg, wParam, lParam, lRes)) return lRes;
 	return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+}
+
+
+void CMenuWnd::ChooseCode(LPCTSTR pLbName)
+{
+	SetChooseCode(pLbName, _T("LbGif"));
+	SetChooseCode(pLbName, _T("LbMp4"));
+	SetChooseCode(pLbName, _T("LbMkv"));
+	SetChooseCode(pLbName, _T("LbM4v"));
+	SetChooseCode(pLbName, _T("LbMov"));
+	SetChooseCode(pLbName, _T("LbWmv"));
+	SetChooseCode(pLbName, _T("LbFlv"));
+	SetChooseCode(pLbName, _T("LbAvi"));
+	SetChooseCode(pLbName, _T("LbTs"));
+	SetChooseCode(pLbName, _T("LbVob"));
+}
+
+void CMenuWnd::ChooseLzPage(LPCTSTR pLbName)
+{
+	SetChooseCode(pLbName, _T("LbScreen"));
+	SetChooseCode(pLbName, _T("LbSound"));
+}
+
+void CMenuWnd::SetChooseCode(LPCTSTR pDesLbName, LPCTSTR pLbName)
+{
+	CLabelUI* cLb = static_cast<CLabelUI*>(m_pm.FindControl(pLbName));
+	if (NULL == cLb)
+		return;
+	if (!strcmp(pDesLbName, pLbName))
+	{
+		cLb->SetBkImage(_T("record/choose.png"));
+	}
+	else
+	{
+		cLb->SetBkImage(_T(""));
+	}
+}
+
+
+void CMenuWnd::OnPrepare()
+{
+	if (NULL != m_Record->m_pCodeName)
+		ChooseCode(m_Record->m_pCodeName);
+	if (NULL != m_Record->m_pLzPageName)
+		ChooseLzPage(m_Record->m_pLzPageName);
+	if (m_Record->m_bSysSound)
+	{
+		CLabelUI* cLb = static_cast<CLabelUI*>(m_pm.FindControl(_T("LbSysSound")));
+		cLb->SetBkImage(_T("record/choose.png"));
+	}
+
+	CLabelUI* cLbMcf = static_cast<CLabelUI*>(m_pm.FindControl(_T("LbMcf")));
+	if (NULL == cLbMcf)
+		return;
+	CLabelUI* cLbUnMcf = static_cast<CLabelUI*>(m_pm.FindControl(_T("LbUnMcf")));
+	if (NULL == cLbUnMcf)
+		return;
+	if (m_Record->m_bMcf)
+	{
+		cLbMcf->SetBkImage(_T("record/choose.png"));
+		cLbUnMcf->SetBkImage(_T(""));
+	}
+	else
+	{
+		cLbUnMcf->SetBkImage(_T("record/choose.png"));
+		cLbMcf->SetBkImage(_T(""));
+	}
 }

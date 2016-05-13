@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Window size="180,60" >
-<VerticalLayout bkcolor="#FF000000" >
-	<List header="hidden" inset="8,8,8,8" itemdisabledbkcolor="#FFEEEEFF" >
+<VerticalLayout bkcolor="#FFDDBBDD" >
+	<List header="hidden" inset="8,8,8,8" >
 		<ListContainerElement name="ListScreen" height="22" inset="5,0,10,0" >
 			<HorizontalLayout>
-				<Control width="10" />
-				<Button name="LbScreen" text="录制屏幕和声音" textcolor="#FFAA2535" />
+				<Label name="LbScreen" width="20" />
+				<Button name="btnScreen" text="录制屏幕和声音" textcolor="#FF000000" />
 			</HorizontalLayout>
 		</ListContainerElement>
 		<ListContainerElement name="ListSound" height="22" inset="5,0,10,0" >
 			<HorizontalLayout>
-				<Control width="10" />
-				<Button name="LbSound" text="录制声音" textcolor="#FFAA2535" />
+				<Label name="LbSound" width="20" />
+				<Button name="btnSound" text="录制声音" textcolor="#FF000000" />
 			</HorizontalLayout>
 		</ListContainerElement>
 	</List>

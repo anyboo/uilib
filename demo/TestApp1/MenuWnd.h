@@ -125,6 +125,16 @@ public:
 
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
+	void ChooseCode(LPCTSTR pLbName);
+
+	void ChooseLzPage(LPCTSTR pLbName);
+
+	void SetChooseCode(LPCTSTR pDesLbName, LPCTSTR pLbName);
+
+	void SetChooseLzPage(LPCTSTR pDesLbName, LPCTSTR pLbName);
+
+	void OnPrepare();
+
 public:
     CPaintManagerUI m_pm;
     CControlUI* m_pOwner;

@@ -1,73 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Window size="280,310" >
-<VerticalLayout bkcolor="#FF000000" >
+<VerticalLayout bkcolor="#FFDDBBDD" >
 	<List header="hidden" inset="8,8,8,8" >
-		<ListContainerElement height="22" inset="20,5,10,5" >
+		<ListContainerElement height="22" inset="2,5,2,5" >
 			<HorizontalLayout>
-				<Button name="BtnGif" text="GIF动画（.GIF）" textcolor="#FFAA2535" />
+				<Label name="LbGif" bkimage="record/choose.png" width="20" />
+				<Button name="BtnGif" text="GIF动画（.GIF）" textcolor="#FF000000" />
 			</HorizontalLayout>
 		</ListContainerElement>
-		<Control height="1" bkcolor="#FF777777" padding="20,0,0,0" />
-		<ListContainerElement height="22" inset="20,5,10,0" >
+		<Control height="1" bkcolor="#FF777777" padding="2,0,0,0" />
+		<ListContainerElement height="22" inset="2,5,2,0" >
 			<HorizontalLayout>
-				<Button name="BtnMP4" text="MP4(MPEG-4 Part 14)容器" textcolor="#FFAA2535" />
+				<Label name="LbMp4" width="20" />
+				<Button name="BtnMP4" text="MP4(MPEG-4 Part 14)容器" textcolor="#FF000000" />
 			</HorizontalLayout>
 		</ListContainerElement>
-		<ListContainerElement height="22" inset="20,0,10,0" >
+		<ListContainerElement height="22" inset="2,0,2,0" >
 			<HorizontalLayout>
-				<Button name="BtnMkv" text="MKV(Matroska)容器" textcolor="#FFAA2535" />
+				<Label name="LbMkv" width="20" />
+				<Button name="BtnMkv" text="MKV(Matroska)容器" textcolor="#FF000000" />
 			</HorizontalLayout>
 		</ListContainerElement>
-		<ListContainerElement height="22" inset="20,0,10,0" >
+		<ListContainerElement height="22" inset="2,0,2,0" >
 			<HorizontalLayout>
-				<Button name="BtnM4v" text="M4V(iPod MP4)容器" textcolor="#FFAA2535" />
+				<Label name="LbM4v" width="20" />
+				<Button name="BtnM4v" text="M4V(iPod MP4)容器" textcolor="#FF000000" />
 			</HorizontalLayout>
 		</ListContainerElement>
-		<ListContainerElement height="22" inset="20,0,10,0" >
+		<ListContainerElement height="22" inset="2,0,2,0" >
 			<HorizontalLayout>
-				<Button name="BtnMov" text="MOV(QuickTime)容器" textcolor="#FFAA2535" />
+				<Label name="LbMov" width="20" />
+				<Button name="BtnMov" text="MOV(QuickTime)容器" textcolor="#FF000000" />
 			</HorizontalLayout>
 		</ListContainerElement>
-		<ListContainerElement height="22" inset="20,0,10,0" >
+		<ListContainerElement height="22" inset="2,0,2,0" >
 			<HorizontalLayout>
-				<Button name="BtnWmv" text="WMV(Windows Media Video)容器" textcolor="#FFAA2535" />
+				<Label name="LbWmv" width="20" />
+				<Button name="BtnWmv" text="WMV(Windows Media Video)容器" textcolor="#FF000000" />
 			</HorizontalLayout>
 		</ListContainerElement>
-		<ListContainerElement height="22" inset="20,0,10,0" >
+		<ListContainerElement height="22" inset="2,0,2,0" >
 			<HorizontalLayout>
-				<Button name="BtnFlv" text="FLV(Flash Video)容器" textcolor="#FFAA2535" />
+				<Label name="LbFlv" width="20" />
+				<Button name="BtnFlv" text="FLV(Flash Video)容器" textcolor="#FF000000" />
 			</HorizontalLayout>
 		</ListContainerElement>
-		<ListContainerElement height="22" inset="20,0,10,0" >
+		<ListContainerElement height="22" inset="2,0,2,0" >
 			<HorizontalLayout>
-				<Button name="BtnAvi" text="AVI(Audio Video Interleaved)容器" textcolor="#FFAA2535" />
+				<Label name="LbAvi" width="20" />
+				<Button name="BtnAvi" text="AVI(Audio Video Interleaved)容器" textcolor="#FF000000" />
 			</HorizontalLayout>
 		</ListContainerElement>
-		<ListContainerElement height="22" inset="20,0,10,0" >
+		<ListContainerElement height="22" inset="2,0,2,0" >
 			<HorizontalLayout>
-				<Button name="BtnTs" text="TS(MPEG-2 Transport Stream)容器" textcolor="#FFAA2535" />
+				<Label name="LbTs" width="20" />
+				<Button name="BtnTs" text="TS(MPEG-2 Transport Stream)容器" textcolor="#FF000000" />
 			</HorizontalLayout>
 		</ListContainerElement>
-		<ListContainerElement height="22" inset="20,0,10,5" >
+		<ListContainerElement height="22" inset="2,0,2,5" >
 			<HorizontalLayout>
-				<Button name="BtnVob" text="VOB(MPEG-2 PS)容器" textcolor="#FFAA2535" />
+				<Label name="LbVob" width="20" />
+				<Button name="BtnVob" text="VOB(MPEG-2 PS)容器" textcolor="#FF000000" />
 			</HorizontalLayout>
 		</ListContainerElement>
-		<Control height="1" bkcolor="#FF777777" padding="20,0,0,0" />
-		<ListContainerElement height="22" inset="20,5,10,0" >
+		<Control height="1" bkcolor="#FF777777" padding="2,0,0,0" />
+		<ListContainerElement height="22" inset="2,5,2,0" >
 			<HorizontalLayout>
-				<Button text="硬件编码器设置..." textcolor="#FFAA2535" />
+				<Button text="硬件编码器设置..." textcolor="#FF000000" />
 			</HorizontalLayout>
 		</ListContainerElement>
-		<ListContainerElement height="22" inset="20,0,10,5" >
+		<ListContainerElement height="22" inset="2,0,2,5" >
 			<HorizontalLayout>
-				<Button text="外部编解码器(.AVI）" textcolor="#FFAA2535" />
+				<Button text="外部编解码器(.AVI）" textcolor="#FF000000" />
 			</HorizontalLayout>
 		</ListContainerElement>
-		<Control height="1" bkcolor="#FF777777" padding="20,0,0,0" />
-		<ListContainerElement height="22" inset="20,5,10,0" >
+		<Control height="1" bkcolor="#FF777777" padding="2,0,0,0" />
+		<ListContainerElement height="22" inset="2,5,2,0" >
 			<HorizontalLayout>
-				<Button text="音频编解码器设置..." textcolor="#FFAA2535" />
+				<Button text="音频编解码器设置..." textcolor="#FF000000" />
 			</HorizontalLayout>
 		</ListContainerElement>
 	</List>

@@ -17,8 +17,8 @@
 #include "istreamwrapper.h"
 #include <fstream>
 
-
 #include "RecordWork.h"
+#include "RecordWindow.h"
 using namespace std;
 
 void CALLBACK TimerProc(HWND hWnd, UINT nMsg, UINT nTimerid, DWORD dwTime)
@@ -103,7 +103,8 @@ void CRecord::Init()
 
 void CRecord::Notify(TNotifyUI& msg)
 {
-	if (msg.sType == _T("click")) {
+	if (msg.sType == _T("windowinit")) OnPrepare();
+	else if (msg.sType == _T("click")) {
 		if (msg.pSender->GetName() == _T("closebtn")) {
 			SaveSet();
 			PostQuitMessage(0);
@@ -114,7 +115,8 @@ void CRecord::Notify(TNotifyUI& msg)
 			return;
 		}
 		if (msg.pSender->GetName() == _T("savebtn")) {
-			SetSaveDir();
+//			SetSaveDir();
+			OpenSetPage();
 			return;
 		}
 
@@ -182,6 +184,17 @@ void CRecord::Notify(TNotifyUI& msg)
 			MessageBox(NULL, _T("°æ±¾ V1.1"), _T("¹ØÓÚ"), MB_OK);
 		}
 	}
+}
+
+void CRecord::OnPrepare()
+{
+#if 0
+	CRecordWindow* pRecordArea = new CRecordWindow();
+	if (pRecordArea == NULL) { Close(); return; }
+	pRecordArea->Create(m_hWnd, _T(""), UI_WNDSTYLE_DIALOG, 0, 0, 0, 0, 0, NULL);
+	pRecordArea->CenterWindow();
+	pRecordArea->ShowModal();
+#endif
 }
 
 LRESULT CRecord::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -537,7 +550,6 @@ void CRecord::OpenRecordFile()
 	int dret = (int)hIns;
 	if (dret < 32)
 		MessageBox(NULL, _T("Open file Failure!"), _T("message"), MB_OK);
-
 }
 
 void CRecord::SaveSet()
@@ -566,6 +578,16 @@ void CRecord::SaveSet()
 
 }
 
+void CRecord::OpenSetPage()
+{
+	CRecordWindow* pRecordArea = new CRecordWindow(this);
+	if (pRecordArea == NULL) { Close(); return; }
+	pRecordArea->Create(m_hWnd, _T(""), UI_WNDSTYLE_DIALOG, 0, 0, 0, 0, 0, NULL);
+	pRecordArea->CenterWindow();
+	pRecordArea->ShowModal();
+
+}
+
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
 
@@ -581,6 +603,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	pFrame->SetIcon(IDI_ICON1);
 	pFrame->CenterWindow();
 	pFrame->ShowWindow(true);
+
 	CPaintManagerUI::MessageLoop();
 
 	::CoUninitialize();

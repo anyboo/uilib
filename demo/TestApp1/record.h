@@ -34,6 +34,8 @@ public:
 
 	void Notify(TNotifyUI& msg);
 
+	void OnPrepare();
+
 	LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 	LRESULT OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -74,6 +76,8 @@ public:
 
 	void SaveSet();
 
+	void OpenSetPage();
+
 public:
 	CPaintManagerUI m_pm;
 	CHorizontalLayoutUI* m_pSelectPage;
@@ -95,6 +99,9 @@ public:
 	int m_iCode = CODE_GIF;
 	bool m_bSysSound = true;
 	bool m_bMcf = false;
+
+	LPCTSTR m_pCodeName = NULL;
+	LPCTSTR m_pLzPageName = NULL;
 
 	CRecordWork* m_cRcdWk;
 };

@@ -279,6 +279,7 @@
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="MenuWnd.cpp" />
+    <ClCompile Include="RecordWindow.cpp" />
     <ClCompile Include="RecordWork.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -290,6 +291,7 @@
   <ItemGroup>
     <ClInclude Include="MenuWnd.h" />
     <ClInclude Include="record.h" />
+    <ClInclude Include="RecordWindow.h" />
     <ClInclude Include="RecordWork.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="StdAfx.h" />
