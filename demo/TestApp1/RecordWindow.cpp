@@ -36,6 +36,7 @@ void CRecordWindow::Init() {
 
 void CRecordWindow::Notify(TNotifyUI& msg)
 {
+	if (msg.sType == _T("windowinit")) OnPrepare();
 	if (msg.sType == _T("click")) {
 		if (msg.pSender->GetName() == _T("closebtn")) { Close(); return; }
 		else if (msg.pSender->GetName() == _T("loginBtn")) { Close(); return; }
@@ -52,40 +53,40 @@ void CRecordWindow::Notify(TNotifyUI& msg)
 			m_cRcd->m_pCodeName = _T("LbGif");
 		}
 		if (msg.pSender->GetName() == _T("opmp4")) {
-			m_cRcd->m_pCodeName = _T("opmp4");
+			m_cRcd->m_pCodeName = _T("LbMp4");
 			m_cRcd->m_iCode = CODE_MP4;
 		}
 		if (msg.pSender->GetName() == _T("opmkv")) {
 			m_cRcd->m_iCode = CODE_MKV;
-			m_cRcd->m_pCodeName = _T("opmkv");
+			m_cRcd->m_pCodeName = _T("LbMkv");
 		}
 		if (msg.pSender->GetName() == _T("opm4v")) {
 			m_cRcd->m_iCode = CODE_M4V;
-			m_cRcd->m_pCodeName = _T("opm4v");
+			m_cRcd->m_pCodeName = _T("LbM4v");
 		}
 		if (msg.pSender->GetName() == _T("opmov")) {
 			m_cRcd->m_iCode = CODE_MOV;
-			m_cRcd->m_pCodeName = _T("opmov");
+			m_cRcd->m_pCodeName = _T("LbMov");
 		}
 		if (msg.pSender->GetName() == _T("opwmv")) {
 			m_cRcd->m_iCode = CODE_WMV;
-			m_cRcd->m_pCodeName = _T("opwmv");
+			m_cRcd->m_pCodeName = _T("LbWmv");
 		}
 		if (msg.pSender->GetName() == _T("opflv")) {
 			m_cRcd->m_iCode = CODE_FLV;
-			m_cRcd->m_pCodeName = _T("opflv");
+			m_cRcd->m_pCodeName = _T("LbFlv");
 		}
 		if (msg.pSender->GetName() == _T("opavi")) {
 			m_cRcd->m_iCode = CODE_AVI;
-			m_cRcd->m_pCodeName = _T("opavi");
+			m_cRcd->m_pCodeName = _T("LbAvi");
 		}
 		if (msg.pSender->GetName() == _T("opts")) {
 			m_cRcd->m_iCode = CODE_TS;
-			m_cRcd->m_pCodeName = _T("opts");
+			m_cRcd->m_pCodeName = _T("LbTs");
 		}
 		if (msg.pSender->GetName() == _T("opvob")) {
 			m_cRcd->m_iCode = CODE_VOB;
-			m_cRcd->m_pCodeName = _T("opvob");
+			m_cRcd->m_pCodeName = _T("LbVob");
 		}
 		if (PAGE_RECORDING == m_cRcd->m_nPageState)
 		{
@@ -220,6 +221,36 @@ void CRecordWindow::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 
 }
 
+void CRecordWindow::OnPrepare()
+{
+	COptionUI* pOp = NULL;
+
+	if (m_cRcd->m_iCode == CODE_GIF)
+		pOp = static_cast<COptionUI*>(m_pm.FindControl(_T("opgif")));
+	if (m_cRcd->m_iCode == CODE_MP4)
+		pOp = static_cast<COptionUI*>(m_pm.FindControl(_T("opMp4")));
+	if (m_cRcd->m_iCode == CODE_MKV)
+		pOp = static_cast<COptionUI*>(m_pm.FindControl(_T("opmkv")));
+	if (m_cRcd->m_iCode == CODE_M4V)
+		pOp = static_cast<COptionUI*>(m_pm.FindControl(_T("opm4v")));
+	if (m_cRcd->m_iCode == CODE_MOV)
+		pOp = static_cast<COptionUI*>(m_pm.FindControl(_T("opmov")));
+	if (m_cRcd->m_iCode == CODE_WMV)
+		pOp = static_cast<COptionUI*>(m_pm.FindControl(_T("opwmv")));
+	if (m_cRcd->m_iCode == CODE_FLV)
+		pOp = static_cast<COptionUI*>(m_pm.FindControl(_T("opflv")));
+	if (m_cRcd->m_iCode == CODE_AVI)
+		pOp = static_cast<COptionUI*>(m_pm.FindControl(_T("opavi")));
+	if (m_cRcd->m_iCode == CODE_TS)
+		pOp = static_cast<COptionUI*>(m_pm.FindControl(_T("opts")));
+	if (m_cRcd->m_iCode == CODE_VOB)
+		pOp = static_cast<COptionUI*>(m_pm.FindControl(_T("opvob")));
+	if (NULL != pOp)
+		pOp->Selected(true);
+
+	CEditUI* pEdit = static_cast<CEditUI*>(m_pm.FindControl(_T("EditDir")));
+	pEdit->SetText(m_cRcd->m_cSaveDir);
+}
 
 
 

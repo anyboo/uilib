@@ -32,6 +32,9 @@ public:
 	LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled);
 
 	void OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+
+	void OnPrepare();
+
 public:
 	CPaintManagerUI m_pm;
 	CRecord* m_cRcd;
