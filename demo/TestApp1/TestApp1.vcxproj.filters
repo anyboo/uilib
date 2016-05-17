@@ -46,6 +46,9 @@
     <ClInclude Include="RecordWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ControlEx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TestApp1.rc">

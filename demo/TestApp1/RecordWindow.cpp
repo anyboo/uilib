@@ -172,11 +172,11 @@ LRESULT CRecordWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	BOOL bHandled = TRUE;
 	switch (uMsg) {
 	case WM_CREATE:        lRes = OnCreate(uMsg, wParam, lParam, bHandled); break;
-	case WM_NCHITTEST:     lRes = OnNcHitTest(uMsg, wParam, lParam, bHandled); break;
+//	case WM_NCHITTEST:     lRes = OnNcHitTest(uMsg, wParam, lParam, bHandled); break;
 	case WM_GETMINMAXINFO: lRes = OnGetMinMaxInfo(uMsg, wParam, lParam, bHandled); break;
 	case WM_SIZE:          lRes = OnSize(uMsg, wParam, lParam, bHandled); break;
-//	case WM_MOUSEMOVE:	   OnMouseMove(uMsg, wParam, lParam, bHandled); break;
-//	case MOUSEEVENTF_LEFTDOWN:	OnMouseMove(uMsg, wParam, lParam, bHandled); break;
+	case WM_MOUSEMOVE:	   OnMouseMove(uMsg, wParam, lParam, bHandled); break;
+	case MOUSEEVENTF_LEFTDOWN:	OnMouseMove(uMsg, wParam, lParam, bHandled); break;
 	default:
 		bHandled = FALSE;
 	}
@@ -209,16 +209,6 @@ LRESULT CRecordWindow::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, b
 
 void CRecordWindow::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	POINT pt;
-	GetCursorPos(&pt);
-	ScreenToClient(m_hWnd, &pt);
-
-	CEditUI* cLytV = static_cast<CEditUI*>(m_pm.FindControl(_T("accountedit")));
-	if ((pt.x < cLytV->GetPos().right) && (pt.x > cLytV->GetPos().left) && (pt.y < cLytV->GetPos().bottom) && (pt.y > cLytV->GetPos().top))
-	{
-		cLytV->SetBkColor(LYT_BK_COLOR);
-	}
-
 }
 
 void CRecordWindow::OnPrepare()

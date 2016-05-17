@@ -582,9 +582,13 @@ void CRecord::OpenSetPage()
 {
 	CRecordWindow* pRecordArea = new CRecordWindow(this);
 	if (pRecordArea == NULL) { Close(); return; }
-	pRecordArea->Create(m_hWnd, _T(""), UI_WNDSTYLE_DIALOG, 0, 0, 0, 0, 0, NULL);
+	pRecordArea->Create(NULL, _T("ÓÎÏ·ÖÐÐÄ"), UI_WNDSTYLE_FRAME, 0L, 0, 0, 1024, 738);
 	pRecordArea->CenterWindow();
-	pRecordArea->ShowModal();
+	::ShowWindow(*pRecordArea, SW_SHOW);
+
+	CPaintManagerUI::MessageLoop();
+
+	::CoUninitialize();
 
 }
 
