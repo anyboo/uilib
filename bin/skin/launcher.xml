@@ -2,17 +2,18 @@
 <Window size="538,264" mininfo="538,264" maxinfo="538,500" sizebox="4,4,6,6" caption="0,0,0,30" roundcorner="4,4" showdirty="false">	
 	<Font shared="true" id="0" name="微软雅黑" size="12" bold="false" />
 	<VerticalLayout bkimage="file='launcher/bg_above.png'" height="270" >	
-			<HorizontalLayout height="30" width="535">
-				<VerticalLayout width="20" height="20" bkimage="file='launcher/launcher.png'" padding="4,4,0,5" />
-				<Label text="  启动器" textcolor="#FFFFFFFF" font="0" width="425" />
-				<Button name="minbtn" width="35" height="19" padding="1,5,1,6" tooltip="最小化" normalimage="file='launcher/btn_min_normal.png' mask='#00FFFFFF'" hotimage="file='launcher/btn_min_hot.png'" pushedimage="file='launcher/btn_min_pushed.png'"/>
-				<Button name="closebtn" width="35" height="19" padding="1,5,3,6" tooltip="点击这里直接退出" normalimage="file='launcher/btn_close_normal.png'" hotimage="file='launcher/btn_close_hot.png'" pushedimage="file='launcher/btn_close_pushed.png'"/>
-			</HorizontalLayout>
-			<HorizontalLayout name="ListLayout1" bkimage="file='record/bg.png'" vscrollbar="true">
+		<HorizontalLayout height="30" width="535">
+			<VerticalLayout width="20" height="20" bkimage="file='launcher/launcher.png'" padding="4,4,0,5" />
+			<Label text="  启动器" textcolor="#FFFFFFFF" font="0" width="425" />
+			<Button name="minbtn" width="35" height="19" padding="1,5,1,6" tooltip="最小化" normalimage="file='launcher/btn_min_normal.png' mask='#00FFFFFF'" hotimage="file='launcher/btn_min_hot.png'" pushedimage="file='launcher/btn_min_pushed.png'"/>
+			<Button name="closebtn" width="35" height="19" padding="1,5,3,6" tooltip="点击这里直接退出" normalimage="file='launcher/btn_close_normal.png'" hotimage="file='launcher/btn_close_hot.png'" pushedimage="file='launcher/btn_close_pushed.png'"/>
+		</HorizontalLayout>
+		<HorizontalLayout name="ListLayout1" bkimage="file='record/bg.png'" >
 			<Control bkcolor="#FF393939" width="5" />
-				<TileLayout name="ListLayout" columns="4" itemsize="135,110">
-				</TileLayout>			
-			</HorizontalLayout>		
-			<Control bkcolor="#FF393939" height="5" />
+				<TileLayout name="ListLayout" columns="4" itemsize="135,110" >
+				</TileLayout>
+			<Control bkcolor="#FF393939" width="5" />				
+		</HorizontalLayout>		
+		<Control bkcolor="#FF393939" height="5" />
 	</VerticalLayout>
 </Window>
