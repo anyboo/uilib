@@ -281,6 +281,7 @@
     <ClCompile Include="MenuWnd.cpp" />
     <ClCompile Include="RecordWindow.cpp" />
     <ClCompile Include="RecordWork.cpp" />
+    <ClCompile Include="SetPageDialog.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -295,6 +296,7 @@
     <ClInclude Include="RecordWindow.h" />
     <ClInclude Include="RecordWork.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SetPageDialog.h" />
     <ClInclude Include="StdAfx.h" />
   </ItemGroup>
   <ItemGroup>
