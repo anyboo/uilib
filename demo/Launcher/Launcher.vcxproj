@@ -295,6 +295,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Launcher.h" />
+    <ClInclude Include="NewUICtrol.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="StdAfx.h" />
   </ItemGroup>

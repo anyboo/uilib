@@ -64,6 +64,18 @@ void Launcher::Notify(TNotifyUI& msg)
 	else if (msg.sType == _T("menu_Rename")){
 		//DeleteLyt();
 	}
+	else if (msg.sType == DUI_MSGTYPE_TABSELECT){
+		OnMouseMove(msg.ptMouse.x, msg.ptMouse.y);
+	}
+	else if (msg.sType == DUI_MSGTYPE_SELECTCHANGED){
+		CNewVerticalLayoutUI* cLyt = new CNewVerticalLayoutUI;
+		for (UINT j = 0; j < m_AllLyt.size(); j++)
+		{
+			cLyt = m_AllLyt[j].Layout;
+			cLyt->SetBkColor(NULL);
+
+		}
+	}
 }
 
 void Launcher::SaveLytToJsonFile()
@@ -158,6 +170,14 @@ void Launcher::OpenExeFile(int xPos, int yPos)
 	int dret = (int)hIns;
 	if (dret < 32)
 		MessageBox(NULL, _T("Open file Failure!"), _T("message"), MB_OK);
+}
+
+void Launcher::OnMouseMove(int xPos, int yPos)
+{
+	UINT n = xPos / LYT_WIDTH + (yPos - BORD_WIDTH) / LYT_HEIGHT * 4;	
+	CNewVerticalLayoutUI* cLyt = new CNewVerticalLayoutUI;
+	cLyt = m_AllLyt[n].Layout;
+	cLyt->SetBkColor(0xFFFF9999);
 }
 
 void Launcher::c2w(wchar_t *pwstr, size_t len, const char *str)
@@ -330,44 +350,6 @@ LRESULT Launcher::OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 	return 0;
 }
 
-LRESULT Launcher::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-
-	POINT pt;
-	GetCursorPos(&pt);
-	ScreenToClient(m_hWnd, &pt);
-	//
-	int xPos = pt.x;
-	int yPos = pt.y;
-	UINT n = xPos / LYT_WIDTH + (yPos - BORD_WIDTH) / LYT_HEIGHT * 4;
-	//
-	CNewVerticalLayoutUI* cLyt = new CNewVerticalLayoutUI;
-	if (pt.x < 5 || pt.y < BORD_WIDTH || n > m_AllLyt.size() - 1 || xPos - 16 < 0 || (xPos - 16) % LYT_WIDTH > 95
-		|| yPos - BORD_WIDTH < 0 || (yPos - BORD_WIDTH) % LYT_HEIGHT > 90)
-	{
-		for (UINT i = 0; i < m_AllLyt.size(); i++)
-		{
-
-			cLyt = m_AllLyt[i].Layout;
-			cLyt->SetBkColor(NULL);
-		}
-		return 0;
-	}
-
-	for (UINT j = 0; j < m_AllLyt.size(); j++)
-	{
-
-		cLyt = m_AllLyt[j].Layout;
-		if (j == n){
-			cLyt->SetBkColor(0xFFFF9999);
-		}
-		else{
-			cLyt->SetBkColor(NULL);
-		}
-	}
-	return 0;
-}
-
 LRESULT Launcher::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LRESULT lRes = 0;
@@ -380,7 +362,6 @@ LRESULT Launcher::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_NCHITTEST:     lRes = OnNcHitTest(uMsg, wParam, lParam, bHandled); break;
 	case WM_SIZE:          lRes = OnSize(uMsg, wParam, lParam, bHandled); break;
 	case WM_GETMINMAXINFO:	lRes = OnGetMinMaxInfo(uMsg, wParam, lParam, bHandled); break;
-	case WM_MOUSEMOVE:		lRes = OnMouseMove(uMsg, wParam, lParam, bHandled);break;
 	default:
 		bHandled = FALSE;
 	}
@@ -472,7 +453,7 @@ void Launcher::AddLayout(int nPosX, int nPosY, LPCTSTR pFileName, LPCTSTR strNam
 
 void Launcher::InitLayOut(CNewVerticalLayoutUI* cLyt, LPCTSTR pFileName, LPCTSTR strName)
 {
-	CButtonUI* cBtn = new CButtonUI;
+	CNewButtonUI* cBtn = new CNewButtonUI;
 	CLabelUI* Lab = new CLabelUI;
 	CHorizontalLayoutUI* cListLyt = static_cast<CHorizontalLayoutUI*>(m_pm.FindControl(_T("ListLayout")));
 	cListLyt->Add(cLyt);
