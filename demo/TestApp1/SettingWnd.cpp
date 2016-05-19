@@ -1,10 +1,8 @@
 #include "stdafx.h"
 #include "SettingWnd.h"
-#include "resource.h"
 
 CSettingWnd::CSettingWnd()
 {
-	RegisterWindowClass();
 }
 
 CSettingWnd::~CSettingWnd()

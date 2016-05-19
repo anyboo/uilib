@@ -1,19 +1,12 @@
 #include "stdafx.h"
 #include "AboutWnd.h"
-#include "resource.h"
 
 CAboutWnd::CAboutWnd()
 {
-	RegisterWindowClass();
 }
 
 CAboutWnd::~CAboutWnd()
 {
-}
-
-void CAboutWnd::InitWindow()
-{
-
 }
 
 void CAboutWnd::OnFinalMessage(HWND hWnd)
@@ -29,9 +22,6 @@ void CAboutWnd::Notify(TNotifyUI& msg)
 
 
 DUI_BEGIN_MESSAGE_MAP(CAboutWnd, WindowImplBase)
-	/*DUI_ON_MSGTYPE(DUI_MSGTYPE_CLICK, OnClick)
-	DUI_ON_MSGTYPE(DUI_MSGTYPE_SELECTCHANGED, OnSelectChanged)
-	DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMCLICK, OnItemClick)*/
 DUI_END_MESSAGE_MAP()
 
 LPCTSTR CAboutWnd::GetWindowClassName() const

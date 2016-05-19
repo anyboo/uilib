@@ -6,7 +6,7 @@ class CSettingWnd :
 {
 public:
 	CSettingWnd();
-	virtual ~CSettingWnd();
+	~CSettingWnd();
 	
 	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND /*hWnd*/);
