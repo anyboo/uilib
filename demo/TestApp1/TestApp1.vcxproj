@@ -278,10 +278,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="MainWnd.cpp" />
     <ClCompile Include="MenuWnd.cpp" />
-    <ClCompile Include="RecordWindow.cpp" />
+    <ClCompile Include="SettingWnd.cpp" />
     <ClCompile Include="RecordWork.cpp" />
-    <ClCompile Include="SetPageDialog.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -290,13 +290,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ControlEx.h" />
     <ClInclude Include="MenuWnd.h" />
-    <ClInclude Include="record.h" />
-    <ClInclude Include="RecordWindow.h" />
+    <ClInclude Include="MainWnd.h" />
+    <ClInclude Include="SettingWnd.h" />
     <ClInclude Include="RecordWork.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="SetPageDialog.h" />
     <ClInclude Include="StdAfx.h" />
   </ItemGroup>
   <ItemGroup>

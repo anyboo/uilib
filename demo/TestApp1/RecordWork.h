@@ -11,11 +11,11 @@
 #define CODE_TS  9
 #define CODE_VOB 10
 
-class CRecordWork
+class CMainWndWork
 {
 public:
-	CRecordWork();
-	~CRecordWork();
+	CMainWndWork();
+	~CMainWndWork();
 
 	void OnGetScreen();
 

@@ -2,21 +2,21 @@
 #include "RecordWork.h"
 
 
-CRecordWork::CRecordWork()
+CMainWndWork::CMainWndWork()
 {
 }
 
 
-CRecordWork::~CRecordWork()
+CMainWndWork::~CMainWndWork()
 {
 }
 
-void CRecordWork::OnGetScreen()
+void CMainWndWork::OnGetScreen()
 {
 
 }
 
-void CRecordWork::OnRecord(bool bScreenRecord, bool bSoundRecord, RECT rArea, int iCode, bool bSysSound, bool bMicrophone, char* cSaveDir)
+void CMainWndWork::OnRecord(bool bScreenRecord, bool bSoundRecord, RECT rArea, int iCode, bool bSysSound, bool bMicrophone, char* cSaveDir)
 {
 	char buf[1024];
 #if 1
@@ -28,22 +28,22 @@ void CRecordWork::OnRecord(bool bScreenRecord, bool bSoundRecord, RECT rArea, in
 	OutputDebugString(buf);
 }
 
-void CRecordWork::OnPause(bool bScreenRecord, bool bSoundRecord, RECT rArea, int iCode, bool bSysSound, bool bMicrophone, char* cSaveDir)
+void CMainWndWork::OnPause(bool bScreenRecord, bool bSoundRecord, RECT rArea, int iCode, bool bSysSound, bool bMicrophone, char* cSaveDir)
 {
 
 }
 
-void CRecordWork::OnGoon(bool bScreenRecord, bool bSoundRecord, RECT rArea, int iCode, bool bSysSound, bool bMicrophone, char* cSaveDir)
+void CMainWndWork::OnGoon(bool bScreenRecord, bool bSoundRecord, RECT rArea, int iCode, bool bSysSound, bool bMicrophone, char* cSaveDir)
 {
 
 }
 
-void CRecordWork::OnStop(bool bScreenRecord, bool bSoundRecord, RECT rArea, int iCode, bool bSysSound, bool bMicrophone, char* cSaveDir)
+void CMainWndWork::OnStop(bool bScreenRecord, bool bSoundRecord, RECT rArea, int iCode, bool bSysSound, bool bMicrophone, char* cSaveDir)
 {
 
 }
 
-void CRecordWork::OnSetChange(bool bScreenRecord, bool bSoundRecord, RECT rArea, int iCode, bool bSysSound, bool bMicrophone, char* cSaveDir)
+void CMainWndWork::OnSetChange(bool bScreenRecord, bool bSoundRecord, RECT rArea, int iCode, bool bSysSound, bool bMicrophone, char* cSaveDir)
 {
 	int i = 0;
 	char buf[1024];

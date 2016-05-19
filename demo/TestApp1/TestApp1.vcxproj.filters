@@ -23,10 +23,10 @@
     <ClCompile Include="RecordWork.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RecordWindow.cpp">
+    <ClCompile Include="SettingWnd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SetPageDialog.cpp">
+    <ClCompile Include="MainWnd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -40,19 +40,13 @@
     <ClInclude Include="MenuWnd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="record.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RecordWork.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RecordWindow.h">
+    <ClInclude Include="SettingWnd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ControlEx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SetPageDialog.h">
+    <ClInclude Include="MainWnd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
