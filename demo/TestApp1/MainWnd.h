@@ -1,9 +1,6 @@
 #pragma once
 #include <DuiLib/UIlib.h>
 
-#define NOTIFY_FUNCTION_DECLARE(MsgSender, className) void className::##MsgSender(TNotifyUI& msg)
-#define NOTIFY_FUNCTION_IMPLEMENT(MsgSender, className) void className::##MsgSender(TNotifyUI& msg)
-
 class CMainWnd : 
 	public CWindowWnd, public INotifyUI, public CNotifyPump
 {
@@ -14,6 +11,7 @@ public:
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+	virtual void OnFinalMessage(HWND hWnd);
 
 	void Notify(TNotifyUI& msg);
 

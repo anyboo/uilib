@@ -1,12 +1,12 @@
 #pragma once
 #include <DuiLib/UIlib.h>
 
-class CSettingWnd :
+class CAboutWnd :
 	public WindowImplBase
 {
 public:
-	CSettingWnd();
-	virtual ~CSettingWnd();
+	CAboutWnd();
+	virtual ~CAboutWnd();
 	
 	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND /*hWnd*/);

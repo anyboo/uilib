@@ -1,17 +1,9 @@
 #include "StdAfx.h"
 #include "MenuWnd.h"
 #include "SettingWnd.h"
+#include "AboutWnd.h"
 #include "MainWnd.h"
-
-CMainWnd::CMainWnd()
-{
-	RegisterWindowClass();
-}
-
-CMainWnd::~CMainWnd()
-{
-
-}
+#include "resource.h"
 
 #define CTR_RECORD			(_T("btlz"))
 #define CTR_SCREEN_CAPTURE	(_T("btpmbh"))
@@ -23,6 +15,15 @@ CMainWnd::~CMainWnd()
 #define CTR_SETTING			(_T("savebtn"))
 #define CTR_MIN				(_T("minbtn"))
 #define CTR_CLOSE			(_T("closebtn"))
+
+CMainWnd::CMainWnd()
+{
+	RegisterWindowClass();
+}
+
+CMainWnd::~CMainWnd()
+{
+}
 
 DUI_BEGIN_MESSAGE_MAP(CMainWnd, CNotifyPump)
 	DUI_ON_CLICK_CTRNAME(CTR_RECORD, OnRecord)
@@ -95,14 +96,23 @@ void CMainWnd::OnAbout(TNotifyUI& msg)
 
 	(msg.pSender) ? DUITRACE(_T("Notify msg.pSender : %s"), msg.pSender->GetName())
 		: _T("unknown sender");
+
+	//reload skin
+	//CPaintManagerUI::ReloadSkin();
+	CAboutWnd* pDlg = new CAboutWnd();
+	assert(pDlg);
+	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_DIALOG, 0L, 0, 0, 500, 400);
+	pDlg->CenterWindow();
+	pDlg->ShowModal();
 }
 
 void CMainWnd::OnSettingDlg(TNotifyUI& msg)
 {
-	DUITRACE(_T("Notify msg.sType : %s"), msg.sType);
-
-	(msg.pSender) ? DUITRACE(_T("Notify msg.pSender : %s"), msg.pSender->GetName())
-		: _T("unknown sender");
+	CSettingWnd* pSettingDlg = new CSettingWnd();
+	assert(pSettingDlg);
+	pSettingDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_DIALOG, 0L, 0, 0, 500, 400);
+	pSettingDlg->CenterWindow();
+	pSettingDlg->ShowModal();
 }
 
 void CMainWnd::OnMin(TNotifyUI& msg)
@@ -237,6 +247,12 @@ LRESULT CMainWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	if (bHandled) return lRes;
 	if (m_pm.MessageHandler(uMsg, wParam, lParam, lRes)) return lRes;
 	return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+}
+
+void CMainWnd::OnFinalMessage(HWND hWnd)
+{
+	__super::OnFinalMessage(hWnd);
+	delete this;
 }
 
 LRESULT CMainWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)

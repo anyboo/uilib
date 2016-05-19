@@ -277,6 +277,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AboutWnd.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="MainWnd.cpp" />
     <ClCompile Include="MenuWnd.cpp" />
@@ -290,6 +291,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AboutWnd.h" />
     <ClInclude Include="MenuWnd.h" />
     <ClInclude Include="MainWnd.h" />
     <ClInclude Include="SettingWnd.h" />
