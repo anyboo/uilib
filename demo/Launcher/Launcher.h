@@ -2,7 +2,7 @@
 #include <map>
 #include <wtypes.h>
 #include "resource.h"
-#include <vector>
+#include <list>
 #include "atlimage.h"
 #include <Shellapi.h>
 
@@ -13,7 +13,8 @@
 typedef struct
 {
 	CNewVerticalLayoutUI* Layout;
-	char FilePath[100];
+	STDSTRING FilePath;
+	STDSTRING Display;
 }LayOut_Info;
 
 class Launcher : public CWindowWnd, public INotifyUI
@@ -26,7 +27,7 @@ protected:
 	LPCTSTR GetWindowClassName() const { return _T("UILauncher"); };
 	UINT GetClassStyle() const { return UI_CLASSSTYLE_DIALOG; };
 	void OnFinalMessage(HWND /*hWnd*/) { delete this; };
-	void Init();
+
 	void Notify(TNotifyUI& msg);
 
 	void c2w(wchar_t *pwstr, size_t len, const char *str);
@@ -67,8 +68,8 @@ private:
 	POINT m_MenuPt;
 	POINT m_xyPos;
 	int m_Nbmp = 1;
-	vector<LayOut_Info> m_AllLyt;
+	std::vector<LayOut_Info> m_AllLyt;
 	HWND hListBoxWnd;
-
+	STDSTRING WriteablePath;
 };
 

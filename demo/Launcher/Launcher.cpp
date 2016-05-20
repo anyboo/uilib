@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "Launcher.h"
 
 #include "ostream"
@@ -11,12 +11,15 @@
 #include "ostreamwrapper.h"
 #include "istreamwrapper.h"
 #include <fstream>
+#include <algorithm>
+#include <direct.h>
+#include <Shlobj.h>
 
 using namespace std;
 
 #define CONTROL_LAYOUT_OUT 68
-#define BUTTON_WIDTH 32
-#define BUTTON_HEIGHT 32
+#define BUTTON_WIDTH 60
+#define BUTTON_HEIGHT 60
 #define LABLE_WIDTH 48
 #define LABLE_HEIGHT 15
 #define FONT_SIZE 12
@@ -24,12 +27,43 @@ using namespace std;
 #define LYT_WIDTH 135
 #define LYT_HEIGHT 110
 
-
 #define BMPBITCOUNT 32
+#include <fstream>
+#include <random>
 
+const int nrolls = 26; // number of experiments
+const int nstars = 95;    // maximum number of stars to distribute
+
+knuth_b generator;
+uniform_int_distribution <int> distribution('A', 'Z');
 
 Launcher::Launcher()
+:WriteablePath(CPaintManagerUI::GetCurrentPath())
 {
+	WriteablePath.append("\\");
+	STDSTRING randomFileName;
+	for (int i = 0; i < nrolls; i++)
+	{
+		randomFileName += distribution(generator);
+	}
+
+	STDSTRING path = WriteablePath + randomFileName;
+
+	DUITRACE("randomFileName : %s", randomFileName.c_str());
+	ofstream fs(path, ios::out | ios::app);
+	
+	if (!fs.put('T'))
+	{
+		TCHAR ch = WriteablePath.at(0);
+		if ( (_T('C') <= ch && _T('Z') > ch) || (_T('c') <= ch && _T('z') > ch))
+				ch += 1;
+		WriteablePath.front() = ch;
+		STDSTRING path = WriteablePath + randomFileName;
+		SHCreateDirectoryEx(0, WriteablePath.c_str(),0 );
+		ofstream fs(path, ios::out | ios::app);
+		fs.put('A');
+		fs.close();
+	}
 }
 
 Launcher::~Launcher()
@@ -62,7 +96,6 @@ void Launcher::Notify(TNotifyUI& msg)
 		OpenExeFile(m_MenuPt.x, m_MenuPt.y);
 	}
 	else if (msg.sType == _T("menu_Rename")){
-		//DeleteLyt();
 	}
 	else if (msg.sType == DUI_MSGTYPE_TABSELECT){
 		OnMouseMove(msg.ptMouse.x, msg.ptMouse.y);
@@ -78,43 +111,44 @@ void Launcher::Notify(TNotifyUI& msg)
 	}
 }
 
+using namespace rapidjson;
+
 void Launcher::SaveLytToJsonFile()
 {
-	rapidjson::Document document;
-	document.Parse("test.json");
-	ofstream ofs("test.json");
-	rapidjson::OStreamWrapper osw(ofs);
-
-	document.SetObject();
-	rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
-	rapidjson::Value root(rapidjson::kObjectType);
-	const char* strFilePath = NULL;
-	for (UINT i = 0; i < m_AllLyt.size(); i++)
+	Document document;
+	STDSTRING path(WriteablePath + "test.json");
+	document.Parse(path.c_str());
+	ofstream ofs(path);
+	OStreamWrapper osw(ofs);
+	Document::AllocatorType& alloc = document.GetAllocator();
+	Value root(rapidjson::kObjectType);
+	
+	for (auto& var : m_AllLyt)
 	{
-		strFilePath = m_AllLyt[i].FilePath;
+		STDSTRING absPath, relPath, name, extension, path, letter, display;
+		path = var.FilePath;
+		display = var.Display;
 
-		char strPath[100] = { 0 };
-		char strExName[100] = { 0 };
-		char strType[16] = { 0 };
-		_splitpath_s(strFilePath, NULL, 0, strPath, 100, strExName, 100, strType, 16);
-	
-		rapidjson::Value array(rapidjson::kArrayType);
+		name = path.substr(path.find_last_of(_T('\\')) + 1);
+		absPath = path.substr(0, path.find_last_of(_T('\\')) + 1);
+		extension = name.substr(name.find_last_of(_T('.')) + 1);
+		relPath = absPath.substr(absPath.find_first_of(_T(':')) + 1);
+		letter = absPath.substr(0, absPath.find_first_of(_T(':')) + 1);
+		
+		Value a(rapidjson::kArrayType);
+		Value n(name.c_str(), name.length(), alloc);
+		Value r(relPath.c_str(), relPath.length(), alloc);
+		Value p(absPath.c_str(), absPath.length(), alloc);
+		Value e(extension.c_str(), extension.length(), alloc);
+		Value l(letter.c_str(), letter.length(), alloc);
+		Value d(display.c_str(), display.length(), alloc);
 
-		rapidjson::Value file_path(rapidjson::kObjectType);
-		rapidjson::Value file_name(rapidjson::kObjectType);
-		rapidjson::Value file_rename(rapidjson::kObjectType);
+		a.PushBack(p, alloc).PushBack(l, alloc).PushBack(r, alloc).PushBack(e, alloc).PushBack(d, alloc);
 
-		file_name.SetString(strExName, allocator);	
-		file_path.SetString(strPath, allocator);
-		file_rename.SetString(strFilePath, allocator);
-	
-		array.PushBack(file_path, allocator);
-		array.PushBack(file_rename, allocator);
-
-		root.AddMember(file_name, array, allocator);		
+		root.AddMember(n.Move(), a.Move(), alloc);
 	}
 
-	rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
+	Writer<OStreamWrapper> writer(osw);
 	root.Accept(writer);
 	
 }
@@ -155,27 +189,18 @@ void Launcher::OpenExeFile(int xPos, int yPos)
 	{
 		return;
 	}
-	const char* str = m_AllLyt[n].FilePath;
-
-	LPCTSTR strFilePath = NULL;
-#ifdef _UNICODE
-	wchar_t strFilePathTmp[100] = { 0 };
-	c2w(strFilePathTmp, 100, str);
-	strFilePath = strFilePathTmp;	
-#else	
-	strFilePath = str;
-#endif
-	
-	HINSTANCE hIns = ShellExecute(NULL, _T("Open"), strFilePath, NULL, NULL, SW_SHOWNORMAL);
+	DUITRACE("%s", m_AllLyt[n].FilePath.c_str());
+	HINSTANCE hIns = ShellExecute(NULL, _T("Open"), m_AllLyt[n].FilePath.c_str(), NULL, NULL, SW_SHOWNORMAL);
 	int dret = (int)hIns;
 	if (dret < 32)
-		MessageBox(NULL, _T("Open file Failure!"), _T("message"), MB_OK);
+		MessageBox(NULL, _T("æ— æ³•æ‰“å¼€"), _T("æç¤º"), MB_OK);
 }
 
 void Launcher::OnMouseMove(int xPos, int yPos)
 {
 	UINT n = xPos / LYT_WIDTH + (yPos - BORD_WIDTH) / LYT_HEIGHT * 4;	
 	CNewVerticalLayoutUI* cLyt = new CNewVerticalLayoutUI;
+	if (n >= m_AllLyt.size()) return;
 	cLyt = m_AllLyt[n].Layout;
 	cLyt->SetBkColor(0xFFFF9999);
 }
@@ -214,12 +239,8 @@ LRESULT Launcher::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 	m_pm.AddNotifier(this);
 	if (m_Nbmp == 1)
 		MapInit();
-	Init();
-	return 0;
-}
 
-void Launcher::Init()
-{
+	return 0;
 }
 
 LRESULT Launcher::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -291,9 +312,9 @@ LRESULT Launcher::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
 
 LRESULT Launcher::OnDropFiles(UINT uMsg, HDROP hDrop, LPARAM lParam, BOOL& bHandled)
 {
-	//»ñÈ¡ÍÏ¶¯ÎÄ¼şËÉ¿ªÊó±êÊ±µÄx×ø±ê
+	//è·å–æ‹–åŠ¨æ–‡ä»¶æ¾å¼€é¼ æ ‡æ—¶çš„xåæ ‡
 	POINT* ptDropPos = new POINT;
-	DragQueryPoint(hDrop, ptDropPos);	//°ÑÎÄ¼şÍÏ¶¯µ½µÄÎ»ÖÃ´æµ½ptDropPosÖĞ
+	DragQueryPoint(hDrop, ptDropPos);	//æŠŠæ–‡ä»¶æ‹–åŠ¨åˆ°çš„ä½ç½®å­˜åˆ°ptDropPosä¸­
 	int iDropPos = ptDropPos->x;
 	int yDropPos = ptDropPos->y;
 	delete(ptDropPos);
@@ -392,13 +413,22 @@ void Launcher::MapInit()
 	if (isw.Tell() == 0)
 	return;
 
-	rapidjson::Value::ConstMemberIterator itr = d.MemberBegin();
-	for (; itr != d.MemberEnd(); itr++)
+	typedef rapidjson::Value::ConstMemberIterator Iter;
+	for (Iter it = d.MemberBegin(); it != d.MemberEnd(); it++)
 	{
-		string TypeName = itr->name.GetString();
+		STDSTRING TypeName = it->name.GetString();
 		const rapidjson::Value& a = d[TypeName.c_str()];
 		assert(a.IsArray());
-		string str = a[1].GetString();
+		if (!a.IsArray() || a.Size() < 5)
+			continue;
+		STDSTRING letter = a[1].GetString();
+		STDSTRING relPath = a[2].GetString();
+		STDSTRING display = a[4].GetString();
+
+		display.empty() ? (display = TypeName) : display ;
+	
+		STDSTRING str = letter + relPath + TypeName;
+		
 		GetIcon(str.c_str());
 	}	
 }
@@ -432,7 +462,8 @@ void Launcher::GetIcon(const char* strPath)
 
 	LayOut_Info Lyt_info = { 0 };
 	Lyt_info.Layout = cLyt;
-	memcpy(Lyt_info.FilePath, strPath, strlen(strPath));
+	Lyt_info.FilePath = strPath;
+	//memcpy(Lyt_info.FilePath.data(), strPath, strlen(strPath));
 
 	m_AllLyt.push_back(Lyt_info);
 
@@ -464,41 +495,23 @@ void Launcher::InitLayOut(CNewVerticalLayoutUI* cLyt, LPCTSTR pFileName, LPCTSTR
 	cBtn->SetFixedWidth(BUTTON_WIDTH);
 	cBtn->SetBkImage(pFileName);
 	cBtn->SetToolTip(strName);
+	
 	RECT r;
-	r.left = r.right = 20;
-	r.bottom = r.top = 5;
+	r.left = r.right = 22;
+	r.bottom = r.top = 0;
 
 	cBtn->SetPadding(r);
 
-	char strFileName[100] = { 0 };
-	char strExName[100] = { 0 };
-	char strType[16] = { 0 };
-
-	LPCTSTR strText = NULL;
-#ifdef _UNICODE	
-	w2c(strFileName, strName, 100);
-	_splitpath_s(strFileName, NULL, 0, NULL, 0, strExName, 100, strType, 16);
-	if (strcmp(strType, ".lnk") != 0 && strcmp(strType, ".exe") != 0){
-		strcat_s(strExName, strType);
-	}
-	wchar_t str[100] = { 0 };
-	c2w(str, 100, strExName);
-	strText = str;
-#else
-	memcpy(strFileName, strName, 100);
-	_splitpath_s(strFileName, NULL, 0, NULL, 0, strExName, 100, strType, 16);
-	if (strcmp(strType, ".lnk") != 0 && strcmp(strType, ".exe") != 0){
-		strcat_s(strExName, strType);
-	}
-	strText = strExName;
-#endif
-
-	Lab->SetText(strText);
+	STDSTRING path, displayName;
+	path = strName;
+	displayName = path.substr(path.find_last_of(_T('\\')) + 1);
+	
+	Lab->SetText(displayName.c_str());
 	Lab->SetFont(FONT_SIZE);
 	Lab->SetMultiLine(true);
 	RECT rect;
-	rect.left = rect.right = 5;
-	rect.bottom = rect.top = 0;
+	rect.left = rect.right = 22;
+	rect.bottom = rect.top = 10;
 	Lab->SetPadding(rect);
 	Lab->SetToolTip(strName);
 }
@@ -507,14 +520,9 @@ void Launcher::Push_LayOut(int xPos, int yPos, CNewVerticalLayoutUI* cLyt, LPCTS
 {
 	LayOut_Info Lyt_info = { 0 };
 	Lyt_info.Layout = cLyt;
-	char strFilePath[100] = { 0 };
-#ifdef _UNICODE
-	w2c(strFilePath, strName, 100);
-#else
-	memcpy(strFilePath, strName, 100);
-#endif
 
-	memcpy(Lyt_info.FilePath, strFilePath, 100);
+	Lyt_info.FilePath = strName;
+	//memcpy(Lyt_info.FilePath, strFilePath, 100);
 	UINT Xnum = xPos / LYT_WIDTH + 1;
 	UINT Ynum = (yPos - BORD_WIDTH) / LYT_HEIGHT;
 	UINT n = Ynum * 4 + Xnum;
@@ -530,27 +538,14 @@ void Launcher::ShowLayOut()
 {
 	CHorizontalLayoutUI* cListLyt = static_cast<CHorizontalLayoutUI*>(m_pm.FindControl(_T("ListLayout")));
 	CNewVerticalLayoutUI* cLyt = new CNewVerticalLayoutUI;
-	vector<LayOut_Info>::iterator it = m_AllLyt.begin();
-	for (; it != m_AllLyt.end(); it++)
-	{
-		cListLyt->Remove((it)->Layout, true);
-	}
 
-	for (UINT j = 0; j < m_AllLyt.size(); j++)
+	for (auto& var : m_AllLyt)
 	{
-		LPCTSTR strTool = NULL;
-#ifdef UNICODE
-		wchar_t strToolTmp[100] = { 0 };
-		c2w(strToolTmp, 100, m_AllLyt[j].FilePath);
-		strTool = strToolTmp;
-#else
-		strTool = m_AllLyt[j].FilePath;
-#endif
+		cListLyt->Remove(var.Layout, true);
 
-		cLyt = m_AllLyt[j].Layout;
-		cLyt->SetContextMenuUsed(true);
-		cLyt->SetToolTip(strTool);
-		
+		cLyt = var.Layout;		cLyt->SetContextMenuUsed(true);
+		cLyt->SetToolTip(var.FilePath.c_str());
+
 		RECT rect;
 		rect.left = rect.right = 10;
 		rect.bottom = rect.top = 5;
@@ -708,24 +703,24 @@ BOOL Launcher::SaveBmp(HBITMAP hBitmap, LPCSTR FileName)
 {
 //	hBitmap = TransparentImage(hBitmap);
 	HDC     hDC;
-	//µ±Ç°·Ö±æÂÊÏÂÃ¿ÏóËØËùÕ¼×Ö½ÚÊı         
+	//å½“å‰åˆ†è¾¨ç‡ä¸‹æ¯è±¡ç´ æ‰€å å­—èŠ‚æ•°         
 	int     iBits;
-	//Î»Í¼ÖĞÃ¿ÏóËØËùÕ¼×Ö½ÚÊı         
+	//ä½å›¾ä¸­æ¯è±¡ç´ æ‰€å å­—èŠ‚æ•°         
 	WORD     wBitCount;
-	//¶¨Òåµ÷É«°å´óĞ¡£¬     Î»Í¼ÖĞÏñËØ×Ö½Ú´óĞ¡     £¬Î»Í¼ÎÄ¼ş´óĞ¡     £¬     Ğ´ÈëÎÄ¼ş×Ö½ÚÊı             
+	//å®šä¹‰è°ƒè‰²æ¿å¤§å°ï¼Œ     ä½å›¾ä¸­åƒç´ å­—èŠ‚å¤§å°     ï¼Œä½å›¾æ–‡ä»¶å¤§å°     ï¼Œ     å†™å…¥æ–‡ä»¶å­—èŠ‚æ•°             
 	DWORD     dwPaletteSize = 0, dwBmBitsSize = 0, dwDIBSize = 0, dwWritten = 0;
-	//Î»Í¼ÊôĞÔ½á¹¹             
+	//ä½å›¾å±æ€§ç»“æ„             
 	BITMAP     Bitmap;
-	//Î»Í¼ÎÄ¼şÍ·½á¹¹         
+	//ä½å›¾æ–‡ä»¶å¤´ç»“æ„         
 	BITMAPFILEHEADER     bmfHdr;
-	//Î»Í¼ĞÅÏ¢Í·½á¹¹             
+	//ä½å›¾ä¿¡æ¯å¤´ç»“æ„             
 	BITMAPINFOHEADER     bi;
-	//Ö¸ÏòÎ»Í¼ĞÅÏ¢Í·½á¹¹                 
+	//æŒ‡å‘ä½å›¾ä¿¡æ¯å¤´ç»“æ„                 
 	LPBITMAPINFOHEADER     lpbi;
-	//¶¨ÒåÎÄ¼ş£¬·ÖÅäÄÚ´æ¾ä±ú£¬µ÷É«°å¾ä±ú             
+	//å®šä¹‰æ–‡ä»¶ï¼Œåˆ†é…å†…å­˜å¥æŸ„ï¼Œè°ƒè‰²æ¿å¥æŸ„             
 	HANDLE     fh, hDib, hPal, hOldPal = NULL;
 
-	//¼ÆËãÎ»Í¼ÎÄ¼şÃ¿¸öÏñËØËùÕ¼×Ö½ÚÊı             
+	//è®¡ç®—ä½å›¾æ–‡ä»¶æ¯ä¸ªåƒç´ æ‰€å å­—èŠ‚æ•°             
 	hDC = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL);
 	iBits = GetDeviceCaps(hDC, BITSPIXEL)     *     GetDeviceCaps(hDC, PLANES);
 	DeleteDC(hDC);
@@ -753,12 +748,12 @@ BOOL Launcher::SaveBmp(HBITMAP hBitmap, LPCSTR FileName)
 
 	dwBmBitsSize = ((Bitmap.bmWidth *wBitCount + 31) / 32) * 4 * Bitmap.bmHeight;
 
-	//ÎªÎ»Í¼ÄÚÈİ·ÖÅäÄÚ´æ             
+	//ä¸ºä½å›¾å†…å®¹åˆ†é…å†…å­˜             
 	hDib = GlobalAlloc(GHND, dwBmBitsSize + dwPaletteSize + sizeof(BITMAPINFOHEADER));
 	lpbi = (LPBITMAPINFOHEADER)GlobalLock(hDib);
 	*lpbi = bi;
 
-	//     ´¦Àíµ÷É«°å                 
+	//     å¤„ç†è°ƒè‰²æ¿                 
 	hPal = GetStockObject(DEFAULT_PALETTE);
 	if (hPal)
 	{
@@ -767,12 +762,12 @@ BOOL Launcher::SaveBmp(HBITMAP hBitmap, LPCSTR FileName)
 		RealizePalette(hDC);
 	}
 
-	//     »ñÈ¡¸Ãµ÷É«°åÏÂĞÂµÄÏñËØÖµ             
+	//     è·å–è¯¥è°ƒè‰²æ¿ä¸‹æ–°çš„åƒç´ å€¼             
 	GetDIBits(hDC, hBitmap, 0, (UINT)Bitmap.bmHeight,
 		(LPSTR)lpbi + sizeof(BITMAPINFOHEADER)+dwPaletteSize,
 		(BITMAPINFO *)lpbi, DIB_RGB_COLORS);
 
-	//»Ö¸´µ÷É«°å                 
+	//æ¢å¤è°ƒè‰²æ¿                 
 	if (hOldPal)
 	{
 		::SelectPalette(hDC, (HPALETTE)hOldPal, TRUE);
@@ -780,7 +775,7 @@ BOOL Launcher::SaveBmp(HBITMAP hBitmap, LPCSTR FileName)
 		::ReleaseDC(NULL, hDC);
 	}
 
-	//´´½¨Î»Í¼ÎÄ¼ş 
+	//åˆ›å»ºä½å›¾æ–‡ä»¶ 
 	LPCTSTR strFileName = NULL;
 #ifdef _UNICODE
 	wchar_t strT[100] = { 0 };
@@ -789,24 +784,24 @@ BOOL Launcher::SaveBmp(HBITMAP hBitmap, LPCSTR FileName)
 #else
 	strFileName = FileName;
 #endif
-	
-	fh = CreateFile(strFileName, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
+	STDSTRING path = WriteablePath + strFileName;
+	fh = CreateFile(path.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
 		FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, NULL);
 
 	if (fh == INVALID_HANDLE_VALUE)         return     FALSE;
 
-	//     ÉèÖÃÎ»Í¼ÎÄ¼şÍ·             
+	//     è®¾ç½®ä½å›¾æ–‡ä»¶å¤´             
 	bmfHdr.bfType = 0x4D42;     //     "BM"             
 	dwDIBSize = sizeof(BITMAPFILEHEADER)+sizeof(BITMAPINFOHEADER)+dwPaletteSize + dwBmBitsSize;
 	bmfHdr.bfSize = dwDIBSize;
 	bmfHdr.bfReserved1 = 0;
 	bmfHdr.bfReserved2 = 0;
 	bmfHdr.bfOffBits = (DWORD)sizeof(BITMAPFILEHEADER)+(DWORD)sizeof(BITMAPINFOHEADER)+dwPaletteSize;
-	//     Ğ´ÈëÎ»Í¼ÎÄ¼şÍ·             
+	//     å†™å…¥ä½å›¾æ–‡ä»¶å¤´             
 	WriteFile(fh, (LPSTR)&bmfHdr, sizeof(BITMAPFILEHEADER), &dwWritten, NULL);
-	//     Ğ´ÈëÎ»Í¼ÎÄ¼şÆäÓàÄÚÈİ             
+	//     å†™å…¥ä½å›¾æ–‡ä»¶å…¶ä½™å†…å®¹             
 	WriteFile(fh, (LPSTR)lpbi, dwDIBSize, &dwWritten, NULL);
-	//Çå³ı                 
+	//æ¸…é™¤                 
 	GlobalUnlock(hDib);
 	GlobalFree(hDib);
 	CloseHandle(fh);

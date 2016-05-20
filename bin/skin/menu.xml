@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Window bktrans="true" size="120,104">
+<Window bktrans="true" size="120,64">
  <Font id="0" name="宋体" size="13" bold="false"/>
  <Font id="1" name="宋体" size="12"/>
 <VerticalLayout bkcolor="#0xFFDDDDDD" hole="false">
@@ -7,14 +7,8 @@
 		<ListContainerElement name="menu_Open" height="22" inset="40,0,0,0">
 			<Label text="打开" Font="1" mouse="false"/>
 		</ListContainerElement>
-		<ListContainerElement name="menu_Mark" height="22" inset="40,0,0,0">
-			<Label text="标注" mouse="false"/>
-		</ListContainerElement>
 		<ListContainerElement name="menu_Delete" height="22" inset="40,0,0,0">
 			<Label text="删除" mouse="false"/>
-		</ListContainerElement>
-		<ListContainerElement name="menu_Rename" height="22" inset="40,0,0,0">
-			<Label text="重命名" mouse="false"/>
 		</ListContainerElement>
 	</List>
 </VerticalLayout>

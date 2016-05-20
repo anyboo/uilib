@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Launcher"
-#define MyAppVersion "1.0.0.0.1"
+#define MyAppVersion "1.0.0.0.3"
 #define MyAppPublisher "sisec"
 #define MyAppURL "http://www.sisec.com.cn/"
 
@@ -32,8 +32,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}";
 
 [Files]
-Source: "..\bin\Launcher*.exe"; DestDir: "{app}"; Flags: ignoreversion 
-Source: "..\bin\DuiLib*.dll"; DestDir: "{app}"; Flags: ignoreversion 
+Source: "..\bin\Launcher.exe"; DestDir: "{app}"; Flags: ignoreversion 
+Source: "..\bin\DuiLib.dll"; DestDir: "{app}"; Flags: ignoreversion 
 Source: "..\bin\skin\launcher\*"; DestDir: "{app}\skin\launcher\"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\bin\skin\menu.xml"; DestDir: "{app}\skin\"; Flags: ignoreversion 
 Source: "..\bin\skin\launcher.xml"; DestDir: "{app}\skin\"; Flags: ignoreversion 

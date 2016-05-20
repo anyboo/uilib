@@ -130,7 +130,8 @@
       <TargetMachine>MachineX86</TargetMachine>
       <AdditionalDependencies>duilib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <UACExecutionLevel>HighestAvailable</UACExecutionLevel>
+      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
+      <EnableUAC>true</EnableUAC>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>

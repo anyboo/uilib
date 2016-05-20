@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Window size="538,264" mininfo="538,264" maxinfo="538,500" sizebox="4,4,6,6" caption="0,0,0,30" roundcorner="4,4" showdirty="false">	
+<Window size="538,264" mininfo="538,264" maxinfo="538,500" sizebox="4,4,6,6" caption="0,0,0,30" roundcorner="4,4" showdirty="false">
 	<Font shared="true" id="0" name="微软雅黑" size="12" bold="false" />
 	<VerticalLayout bkimage="file='launcher/bg_above.png'" height="270" >	
 		<HorizontalLayout height="30" width="535">

@@ -29,6 +29,11 @@ using namespace DuiLib;
 #   endif
 #endif
 
+#ifdef _UNICODE
+#	define STDSTRING std::wstring
+#else
+#	define STDSTRING std::string
+#endif
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
