@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window size="512,108" caption="0,0,0,30" roundcorner="4,4" >
 	<Font shared="true" id="0" name="微软雅黑" size="12" bold="false" />
+	<Font shared="true" id="1" name="微软雅黑" size="34" bold="false" />
 	<VerticalLayout bkimage="file='record/bg_above.png'">
 		<HorizontalLayout height="30" >
 			<VerticalLayout width="20" height="20" bkimage="file='record/camera_LOGO.png'" padding="4,2,5,8" />
@@ -9,7 +10,7 @@
 			<Button name="minbtn" width="35" height="19" padding="1,5,1,6" tooltip="最小化" normalimage="file='record/btn_min_normal.png' mask='#00FFFFFF'" hotimage="file='record/btn_min_hot.png'" pushedimage="file='record/btn_min_pushed.png'"/>
 			<Button name="closebtn" width="35" height="19" padding="1,5,3,6" tooltip="点击这里直接退出游戏" normalimage="file='record/btn_close_normal.png'" hotimage="file='record/btn_close_hot.png'" pushedimage="file='record/btn_close_pushed.png'"/>
 		</HorizontalLayout>
-		<HorizontalLayout name="selectPage" bkimage="file='record/bg.png'" >
+		<TabLayout name="tab_main" text="" bkimage="file='record/bg.png'" tooltip="" float="false" bordersize="1" bkcolor="#FF757676">
 			<HorizontalLayout name="page1" >
 				<Control bkcolor="#FF393939" width="5" />
 				<HorizontalLayout name="lytlz" borderround="4,4" focusbordercolor="0xFF000000" width="61"  padding="10,5,10,5" >
@@ -48,7 +49,22 @@
 				</HorizontalLayout>
 				<Control bkcolor="#FF393939" width="20" />
 			</HorizontalLayout>
-		</HorizontalLayout>
+			<HorizontalLayout name="page2" >
+				<Control bkcolor="#FF393939" width="5" />
+				<HorizontalLayout width="498" bkimage="file='record/bg.png'" >
+					<VerticalLayout name="lytstop" padding="10,5,10,5" width="48" >
+						<Button name="btlz" normalimage="file='record/player_stop.png'" height="48" />
+						<Label text="停止" align="center" font="0" height="15" />
+					</VerticalLayout>
+					<VerticalLayout name="lytpause" padding="10,5,10,5" width="48" >
+						<Button name="btpause" normalimage="file='record/player_pause.png'" height="48" />
+						<Label name="lbpause" text="暂停" align="center" font="0" height="15" />
+					</VerticalLayout>
+					<label name="LbTime" text="00:00:00" font="1" padding="20,2,20,2" />
+				</HorizontalLayout>
+				<Control bkcolor="#FF393939" width="20" />
+			</HorizontalLayout>
+		</TabLayout>
 		<Control bkcolor="#FF393939" height="5" />
 	</VerticalLayout>		
 </Window>
