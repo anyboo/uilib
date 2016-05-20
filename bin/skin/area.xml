@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="180,334" >
+<VerticalLayout bkcolor="#FF000000" >
+	<List header="hidden" inset="8,8,8,8" >
+		<ListContainerElement height="22" inset="20,5,10,0" >
+			<HorizontalLayout>
+				<Button name="btn_640_360" text="640x360" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<ListContainerElement height="22" inset="20,0,10,0" >
+			<HorizontalLayout>
+				<Button name="btn_800_450" text="800x450" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<ListContainerElement height="22" inset="20,0,10,5" >
+			<HorizontalLayout>
+				<Button name="btn_1024_576" text="1024x576" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<Control height="1" bkcolor="#FF777777" padding="20,0,0,0" />
+		<ListContainerElement height="22" inset="20,5,10,0" >
+			<HorizontalLayout>
+				<Button name="btn_640_480" text="640x480" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<ListContainerElement height="22" inset="20,0,10,0" >
+			<HorizontalLayout>
+				<Button name="btn_800_600" text="800x600" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<ListContainerElement height="22" inset="20,0,10,5" >
+			<HorizontalLayout>
+				<Button name="btn_1024_768" text="1024x768" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<Control height="1" bkcolor="#FF777777" padding="20,0,0,0" />
+		<ListContainerElement height="22" inset="20,5,10,0" >
+			<HorizontalLayout>
+				<Button name="btn_1280_720" text="1280x720(HD)" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<ListContainerElement height="22" inset="20,0,10,0" >
+			<HorizontalLayout>
+				<Button name="btn_1920_1080" text="1920x1080(FHD)" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<ListContainerElement height="22" inset="20,0,10,0" >
+			<HorizontalLayout>
+				<Button name="btn_2560_1440" ="2560x1440(QHD)" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<ListContainerElement height="22" inset="20,0,10,0" >
+			<HorizontalLayout>
+				<Button name="btn_3840_2160" text="3840x2160(UHD 4K)" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<ListContainerElement height="22" inset="20,0,10,5" >
+			<HorizontalLayout>
+				<Button name="btn_7680_4320" text="7680x4320(UHD 8K)" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<Control height="1" bkcolor="#FF777777" padding="20,0,0,0" />
+		<ListContainerElement height="22" inset="20,5,10,5" >
+			<HorizontalLayout>
+				<Button text="全屏幕" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<Control height="1" bkcolor="#FF777777" padding="20,0,0,0" />
+		<ListContainerElement height="22" inset="20,5,10,5" >
+			<HorizontalLayout>
+				<Button text="录制目标窗口" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<Control height="1" bkcolor="#FF777777" padding="20,0,0,0" />
+		<ListContainerElement height="22" inset="20,5,10,0" >
+			<HorizontalLayout>
+				<Button text="自定义大小" textcolor="#FFAA2535" />
+			</HorizontalLayout>
+		</ListContainerElement>
+
+	</List>
+</VerticalLayout>
+</Window>
