@@ -1,20 +1,69 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "Launcher.h"
 
+#include "ostream"
+
+#include "document.h"
+#include "prettywriter.h"
+#include "stringbuffer.h"
+#include "string"
+
+#include "ostreamwrapper.h"
+#include "istreamwrapper.h"
+#include <fstream>
+#include <algorithm>
+#include <direct.h>
+#include <Shlobj.h>
 
 using namespace std;
 
 #define CONTROL_LAYOUT_OUT 68
-#define BUTTON_WIDTH 48
-#define BUTTON_HEIGHT 48
+#define BUTTON_WIDTH 60
+#define BUTTON_HEIGHT 60
 #define LABLE_WIDTH 48
 #define LABLE_HEIGHT 15
 #define FONT_SIZE 12
-#define BORD_WIDTH 5
-#define LYT_WIDTH 68
+#define BORD_WIDTH 35
+#define LYT_WIDTH 135
+#define LYT_HEIGHT 110
+
+#define BMPBITCOUNT 32
+#include <fstream>
+#include <random>
+
+const int nrolls = 26; // number of experiments
+const int nstars = 95;    // maximum number of stars to distribute
+
+knuth_b generator;
+uniform_int_distribution <int> distribution('A', 'Z');
 
 Launcher::Launcher()
+:WriteablePath(CPaintManagerUI::GetCurrentPath())
 {
+	WriteablePath.append("\\");
+	STDSTRING randomFileName;
+	for (int i = 0; i < nrolls; i++)
+	{
+		randomFileName += distribution(generator);
+	}
+
+	STDSTRING path = WriteablePath + randomFileName;
+
+	DUITRACE("randomFileName : %s", randomFileName.c_str());
+	ofstream fs(path, ios::out | ios::app);
+	
+	if (!fs.put('T'))
+	{
+		TCHAR ch = WriteablePath.at(0);
+		if ( (_T('C') <= ch && _T('Z') > ch) || (_T('c') <= ch && _T('z') > ch))
+				ch += 1;
+		WriteablePath.front() = ch;
+		STDSTRING path = WriteablePath + randomFileName;
+		SHCreateDirectoryEx(0, WriteablePath.c_str(),0 );
+		ofstream fs(path, ios::out | ios::app);
+		fs.put('A');
+		fs.close();
+	}
 }
 
 Launcher::~Launcher()
@@ -25,31 +74,15 @@ void Launcher::Notify(TNotifyUI& msg)
 {
 	if (msg.sType == DUI_MSGTYPE_CLICK) {
 		if (msg.pSender->GetName() == _T("closebtn")) {
+			SaveLytToJsonFile();
 			PostQuitMessage(0);
 		}
 		else if (msg.pSender->GetName() == _T("minbtn")) {
 			SendMessage(WM_SYSCOMMAND, SC_MINIMIZE, 0);
 		}
-		else if(msg.pSender->GetName() == _T("btlz")) {
-			MessageBox(NULL, _T("Record"), _T("message"), MB_OK);
-		}
-		else if(msg.pSender->GetName() == _T("btpmbh")) {
-			MessageBox(NULL, _T("Record Capture"), _T("message"), MB_OK);
-		}
-		else if(msg.pSender->GetName() == _T("btlzqy")) {
-			MessageBox(NULL, _T("Record Area"), _T("message"), MB_OK);
-		}
-		else if(msg.pSender->GetName() == _T("btopen")) {
-			MessageBox(NULL, _T("open"), _T("message"), MB_OK);
-		}
-		else if(msg.pSender->GetName() == _T("btencode")) {
-			MessageBox(NULL, _T("coding"), _T("message"), MB_OK);
-		}
-		else if(msg.pSender->GetName() == _T("btvoice")) {
-			MessageBox(NULL, _T("sound"), _T("message"), MB_OK);
-		}
-		else if(msg.pSender->GetName() == _T("btlzyx")) {
-			MessageBox(NULL, _T("Record Game"), _T("message"), MB_OK);
+		else {
+			m_xyPos = { msg.ptMouse.x, msg.ptMouse.y };
+			OpenExeFile(m_xyPos.x, m_xyPos.y);
 		}
 	}
 	else if (msg.sType == DUI_MSGTYPE_MENU)
@@ -60,22 +93,69 @@ void Launcher::Notify(TNotifyUI& msg)
 		DeleteLyt();
 	}
 	else if (msg.sType == _T("menu_Open")) {
-		
-		if (m_Nbmp == 1)
-			MapInit();
-		int xPos = m_MenuPt.x;
-		int n = (xPos - BORD_WIDTH) / LYT_WIDTH;
-		
-		char * strPath = m_filePath[n];
-		int a = 0;
-	
+		OpenExeFile(m_MenuPt.x, m_MenuPt.y);
+	}
+	else if (msg.sType == _T("menu_Rename")){
+	}
+	else if (msg.sType == DUI_MSGTYPE_TABSELECT){
+		OnMouseMove(msg.ptMouse.x, msg.ptMouse.y);
+	}
+	else if (msg.sType == DUI_MSGTYPE_SELECTCHANGED){
+		CNewVerticalLayoutUI* cLyt = new CNewVerticalLayoutUI;
+		for (UINT j = 0; j < m_AllLyt.size(); j++)
+		{
+			cLyt = m_AllLyt[j].Layout;
+			cLyt->SetBkColor(NULL);
+
+		}
 	}
 }
 
+using namespace rapidjson;
+
+void Launcher::SaveLytToJsonFile()
+{
+	Document document;
+	STDSTRING path(WriteablePath + "test.json");
+	document.Parse(path.c_str());
+	ofstream ofs(path);
+	OStreamWrapper osw(ofs);
+	Document::AllocatorType& alloc = document.GetAllocator();
+	Value root(rapidjson::kObjectType);
+	
+	for (auto& var : m_AllLyt)
+	{
+		STDSTRING absPath, relPath, name, extension, path, letter, display;
+		path = var.FilePath;
+		display = var.Display;
+
+		name = path.substr(path.find_last_of(_T('\\')) + 1);
+		absPath = path.substr(0, path.find_last_of(_T('\\')) + 1);
+		extension = name.substr(name.find_last_of(_T('.')) + 1);
+		relPath = absPath.substr(absPath.find_first_of(_T(':')) + 1);
+		letter = absPath.substr(0, absPath.find_first_of(_T(':')) + 1);
+		
+		Value a(rapidjson::kArrayType);
+		Value n(name.c_str(), name.length(), alloc);
+		Value r(relPath.c_str(), relPath.length(), alloc);
+		Value p(absPath.c_str(), absPath.length(), alloc);
+		Value e(extension.c_str(), extension.length(), alloc);
+		Value l(letter.c_str(), letter.length(), alloc);
+		Value d(display.c_str(), display.length(), alloc);
+
+		a.PushBack(p, alloc).PushBack(l, alloc).PushBack(r, alloc).PushBack(e, alloc).PushBack(d, alloc);
+
+		root.AddMember(n.Move(), a.Move(), alloc);
+	}
+
+	Writer<OStreamWrapper> writer(osw);
+	root.Accept(writer);
+	
+}
 
 void Launcher::PopMenu(TNotifyUI& msg)
 {
-	CMenuWnd* pMenu = new CMenuWnd();
+ 	CMenuWnd* pMenu = new CMenuWnd();
 	if (pMenu == NULL) { return; }
 	m_MenuPt = { msg.ptMouse.x, msg.ptMouse.y };
 	POINT pt = m_MenuPt;
@@ -85,19 +165,64 @@ void Launcher::PopMenu(TNotifyUI& msg)
 
 void Launcher::DeleteLyt()
 {
-	if (m_Nbmp == 1)
-		MapInit();
 	CHorizontalLayoutUI* cListLyt = static_cast<CHorizontalLayoutUI*>(m_pm.FindControl(_T("ListLayout")));
-
-	int xPos = m_MenuPt.x;
-	int n = (xPos - BORD_WIDTH) / LYT_WIDTH;
-	CVerticalLayoutUI* cLyt = new CVerticalLayoutUI;
-
-	cLyt = m_AllLyt[n];
+	CNewVerticalLayoutUI* cLyt = new CNewVerticalLayoutUI;
+	POINT pt = m_MenuPt;
+	int xPos = pt.x;
+	int yPos = pt.y;
+	
+	UINT n = xPos / LYT_WIDTH + (yPos - BORD_WIDTH) / LYT_HEIGHT * 4;
+	if (n > m_AllLyt.size() || m_AllLyt.size() == 0)
+		return;
+	cLyt = m_AllLyt[n].Layout;
 	cListLyt->Remove(cLyt);
 	m_AllLyt.erase(m_AllLyt.begin() + n);
-	m_filePath.erase(m_filePath.begin() + n);
-	m_Nbmp++;
+}
+
+void Launcher::OpenExeFile(int xPos, int yPos)
+{	
+	UINT n = xPos / LYT_WIDTH + (yPos - BORD_WIDTH) / LYT_HEIGHT * 4;
+	if (m_AllLyt.size() == 0 || m_AllLyt.size() - 1 < n)
+		return;
+	if (xPos < 5 || yPos < BORD_WIDTH || n > m_AllLyt.size() - 1 || xPos - 16 < 0 || (xPos - 16) % LYT_WIDTH > 95
+		|| yPos - BORD_WIDTH < 0 || (yPos - BORD_WIDTH) % LYT_HEIGHT > 90)
+	{
+		return;
+	}
+	DUITRACE("%s", m_AllLyt[n].FilePath.c_str());
+	HINSTANCE hIns = ShellExecute(NULL, _T("Open"), m_AllLyt[n].FilePath.c_str(), NULL, NULL, SW_SHOWNORMAL);
+	int dret = (int)hIns;
+	if (dret < 32)
+		MessageBox(NULL, _T("æ— æ³•æ‰“å¼€"), _T("æç¤º"), MB_OK);
+}
+
+void Launcher::OnMouseMove(int xPos, int yPos)
+{
+	UINT n = xPos / LYT_WIDTH + (yPos - BORD_WIDTH) / LYT_HEIGHT * 4;	
+	CNewVerticalLayoutUI* cLyt = new CNewVerticalLayoutUI;
+	if (n >= m_AllLyt.size()) return;
+	cLyt = m_AllLyt[n].Layout;
+	cLyt->SetBkColor(0xFFFF9999);
+}
+
+void Launcher::c2w(wchar_t *pwstr, size_t len, const char *str)
+{
+	if (str)
+	{
+		size_t nu = strlen(str);
+		size_t n = (size_t)MultiByteToWideChar(CP_ACP, 0, (const char *)str, (int)nu, NULL, 0);
+		if (n >= len)n = len - 1;
+		MultiByteToWideChar(CP_ACP, 0, (const char *)str, (int)nu, pwstr, (int)n);
+		pwstr[n] = 0;
+	}
+}
+
+void Launcher::w2c(char *pcstr, const wchar_t *pwstr, int len)
+{
+	int nlength = wcslen(pwstr);
+	int nbytes = WideCharToMultiByte(0, 0, pwstr, nlength, NULL, 0, NULL, NULL);
+	if (nbytes>len)   nbytes = len;
+	WideCharToMultiByte(0, 0, pwstr, nlength, pcstr, nbytes, NULL, NULL);
 }
 
 LRESULT Launcher::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -112,8 +237,9 @@ LRESULT Launcher::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 	ASSERT(pRoot && "Failed to parse XML");
 	m_pm.AttachDialog(pRoot);
 	m_pm.AddNotifier(this);
+	if (m_Nbmp == 1)
+		MapInit();
 
-	Init();
 	return 0;
 }
 
@@ -139,14 +265,31 @@ LRESULT Launcher::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 	RECT rcClient;
 	::GetClientRect(*this, &rcClient);
 
+	if (!::IsZoomed(*this)) {
+		RECT rcSizeBox = m_pm.GetSizeBox();
+		if (pt.y < rcClient.top + rcSizeBox.top) {
+			if (pt.x < rcClient.left + rcSizeBox.left) return HTTOPLEFT;
+			if (pt.x > rcClient.right - rcSizeBox.right) return HTTOPRIGHT;
+			return HTTOP;
+		}
+		else if (pt.y > rcClient.bottom - rcSizeBox.bottom) {
+			if (pt.x < rcClient.left + rcSizeBox.left) return HTBOTTOMLEFT;
+			if (pt.x > rcClient.right - rcSizeBox.right) return HTBOTTOMRIGHT;
+			return HTBOTTOM;
+		}
+		if (pt.x < rcClient.left + rcSizeBox.left) return HTLEFT;
+		if (pt.x > rcClient.right - rcSizeBox.right) return HTRIGHT;
+	}
+
 	RECT rcCaption = m_pm.GetCaptionRect();
 	if (pt.x >= rcClient.left + rcCaption.left && pt.x < rcClient.right - rcCaption.right \
 		&& pt.y >= rcCaption.top && pt.y < rcCaption.bottom) {
 		CControlUI* pControl = static_cast<CControlUI*>(m_pm.FindControl(pt));
-		if (pControl && _tcscmp(pControl->GetClass(), DUI_CTR_BUTTON) != 0)
+		if (pControl && _tcscmp(pControl->GetClass(), DUI_CTR_BUTTON) != 0 &&
+			_tcscmp(pControl->GetClass(), DUI_CTR_OPTION) != 0 &&
+			_tcscmp(pControl->GetClass(), DUI_CTR_TEXT) != 0)
 			return HTCAPTION;
 	}
-
 	return HTCLIENT;
 }
 
@@ -169,55 +312,62 @@ LRESULT Launcher::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
 
 LRESULT Launcher::OnDropFiles(UINT uMsg, HDROP hDrop, LPARAM lParam, BOOL& bHandled)
 {
-	if (m_Nbmp == 1)
-		MapInit();
-	if (m_AllLyt.size() >= 7){
-		MessageBox(NULL, _T("No more than 7 files you drop!"), _T("message"), MB_OK);
-		return 0;
-	}	
-	//»ñÈ¡ÍÏ¶¯ÎÄ¼şËÉ¿ªÊó±êÊ±µÄx×ø±ê
+	//è·å–æ‹–åŠ¨æ–‡ä»¶æ¾å¼€é¼ æ ‡æ—¶çš„xåæ ‡
 	POINT* ptDropPos = new POINT;
-	DragQueryPoint(hDrop, ptDropPos);	//°ÑÎÄ¼şÍÏ¶¯µ½µÄÎ»ÖÃ´æµ½ptDropPosÖĞ
+	DragQueryPoint(hDrop, ptDropPos);	//æŠŠæ–‡ä»¶æ‹–åŠ¨åˆ°çš„ä½ç½®å­˜åˆ°ptDropPosä¸­
 	int iDropPos = ptDropPos->x;
+	int yDropPos = ptDropPos->y;
 	delete(ptDropPos);
 
 	WORD wNumFilesDropped = DragQueryFile(hDrop, -1, NULL, 0);
-	WORD wPathnameSize = 0;
-	LPSTR lpFileName = NULL;
-	WCHAR * pFilePathName = NULL;
-	wstring strFirstFile = L"";
-	HICON hIcon = NULL;
 
-	char strTmp[20] = { 0 };
-	_itoa(m_Nbmp, strTmp, 2);
-	strcat_s(strTmp, "tem.bmp");
-	LPCSTR pBmpFilename = strTmp;
-	m_Nbmp++;
-	//there may be many, but we'll only use the first
-	if (wNumFilesDropped > 0)
-	{
-		wPathnameSize = DragQueryFile(hDrop, 0, NULL, 0);
-		wPathnameSize++;
-		pFilePathName = new WCHAR[wPathnameSize];
-		if (NULL == pFilePathName)
-		{
-			_ASSERT(0);
-			DragFinish(hDrop);
-			return 0;
-		}
-		lpFileName = (LPSTR)pFilePathName;
-
-		::ZeroMemory(pFilePathName, wPathnameSize);
-		DragQueryFile(hDrop, 0, lpFileName, wPathnameSize);
-		hIcon = QueryFileIcon((LPCTSTR)lpFileName);
-		HBITMAP IconHbmp = IconToBitmap(hIcon);
-		SaveBmp(IconHbmp, pBmpFilename);
-
-		AddLayout(iDropPos, pBmpFilename, lpFileName);
-		//	Vacated_position(iDropPos);
-		remove(pBmpFilename);
-		delete(pFilePathName);
+	if (m_AllLyt.size() + wNumFilesDropped > 21){
+		MessageBox(NULL, _T("can't drop too many files!"), _T("message"), MB_OK);
+		return 0;
 	}
+
+	for (unsigned short i = 0; i < wNumFilesDropped; i++)
+	{
+		HICON hIcon = NULL;
+		char strTmp[20] = { 0 };
+		_itoa(m_Nbmp, strTmp, 10);
+		strcat_s(strTmp, "tem.bmp");
+		m_Nbmp++;
+
+		LPCTSTR pBmpFilename = NULL;
+#ifdef _UNICODE
+		wchar_t strFileName[MAX_PATH] = { 0 };
+		wchar_t pBmpFilenameTmp[100] = { 0 };
+		c2w(pBmpFilenameTmp, 100, strTmp);
+		pBmpFilename = pBmpFilenameTmp;
+		DragQueryFile(hDrop, i, strFileName, MAX_PATH);
+#else
+		char strFileName[MAX_PATH] = { 0 };
+		pBmpFilename = strTmp;
+		DragQueryFile(hDrop, i, strFileName, MAX_PATH);
+#endif
+		
+
+		hIcon = QueryFileIcon(strFileName);
+		HBITMAP IconHbmp = IconToBitmap(hIcon);
+		SaveBmp(IconHbmp, strTmp);		
+		AddLayout(iDropPos, yDropPos, pBmpFilename, strFileName);
+	}
+	return 0;
+}
+
+LRESULT Launcher::OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	MONITORINFO oMonitor = {};
+	oMonitor.cbSize = sizeof(oMonitor);
+	::GetMonitorInfo(::MonitorFromWindow(*this, MONITOR_DEFAULTTOPRIMARY), &oMonitor);
+	CDuiRect rcWork = oMonitor.rcWork;
+	LPMINMAXINFO lpMMI = (LPMINMAXINFO)lParam;
+	lpMMI->ptMaxPosition.x = rcWork.left;
+	lpMMI->ptMaxPosition.y = rcWork.top;
+	lpMMI->ptMaxSize.x = rcWork.right - rcWork.left;
+	lpMMI->ptMaxSize.y = rcWork.bottom - rcWork.top;
+	bHandled = FALSE;
 	return 0;
 }
 
@@ -229,11 +379,10 @@ LRESULT Launcher::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_CREATE:        lRes = OnCreate(uMsg, wParam, lParam, bHandled); break;
 	case WM_DESTROY:       lRes = OnDestroy(uMsg, wParam, lParam, bHandled); break;
 	case WM_NCACTIVATE:    lRes = OnNcActivate(uMsg, wParam, lParam, bHandled); break;
-	/*case WM_NCCALCSIZE:    lRes = OnNcCalcSize(uMsg, wParam, lParam, bHandled); break;
-	case WM_NCPAINT:       lRes = OnNcPaint(uMsg, wParam, lParam, bHandled); break;*/
 	case WM_DROPFILES:	    lRes = OnDropFiles(uMsg, HDROP(wParam), lParam, bHandled); break;
 	case WM_NCHITTEST:     lRes = OnNcHitTest(uMsg, wParam, lParam, bHandled); break;
 	case WM_SIZE:          lRes = OnSize(uMsg, wParam, lParam, bHandled); break;
+	case WM_GETMINMAXINFO:	lRes = OnGetMinMaxInfo(uMsg, wParam, lParam, bHandled); break;
 	default:
 		bHandled = FALSE;
 	}
@@ -256,68 +405,147 @@ HICON Launcher::QueryFileIcon(LPCTSTR lpszFilePath)
 
 void Launcher::MapInit()
 {
-	/*static int i = 0;
-	if (0 == i)
+	ifstream ifs("test.json");
+	rapidjson::IStreamWrapper isw(ifs);
+	rapidjson::Document d;
+	d.ParseStream(isw);
+	size_t file_size = isw.Tell();
+	if (isw.Tell() == 0)
+	return;
+
+	typedef rapidjson::Value::ConstMemberIterator Iter;
+	for (Iter it = d.MemberBegin(); it != d.MemberEnd(); it++)
 	{
-		AddToMap(_T("btlz"));
-		i++;
-	}*/
+		STDSTRING TypeName = it->name.GetString();
+		const rapidjson::Value& a = d[TypeName.c_str()];
+		assert(a.IsArray());
+		if (!a.IsArray() || a.Size() < 5)
+			continue;
+		STDSTRING letter = a[1].GetString();
+		STDSTRING relPath = a[2].GetString();
+		STDSTRING display = a[4].GetString();
+
+		display.empty() ? (display = TypeName) : display ;
+	
+		STDSTRING str = letter + relPath + TypeName;
+		
+		GetIcon(str.c_str());
+	}	
 }
 
-//ÓÃÓÚ³õÊ¼»¯Ê±°ÑÒÑÖªµÄlayout¼Ó½ømap
+void Launcher::GetIcon(const char* strPath)
+{
+	char strTmp[20] = { 0 };
+	_itoa(m_Nbmp, strTmp, 10);
+	strcat_s(strTmp, "tem.bmp");
+	m_Nbmp++;	
+	
+	LPCTSTR strFilePath = NULL;
+	LPCTSTR pBmpFilename = NULL;
+#ifdef _UNICODE
+	wchar_t strFilePathTmp[100] = { 0 };
+	wchar_t pBmpFilenameTmp[100] = { 0 };
+	c2w(strFilePathTmp, 100, strPath);
+	c2w(pBmpFilenameTmp, 100, strTmp);
+	strFilePath = strFilePathTmp;
+	pBmpFilename = pBmpFilenameTmp;
+#else	
+	strFilePath = strPath;
+	pBmpFilename = strTmp;
+#endif
+	HICON hIcon = QueryFileIcon(strFilePath);
+	HBITMAP IconHbmp = IconToBitmap(hIcon);
+	SaveBmp(IconHbmp, strTmp);
+	
+	CNewVerticalLayoutUI* cLyt = new CNewVerticalLayoutUI;
+	InitLayOut(cLyt, pBmpFilename, strFilePath);
+
+	LayOut_Info Lyt_info = { 0 };
+	Lyt_info.Layout = cLyt;
+	Lyt_info.FilePath = strPath;
+	//memcpy(Lyt_info.FilePath.data(), strPath, strlen(strPath));
+
+	m_AllLyt.push_back(Lyt_info);
+
+	ShowLayOut();
+}
+
 void Launcher::AddToMap(LPCTSTR LayoutName)
 {
-	CVerticalLayoutUI* cLyt = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(LayoutName));
-	m_AllLyt.push_back(cLyt);
 }
 
+void Launcher::AddLayout(int nPosX, int nPosY, LPCTSTR pFileName, LPCTSTR strName)
+{	
+	CNewVerticalLayoutUI* cLyt = new CNewVerticalLayoutUI;
+	InitLayOut(cLyt, pFileName, strName);
+	Push_LayOut(nPosX, nPosY, cLyt, strName);
+	ShowLayOut();
+}
 
-void Launcher::AddLayout(int nPosX, LPCTSTR pFileName, const char* strName)
+void Launcher::InitLayOut(CNewVerticalLayoutUI* cLyt, LPCTSTR pFileName, LPCTSTR strName)
 {
-	CVerticalLayoutUI* cLyt = new CVerticalLayoutUI;
-	CButtonUI* cBtn = new CButtonUI;
+	CNewButtonUI* cBtn = new CNewButtonUI;
 	CLabelUI* Lab = new CLabelUI;
 	CHorizontalLayoutUI* cListLyt = static_cast<CHorizontalLayoutUI*>(m_pm.FindControl(_T("ListLayout")));
 	cListLyt->Add(cLyt);
 	cLyt->Add(cBtn);
 	cLyt->Add(Lab);
-	cLyt->SetContextMenuUsed(true);
-
-	cBtn->SetFixedWidth(BUTTON_WIDTH);
-	cBtn->SetFixedHeight(BUTTON_HEIGHT);
 	cBtn->SetContextMenuUsed(true);
+	cBtn->SetFixedHeight(BUTTON_HEIGHT);
+	cBtn->SetFixedWidth(BUTTON_WIDTH);
 	cBtn->SetBkImage(pFileName);
-	//	cBtn->SetBkColor(0xFFFFFFFF);
+	cBtn->SetToolTip(strName);
+	
+	RECT r;
+	r.left = r.right = 22;
+	r.bottom = r.top = 0;
 
+	cBtn->SetPadding(r);
 
-	LPCTSTR str = strName;
-	char tmp[100] = { 0 };
-	memcpy(tmp, str, strlen(str));
-	Lab->SetText(str);
+	STDSTRING path, displayName;
+	path = strName;
+	displayName = path.substr(path.find_last_of(_T('\\')) + 1);
+	
+	Lab->SetText(displayName.c_str());
 	Lab->SetFont(FONT_SIZE);
-	Lab->SetFixedWidth(LABLE_WIDTH);
-	Lab->SetFixedHeight(LABLE_HEIGHT);
+	Lab->SetMultiLine(true);
+	RECT rect;
+	rect.left = rect.right = 22;
+	rect.bottom = rect.top = 10;
+	Lab->SetPadding(rect);
+	Lab->SetToolTip(strName);
+}
 
-	UINT num = (nPosX - BORD_WIDTH) / LYT_WIDTH + 1;
-	if (num > m_AllLyt.size()){
-		m_AllLyt.push_back(cLyt);
-		m_filePath.push_back(tmp);
-	}		
+void Launcher::Push_LayOut(int xPos, int yPos, CNewVerticalLayoutUI* cLyt, LPCTSTR strName)
+{
+	LayOut_Info Lyt_info = { 0 };
+	Lyt_info.Layout = cLyt;
+
+	Lyt_info.FilePath = strName;
+	//memcpy(Lyt_info.FilePath, strFilePath, 100);
+	UINT Xnum = xPos / LYT_WIDTH + 1;
+	UINT Ynum = (yPos - BORD_WIDTH) / LYT_HEIGHT;
+	UINT n = Ynum * 4 + Xnum;
+	if (n > m_AllLyt.size()){
+		m_AllLyt.push_back(Lyt_info);
+	}
 	else{
-		m_AllLyt.insert(m_AllLyt.begin() + num - 1, cLyt);
-		m_filePath.push_back(tmp);
+		m_AllLyt.insert(m_AllLyt.begin() + n - 1, Lyt_info);
 	}
+}
 
-	vector<CVerticalLayoutUI*>::iterator it = m_AllLyt.begin();
-	for (; it != m_AllLyt.end(); it++)
-	{
-		cListLyt->Remove((*it), true);
-	}
+void Launcher::ShowLayOut()
+{
+	CHorizontalLayoutUI* cListLyt = static_cast<CHorizontalLayoutUI*>(m_pm.FindControl(_T("ListLayout")));
+	CNewVerticalLayoutUI* cLyt = new CNewVerticalLayoutUI;
 
-	for (UINT i = 0; i < m_AllLyt.size(); i++)
+	for (auto& var : m_AllLyt)
 	{
-		cLyt = m_AllLyt[i];
-		cLyt->SetFixedWidth(BUTTON_WIDTH);
+		cListLyt->Remove(var.Layout, true);
+
+		cLyt = var.Layout;		cLyt->SetContextMenuUsed(true);
+		cLyt->SetToolTip(var.FilePath.c_str());
+
 		RECT rect;
 		rect.left = rect.right = 10;
 		rect.bottom = rect.top = 5;
@@ -326,7 +554,6 @@ void Launcher::AddLayout(int nPosX, LPCTSTR pFileName, const char* strName)
 	}
 }
 
-//°Ñicon×ª³ÉHBITMAP
 HBITMAP Launcher::IconToBitmap(HICON hIcon, SIZE* pTargetSize)
 {
 	ICONINFO info = { 0 };
@@ -391,7 +618,7 @@ HBITMAP Launcher::IconToBitmap(HICON hIcon, SIZE* pTargetSize)
 		bi.biWidth = nWidth;
 		bi.biHeight = -nHeight;
 		bi.biPlanes = 1;
-		bi.biBitCount = 32;
+		bi.biBitCount = BMPBITCOUNT;
 		bi.biCompression = BI_RGB;
 		dib = CreateDIBSection(dc, (BITMAPINFO*)&bi, DIB_RGB_COLORS, (VOID**)&pData, NULL, 0);
 		if (dib == NULL) break;
@@ -472,55 +699,29 @@ HBITMAP Launcher::IconToBitmap(HICON hIcon, SIZE* pTargetSize)
 	return dib;
 }
 
-
-HBITMAP TransparentImage(HBITMAP hBitmap)
-{
-	CImage Image;
-	Image.Attach(hBitmap);
-	int nPitch = Image.GetPitch(), nBPP = Image.GetBPP();
-	LPBYTE lpBits = reinterpret_cast<LPBYTE>(Image.GetBits());
-
-	for (int yPos = 0; yPos < Image.GetHeight(); yPos++)
-	{
-		LPBYTE lpBytes = lpBits + (yPos * nPitch);
-		PDWORD lpLines = reinterpret_cast<PDWORD>(lpBytes);
-		for (int xPos = 0; xPos < Image.GetWidth(); xPos++)
-		{
-			if (nBPP == 32 && lpLines[xPos] >> 24 != 0x000000FF)
-			{
-				lpLines[xPos] |= 0xFFFFFFFF;
-			}
-		}
-	}
-
-	return Image.Detach();
-}
-
-
-//°ÑhbitmapÎÄ¼ş±£´æ³ÉbmpÍ¼Æ¬
 BOOL Launcher::SaveBmp(HBITMAP hBitmap, LPCSTR FileName)
 {
-	hBitmap = TransparentImage(hBitmap);
+//	hBitmap = TransparentImage(hBitmap);
 	HDC     hDC;
-	//µ±Ç°·Ö±æÂÊÏÂÃ¿ÏóËØËùÕ¼×Ö½ÚÊı         
+	//å½“å‰åˆ†è¾¨ç‡ä¸‹æ¯è±¡ç´ æ‰€å å­—èŠ‚æ•°         
 	int     iBits;
-	//Î»Í¼ÖĞÃ¿ÏóËØËùÕ¼×Ö½ÚÊı         
+	//ä½å›¾ä¸­æ¯è±¡ç´ æ‰€å å­—èŠ‚æ•°         
 	WORD     wBitCount;
-	//¶¨Òåµ÷É«°å´óĞ¡£¬     Î»Í¼ÖĞÏñËØ×Ö½Ú´óĞ¡     £¬Î»Í¼ÎÄ¼ş´óĞ¡     £¬     Ğ´ÈëÎÄ¼ş×Ö½ÚÊı             
+	//å®šä¹‰è°ƒè‰²æ¿å¤§å°ï¼Œ     ä½å›¾ä¸­åƒç´ å­—èŠ‚å¤§å°     ï¼Œä½å›¾æ–‡ä»¶å¤§å°     ï¼Œ     å†™å…¥æ–‡ä»¶å­—èŠ‚æ•°             
 	DWORD     dwPaletteSize = 0, dwBmBitsSize = 0, dwDIBSize = 0, dwWritten = 0;
-	//Î»Í¼ÊôĞÔ½á¹¹             
+	//ä½å›¾å±æ€§ç»“æ„             
 	BITMAP     Bitmap;
-	//Î»Í¼ÎÄ¼şÍ·½á¹¹         
+	//ä½å›¾æ–‡ä»¶å¤´ç»“æ„         
 	BITMAPFILEHEADER     bmfHdr;
-	//Î»Í¼ĞÅÏ¢Í·½á¹¹             
+	//ä½å›¾ä¿¡æ¯å¤´ç»“æ„             
 	BITMAPINFOHEADER     bi;
-	//Ö¸ÏòÎ»Í¼ĞÅÏ¢Í·½á¹¹                 
+	//æŒ‡å‘ä½å›¾ä¿¡æ¯å¤´ç»“æ„                 
 	LPBITMAPINFOHEADER     lpbi;
-	//¶¨ÒåÎÄ¼ş£¬·ÖÅäÄÚ´æ¾ä±ú£¬µ÷É«°å¾ä±ú             
+	//å®šä¹‰æ–‡ä»¶ï¼Œåˆ†é…å†…å­˜å¥æŸ„ï¼Œè°ƒè‰²æ¿å¥æŸ„             
 	HANDLE     fh, hDib, hPal, hOldPal = NULL;
 
-	//¼ÆËãÎ»Í¼ÎÄ¼şÃ¿¸öÏñËØËùÕ¼×Ö½ÚÊı             
-	hDC = CreateDC("DISPLAY", NULL, NULL, NULL);
+	//è®¡ç®—ä½å›¾æ–‡ä»¶æ¯ä¸ªåƒç´ æ‰€å å­—èŠ‚æ•°             
+	hDC = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL);
 	iBits = GetDeviceCaps(hDC, BITSPIXEL)     *     GetDeviceCaps(hDC, PLANES);
 	DeleteDC(hDC);
 	if (iBits <= 1)
@@ -530,7 +731,7 @@ BOOL Launcher::SaveBmp(HBITMAP hBitmap, LPCSTR FileName)
 	else if (iBits <= 8)
 		wBitCount = 8;
 	else
-		wBitCount = 24;
+		wBitCount = BMPBITCOUNT;
 
 	GetObject(hBitmap, sizeof(Bitmap), (LPSTR)&Bitmap);
 	bi.biSize = sizeof(BITMAPINFOHEADER);
@@ -547,12 +748,12 @@ BOOL Launcher::SaveBmp(HBITMAP hBitmap, LPCSTR FileName)
 
 	dwBmBitsSize = ((Bitmap.bmWidth *wBitCount + 31) / 32) * 4 * Bitmap.bmHeight;
 
-	//ÎªÎ»Í¼ÄÚÈİ·ÖÅäÄÚ´æ             
+	//ä¸ºä½å›¾å†…å®¹åˆ†é…å†…å­˜             
 	hDib = GlobalAlloc(GHND, dwBmBitsSize + dwPaletteSize + sizeof(BITMAPINFOHEADER));
 	lpbi = (LPBITMAPINFOHEADER)GlobalLock(hDib);
 	*lpbi = bi;
 
-	//     ´¦Àíµ÷É«°å                 
+	//     å¤„ç†è°ƒè‰²æ¿                 
 	hPal = GetStockObject(DEFAULT_PALETTE);
 	if (hPal)
 	{
@@ -561,12 +762,12 @@ BOOL Launcher::SaveBmp(HBITMAP hBitmap, LPCSTR FileName)
 		RealizePalette(hDC);
 	}
 
-	//     »ñÈ¡¸Ãµ÷É«°åÏÂĞÂµÄÏñËØÖµ             
+	//     è·å–è¯¥è°ƒè‰²æ¿ä¸‹æ–°çš„åƒç´ å€¼             
 	GetDIBits(hDC, hBitmap, 0, (UINT)Bitmap.bmHeight,
 		(LPSTR)lpbi + sizeof(BITMAPINFOHEADER)+dwPaletteSize,
 		(BITMAPINFO *)lpbi, DIB_RGB_COLORS);
 
-	//»Ö¸´µ÷É«°å                 
+	//æ¢å¤è°ƒè‰²æ¿                 
 	if (hOldPal)
 	{
 		::SelectPalette(hDC, (HPALETTE)hOldPal, TRUE);
@@ -574,24 +775,33 @@ BOOL Launcher::SaveBmp(HBITMAP hBitmap, LPCSTR FileName)
 		::ReleaseDC(NULL, hDC);
 	}
 
-	//´´½¨Î»Í¼ÎÄ¼ş                 
-	fh = CreateFile(FileName, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
+	//åˆ›å»ºä½å›¾æ–‡ä»¶ 
+	LPCTSTR strFileName = NULL;
+#ifdef _UNICODE
+	wchar_t strT[100] = { 0 };
+	c2w(strT, 100, FileName);
+	strFileName = strT;
+#else
+	strFileName = FileName;
+#endif
+	STDSTRING path = WriteablePath + strFileName;
+	fh = CreateFile(path.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
 		FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, NULL);
 
 	if (fh == INVALID_HANDLE_VALUE)         return     FALSE;
 
-	//     ÉèÖÃÎ»Í¼ÎÄ¼şÍ·             
+	//     è®¾ç½®ä½å›¾æ–‡ä»¶å¤´             
 	bmfHdr.bfType = 0x4D42;     //     "BM"             
 	dwDIBSize = sizeof(BITMAPFILEHEADER)+sizeof(BITMAPINFOHEADER)+dwPaletteSize + dwBmBitsSize;
 	bmfHdr.bfSize = dwDIBSize;
 	bmfHdr.bfReserved1 = 0;
 	bmfHdr.bfReserved2 = 0;
 	bmfHdr.bfOffBits = (DWORD)sizeof(BITMAPFILEHEADER)+(DWORD)sizeof(BITMAPINFOHEADER)+dwPaletteSize;
-	//     Ğ´ÈëÎ»Í¼ÎÄ¼şÍ·             
+	//     å†™å…¥ä½å›¾æ–‡ä»¶å¤´             
 	WriteFile(fh, (LPSTR)&bmfHdr, sizeof(BITMAPFILEHEADER), &dwWritten, NULL);
-	//     Ğ´ÈëÎ»Í¼ÎÄ¼şÆäÓàÄÚÈİ             
+	//     å†™å…¥ä½å›¾æ–‡ä»¶å…¶ä½™å†…å®¹             
 	WriteFile(fh, (LPSTR)lpbi, dwDIBSize, &dwWritten, NULL);
-	//Çå³ı                 
+	//æ¸…é™¤                 
 	GlobalUnlock(hDib);
 	GlobalFree(hDib);
 	CloseHandle(fh);
