@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="1024,768" caption="0,0,0,30" >
+	<Font shared="true" id="0" name="微软雅黑" size="29" bold="false" />
+	<VerticalLayout bkimage="file='TChalla/bg1.png'" >
+		<HorizontalLayout height="75" >
+			<Label bkimage="file='TChalla/logo.png'" width="33" height="31" padding="50,22,20,22" />
+			<Label text="视频调整下载器" width="300" textcolor="#FFFFFFFF" font="0" padding="0,22,0,22" />
+			<Control width="449" />
+			<Button width="30" height="30" padding="0,16,25,29" normalimage="file='TChalla/function.png' source='0,0,30,30'" hotimage="file='TChalla/function.png' source='0,30,30,60'" pushedimage="file='TChalla/function.png' source='0,60,30,90'" />
+			<Button name="minbtn" width="30" height="30" padding="0,16,25,29" normalimage="file='TChalla/reduce.png' source='0,0,30,30'" hotimage="file='TChalla/reduce.png' source='0,30,30,60'" pushedimage="file='TChalla/reduce.png' source='0,60,30,90'" />
+			<Button name="closebtn" width="30" height="30" padding="0,16,29,29" normalimage="file='TChalla/close.png' source='0,0,30,30'" hotimage="file='TChalla/close.png' source='0,30,30,60'" pushedimage="file='TChalla/close.png' source='0,60,30,90'" />
+		</HorizontalLayout>
+		<HorizontalLayout width="554" height="518" padding="235,59,235,120" >
+			<VerticalLayout height="518" >
+				<Button bkimage="file='TChalla/download_normal.png'" height="256" />
+				<Control height="8" />
+				<Button bkimage="file='TChalla/log_normal.png'" height="254" />
+			</VerticalLayout>
+			<Control width="7" />
+			<VerticalLayout height="518" >
+				<Button bkimage="file='TChalla/video_normal.png'" height="255" />
+				<Control height="8" />
+				<Button bkimage="file='TChalla/tool_normal.png'" height="254" />
+			</VerticalLayout>
+		</HorizontalLayout>
+	</VerticalLayout>		
+</Window>
