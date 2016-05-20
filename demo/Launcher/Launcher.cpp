@@ -18,8 +18,8 @@
 using namespace std;
 
 #define CONTROL_LAYOUT_OUT 68
-#define BUTTON_WIDTH 60
-#define BUTTON_HEIGHT 60
+#define BUTTON_WIDTH 48
+#define BUTTON_HEIGHT 48
 #define LABLE_WIDTH 48
 #define LABLE_HEIGHT 15
 #define FONT_SIZE 12
@@ -493,12 +493,15 @@ void Launcher::InitLayOut(CNewVerticalLayoutUI* cLyt, LPCTSTR pFileName, LPCTSTR
 	cBtn->SetContextMenuUsed(true);
 	cBtn->SetFixedHeight(BUTTON_HEIGHT);
 	cBtn->SetFixedWidth(BUTTON_WIDTH);
-	cBtn->SetBkImage(pFileName);
+	STDSTRING ImagePath = WriteablePath + pFileName;
+	cBtn->SetBkImage(ImagePath.c_str());
 	cBtn->SetToolTip(strName);
 	
 	RECT r;
-	r.left = r.right = 22;
-	r.bottom = r.top = 0;
+	r.left = 25;
+	r.right = 22;
+	r.bottom = 0;
+	r.top = 10;
 
 	cBtn->SetPadding(r);
 
@@ -510,8 +513,10 @@ void Launcher::InitLayOut(CNewVerticalLayoutUI* cLyt, LPCTSTR pFileName, LPCTSTR
 	Lab->SetFont(FONT_SIZE);
 	Lab->SetMultiLine(true);
 	RECT rect;
-	rect.left = rect.right = 22;
-	rect.bottom = rect.top = 10;
+	rect.left = 25;
+	rect.right = 22;
+	rect.bottom = 40;
+	rect.top = 5;
 	Lab->SetPadding(rect);
 	Lab->SetToolTip(strName);
 }

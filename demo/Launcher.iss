@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Launcher"
-#define MyAppVersion "1.0.0.0.3"
+#define MyAppVersion "1.0.0.0.4"
 #define MyAppPublisher "sisec"
 #define MyAppURL "http://www.sisec.com.cn/"
 
@@ -20,7 +20,7 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
-OutputBaseFilename=Æô¶¯Æ÷
+OutputBaseFilename=Æô¶¯Æ÷{#MyAppVersion}
 Compression=lzma
 SolidCompression=yes
 
