@@ -11,7 +11,7 @@
 			<Button name="closebtn" width="35" height="19" padding="1,5,3,6" tooltip="点击这里直接退出游戏" normalimage="file='record/btn_close_normal.png'" hotimage="file='record/btn_close_hot.png'" pushedimage="file='record/btn_close_pushed.png'"/>
 		</HorizontalLayout>
 		<TabLayout name="tab_main" text="" bkimage="file='record/bg.png'" tooltip="" float="false" bordersize="1" bkcolor="#FF757676">
-			<HorizontalLayout name="page1" >
+			<HorizontalLayout virtualwnd="page1" name="static_page" >
 				<Control bkcolor="#FF393939" width="5" />
 				<HorizontalLayout name="lytlz" borderround="4,4" focusbordercolor="0xFF000000" width="61"  padding="10,5,10,5" >
 					<VerticalLayout name="lytlzv" borderround="4,4" focusbordercolor="0xFF000000" width="48" >
@@ -49,7 +49,7 @@
 				</HorizontalLayout>
 				<Control bkcolor="#FF393939" width="20" />
 			</HorizontalLayout>
-			<HorizontalLayout name="page2" >
+			<HorizontalLayout virtualwnd="page2" name="record_page" >
 				<Control bkcolor="#FF393939" width="5" />
 				<HorizontalLayout width="498" bkimage="file='record/bg.png'" >
 					<VerticalLayout name="lytstop" padding="10,5,10,5" width="48" >
