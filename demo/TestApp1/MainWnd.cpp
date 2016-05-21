@@ -1,35 +1,24 @@
 #include "StdAfx.h"
-#include "MenuWnd.h"
 #include "SettingWnd.h"
 #include "AboutWnd.h"
 #include "MainWnd.h"
 
-#define CTR_RECORD			(_T("btlz"))
-#define CTR_SCREEN_CAPTURE	(_T("btpmbh"))
-#define CTR_AREA_RECORD		(_T("btlzqy"))
-#define CTR_LOCATION		(_T("btopen"))
-#define CTR_ENCODE			(_T("btencode"))
-#define CTR_VOICE			(_T("btvoice"))
-#define CTR_ABOUT			(_T("btabout"))
-#define CTR_SETTING			(_T("savebtn"))
-#define CTR_MIN				(_T("minbtn"))
-#define CTR_CLOSE			(_T("closebtn"))
-
 CMainWnd::CMainWnd()
 {
+	Page1.SetPaintMagager(&m_PaintManager);
+	Page2.SetPaintMagager(&m_PaintManager);
+
+	AddVirtualWnd(_T("page1"), &Page1);
+	AddVirtualWnd(_T("page2"), &Page2);
 }
 
 CMainWnd::~CMainWnd()
 {
+	RemoveVirtualWnd(_T("page1"));
+	RemoveVirtualWnd(_T("page2"));
 }
 
 DUI_BEGIN_MESSAGE_MAP(CMainWnd, WindowImplBase)
-	DUI_ON_CLICK_CTRNAME(CTR_RECORD, OnRecord)
-	DUI_ON_CLICK_CTRNAME(CTR_SCREEN_CAPTURE, OnScreenRecord)
-	DUI_ON_CLICK_CTRNAME(CTR_AREA_RECORD, OnAreaRecord)
-	DUI_ON_CLICK_CTRNAME(CTR_LOCATION, OnLocation)
-	DUI_ON_CLICK_CTRNAME(CTR_ENCODE, OnEncode)
-	DUI_ON_CLICK_CTRNAME(CTR_VOICE, OnVoice)
 	DUI_ON_CLICK_CTRNAME(CTR_ABOUT, OnAbout)
 	DUI_ON_CLICK_CTRNAME(CTR_SETTING, OnSettingDlg)
 	DUI_ON_CLICK_CTRNAME(CTR_MIN, OnMin)
@@ -49,53 +38,6 @@ CDuiString CMainWnd::GetSkinFolder()
 CDuiString CMainWnd::GetSkinFile()
 {
 	return _T("record.xml");
-}
-
-void CMainWnd::OnRecord(TNotifyUI& msg)
-{
-	DUITRACE(_T("Notify msg.sType : %s"), msg.sType);
-
-	(msg.pSender) ? DUITRACE(_T("Notify msg.pSender : %s"), msg.pSender->GetName()) : _T("unknown sender");
-}
-
-void CMainWnd::OnScreenRecord(TNotifyUI& msg)
-{
-	DUITRACE(_T("Notify msg.sType : %s"), msg.sType);
-
-	(msg.pSender) ? DUITRACE(_T("Notify msg.pSender : %s"), msg.pSender->GetName()) 
-		: _T("unknown sender");
-}
-
-void CMainWnd::OnAreaRecord(TNotifyUI& msg)
-{
-	DUITRACE(_T("Notify msg.sType : %s"), msg.sType);
-
-	(msg.pSender) ? DUITRACE(_T("Notify msg.pSender : %s"), msg.pSender->GetName())
-		: _T("unknown sender");
-}
-
-void CMainWnd::OnLocation(TNotifyUI& msg)
-{
-	DUITRACE(_T("Notify msg.sType : %s"), msg.sType);
-
-	(msg.pSender) ? DUITRACE(_T("Notify msg.pSender : %s"), msg.pSender->GetName())
-		: _T("unknown sender");
-}
-
-void CMainWnd::OnEncode(TNotifyUI& msg)
-{
-	DUITRACE(_T("Notify msg.sType : %s"), msg.sType);
-
-	(msg.pSender) ? DUITRACE(_T("Notify msg.pSender : %s"), msg.pSender->GetName())
-		: _T("unknown sender");
-}
-
-void CMainWnd::OnVoice(TNotifyUI& msg)
-{
-	DUITRACE(_T("Notify msg.sType : %s"), msg.sType);
-
-	(msg.pSender) ? DUITRACE(_T("Notify msg.pSender : %s"), msg.pSender->GetName())
-		: _T("unknown sender");
 }
 
 void CMainWnd::OnAbout(TNotifyUI& msg)

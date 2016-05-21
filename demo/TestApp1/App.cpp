@@ -4,12 +4,6 @@
 #include "MainWnd.h"
 #include "resource.h"
 
-
-void CALLBACK TimerProc(HWND hWnd, UINT nMsg, UINT nTimerid, DWORD dwTime)
-{
-	SendMessage(hWnd, WM_TIMER, NULL, NULL);
-}
-
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
 

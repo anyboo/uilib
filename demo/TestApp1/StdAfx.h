@@ -28,6 +28,18 @@ using namespace DuiLib;
 #   endif
 #endif
 
+#define CTR_RECORD			(_T("btlz"))
+#define CTR_SCREEN_CAPTURE	(_T("btpmbh"))
+#define CTR_AREA_RECORD		(_T("btlzqy"))
+#define CTR_LOCATION		(_T("btopen"))
+#define CTR_ENCODE			(_T("btencode"))
+#define CTR_VOICE			(_T("btvoice"))
+#define CTR_ABOUT			(_T("btabout"))
+#define CTR_SETTING			(_T("savebtn"))
+#define CTR_MIN				(_T("minbtn"))
+#define CTR_CLOSE			(_T("closebtn"))
+
+void trace(TNotifyUI& msg);
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
