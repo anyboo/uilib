@@ -37,7 +37,6 @@ protected:
 	void PopMenu(TNotifyUI& msg);
 	void DeleteLyt();
 	void OpenExeFile(int xPos, int yPos);
-	void OnMouseMove(int xPos, int yPos);
 
 	HICON QueryFileIcon(LPCTSTR lpszFilePath);
 	void MapInit();

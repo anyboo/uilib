@@ -196,15 +196,6 @@ void Launcher::OpenExeFile(int xPos, int yPos)
 		MessageBox(NULL, _T("无法打开"), _T("提示"), MB_OK);
 }
 
-void Launcher::OnMouseMove(int xPos, int yPos)
-{
-	UINT n = xPos / LYT_WIDTH + (yPos - BORD_WIDTH) / LYT_HEIGHT * 4;	
-	CNewVerticalLayoutUI* cLyt = new CNewVerticalLayoutUI;
-	if (n >= m_AllLyt.size()) return;
-	cLyt = m_AllLyt[n].Layout;
-	cLyt->SetBkColor(0xFFFF9999);
-}
-
 void Launcher::c2w(wchar_t *pwstr, size_t len, const char *str)
 {
 	if (str)
