@@ -4,11 +4,12 @@
 #include "resource.h"
 #include <list>
 #include "atlimage.h"
-#include <Shellapi.h>
 
 #include "MenuWnd.h"
 
 #include "NewUICtrol.h"
+#include <Shellapi.h>
+#include <DuiLib/UIlib.h>
 
 typedef struct
 {
@@ -17,7 +18,8 @@ typedef struct
 	STDSTRING Display;
 }LayOut_Info;
 
-class Launcher : public CWindowWnd, public INotifyUI
+class Launcher : 
+	public CWindowWnd, public INotifyUI
 {
 public:
 	Launcher();
@@ -64,12 +66,14 @@ protected:
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 private:
-	CPaintManagerUI m_pm;
+	CPaintManagerUI mpm;
 	POINT m_MenuPt;
 	POINT m_xyPos;
 	int m_Nbmp = 1;
 	std::vector<LayOut_Info> m_AllLyt;
 	HWND hListBoxWnd;
 	STDSTRING WriteablePath;
+	STDSTRING configfile;
+	STDSTRING AppLetter;
 };
 

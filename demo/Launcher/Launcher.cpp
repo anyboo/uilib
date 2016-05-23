@@ -1,19 +1,15 @@
 ﻿#include "stdafx.h"
 #include "Launcher.h"
-
-#include "ostream"
-
 #include "document.h"
 #include "prettywriter.h"
 #include "stringbuffer.h"
-#include "string"
-
 #include "ostreamwrapper.h"
 #include "istreamwrapper.h"
+#include <ostream>
+#include <string>
 #include <fstream>
-#include <algorithm>
-#include <direct.h>
 #include <Shlobj.h>
+#include <direct.h>
 
 using namespace std;
 
@@ -28,42 +24,14 @@ using namespace std;
 #define LYT_HEIGHT 110
 
 #define BMPBITCOUNT 32
-#include <fstream>
-#include <random>
-
-const int nrolls = 26; // number of experiments
-const int nstars = 95;    // maximum number of stars to distribute
-
-knuth_b generator;
-uniform_int_distribution <int> distribution('A', 'Z');
 
 Launcher::Launcher()
-:WriteablePath(CPaintManagerUI::GetCurrentPath())
 {
-	WriteablePath.append("\\");
-	STDSTRING randomFileName;
-	for (int i = 0; i < nrolls; i++)
-	{
-		randomFileName += distribution(generator);
-	}
-
-	STDSTRING path = WriteablePath + randomFileName;
-
-	DUITRACE("randomFileName : %s", randomFileName.c_str());
-	ofstream fs(path, ios::out | ios::app);
-	
-	if (!fs.put('T'))
-	{
-		TCHAR ch = WriteablePath.at(0);
-		if ( (_T('C') <= ch && _T('Z') > ch) || (_T('c') <= ch && _T('z') > ch))
-				ch += 1;
-		WriteablePath.front() = ch;
-		STDSTRING path = WriteablePath + randomFileName;
-		SHCreateDirectoryEx(0, WriteablePath.c_str(),0 );
-		ofstream fs(path, ios::out | ios::app);
-		fs.put('A');
-		fs.close();
-	}
+	TCHAR PATH[MAX_PATH] = { 0 };
+	STDSTRING AppPath = STDSTRING(PATH, ::GetModuleFileName(NULL, PATH, MAX_PATH));
+	WriteablePath = AppPath.substr(0,AppPath.find_last_of(_T('\\')) + 1);
+	AppLetter = AppPath.substr(0, AppPath.find_first_of(_T('\\')) );
+	configfile = WriteablePath + "config.json";
 }
 
 Launcher::~Launcher()
@@ -116,9 +84,9 @@ using namespace rapidjson;
 void Launcher::SaveLytToJsonFile()
 {
 	Document document;
-	STDSTRING path(WriteablePath + "test.json");
-	document.Parse(path.c_str());
-	ofstream ofs(path);
+	//STDSTRING path(WriteablePath + "test.json");
+	document.Parse(configfile.c_str());
+	ofstream ofs(configfile);
 	OStreamWrapper osw(ofs);
 	Document::AllocatorType& alloc = document.GetAllocator();
 	Value root(rapidjson::kObjectType);
@@ -165,7 +133,7 @@ void Launcher::PopMenu(TNotifyUI& msg)
 
 void Launcher::DeleteLyt()
 {
-	CHorizontalLayoutUI* cListLyt = static_cast<CHorizontalLayoutUI*>(m_pm.FindControl(_T("ListLayout")));
+	CHorizontalLayoutUI* cListLyt = static_cast<CHorizontalLayoutUI*>(mpm.FindControl(_T("ListLayout")));
 	CNewVerticalLayoutUI* cLyt = new CNewVerticalLayoutUI;
 	POINT pt = m_MenuPt;
 	int xPos = pt.x;
@@ -231,12 +199,12 @@ LRESULT Launcher::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 	styleValue &= ~WS_CAPTION;
 	::SetWindowLong(*this, GWL_STYLE, styleValue | WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
 
-	m_pm.Init(m_hWnd);
+	mpm.Init(m_hWnd);
 	CDialogBuilder builder;
-	CControlUI* pRoot = builder.Create(_T("launcher.xml"), (UINT)0, NULL, &m_pm);
+	CControlUI* pRoot = builder.Create(_T("launcher.xml"), (UINT)0, NULL, &mpm);
 	ASSERT(pRoot && "Failed to parse XML");
-	m_pm.AttachDialog(pRoot);
-	m_pm.AddNotifier(this);
+	mpm.AttachDialog(pRoot);
+	mpm.AddNotifier(this);
 	if (m_Nbmp == 1)
 		MapInit();
 
@@ -266,7 +234,7 @@ LRESULT Launcher::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 	::GetClientRect(*this, &rcClient);
 
 	if (!::IsZoomed(*this)) {
-		RECT rcSizeBox = m_pm.GetSizeBox();
+		RECT rcSizeBox = mpm.GetSizeBox();
 		if (pt.y < rcClient.top + rcSizeBox.top) {
 			if (pt.x < rcClient.left + rcSizeBox.left) return HTTOPLEFT;
 			if (pt.x > rcClient.right - rcSizeBox.right) return HTTOPRIGHT;
@@ -281,10 +249,10 @@ LRESULT Launcher::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 		if (pt.x > rcClient.right - rcSizeBox.right) return HTRIGHT;
 	}
 
-	RECT rcCaption = m_pm.GetCaptionRect();
+	RECT rcCaption = mpm.GetCaptionRect();
 	if (pt.x >= rcClient.left + rcCaption.left && pt.x < rcClient.right - rcCaption.right \
 		&& pt.y >= rcCaption.top && pt.y < rcCaption.bottom) {
-		CControlUI* pControl = static_cast<CControlUI*>(m_pm.FindControl(pt));
+		CControlUI* pControl = static_cast<CControlUI*>(mpm.FindControl(pt));
 		if (pControl && _tcscmp(pControl->GetClass(), DUI_CTR_BUTTON) != 0 &&
 			_tcscmp(pControl->GetClass(), DUI_CTR_OPTION) != 0 &&
 			_tcscmp(pControl->GetClass(), DUI_CTR_TEXT) != 0)
@@ -295,7 +263,7 @@ LRESULT Launcher::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 
 LRESULT Launcher::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	SIZE szRoundCorner = m_pm.GetRoundCorner();
+	SIZE szRoundCorner = mpm.GetRoundCorner();
 	if (!::IsIconic(*this) && (szRoundCorner.cx != 0 || szRoundCorner.cy != 0)) {
 		CDuiRect rcWnd;
 		::GetWindowRect(*this, &rcWnd);
@@ -387,7 +355,7 @@ LRESULT Launcher::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		bHandled = FALSE;
 	}
 	if (bHandled) return lRes;
-	if (m_pm.MessageHandler(uMsg, wParam, lParam, lRes)) return lRes;
+	if (mpm.MessageHandler(uMsg, wParam, lParam, lRes)) return lRes;
 	return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 }
 
@@ -405,7 +373,7 @@ HICON Launcher::QueryFileIcon(LPCTSTR lpszFilePath)
 
 void Launcher::MapInit()
 {
-	ifstream ifs("test.json");
+	ifstream ifs(configfile);
 	rapidjson::IStreamWrapper isw(ifs);
 	rapidjson::Document d;
 	d.ParseStream(isw);
@@ -427,7 +395,7 @@ void Launcher::MapInit()
 
 		display.empty() ? (display = TypeName) : display ;
 	
-		STDSTRING str = letter + relPath + TypeName;
+		STDSTRING str = AppLetter + relPath + TypeName;
 		
 		GetIcon(str.c_str());
 	}	
@@ -486,7 +454,7 @@ void Launcher::InitLayOut(CNewVerticalLayoutUI* cLyt, LPCTSTR pFileName, LPCTSTR
 {
 	CNewButtonUI* cBtn = new CNewButtonUI;
 	CLabelUI* Lab = new CLabelUI;
-	CHorizontalLayoutUI* cListLyt = static_cast<CHorizontalLayoutUI*>(m_pm.FindControl(_T("ListLayout")));
+	CHorizontalLayoutUI* cListLyt = static_cast<CHorizontalLayoutUI*>(mpm.FindControl(_T("ListLayout")));
 	cListLyt->Add(cLyt);
 	cLyt->Add(cBtn);
 	cLyt->Add(Lab);
@@ -519,6 +487,7 @@ void Launcher::InitLayOut(CNewVerticalLayoutUI* cLyt, LPCTSTR pFileName, LPCTSTR
 	rect.top = 5;
 	Lab->SetPadding(rect);
 	Lab->SetToolTip(strName);
+	Lab->SetMultiLine(true);
 }
 
 void Launcher::Push_LayOut(int xPos, int yPos, CNewVerticalLayoutUI* cLyt, LPCTSTR strName)
@@ -541,7 +510,7 @@ void Launcher::Push_LayOut(int xPos, int yPos, CNewVerticalLayoutUI* cLyt, LPCTS
 
 void Launcher::ShowLayOut()
 {
-	CHorizontalLayoutUI* cListLyt = static_cast<CHorizontalLayoutUI*>(m_pm.FindControl(_T("ListLayout")));
+	CHorizontalLayoutUI* cListLyt = static_cast<CHorizontalLayoutUI*>(mpm.FindControl(_T("ListLayout")));
 	CNewVerticalLayoutUI* cLyt = new CNewVerticalLayoutUI;
 
 	for (auto& var : m_AllLyt)
