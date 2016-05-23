@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="280,85" >
+<VerticalLayout bkcolor="#FFDDBBDD" >
+	<List header="hidden" inset="8,8,8,8" >
+		<ListContainerElement height="22" inset="20,5,10,5" >
+			<HorizontalLayout>
+				<Label name="LbSysSound" width="20" />
+				<Button name="btnSysSound" text="录制系统音频" textcolor="#FF000000" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<Control height="1" bkcolor="#FF777777" padding="20,0,0,0" />
+		<ListContainerElement height="22" inset="20,5,10,0" >
+			<HorizontalLayout>
+				<Label name="LbMcf" width="20" />
+				<Button name="btnMcf" text="麦克风(Realtek High Definition Audio)" textcolor="#FF000000" />
+			</HorizontalLayout>
+		</ListContainerElement>
+		<ListContainerElement height="22" inset="20,0,10,0" >
+			<HorizontalLayout>
+				<Label name="LbUnMcf" width="20" />
+				<Button name="btnUnmcf" text="不录制麦克风" textcolor="#FF000000" />
+			</HorizontalLayout>
+		</ListContainerElement>
+	</List>
+</VerticalLayout>
+</Window>

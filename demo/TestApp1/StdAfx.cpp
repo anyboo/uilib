@@ -13,3 +13,11 @@
 #else
 #pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #endif
+
+void trace(TNotifyUI& msg)
+{
+	DUITRACE(_T("Notify msg.sType : %s"), msg.sType);
+
+	(msg.pSender) ? DUITRACE(_T("Notify msg.pSender : %s"), msg.pSender->GetName())
+		: _T("unknown sender");
+}

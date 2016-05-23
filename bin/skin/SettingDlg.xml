@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="420,330" sizebox="4,4,6,6" caption="0,0,0,36" roundcorner="4,4" mininfo="308,208" roundcorner="5,5" showdirty="false" >
+	<Font shared="true" id="3" name="微软雅黑" size="18" bold="false" />
+	<Default shared="true" name="Option" value="disabledtextcolor=&quot;#FFbac0c5&quot; textpadding=&quot;2,2,0,0&quot; align=&quot;left&quot; selectedimage=&quot;file='record/RadioBtnSel.png' source='0,0,13,13' dest='0,5,14,19'&quot; normalimage=&quot;file='record/RadioBtnNon.png' source='0,0,13,13' dest='0,5,14,19'&quot;" />
+	<VerticalLayout inset="4,0,4,4" bkimage="file='record/bg_above.png'" >
+		<HorizontalLayout height="32" inset="2,2,2,0" >
+			<Label text="设置" width="80" textcolor="#FFFFFFFF" />
+			<Control />
+			<Button name="closebtn" width="35" height="19" padding="1,5,3,6" tooltip="点击退出则保存配置" normalimage="file='record/btn_close_normal.png'" hotimage="file='record/btn_close_hot.png'" pushedimage="file='record/btn_close_pushed.png'"/>
+		</HorizontalLayout>
+		<Container bkcolor="#FFFFFFFF">
+			<Label text="保存路径：" float="true" pos="10, 20, 78, 42" />
+			<Edit name="edit" float="true" pos="80, 20, 330, 42" text="选择保存目录" tooltip="选择保存目录" bordercolor="#FF4EA0D1" bordersize="1"/>
+			<Button text="浏览" name="folder" showhtml="true" float="true" pos="330, 20, 380, 42" tooltip="请选择保存目录" />
+			<Label text="视频文件编码：" float="true" pos="10, 55, 98, 75" />
+			<Combo name="encoding" float="true" pos="100, 55, 220, 75" tooltip="请点击这里选择编码" normalimage="file='Combo_nor.bmp' corner='2,2,24,2'" hotimage="file='Combo_over.bmp' corner='2,2,24,2'" pushedimage="file='Combo_over.bmp' corner='2,2,24,2'" textpadding="1,1,1,1" >
+				<ListLabelElement text="MP4" selected="true" />
+				<ListLabelElement text="FLV" />
+			</Combo>
+		</Container>
+    </VerticalLayout>
+</Window>
