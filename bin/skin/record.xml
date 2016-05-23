@@ -6,12 +6,12 @@
 		<HorizontalLayout height="30" >
 			<VerticalLayout width="20" height="20" bkimage="file='record/camera_LOGO.png'" padding="4,2,5,8" />
 			<Label text="录屏工具" textcolor="#FFFFFFFF" font="0" width="364" />
-			<Button name="savebtn" width="35" height="19" padding="1,5,1,6" tooltip="存放路径" normalimage="file='record/save.png' source='26,0,52,17'" hotimage="file='record/save.png' source='0,0,26,17'" pushedimage="file='record/save.png' source='52,0,78,17'" />
+			<Button name="savebtn" width="35" height="19" padding="1,5,1,6" tooltip="设置" normalimage="file='record/save.png' source='26,0,52,17'" hotimage="file='record/save.png' source='0,0,26,17'" pushedimage="file='record/save.png' source='52,0,78,17'" />
 			<Button name="minbtn" width="35" height="19" padding="1,5,1,6" tooltip="最小化" normalimage="file='record/btn_min_normal.png' mask='#00FFFFFF'" hotimage="file='record/btn_min_hot.png'" pushedimage="file='record/btn_min_pushed.png'"/>
-			<Button name="closebtn" width="35" height="19" padding="1,5,3,6" tooltip="点击这里直接退出游戏" normalimage="file='record/btn_close_normal.png'" hotimage="file='record/btn_close_hot.png'" pushedimage="file='record/btn_close_pushed.png'"/>
+			<Button name="closebtn" width="35" height="19" padding="1,5,3,6" tooltip="退出" normalimage="file='record/btn_close_normal.png'" hotimage="file='record/btn_close_hot.png'" pushedimage="file='record/btn_close_pushed.png'"/>
 		</HorizontalLayout>
 		<TabLayout name="tab_main" text="" bkimage="file='record/bg.png'" tooltip="" float="false" bordersize="1" bkcolor="#FF757676">
-			<HorizontalLayout name="page1" >
+			<HorizontalLayout virtualwnd="page1" name="static_page" >
 				<Control bkcolor="#FF393939" width="5" />
 				<HorizontalLayout name="lytlz" borderround="4,4" focusbordercolor="0xFF000000" width="61"  padding="10,5,10,5" >
 					<VerticalLayout name="lytlzv" borderround="4,4" focusbordercolor="0xFF000000" width="48" >
@@ -49,7 +49,7 @@
 				</HorizontalLayout>
 				<Control bkcolor="#FF393939" width="20" />
 			</HorizontalLayout>
-			<HorizontalLayout name="page2" >
+			<HorizontalLayout virtualwnd="page2" name="record_page" >
 				<Control bkcolor="#FF393939" width="5" />
 				<HorizontalLayout width="498" bkimage="file='record/bg.png'" >
 					<VerticalLayout name="lytstop" padding="10,5,10,5" width="48" >

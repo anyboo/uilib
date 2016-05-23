@@ -10,10 +10,10 @@
 		</HorizontalLayout>
 		<Container bkcolor="#FFFFFFFF">
 			<Label text="保存路径：" float="true" pos="10, 20, 78, 42" />
-			<Edit name="pwdedit" float="true" pos="80, 20, 330, 42" tooltip="选择保存目录" bordercolor="#FF4EA0D1" bordersize="1"/>
-			<Button text="浏览" showhtml="true" float="true" pos="330, 20, 380, 42" tooltip="请选择视频文件编码" />
+			<Edit name="edit" float="true" pos="80, 20, 330, 42" text="选择保存目录" tooltip="选择保存目录" bordercolor="#FF4EA0D1" bordersize="1"/>
+			<Button text="浏览" name="folder" showhtml="true" float="true" pos="330, 20, 380, 42" tooltip="请选择保存目录" />
 			<Label text="视频文件编码：" float="true" pos="10, 55, 98, 75" />
-			<Combo name="accountcombo" float="true" pos="100, 55, 220, 75" tooltip="请点击这里选择编码" normalimage="file='Combo_nor.bmp' corner='2,2,24,2'" hotimage="file='Combo_over.bmp' corner='2,2,24,2'" pushedimage="file='Combo_over.bmp' corner='2,2,24,2'" textpadding="1,1,1,1" >
+			<Combo name="encoding" float="true" pos="100, 55, 220, 75" tooltip="请点击这里选择编码" normalimage="file='Combo_nor.bmp' corner='2,2,24,2'" hotimage="file='Combo_over.bmp' corner='2,2,24,2'" pushedimage="file='Combo_over.bmp' corner='2,2,24,2'" textpadding="1,1,1,1" >
 				<ListLabelElement text="MP4" selected="true" />
 				<ListLabelElement text="FLV" />
 			</Combo>

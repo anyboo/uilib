@@ -11,9 +11,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 {
     CPaintManagerUI::SetInstance(hInstance);
     CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skin") );
-#ifdef _NDEBUG
-	CPaintManagerUI::SetResourceZip(_T("launcher.zip"));
-#endif
 
 	LoadConfiguration();
     HRESULT Hr = ::CoInitialize(NULL);
