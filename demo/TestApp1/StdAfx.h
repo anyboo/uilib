@@ -38,6 +38,14 @@ using namespace DuiLib;
 #define CTR_SETTING			(_T("savebtn"))
 #define CTR_MIN				(_T("minbtn"))
 #define CTR_CLOSE			(_T("closebtn"))
+#define CTR_FOLDER			(_T("folder"))
+#define CTR_ENCODING		(_T("encoding")) 
+
+#ifdef _UNICODE
+#	define STDSTRING std::wstring
+#else
+#	define STDSTRING std::string
+#endif
 
 void trace(TNotifyUI& msg);
 

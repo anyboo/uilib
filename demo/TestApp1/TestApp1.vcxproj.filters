@@ -17,9 +17,6 @@
     <ClCompile Include="StdAfx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RecordWork.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SettingWnd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -35,15 +32,15 @@
     <ClCompile Include="RecordPage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CaptureWnd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StdAfx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RecordWork.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SettingWnd.h">
@@ -59,6 +56,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RecordPage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CaptureWnd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

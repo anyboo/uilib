@@ -279,10 +279,10 @@
   <ItemGroup>
     <ClCompile Include="AboutWnd.cpp" />
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="CaptureWnd.cpp" />
     <ClCompile Include="MainWnd.cpp" />
     <ClCompile Include="RecordPage.cpp" />
     <ClCompile Include="SettingWnd.cpp" />
-    <ClCompile Include="RecordWork.cpp" />
     <ClCompile Include="StaticPage.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -293,10 +293,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AboutWnd.h" />
+    <ClInclude Include="CaptureWnd.h" />
     <ClInclude Include="MainWnd.h" />
     <ClInclude Include="RecordPage.h" />
     <ClInclude Include="SettingWnd.h" />
-    <ClInclude Include="RecordWork.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="StaticPage.h" />
     <ClInclude Include="StdAfx.h" />
