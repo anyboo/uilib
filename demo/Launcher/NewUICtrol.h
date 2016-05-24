@@ -112,7 +112,6 @@ private:
 	}
 };
 
-
 class CNewButtonUI : public CButtonUI 
 {
 public:
@@ -239,5 +238,13 @@ public:
 		CLabelUI::DoEvent(event);
 	}
 };
+
+typedef struct
+{
+	CNewVerticalLayoutUI* Layout;
+	STDSTRING FilePath;
+	STDSTRING Display;
+}LayOut_Info;
+
 
 

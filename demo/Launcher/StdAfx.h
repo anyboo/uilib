@@ -1,4 +1,3 @@
-
 #if !defined(AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_)
 #define AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_
 
@@ -9,9 +8,19 @@
 
 #include <windows.h>
 #include <objbase.h>
+#include <shellapi.h>
 
 #include "resource.h"
 #include "DuiLib\UIlib.h"
+
+#include "document.h"
+#include "prettywriter.h"
+#include "stringbuffer.h"
+#include <string>
+
+#include "ostreamwrapper.h"
+#include "istreamwrapper.h"
+
 
 using namespace DuiLib;
 
@@ -29,11 +38,17 @@ using namespace DuiLib;
 #   endif
 #endif
 
+#define BT_CLOSE			(_T("closebtn"))
+#define	BT_MINWIND			(_T("minbtn"))
+
 #ifdef _UNICODE
 #	define STDSTRING std::wstring
 #else
 #	define STDSTRING std::string
 #endif
+
+
+
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.

@@ -1,40 +1,26 @@
 // App.cpp : Defines the entry point for the application.
 //
-
 #include "stdafx.h"
-#include "Launcher.h"
-
-static void LoadConfiguration();
-static void SaveConfiguration();
+#include "MainWnd.h"
+#include "resource.h"
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
-    CPaintManagerUI::SetInstance(hInstance);
-    CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skin") );
 
-	LoadConfiguration();
-    HRESULT Hr = ::CoInitialize(NULL);
-    if( FAILED(Hr) ) return 0;
+	CPaintManagerUI::SetInstance(hInstance);
+	CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skin"));
 
-	Launcher* pFrame = new Launcher();
-    if( pFrame == NULL ) return 0;
-	pFrame->Create(NULL, NULL, UI_WNDSTYLE_DIALOG | UI_WNDSTYLE_FRAME, WS_EX_WINDOWEDGE | WS_EX_ACCEPTFILES | WS_EX_STATICEDGE | WS_EX_APPWINDOW);
+	HRESULT Hr = ::CoInitialize(NULL);
+	if (FAILED(Hr)) return 0;
+
+	CMainWnd* pFrame = new CMainWnd();
+	pFrame->Create(NULL, NULL, UI_WNDSTYLE_DIALOG, WS_EX_WINDOWEDGE | WS_EX_ACCEPTFILES);
 	pFrame->SetIcon(IDI_ICON);
-    pFrame->CenterWindow();
-    pFrame->ShowWindow(true);
-    CPaintManagerUI::MessageLoop();
-	SaveConfiguration();
-    ::CoUninitialize();
-    return 0;
-}
+	pFrame->CenterWindow();
+	pFrame->ShowWindow(true);
 
-void LoadConfiguration()
-{
-	//Load configuration from json file
-	//configuration is path of shortcut
-}
+	CPaintManagerUI::MessageLoop();
 
-void SaveConfiguration()
-{
-
+	::CoUninitialize();
+	return 0;
 }
