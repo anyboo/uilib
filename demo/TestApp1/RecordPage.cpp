@@ -39,6 +39,8 @@ void CRecordPage::OnRecord(TNotifyUI& msg)
 	time = 0;
 	timelabel = dynamic_cast<CLabelUI*>(ppm->FindControl(_T("LbTime")));
 	timelabel->SetText("00:00:00");
+
+	//sscobs_stopRecording();
 }
 
 void CRecordPage::OnTimer(TNotifyUI& msg)

@@ -4,10 +4,12 @@
 CStaticPage::CStaticPage()
 :ppm(nullptr)
 {
+	//sscobs_init();
 }
 
 CStaticPage::~CStaticPage()
 {
+	//sscobs_uninit();
 }
 
 DUI_BEGIN_MESSAGE_MAP(CStaticPage, CNotifyPump)
@@ -37,18 +39,25 @@ void CStaticPage::OnRecord(TNotifyUI& msg)
 
 	t.SelectItem(1);
 
-	ppm->SetTimer(t.FindSubControl(_T("record_page")), 0x5201, 3*1000);
+	ppm->SetTimer(t.FindSubControl(_T("record_page")), 0x5201, 1*1000);
+
+
 }
 
 void CStaticPage::OnScreenCapture(TNotifyUI& msg)
 {
 	trace(msg);
 	//capture full screenshot
+	//CDuiString file = GetConfig().savefile;
+	RECT rc;
+	::GetWindowRect(::GetDesktopWindow(), &rc);
+	//sscobs_startRecording(file,rc.x,rc.y,width,height);
 }
 
 void CStaticPage::OnAreaRecord(TNotifyUI& msg)
 {
 	trace(msg);
+	CaptureWnd
 }
 
 void CStaticPage::OnLocation(TNotifyUI& msg)

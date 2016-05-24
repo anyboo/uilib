@@ -71,7 +71,7 @@ void CMainWnd::OnClose(TNotifyUI& msg)
 
 void CMainWnd::Notify(TNotifyUI& msg)
 {
-	return WindowImplBase::NotifyPump(msg);
+	WindowImplBase::NotifyPump(msg);
 }
 
 void CMainWnd::OnFinalMessage(HWND hWnd)

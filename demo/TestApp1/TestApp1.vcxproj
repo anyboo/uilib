@@ -281,7 +281,9 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="CaptureWnd.cpp" />
     <ClCompile Include="MainWnd.cpp" />
+    <ClCompile Include="RecordHandler.cpp" />
     <ClCompile Include="RecordPage.cpp" />
+    <ClCompile Include="Setting.cpp" />
     <ClCompile Include="SettingWnd.cpp" />
     <ClCompile Include="StaticPage.cpp" />
     <ClCompile Include="StdAfx.cpp">
@@ -295,7 +297,9 @@
     <ClInclude Include="AboutWnd.h" />
     <ClInclude Include="CaptureWnd.h" />
     <ClInclude Include="MainWnd.h" />
+    <ClInclude Include="RecordHandler.h" />
     <ClInclude Include="RecordPage.h" />
+    <ClInclude Include="Setting.h" />
     <ClInclude Include="SettingWnd.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="StaticPage.h" />
