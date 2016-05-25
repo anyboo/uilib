@@ -1,9 +1,15 @@
 #pragma once
+
+enum ENCODE{ FLV, MP4, };
+
 class CRecordHandler
 {
 public:
-	static CRecordHandler& singleton();
+
+	CRecordHandler();
 	~CRecordHandler();
+
+	static CRecordHandler& Inst();
 
 	void start();
 	void stop();
@@ -11,6 +17,8 @@ public:
 	void resume();
 	void SetVolume(bool mute = false);
 	void SetMicro(bool mute = false);
+	void SetEncode(const ENCODE& type);
+	void SetArea(const POINT& p, const SIZE& s);
 
 protected:
 
@@ -18,12 +26,17 @@ protected:
 	void uninit();
 
 private:
-	CRecordHandler();
 	CRecordHandler(CRecordHandler&);
-	CRecordHandler operator = (CRecordHandler&);
+	CRecordHandler operator= (const CRecordHandler&);
 
 	bool MuteVolume;
 	bool MuteMicroPhone;
 	bool Recording;
+	std::string format;
+	std::string file;
+	POINT _p;
+	SIZE _s;
+
+	size_t count;
 };
 

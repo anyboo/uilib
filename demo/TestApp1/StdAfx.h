@@ -49,6 +49,8 @@ using namespace DuiLib;
 
 void trace(TNotifyUI& msg);
 
+#define TRACE (DUITRACE("<%s>  %s:%d", __FUNCTION__, __FILE__, __LINE__));
+
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 

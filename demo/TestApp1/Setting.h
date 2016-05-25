@@ -1,17 +1,20 @@
 #pragma once
-#include <string>
 
 class CSetting
 {
 public:
 	CSetting();
-	CSetting(const std::string& filename);
-
+	CSetting(const STDSTRING& filename);
+	
 	~CSetting();
 
+	static CSetting& Inst();
 	void load();
 	void save();
 private:
 	void preload();
+	STDSTRING location;
+	STDSTRING encode;
+	STDSTRING configuration;
 };
 

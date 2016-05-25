@@ -1,8 +1,9 @@
 #include "stdafx.h"
-#include "RecordPage.h"
 #include <ctime>
 #include <sstream>
 #include <iomanip>
+#include "RecordHandler.h"
+#include "RecordPage.h"
 
 CRecordPage::CRecordPage()
 :ppm(nullptr), time(0)
@@ -40,14 +41,14 @@ void CRecordPage::OnRecord(TNotifyUI& msg)
 	timelabel = dynamic_cast<CLabelUI*>(ppm->FindControl(_T("LbTime")));
 	timelabel->SetText("00:00:00");
 
-	//sscobs_stopRecording();
+	CRecordHandler::Inst().stop();
 }
 
 void CRecordPage::OnTimer(TNotifyUI& msg)
 {
 	trace(msg);
 
-	time += 3;
+	time++;
 	std::stringstream ss;
 	auto tm = *std::gmtime(&time);
 	ss << std::put_time(&tm, "%H:%M:%S") << std::endl;

@@ -1,6 +1,7 @@
 #pragma once
 #include <DuiLib/UIlib.h>
 
+class CRecordHandler;
 class CStaticPage
 	:public CNotifyPump
 {
@@ -20,5 +21,7 @@ public:
 
 private:
 	CPaintManagerUI* ppm;
+	CRecordHandler& handler;
+	bool mute;
 };
 
