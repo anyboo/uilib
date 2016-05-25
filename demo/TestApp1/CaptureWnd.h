@@ -1,5 +1,6 @@
 #pragma once
 #include <DuiLib/UIlib.h>
+
 class CCaptureWnd
 	:public WindowImplBase
 {
@@ -7,19 +8,25 @@ public:
 	CCaptureWnd();
 	~CCaptureWnd();
 protected:
-	virtual CDuiString GetSkinFolder() = 0;
-	virtual CDuiString GetSkinFile() = 0;
-	virtual LPCTSTR GetWindowClassName(void) const = 0;
+	virtual CDuiString GetSkinFolder();
+	virtual CDuiString GetSkinFile();
+	virtual LPCTSTR GetWindowClassName(void) const;
+	virtual void InitWindow();
+	virtual void Notify(TNotifyUI& msg);
+	DUI_DECLARE_MESSAGE_MAP()
+protected:
+	virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 private:
-	CControlUI* m_pDesktopImage;
-	CControlUI* m_pDesktopMask;
-	CControlUI* m_pDesktopMaskBorder;
-	CContainerUI* m_pDesktopCanvasContainer;
+	CControlUI* Image;
+	CControlUI* Mask;
+	CControlUI* MaskBorder;
+	CContainerUI* CanvasContainer;
 
 	RECT	Window;
 	RECT	ClipPadding;
 	POINT	ClipBasePoint; // adjust base point
 	bool	bClipChoiced; //  already selected screenshot area
 	CDuiString	ClipDrawStringBuf;
+	CSetting config;
 };
 

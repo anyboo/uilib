@@ -53,7 +53,7 @@ CDuiString CSettingWnd::GetSkinFile()
 #include <locale>
 #include <codecvt>
 
-//fixed later,maybe leak resource.
+//fixed later,maybe resource leak.
 void CSettingWnd::OnSelectFolder(TNotifyUI& msg)
 {
 	IFileOpenDialog* pfd;
