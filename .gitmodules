@@ -16,3 +16,9 @@
 [submodule "grpc"]
 	path = grpc
 	url = https://github.com/grpc/grpc.git
+[submodule "poco"]
+	path = poco
+	url = https://github.com/pocoproject/poco.git
+[submodule "OBSE"]
+	path = OBSE
+	url = https://github.com/anyboo/OBS.git
