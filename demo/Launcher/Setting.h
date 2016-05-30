@@ -20,6 +20,5 @@ private:
 	STDSTRING tmp;
 public:
 	CMyHandle			m_MyHandle;
-	
 };
 

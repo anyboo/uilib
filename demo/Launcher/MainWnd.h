@@ -32,8 +32,9 @@ private:
 	Config					m_config;
 	CMyHandle				m_MyHandle;
 	vector<LayOut_Info>		m_AllLyt;	
-	UINT					begin = 1;
-	POINT					menuPos;
-	STDSTRING				tmp;
+	UINT					m_begin = 1;
+	POINT					m_MenuPos;
+	UINT					m_LoadNum;
+	STDSTRING				m_BmpNameHead;
 };
 

@@ -3,7 +3,7 @@
 
 
 CMainWnd::CMainWnd()
-:tmp(_T("A") )
+:m_BmpNameHead(_T("A"))
 {
 	
 }
@@ -52,21 +52,22 @@ void CMainWnd::OnMin(TNotifyUI& msg)
 	SendMessage(WM_SYSCOMMAND, SC_MINIMIZE);
 }
 
-void CMainWnd::Notify(TNotifyUI& msg)
+void CMainWnd::Notify(TNotifyUI& msg) 
 {
-	if (begin == 1){
+	if (m_begin == 1){
 		m_config.LoadConfig(m_AllLyt, m_PaintManager);
-		begin++;
+		m_LoadNum = m_AllLyt.size();
+		m_begin++;
 	}
 	if (msg.sType == _T("menu")){
-		menuPos = { msg.ptMouse.x, msg.ptMouse.y };
+		m_MenuPos = { msg.ptMouse.x, msg.ptMouse.y };
 		m_MyHandle.PopMenu(msg, m_hWnd);
 	}
 	else if (msg.sType == _T("menu_Delete")){
 		m_MyHandle.DeleteLyt(m_PaintManager, m_AllLyt);
 	}
 	else if (msg.sType == _T("menu_Open")){
-		m_MyHandle.OpenExeFile(menuPos.x, menuPos.y, m_AllLyt);
+		m_MyHandle.OpenExeFile(m_MenuPos.x, m_MenuPos.y, m_AllLyt);
 	}
 	else if (msg.sType == _T("tabselect")){
 		m_MyHandle.OnMouseMove(msg.ptMouse.x, msg.ptMouse.y, m_AllLyt);
@@ -96,12 +97,11 @@ LRESULT CMainWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 LRESULT CMainWnd::OnDropFiles(UINT uMsg, HDROP hDrop, LPARAM lParam, BOOL& bHandled)
 {
-	POINT* ptDropPos = new POINT;
-	DragQueryPoint(hDrop, ptDropPos);	
-	int iDropPos = ptDropPos->x;
-	int yDropPos = ptDropPos->y;
-	delete(ptDropPos);
-
+	POINT ptDropPos;
+	DragQueryPoint(hDrop, &ptDropPos);	
+	int iDropPos = ptDropPos.x;
+	int yDropPos = ptDropPos.y;
+	
 	HICON hIcon = NULL;
 	STDSTRING BmpFileName, strFilePath;
 #ifdef _UNICODE
@@ -112,8 +112,8 @@ LRESULT CMainWnd::OnDropFiles(UINT uMsg, HDROP hDrop, LPARAM lParam, BOOL& bHand
 	WORD wNumFilesDropped = DragQueryFile(hDrop, -1, NULL, 0);
 	for (unsigned short i = 0; i < wNumFilesDropped; i++)
 	{	
-		tmp[0] += 1;
-		BmpFileName = tmp + _T("tmp.bmp");		
+		m_BmpNameHead[0] += m_LoadNum + 1;
+		BmpFileName = m_BmpNameHead + _T("tmp.bmp");
 		DragQueryFile(hDrop, i, strFileName, MAX_PATH);
 		strFilePath = strFileName;	
 		hIcon = m_MyHandle.QueryFileIcon(strFilePath);

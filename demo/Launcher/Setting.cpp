@@ -45,7 +45,7 @@ void Config::LoadConfig(vector<LayOut_Info>& AllLyt, CPaintManagerUI& m_pm)
 
 		STDSTRING str = letter + relPath + TypeName;
 
-		m_MyHandle.GetIcon(str, AllLyt, m_pm);
+		m_MyHandle.LoadIcon(str, AllLyt, m_pm);
 	}
 }
 
@@ -85,7 +85,6 @@ void Config::SaveToConfig(vector<LayOut_Info>& AllLyt)
 
 	Writer<OStreamWrapper> writer(osw);
 	root.Accept(writer);
-
 }
 
 

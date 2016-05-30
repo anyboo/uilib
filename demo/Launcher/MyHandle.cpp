@@ -13,7 +13,7 @@
 #define BMPBITCOUNT						32
 
 CMyHandle::CMyHandle()
-:tmp("A")
+:m_BmpNameHead(_T("A"))
 {
 }
 
@@ -96,12 +96,12 @@ void CMyHandle::OnMouseLeave(vector<LayOut_Info>& AllLyt)
 	}
 }
 
-void CMyHandle::AddLayout(int nPosX, int nPosY, STDSTRING pFileName, STDSTRING strPath, CPaintManagerUI& p_mp, vector<LayOut_Info>& AllLyt)
+void CMyHandle::AddLayout(int nPosX, int nPosY, STDSTRING pFileName, STDSTRING strPath, CPaintManagerUI& CPaint, vector<LayOut_Info>& AllLyt)
 {
 	CNewVerticalLayoutUI* cLyt = new CNewVerticalLayoutUI;
 	InitLayOut(cLyt, pFileName, strPath);
 	Push_LayOut(nPosX, nPosY, cLyt, strPath, AllLyt);
-	ShowLayOut(p_mp, AllLyt);
+	ShowLayOut(CPaint, AllLyt);
 }
 
 void CMyHandle::InitLayOut(CNewVerticalLayoutUI* cLyt, STDSTRING pFileName, STDSTRING strPath)
@@ -159,9 +159,9 @@ void CMyHandle::Push_LayOut(int xPos, int yPos, CNewVerticalLayoutUI* cLyt, STDS
 	}
 }
 
-void CMyHandle::ShowLayOut(CPaintManagerUI& p_mp, vector<LayOut_Info>& AllLyt)
+void CMyHandle::ShowLayOut(CPaintManagerUI& CPaint, vector<LayOut_Info>& AllLyt)
 {
-	CTileLayoutUI* cListLyt = static_cast<CTileLayoutUI*>(p_mp.FindControl(_T("ListLayout")));
+	CTileLayoutUI* cListLyt = static_cast<CTileLayoutUI*>(CPaint.FindControl(_T("ListLayout")));
 	CNewVerticalLayoutUI* cLyt = new CNewVerticalLayoutUI;
 
 	for (auto& var : AllLyt)
@@ -179,11 +179,11 @@ void CMyHandle::ShowLayOut(CPaintManagerUI& p_mp, vector<LayOut_Info>& AllLyt)
 	}
 }
 
-void CMyHandle::GetIcon(STDSTRING strPath, vector<LayOut_Info>& AllLyt, CPaintManagerUI& p_mp)
+void CMyHandle::LoadIcon(STDSTRING strPath, vector<LayOut_Info>& AllLyt, CPaintManagerUI& CPaint)
 {
 	STDSTRING BmpFileName;
-	tmp[0] += 1;
-	BmpFileName = tmp + _T("tmp.bmp");
+	m_BmpNameHead[0] += 1;
+	BmpFileName = m_BmpNameHead + _T("tmp.bmp");
 
 	HICON hIcon = QueryFileIcon(strPath);
 	HBITMAP IconHbmp = IconToBitmap(hIcon);
@@ -197,7 +197,7 @@ void CMyHandle::GetIcon(STDSTRING strPath, vector<LayOut_Info>& AllLyt, CPaintMa
 	Lyt_info.Layout = cLyt;
 	Lyt_info.FilePath = strPath;
 	AllLyt.push_back(Lyt_info);
-	ShowLayOut(p_mp, AllLyt);
+	ShowLayOut(CPaint, AllLyt);
 }
 
 HICON CMyHandle::QueryFileIcon(STDSTRING lpszFilePath)
