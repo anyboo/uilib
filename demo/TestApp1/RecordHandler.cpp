@@ -2,6 +2,7 @@
 #include "RecordHandler.h"
 #include <exception>
 #include <cassert>
+#include <Poco/Path.h>
 #include <Poco/SingletonHolder.h>
 #include <Poco/Exception.h>
 #include "SisecObsApi.h"
@@ -31,7 +32,7 @@ CRecordHandler& CRecordHandler::Inst()
 void CRecordHandler::init()
 {
 	CSetting& s = CSetting::Inst();
-	std::string config = s.GetConfiguration();
+	std::string config = Poco::Path::home();
 
 	if (!sscobs_init(config.c_str()))
 	{

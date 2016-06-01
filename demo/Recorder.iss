@@ -70,3 +70,4 @@ Name: "{commondesktop}\{#DesktopName}"; Filename: "{app}\{#MyAppName}"; Tasks: d
 [UninstallDelete]
 Type: files;          Name: "{app}\*.json"
 Type: filesandordirs; Name: "{app}"
+Type: filesandordirs; Name: "{%HOMEPATH}\OBS"
