@@ -18,7 +18,8 @@ public:
 	void OnLocation(TNotifyUI& msg);
 	void OnEncode(TNotifyUI& msg);
 	void OnVoice(TNotifyUI& msg);
-
+protected:
+	void Switch();
 private:
 	CPaintManagerUI* ppm;
 	CRecordHandler& handler;

@@ -17,7 +17,6 @@ public:
 	void resume();
 	void SetVolume(bool mute = false);
 	void SetMicro(bool mute = false);
-	void SetEncode(const ENCODE& type);
 	void SetArea(const POINT& p, const SIZE& s);
 
 protected:
@@ -25,14 +24,14 @@ protected:
 	void init();
 	void uninit();
 
+	std::string GenerateFileName();
 private:
 	CRecordHandler(CRecordHandler&);
 	CRecordHandler operator= (const CRecordHandler&);
 
 	bool MuteVolume;
 	bool MuteMicroPhone;
-	bool Recording;
-	std::string format;
+	bool recording;
 	std::string file;
 	POINT _p;
 	SIZE _s;

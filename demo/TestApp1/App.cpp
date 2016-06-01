@@ -13,12 +13,12 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	HRESULT Hr = ::CoInitialize(NULL);
 	if (FAILED(Hr)) return 0;
 
-	CMainWnd* pFrame = new CMainWnd();
-	pFrame->Create(NULL, NULL, UI_WNDSTYLE_DIALOG, WS_EX_WINDOWEDGE | WS_EX_ACCEPTFILES);
-	pFrame->SetIcon(IDI_ICON1);
-	pFrame->CenterWindow();
-	pFrame->ShowWindow(true);
-
+	CMainWnd Frame;
+	Frame.Create(NULL, NULL, UI_WNDSTYLE_DIALOG, WS_EX_WINDOWEDGE | WS_EX_ACCEPTFILES);
+	Frame.SetIcon(IDI_ICON1);
+	Frame.CenterWindow();
+	Frame.ShowWindow(true);
+	
 	CPaintManagerUI::MessageLoop();
 
 	::CoUninitialize();

@@ -13,11 +13,13 @@ public:
 	virtual void Notify(TNotifyUI& msg);
 	DUI_DECLARE_MESSAGE_MAP();
 	void OnSelectFolder(TNotifyUI& msg);
+	void OnSelectChanged(TNotifyUI& msg);
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();
 	virtual CDuiString GetSkinFile();
 private:
 	CLabelUI* label;
+	CComboUI* combo;
 };
 

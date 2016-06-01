@@ -1,6 +1,9 @@
 #include "stdafx.h"
-#include "StaticPage.h"
+#include "Setting.h"
 #include "RecordHandler.h"
+#include "CaptureWnd.h"
+#include "Util.h"
+#include "StaticPage.h"
 
 CStaticPage::CStaticPage()
 :ppm(nullptr), handler(CRecordHandler::Inst()), mute(false)
@@ -26,10 +29,8 @@ void CStaticPage::SetPaintMagager(CPaintManagerUI* pPaintMgr)
 	ppm = pPaintMgr;
 }
 
-
-void CStaticPage::OnRecord(TNotifyUI& msg)
+void CStaticPage::Switch()
 {
-	assert(ppm);
 	CTabLayoutUI* tab_main = dynamic_cast<CTabLayoutUI*>(ppm->FindControl(_T("tab_main")));
 
 	if (!tab_main) return;
@@ -38,7 +39,12 @@ void CStaticPage::OnRecord(TNotifyUI& msg)
 
 	t.SelectItem(1);
 
-	ppm->SetTimer(t.FindSubControl(_T("record_page")), 0x5201, 1*1000);
+	ppm->SetTimer(t.FindSubControl(_T("record_page")), 0x5201, 1 * 1000);
+}
+
+void CStaticPage::OnRecord(TNotifyUI& msg)
+{
+	assert(ppm);
 
 	RECT rc;
 	::GetWindowRect(::GetDesktopWindow(),&rc);
@@ -48,57 +54,77 @@ void CStaticPage::OnRecord(TNotifyUI& msg)
 
 	handler.SetArea(P, S);
 	handler.start();
+
+	Switch();
 }
+
 
 void CStaticPage::OnScreenCapture(TNotifyUI& msg)
 {
 	trace(msg);
 	//capture full screenshot
-	//CDuiString file = GetConfig().savefile;
-	/*RECT rc;
-	::GetWindowRect(::GetDesktopWindow(), &rc);
-	
-	POINT P = { rc.left, rc.top };
-	SIZE S = { rc.right - rc.left, rc.bottom - rc.top };
+	HBITMAP bmp = CreateDesktopBitmap(0);
+	HWND hWndDesktop = ::GetDesktopWindow();
+	RECT rect;
+	GetWindowRect(hWndDesktop, &rect);
+	int width, height;
+	width = rect.right - rect.left;
+	height = rect.bottom - rect.top;
 
-	handler.SetArea(P, S);
-	handler.start();*/
+	CSetting& setting = CSetting::Inst();
+	//test if work with chinese path
+	std::wstring path;
+	setting.GetLocation(path);
+
+	BitmapToJpg(bmp, width, height, path);
 }
 
 void CStaticPage::OnAreaRecord(TNotifyUI& msg)
 {
 	trace(msg);
-	//CaptureWnd
-	/*RECT rc;
+	CCaptureWnd Frame;
 
-	::GetWindowRect(::GetDesktopWindow(), &rc);
+	Frame.Create(NULL, NULL, WS_VISIBLE | WS_POPUP, 0);
+	Frame.CenterWindow();
+	Frame.ShowModal();
 
-	POINT P = { rc.left, rc.top };
-	SIZE S = { rc.right - rc.left - 100, rc.bottom - rc.top - 100};
+	if (!Frame.IsClipChoiced()) return;
+
+	RECT rc = Frame.GetClipRect();
+	RECT rc1 = Frame.GetCanvasContainerRect();
+	POINT P = {rc.left, rc.top};
+	SIZE S = { rc.right - rc.left, rc.bottom - rc.top };
 
 	handler.SetArea(P, S);
+	handler.start();
 
-	handler.start();*/
+	Switch();
 }
+
+#include "Shellapi.h"
 
 void CStaticPage::OnLocation(TNotifyUI& msg)
 {
 	trace(msg);
-	//open path of storage record video 
+	
+	CSetting& setting = CSetting::Inst();
+	//test if work with chinese path
+	std::wstring path;
+	setting.GetLocation(path);
+	ShellExecute(NULL, L"explore", path.c_str(), NULL, NULL, SW_SHOWNORMAL);
 }
 
 void CStaticPage::OnEncode(TNotifyUI& msg)
 {
 	trace(msg);
 	//Popup Menu
-	handler.SetEncode(ENCODE::MP4);
+	//setting.SetEncode(ENCODE::MP4);
 }
 
 void CStaticPage::OnVoice(TNotifyUI& msg)
 {
 	trace(msg);
-	//enable or disable record voice
-	//Popup Menu
+
 	mute = !mute;
 	handler.SetMicro(mute);
 	handler.SetVolume(mute);

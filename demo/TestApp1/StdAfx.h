@@ -41,15 +41,11 @@ using namespace DuiLib;
 #define CTR_FOLDER			(_T("folder"))
 #define CTR_ENCODING		(_T("encoding")) 
 
-#ifdef _UNICODE
-#	define STDSTRING std::wstring
-#else
-#	define STDSTRING std::string
-#endif
+#define  DUI_CTR_CANVASCONTAINER                 (_T("CanvasContainer"))
 
 void trace(TNotifyUI& msg);
 
-#define TRACE (DUITRACE("<%s>  %s:%d", __FUNCTION__, __FILE__, __LINE__));
+#define TRACE (DUITRACE(_T("<%s>  %s:%d"), __FUNCTION__, __FILE__, __LINE__));
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.

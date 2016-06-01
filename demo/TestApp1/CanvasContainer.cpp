@@ -1,12 +1,12 @@
 #include "StdAfx.h"
-#include "ScrCaptureWnd.h"
+#include "CaptureWnd.h"
 #include "CanvasContainer.h"
 
-CCanvasContainerUI::CCanvasContainerUI() : m_iCursor(0), m_uButtonState(0)
+CCanvasContainerUI::CCanvasContainerUI(CCaptureWnd* parent) : m_iCursor(0), m_uButtonState(0)
 {
-	DUITRACE("<%s>  %s:%d", __FUNCTION__, __FILE__, __LINE__);
 	m_ptClipBasePoint.x = m_ptClipBasePoint.y = 0;
 	m_ptLastMouse.x = m_ptLastMouse.y = 0;
+	pCapWnd = parent;
 }
 
 LPCTSTR CCanvasContainerUI::GetClass() const
@@ -27,7 +27,6 @@ UINT CCanvasContainerUI::GetControlFlags() const
 
 RECT CCanvasContainerUI::GetSizerRect(int iIndex)
 {
-	DUITRACE("<%s>  %s:%d", __FUNCTION__, __FILE__, __LINE__);
 	LONG lMiddleX = (m_rcItem.left + m_rcItem.right) / 2;
 	LONG lMiddleY = (m_rcItem.top + m_rcItem.bottom) / 2;
 	LONG SIZER_WIDTH = m_rcInset.left*2;
@@ -58,7 +57,6 @@ RECT CCanvasContainerUI::GetSizerRect(int iIndex)
 
 LPTSTR CCanvasContainerUI::GetSizerCursor(POINT& pt, int& iCursor)
 {
-	DUITRACE("<%s>  %s:%d", __FUNCTION__, __FILE__, __LINE__);
 	LONG SIZER_WIDTH = m_rcInset.left*2;
 	LONG SIZER_TO_ROOT = 20;	
 	RECT rcRoot = m_pManager->GetRoot()->GetPos();
@@ -121,10 +119,8 @@ LPTSTR CCanvasContainerUI::GetSizerCursor(POINT& pt, int& iCursor)
 }
 
 void CCanvasContainerUI::PaintBorder(HDC hDC) {
-	DUITRACE("<%s> begin %s:%d", __FUNCTION__, __FILE__, __LINE__);
 	for (int i = 0; i < 9; ++i) {
 		CRenderEngine::DrawColor(hDC, GetSizerRect(i), m_dwBorderColor);
-		DUITRACE("DrawColor : %x", m_dwBorderColor);
 	}
 	RECT rc = m_rcItem;
 	rc.left += m_rcInset.left;
@@ -132,8 +128,6 @@ void CCanvasContainerUI::PaintBorder(HDC hDC) {
 	rc.right -= m_rcInset.left;
 	rc.bottom -= m_rcInset.left;
 	CRenderEngine::DrawRect(hDC, rc, m_rcBorderSize.left, m_dwBorderColor);
-	DUITRACE("DrawRect : %x", m_dwBorderColor);
-	DUITRACE("<%s> end  %s:%d", __FUNCTION__, __FILE__, __LINE__);
 }
 
 void CCanvasContainerUI::DoEvent(TEventUI& event) 
@@ -148,8 +142,8 @@ void CCanvasContainerUI::DoEvent(TEventUI& event)
 	{
 		m_uButtonState |= UISTATE_CAPTURED;
 		m_ptLastMouse = event.ptMouse;
-		RECT rcWindow = CScrCaptureWnd::Instance()->GetWindowRect();
-		RECT rcClipPadding = CScrCaptureWnd::Instance()->GetClipPadding();
+		RECT rcWindow = pCapWnd->GetWindowRect();
+		RECT rcClipPadding = pCapWnd->GetClipPadding();
 		switch( m_iCursor ) {
 		case 0:
 		case 1:
@@ -184,10 +178,9 @@ void CCanvasContainerUI::DoEvent(TEventUI& event)
 	}
 	else if( event.Type == UIEVENT_MOUSEMOVE )
 	{
-		DUITRACE("<%s> %d UIEVENT_MOUSEMOVE %d", __FUNCTION__, __LINE__, m_iCursor);
 		if( (m_uButtonState & UISTATE_CAPTURED) == 0 ) return;
-		RECT rcWindow = CScrCaptureWnd::Instance()->GetWindowRect();
-		RECT rcClipPadding = CScrCaptureWnd::Instance()->GetClipPadding();
+		RECT rcWindow = pCapWnd->GetWindowRect();
+		RECT rcClipPadding = pCapWnd->GetClipPadding();
 		switch( m_iCursor ) {
 		case 0:
 		case 2:
@@ -224,7 +217,7 @@ void CCanvasContainerUI::DoEvent(TEventUI& event)
 			break;
 		}
 		m_ptLastMouse = event.ptMouse;
-		CScrCaptureWnd::Instance()->SetClipPadding(rcClipPadding);
+		pCapWnd->SetClipPadding(rcClipPadding);
 	}
 	CContainerUI::DoEvent(event);
 }

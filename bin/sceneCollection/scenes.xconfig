@@ -1,0 +1,33 @@
+scenes : {
+  场景 : {
+    class : Scene
+    sources : {
+      显示器获取 : {
+        render : 1
+        class : MonitorCaptureSource
+        data : {
+          captureType : 0
+          monitor : 0
+          innerWindow : 0
+          regionCapture : 0
+          captureMouse : 0
+          captureLayered : 0
+          compatibilityMode : 0
+          usePointFiltering : 0
+          captureX : 0
+          captureY : 0
+          captureCX : 1366
+          captureCY : 768
+          useColorKey : 0
+          keyColor : -1
+          keySimilarity : 10
+          keyBlend : 0
+          opacity : 100
+          gamma : 100
+        }
+        cx : 1366
+        cy : 768
+      }
+    }
+  }
+}

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SettingWnd.h"
+#include "Setting.h"
 
 CSettingWnd::CSettingWnd()
 {
@@ -13,24 +14,34 @@ void CSettingWnd::InitWindow()
 {
 	label = dynamic_cast<CLabelUI*>(m_PaintManager.FindControl(_T("edit")));
 	assert(label);
+	if (!label) return;
+	std::wstring location;
+	CSetting::Inst().GetLocation(location);
+	label->SetText(location.c_str());
+
+	combo = dynamic_cast<CComboUI*>(m_PaintManager.FindControl(_T("encoding")));
+	assert(combo);
+	if (!combo) return;
+	combo->SelectItem(0);
 }
 
 void CSettingWnd::OnFinalMessage(HWND hWnd)
 {
 	WindowImplBase::OnFinalMessage(hWnd);
-	delete this;
+	//delete this;
 }
 
 void CSettingWnd::Notify(TNotifyUI& msg)
 {
 	trace(msg);
-	DUITRACE("VirtualWnd: %s", msg.sVirtualWnd);
+	DUITRACE(_T("VirtualWnd: %s"), msg.sVirtualWnd);
 	WindowImplBase::Notify(msg);
 }
 
 
 DUI_BEGIN_MESSAGE_MAP(CSettingWnd, WindowImplBase)
 DUI_ON_CLICK_CTRNAME(CTR_FOLDER, OnSelectFolder)
+DUI_ON_MSGTYPE_CTRNAME(DUI_MSGTYPE_ITEMSELECT, CTR_ENCODING, OnSelectChanged)
 DUI_END_MESSAGE_MAP()
 
 LPCTSTR CSettingWnd::GetWindowClassName() const
@@ -48,10 +59,16 @@ CDuiString CSettingWnd::GetSkinFile()
 	return _T("SettingDlg.xml");
 }
 
+void CSettingWnd::OnSelectChanged(TNotifyUI& msg)
+{
+	int sel = combo->GetCurSel();
+	CDuiString str = combo->GetText();
+	DUITRACE(_T("combo->GetText : %s index : %d"), str, sel);
+	CSetting::Inst().SetEncode(str.GetData());
+}
+
 #include <Objbase.h>
 #include <Shobjidl.h>
-#include <locale>
-#include <codecvt>
 
 //fixed later,maybe resource leak.
 void CSettingWnd::OnSelectFolder(TNotifyUI& msg)
@@ -75,23 +92,17 @@ void CSettingWnd::OnSelectFolder(TNotifyUI& msg)
 	DWORD conut = 0;
 	hr = psiaResults->GetCount(&conut);
 	
-	LPWSTR NAME;
+	LPWSTR NAME, DISPLAYNAME;
 	IShellItem *item;
 	psiaResults->GetItemAt(0, &item);
-	hr = item->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &NAME);
+	hr = item->GetDisplayName(SIGDN_DESKTOPABSOLUTEEDITING, &DISPLAYNAME);
+	hr = item->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &NAME); 
+
 	psiaResults->Release();
 	pfd->Release();
 
-	//fixed later, convert UUID to humanreadable name
+	DUITRACE(_T("SELECTED FOLDER : %s"), DISPLAYNAME);	
+	CSetting::Inst().SetLocation(NAME);
 
-	std::wstring path(NAME);
-	STDSTRING text;
-	if (sizeof(TCHAR) == 1){
-		std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
-		text = conv.to_bytes(path);
-	}
-	DUITRACE("SELECTED FOLDER : %s", text.c_str());
-	
-	//fixed 
-	label->SetText(text.c_str());
+	label->SetText(DISPLAYNAME);
 }

@@ -24,7 +24,7 @@ protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();
 	virtual CDuiString GetSkinFile();
-
+	virtual LRESULT ResponseDefaultKeyEvent(WPARAM wParam);
 private:
 	CStaticPage Page1;
 	CRecordPage Page2;

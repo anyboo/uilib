@@ -39,7 +39,7 @@ void CRecordPage::OnRecord(TNotifyUI& msg)
 	ppm->KillTimer(t.FindSubControl(_T("record_page")));
 	time = 0;
 	timelabel = dynamic_cast<CLabelUI*>(ppm->FindControl(_T("LbTime")));
-	timelabel->SetText("00:00:00");
+	timelabel->SetText(_T("00:00:00"));
 
 	CRecordHandler::Inst().stop();
 }
@@ -49,9 +49,9 @@ void CRecordPage::OnTimer(TNotifyUI& msg)
 	trace(msg);
 
 	time++;
-	std::stringstream ss;
+	std::wstringstream ss;
 	auto tm = *std::gmtime(&time);
-	ss << std::put_time(&tm, "%H:%M:%S") << std::endl;
+	ss << std::put_time(&tm, _T("%H:%M:%S")) << std::ends;
 	
 	timelabel = dynamic_cast<CLabelUI*>(ppm->FindControl(_T("LbTime")));
 	timelabel->SetText(ss.str().c_str());

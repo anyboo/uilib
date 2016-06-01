@@ -5,12 +5,13 @@
 #include <Poco/SingletonHolder.h>
 #include <Poco/Exception.h>
 #include "SisecObsApi.h"
+#include "Setting.h"
 
 CRecordHandler::CRecordHandler()
-:format("mp4"),
-MuteVolume(false),
+:MuteVolume(false),
 MuteMicroPhone(false),
-Recording(false)
+recording(false),
+count(0)
 {
 	init();
 }
@@ -29,7 +30,9 @@ CRecordHandler& CRecordHandler::Inst()
 
 void CRecordHandler::init()
 {
-	std::string config("");
+	CSetting& s = CSetting::Inst();
+	std::string config = s.GetConfiguration();
+
 	if (!sscobs_init(config.c_str()))
 	{
 		throw std::exception("sscobs_init failed!");
@@ -41,15 +44,41 @@ void CRecordHandler::uninit()
 	sscobs_uninit();
 }
 
+#include <sstream>
+#include <iomanip>
+#include <ctime>
+
+static std::string currentTime()
+{
+	time_t current;
+	time(&current);
+	auto tm = *std::localtime(&current);
+
+	std::stringstream str;
+	str << std::put_time(&tm, "%Y%m%d_%H%M%S");
+	return str.str();
+}
+
+std::string CRecordHandler::GenerateFileName()
+{
+	CSetting& s = CSetting::Inst();
+
+	std::stringstream ss;
+	ss << s.GetLocation();
+	if (ss.str().back() != '\\')
+		ss << '\\';
+	ss << currentTime() << s.GetEncode() << std::ends;
+
+	return ss.str();
+}
+
 void CRecordHandler::start()
 {
-	count++;
+	if (recording) return;
+	
+	std::string filename = GenerateFileName();
 
-	if (!Recording) return;
-	std::string file("d:\\test\\record");
-	file += count;
-	file += ".mp4";
-	sscobs_startRecording(file.c_str(), _p.x, _p.y, _s.cx, _s.cy);
+	sscobs_startRecording(filename.c_str(), _p.x, _p.y, _s.cx, _s.cy);
 
 	if (MuteVolume)
 	{
@@ -61,13 +90,14 @@ void CRecordHandler::start()
 		sscobs_closeMic();
 	}
 
-	Recording = true;
+	recording = true;
 }
 void CRecordHandler::stop()
 {
-	if (Recording)
+	if (recording)
 	{
 		sscobs_stopRecording();
+		recording = false;
 	}
 }
 void CRecordHandler::pause()
@@ -89,16 +119,6 @@ void CRecordHandler::SetVolume(bool mute)
 void CRecordHandler::SetMicro(bool Mute)
 {
 	MuteMicroPhone = Mute;
-}
-
-void CRecordHandler::SetEncode(const ENCODE& type)
-{
-	assert(type < FLV || type > MP4);
-
-	if (MP4 == type)
-		format = "mp4";
-	else if (FLV == type)
-		format = "flv";
 }
 
 void CRecordHandler::SetArea(const POINT& p, const SIZE& s)

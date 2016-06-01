@@ -42,20 +42,20 @@ CDuiString CMainWnd::GetSkinFile()
 
 void CMainWnd::OnAbout(TNotifyUI& msg)
 {
-	CAboutWnd* pDlg = new CAboutWnd();
-	assert(pDlg);
-	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_DIALOG, 0L, 0, 0, 500, 400);
-	pDlg->CenterWindow();
-	pDlg->ShowModal();
+	CAboutWnd Dlg;
+
+	Dlg.Create(GetHWND(), NULL, UI_WNDSTYLE_DIALOG, 0L, 0, 0, 500, 400);
+	Dlg.CenterWindow();
+	Dlg.ShowModal();
 }
 
 void CMainWnd::OnSettingDlg(TNotifyUI& msg)
 {
-	CSettingWnd* pSettingDlg = new CSettingWnd();
-	assert(pSettingDlg);
-	pSettingDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_DIALOG, 0L, 0, 0, 500, 400);
-	pSettingDlg->CenterWindow();
-	pSettingDlg->ShowModal();
+	CSettingWnd SettingDlg;
+
+	SettingDlg.Create(GetHWND(), NULL, UI_WNDSTYLE_DIALOG, 0L, 0, 0, 500, 400);
+	SettingDlg.CenterWindow();
+	SettingDlg.ShowModal();
 }
 
 void CMainWnd::OnMin(TNotifyUI& msg)
@@ -77,5 +77,12 @@ void CMainWnd::Notify(TNotifyUI& msg)
 void CMainWnd::OnFinalMessage(HWND hWnd)
 {
 	WindowImplBase::OnFinalMessage(hWnd);
-	delete this;
+	//delete this;
+}
+
+LRESULT CMainWnd::ResponseDefaultKeyEvent(WPARAM wParam)
+{
+	if (wParam == VK_ESCAPE)
+		return true;
+	return WindowImplBase::ResponseDefaultKeyEvent(wParam);
 }

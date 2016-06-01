@@ -1,9 +1,10 @@
 #pragma once
 
+class CCaptureWnd;
 class CCanvasContainerUI: public CContainerUI
 {
 public:
-	CCanvasContainerUI();
+	CCanvasContainerUI(CCaptureWnd* parent);
 	LPCTSTR GetClass() const;
 	LPVOID GetInterface(LPCTSTR pstrName);
 	UINT GetControlFlags() const;
@@ -19,6 +20,7 @@ public:
 protected:
 	int m_iCursor;
 	UINT m_uButtonState;
-	POINT m_ptClipBasePoint; // 调整基准点
+	POINT m_ptClipBasePoint; // 
 	POINT m_ptLastMouse; // 
+	CCaptureWnd* pCapWnd;
 };

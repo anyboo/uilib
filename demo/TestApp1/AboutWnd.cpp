@@ -12,7 +12,7 @@ CAboutWnd::~CAboutWnd()
 void CAboutWnd::OnFinalMessage(HWND hWnd)
 {
 	WindowImplBase::OnFinalMessage(hWnd);
-	delete this;
+	//delete this;
 }
 
 void CAboutWnd::Notify(TNotifyUI& msg)
