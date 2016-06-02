@@ -91,7 +91,7 @@ void CStaticPage::OnAreaRecord(TNotifyUI& msg)
 	if (!Frame.IsClipChoiced()) return;
 
 	RECT rc = Frame.GetClipRect();
-	RECT rc1 = Frame.GetCanvasContainerRect();
+
 	POINT P = {rc.left, rc.top};
 	SIZE S = { rc.right - rc.left, rc.bottom - rc.top };
 
@@ -114,11 +114,37 @@ void CStaticPage::OnLocation(TNotifyUI& msg)
 	ShellExecute(NULL, L"explore", path.c_str(), NULL, NULL, SW_SHOWNORMAL);
 }
 
+#include <map>
 void CStaticPage::OnEncode(TNotifyUI& msg)
 {
 	trace(msg);
-	//Popup Menu
-	//setting.SetEncode(ENCODE::MP4);
+
+	typedef std::map<std::string,std::wstring> EncodeList;
+	typedef EncodeList::iterator EncodeListIter;
+
+	//初始化编码表
+	//Initialize encode tabel
+	//InitEncodeTabel()
+	EncodeList encodes;
+	encodes["MP4"] = L"record/codingMP4.png";
+	encodes["FLV"] = L"record/codingFLV.png";
+
+	//获取设置信息
+	CSetting& setting = CSetting::Inst();
+	std::string key = setting.GetEncode();
+
+	//获取下一个编码表项，设置控件图片；如果是最后一项，则，选择第一个
+	assert(ppm);
+	CButtonUI* control = dynamic_cast<CButtonUI*>(ppm->FindControl(_T("btencode")));
+	if (!control) return;
+	
+	/*
+	EncodeListIter it = encodes.find(key);
+
+	(it != encodes.end()) ? it : (it = encodes.begin());
+	*/
+	/*setting.SetEncode(it->first);
+	control->SetNormalImage((it->second).c_str());*/
 }
 
 void CStaticPage::OnVoice(TNotifyUI& msg)

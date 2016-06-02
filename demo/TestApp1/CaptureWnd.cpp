@@ -68,7 +68,8 @@ void CCaptureWnd::InitWindow()
 	pm.AddImage(_T("desktopimage"), hDesktopBmp,width, height, false);
 	HBITMAP hDesktopBmpMask = CreateDesktopMaskBitmap(GetHWND());
 	pm.AddImage(_T("desktopimagemask"), hDesktopBmpMask, width, height, true);
-
+	Image->SetAttribute(_T("pos"), _T("0, 0, 0, 0"));
+	
 	Image->SetBkImage(_T("desktopimage"));
 	Mask->SetBkImage(_T("desktopimagemask"));
 }

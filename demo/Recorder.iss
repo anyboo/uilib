@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "SRTool"
-#define MyAppVersion "1.0.0.0.4"
+#define MyAppVersion "1.0.0.0.6"
 #define MyAppPublisher "sisec"
 #define MyAppURL "http://www.sisec.com.cn/"
 #define DesktopName "Â¼ÆÁ¹¤¾ß"
@@ -68,6 +68,6 @@ Name: "{commondesktop}\{#DesktopName}"; Filename: "{app}\{#MyAppName}"; Tasks: d
 ;Filename: "{app}\{#MyAppName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [UninstallDelete]
-Type: files;          Name: "{app}\*.json"
+Type: files;          Name: "{%HOMEPATH}\*.json"
 Type: filesandordirs; Name: "{app}"
 Type: filesandordirs; Name: "{%HOMEPATH}\OBS"

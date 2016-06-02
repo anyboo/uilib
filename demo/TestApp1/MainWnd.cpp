@@ -74,6 +74,25 @@ void CMainWnd::Notify(TNotifyUI& msg)
 	WindowImplBase::NotifyPump(msg);
 }
 
+#include "Setting.h"
+void CMainWnd::InitWindow()
+{
+	std::wstring current;
+	CSetting::Inst().GetEncode(current);
+
+	CPaintManagerUI& pm = m_PaintManager;
+	CButtonUI* control = dynamic_cast<CButtonUI*>(pm.FindControl(_T("btencode")));
+	if (!control) return;
+	control->SetHotBkColor(0);
+
+	/*
+	control->SetAttribute(L"current", current.c_str());
+	CDuiString imagePath = control->GetAttribute(current.c_str());
+	control->SetNormalImage(imagePath);
+	*/
+
+}
+
 void CMainWnd::OnFinalMessage(HWND hWnd)
 {
 	WindowImplBase::OnFinalMessage(hWnd);

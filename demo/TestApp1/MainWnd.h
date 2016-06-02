@@ -10,6 +10,7 @@ public:
 	CMainWnd();
 	~CMainWnd();
 
+	virtual void InitWindow();
 	virtual void OnFinalMessage(HWND hWnd);
 	virtual void Notify(TNotifyUI& msg);
 

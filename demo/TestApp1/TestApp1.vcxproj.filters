@@ -94,4 +94,7 @@
   <ItemGroup>
     <Image Include="..\..\bin\skin\record\camera_LOGO.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="SisecObsApi" />
+  </ItemGroup>
 </Project>

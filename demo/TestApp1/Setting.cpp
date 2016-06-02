@@ -110,14 +110,23 @@ std::string CSetting::GetConfiguration() const
 void CSetting::SetLocation(const std::string& path)
 {
 	location = path;
+	save();
 }
+
+#include <algorithm>
 void CSetting::SetEncode(const std::string& fileExt)
 {
-	container = fileExt;
+	//eg. format to .mp4 and lowercase it.
+	container.clear();
+	container += ".";
+	container += fileExt;
+	std::transform(container.begin(), container.end(), container.begin(), ::tolower);
+	save();
 }
 void CSetting::SetConfiguration(const std::string& path)
 {
 	configuration = path;
+	save();
 }
 
 void CSetting::GetLocation(std::wstring& wstr)

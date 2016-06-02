@@ -5,7 +5,7 @@
 #include <Poco/Path.h>
 #include <Poco/SingletonHolder.h>
 #include <Poco/Exception.h>
-#include "SisecObsApi.h"
+#include "SisecObsApi"
 #include "Setting.h"
 
 CRecordHandler::CRecordHandler()

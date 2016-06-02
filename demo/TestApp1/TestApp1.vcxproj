@@ -209,7 +209,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(SolutionDir)\library\;$(SolutionDir)\JSON\include\;$(SolutionDir)\poco\Foundation\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\library\;$(SolutionDir)\JSON\include\;$(SolutionDir)\poco\Foundation\include\;$(SolutionDir)\OBSE\Source\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -256,7 +256,7 @@
       <ProgramDataBaseFileName>.\Release_u/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalIncludeDirectories>$(SolutionDir)\library\;$(SolutionDir)\JSON\include\;$(SolutionDir)\poco\Foundation\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\library\;$(SolutionDir)\JSON\include\;$(SolutionDir)\poco\Foundation\include\;$(SolutionDir)\OBSE\Source\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -314,6 +314,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\bin\skin\record\camera_LOGO.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SisecObsApi" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
