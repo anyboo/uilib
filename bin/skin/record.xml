@@ -6,7 +6,7 @@
 		<HorizontalLayout height="30" >
 			<VerticalLayout width="28" height="20" bkimage="file='record/camera_LOGO.png'" padding="5,5,0,2" />
 			<Label text="录屏工具" textcolor="#FFFFFFFF" font="0" width="345"  padding="2,5,5,2"/>
-			<Button name="savebtn" width="35" height="19" padding="1,5,1,6" tooltip="设置" normalimage="file='record/1.png'" hotimage="file='record/2.png'" pushedimage="file='record/3.png'" />
+			<Button name="savebtn" width="35" height="19" padding="1,5,1,6" tooltip="设置" normalimage="file='record/btn_setting_normal.png'" hotimage="file='record/btn_setting_hot.png'" pushedimage="file='record/btn_setting_pushed.png'" />
 			<Button name="minbtn" width="35" height="19" padding="1,5,1,6" tooltip="最小化" normalimage="file='record/btn_min_normal.png' mask='#00FFFFFF'" hotimage="file='record/btn_min_hot.png'" pushedimage="file='record/btn_min_pushed.png'"/>
 			<Button name="closebtn" width="35" height="19" padding="1,5,3,6" tooltip="退出" normalimage="file='record/btn_close_normal.png'" hotimage="file='record/btn_close_hot.png'" pushedimage="file='record/btn_close_pushed.png'"/>
 		</HorizontalLayout>
@@ -15,7 +15,7 @@
 				<Control bkcolor="#FF393939" width="5" />
 				<HorizontalLayout name="lytlz" borderround="4,4" focusbordercolor="0xFF000000" width="61"  padding="20,5,0,5" >
 					<VerticalLayout name="lytlzv" borderround="4,4" focusbordercolor="0xFF000000" width="48" >
-						<Button name="btlz" normalimage="file='record/movie.png'" height="48" />
+						<Button name="btlz" normalimage="file='record/movie.png'" hotimage="file='record/movie_hover.png'" pushedimage="file='record/movie_pushed.png'" height="48" />
 						<Label text="录制" align="center" font="0" height="15" />
 					</VerticalLayout>
 					<Control width="1" visible="false"/>
@@ -23,27 +23,27 @@
 				</HorizontalLayout>
 				<HorizontalLayout name="lytWork" focusbordercolor="0xFF000000" width="410" bkimage="file='record/bg.png'" >
 					<VerticalLayout name="lytPmbh" borderround="4,4" focusbordercolor="0xFF000000" padding="10,5,10,5" width="48" >
-						<Button name="btpmbh" normalimage="file='record/display.png'" height="48" />
+						<Button name="btpmbh" normalimage="file='record/display.png'" hotimage="file='record/display_hover.png'" pushedimage="file='record/display_pushed.png'" height="48" />
 						<Label text="屏幕捕获" align="center" font="0" height="15" />
 					</VerticalLayout>
 					<VerticalLayout name="lytArea" borderround="4,4" focusbordercolor="0xFF000000" padding="10,5,10,5" width="48" >
-						<Button name="btlzqy" normalimage="file='record/area.png'" height="48" />
+						<Button name="btlzqy" normalimage="file='record/area.png'" hotimage="file='record/'" pushedimage="file='record/'" height="48" />
 						<Label text="录制区域" align="center" font="0" height="15" />
 					</VerticalLayout>
 					<VerticalLayout name="lytOpen" borderround="4,4" focusbordercolor="0xFF000000" padding="10,5,10,5" width="48" >
-						<Button name="btopen" normalimage="file='record/folder.png'" height="48" />
+						<Button name="btopen" normalimage="file='record/folder.png'" hotimage="file='record/folder_hover.png'" pushedimage="file='record/folder_pushed.png'" height="48" />
 						<Label text="打开" align="center" font="0" height="15" />
 					</VerticalLayout>
 					<VerticalLayout name="lytCode" borderround="4,4" focusbordercolor="0xFF000000" padding="10,5,10,5" width="48" >
-						<Button name="btencode" normalimage="file='record/coding.png'" height="48" mp4="record/codingMP4.png" flv="record/codingFLV.png"/>
+						<Button name="btencode" normalimage="file='record/coding.png'" hotimage="file='record/coding_hover.png'" pushedimage="file='record/coding_pushed.png'" height="48"/>
 						<Label text="编码" align="center" font="0" height="15" />
 					</VerticalLayout>
 					<VerticalLayout name="lytSound" borderround="4,4" focusbordercolor="0xFF000000" padding="10,5,10,5" width="48" >
-						<Button name="btvoice" normalimage="file='record/sound.png'" height="48" />
+						<Button name="btvoice" normalimage="file='record/sound.png'" hotimage="file='record/sound_hover.png'" pushedimage="file='record/sound_pushed.png'" height="48" />
 						<Label text="声音" align="center" font="0" height="15" />
 					</VerticalLayout>
 					<VerticalLayout name="lytAbout" borderround="4,4" focusbordercolor="0xFF000000" padding="10,5,5,5" width="48" >
-						<Button name="btabout" normalimage="file='record/info.png'" height="48" />
+						<Button name="btabout" normalimage="file='record/info.png'" hotimage="file='record/info_hover.png'" pushedimage="file='record/info_pushed.png'" height="48" />
 						<Label text="关于" align="center" font="0" height="15" />
 					</VerticalLayout>
 				</HorizontalLayout>
@@ -53,11 +53,11 @@
 				<Control bkcolor="#FF393939" width="5" />
 				<HorizontalLayout width="498" bkimage="file='record/bg.png'" >
 					<VerticalLayout name="lytstop" padding="10,5,10,5" width="48" >
-						<Button name="btlz" normalimage="file='record/player_stop.png'" height="48" />
+						<Button name="btlz" normalimage="file='record/player_stop.png'" hotimage="file='record/player_stop_hover.png'" pushedimage="file='record/player_stop_pushed.png'" height="48" />
 						<Label text="停止" align="center" font="0" height="15" />
 					</VerticalLayout>
 					<VerticalLayout name="lytpause" padding="10,5,10,5" width="48" visible="false">
-						<Button name="btpause" normalimage="file='record/player_pause.png'" height="48" />
+						<Button name="btpause" normalimage="file='record/player_pause.png'" hotimage="file='record/player_pause_hover.png'" pushedimage="file='record/player_pause_pushed.png'" height="48" />
 						<Label name="lbpause" text="暂停" align="center" font="0" height="15" />
 					</VerticalLayout>
 					<label name="LbTime" text="00:00:00" font="1" padding="20,2,20,2" />
