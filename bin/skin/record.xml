@@ -53,7 +53,7 @@
 			</HorizontalLayout>
 			<HorizontalLayout virtualwnd="page2" name="record_page" >
 				<Control bkcolor="#FF393939" width="5" />
-				<HorizontalLayout width="498" bkimage="file='record/bg.png'" >
+				<HorizontalLayout width="488" bkimage="file='record/bg.png'" >
 					<VerticalLayout name="lytstop" padding="10,5,10,5" width="48" >
 						<Button name="btlz" normalimage="file='record/player_stop.png'" hotimage="file='record/player_stop_hover.png'" pushedimage="file='record/player_stop_pushed.png'" height="48" />
 						<Label text="停止" align="center" font="0" height="15" />

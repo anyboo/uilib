@@ -140,8 +140,8 @@ void CStaticPage::OnEncodeFLV(TNotifyUI& msg)
 
 void CStaticPage::OnMute(TNotifyUI& msg)
 {
-	handler.SetMicro(false);
-	handler.SetVolume(false);
+	handler.SetMicro(true);
+	handler.SetVolume(true);
 
 	msg.pSender->SetVisible(false);
 	assert(ppm);
@@ -152,8 +152,8 @@ void CStaticPage::OnMute(TNotifyUI& msg)
 
 void CStaticPage::OnVoice(TNotifyUI& msg)
 {
-	handler.SetMicro(true);
-	handler.SetVolume(true);
+	handler.SetMicro(false);
+	handler.SetVolume(false);
 
 	msg.pSender->SetVisible(false);
 	assert(ppm);

@@ -3,9 +3,13 @@
 #include "stdafx.h"
 #include "MainWnd.h"
 #include "resource.h"
+#include <Poco/NamedMutex.h>
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
+	Poco::NamedMutex unique("SRTool");
+	if (!unique.tryLock())
+		return 0;
 
 	CPaintManagerUI::SetInstance(hInstance);
 	CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skin"));
