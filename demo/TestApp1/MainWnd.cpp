@@ -77,25 +77,17 @@ void CMainWnd::Notify(TNotifyUI& msg)
 #include "Setting.h"
 void CMainWnd::InitWindow()
 {
-	std::wstring current;
-	CSetting::Inst().GetEncode(current);
-
-	CPaintManagerUI& pm = m_PaintManager;
-	CButtonUI* control = dynamic_cast<CButtonUI*>(pm.FindControl(_T("btencode")));
-	if (!control) return;
-	control->SetHotBkColor(0);
-
-	/*
-	control->SetAttribute(L"current", current.c_str());
-	CDuiString imagePath = control->GetAttribute(current.c_str());
-	control->SetNormalImage(imagePath);
-	*/
-
+	std::wstring contorl_name;
+	std::string encode = CSetting::Inst().GetEncode();
+	(encode == ".mp4") ? (contorl_name = CTR_ENCODE_MP4) : (contorl_name = CTR_ENCODE_FLV);
+	CControlUI* c = m_PaintManager.FindControl(contorl_name.c_str());
+	if(c) c->SetVisible(true);
 }
 
 void CMainWnd::OnFinalMessage(HWND hWnd)
 {
 	WindowImplBase::OnFinalMessage(hWnd);
+	::PostQuitMessage(0L);
 	//delete this;
 }
 

@@ -114,6 +114,7 @@ void CSetting::SetLocation(const std::string& path)
 }
 
 #include <algorithm>
+/*setencode fileext = mp4 | flv*/
 void CSetting::SetEncode(const std::string& fileExt)
 {
 	//eg. format to .mp4 and lowercase it.

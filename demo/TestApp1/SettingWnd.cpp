@@ -22,7 +22,10 @@ void CSettingWnd::InitWindow()
 	combo = dynamic_cast<CComboUI*>(m_PaintManager.FindControl(_T("encoding")));
 	assert(combo);
 	if (!combo) return;
-	combo->SelectItem(0);
+	size_t sel;
+	std::string encode = CSetting::Inst().GetEncode();
+	(encode == ".mp4") ? (sel = 0) : (sel = 1);
+	combo->SelectItem(sel);
 }
 
 void CSettingWnd::OnFinalMessage(HWND hWnd)

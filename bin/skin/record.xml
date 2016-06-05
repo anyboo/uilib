@@ -27,7 +27,7 @@
 						<Label text="屏幕捕获" align="center" font="0" height="15" />
 					</VerticalLayout>
 					<VerticalLayout name="lytArea" borderround="4,4" focusbordercolor="0xFF000000" padding="10,5,10,5" width="48" >
-						<Button name="btlzqy" normalimage="file='record/area.png'" hotimage="file='record/'" pushedimage="file='record/'" height="48" />
+						<Button name="btlzqy" normalimage="file='record/area.png'" hotimage="file='record/area_hover.png'" pushedimage="file='record/area_pushed.png'" height="48" />
 						<Label text="录制区域" align="center" font="0" height="15" />
 					</VerticalLayout>
 					<VerticalLayout name="lytOpen" borderround="4,4" focusbordercolor="0xFF000000" padding="10,5,10,5" width="48" >
@@ -35,11 +35,13 @@
 						<Label text="打开" align="center" font="0" height="15" />
 					</VerticalLayout>
 					<VerticalLayout name="lytCode" borderround="4,4" focusbordercolor="0xFF000000" padding="10,5,10,5" width="48" >
-						<Button name="btencode" normalimage="file='record/coding.png'" hotimage="file='record/coding_hover.png'" pushedimage="file='record/coding_pushed.png'" height="48"/>
+						<Button name="btencodemp4" normalimage="file='record/codingMP4.png'" hotimage="file='record/codingMP4_hover.png'" pushedimage="file='record/codingMP4_pushed.png'" height="48" visible="false"/>
+						<Button name="btencodeflv" normalimage="file='record/codingFLV.png'" hotimage="file='record/codingFLV_hover.png'" pushedimage="file='record/codingFLV_pushed.png'" height="48" visible="false"/>
 						<Label text="编码" align="center" font="0" height="15" />
 					</VerticalLayout>
 					<VerticalLayout name="lytSound" borderround="4,4" focusbordercolor="0xFF000000" padding="10,5,10,5" width="48" >
-						<Button name="btvoice" normalimage="file='record/sound.png'" hotimage="file='record/sound_hover.png'" pushedimage="file='record/sound_pushed.png'" height="48" />
+						<Button name="btvoice" normalimage="file='record/sound.png'" hotimage="file='record/sound_hover.png'" pushedimage="file='record/sound_pushed.png'" height="48" visible="true"/>
+						<Button name="btmute" normalimage="file='record/mute.png'" hotimage="file='record/mute_hover.png'" pushedimage="file='record/mute_pushed.png'" height="48" visible="false"/>
 						<Label text="声音" align="center" font="0" height="15" />
 					</VerticalLayout>
 					<VerticalLayout name="lytAbout" borderround="4,4" focusbordercolor="0xFF000000" padding="10,5,5,5" width="48" >

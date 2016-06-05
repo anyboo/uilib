@@ -16,7 +16,9 @@ public:
 	void OnScreenCapture(TNotifyUI& msg);
 	void OnAreaRecord(TNotifyUI& msg);
 	void OnLocation(TNotifyUI& msg);
-	void OnEncode(TNotifyUI& msg);
+	void OnEncodeMP4(TNotifyUI& msg);
+	void OnEncodeFLV(TNotifyUI& msg);
+	void OnMute(TNotifyUI& msg);
 	void OnVoice(TNotifyUI& msg);
 protected:
 	void Switch();

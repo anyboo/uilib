@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "Setting.h"
 #include "RecordHandler.h"
 #include "CaptureWnd.h"
@@ -19,8 +19,10 @@ DUI_BEGIN_MESSAGE_MAP(CStaticPage, CNotifyPump)
 	DUI_ON_CLICK_CTRNAME(CTR_SCREEN_CAPTURE, OnScreenCapture)
 	DUI_ON_CLICK_CTRNAME(CTR_AREA_RECORD, OnAreaRecord)
 	DUI_ON_CLICK_CTRNAME(CTR_LOCATION, OnLocation)
-	DUI_ON_CLICK_CTRNAME(CTR_ENCODE, OnEncode)
-	DUI_ON_CLICK_CTRNAME(CTR_VOICE, OnVoice)
+	DUI_ON_CLICK_CTRNAME(CTR_ENCODE_MP4, OnEncodeMP4)
+	DUI_ON_CLICK_CTRNAME(CTR_ENCODE_FLV, OnEncodeFLV)
+	DUI_ON_CLICK_CTRNAME(CTR_VOICE, OnMute)
+	DUI_ON_CLICK_CTRNAME(CTR_MUTE, OnVoice)
 DUI_END_MESSAGE_MAP()
 
 void CStaticPage::SetPaintMagager(CPaintManagerUI* pPaintMgr)
@@ -114,44 +116,48 @@ void CStaticPage::OnLocation(TNotifyUI& msg)
 	ShellExecute(NULL, L"explore", path.c_str(), NULL, NULL, SW_SHOWNORMAL);
 }
 
-#include <map>
-void CStaticPage::OnEncode(TNotifyUI& msg)
+void CStaticPage::OnEncodeMP4(TNotifyUI& msg)
 {
-	trace(msg);
+	CSetting::Inst().SetEncode("flv");
 
-	typedef std::map<std::string,std::wstring> EncodeList;
-	typedef EncodeList::iterator EncodeListIter;
-
-	//初始化编码表
-	//Initialize encode tabel
-	//InitEncodeTabel()
-	EncodeList encodes;
-	encodes["MP4"] = L"record/codingMP4.png";
-	encodes["FLV"] = L"record/codingFLV.png";
-
-	//获取设置信息
-	CSetting& setting = CSetting::Inst();
-	std::string key = setting.GetEncode();
-
-	//获取下一个编码表项，设置控件图片；如果是最后一项，则，选择第一个
+	msg.pSender->SetVisible(false);
 	assert(ppm);
-	CButtonUI* control = dynamic_cast<CButtonUI*>(ppm->FindControl(_T("btencode")));
-	if (!control) return;
-	
-	/*
-	EncodeListIter it = encodes.find(key);
+	CControlUI* c = ppm->FindControl(CTR_ENCODE_FLV);
+	if (!c) return;
+	c->SetVisible(true);
+}
 
-	(it != encodes.end()) ? it : (it = encodes.begin());
-	*/
-	/*setting.SetEncode(it->first);
-	control->SetNormalImage((it->second).c_str());*/
+void CStaticPage::OnEncodeFLV(TNotifyUI& msg)
+{
+	CSetting::Inst().SetEncode("mp4");
+
+	msg.pSender->SetVisible(false);
+	assert(ppm);
+	CControlUI* c = ppm->FindControl(CTR_ENCODE_MP4);
+	if (!c) return;
+	c->SetVisible(true);
+}
+
+void CStaticPage::OnMute(TNotifyUI& msg)
+{
+	handler.SetMicro(false);
+	handler.SetVolume(false);
+
+	msg.pSender->SetVisible(false);
+	assert(ppm);
+	CControlUI* c =ppm->FindControl(CTR_MUTE);
+	if (!c) return;
+	c->SetVisible(true);
 }
 
 void CStaticPage::OnVoice(TNotifyUI& msg)
 {
-	trace(msg);
+	handler.SetMicro(true);
+	handler.SetVolume(true);
 
-	mute = !mute;
-	handler.SetMicro(mute);
-	handler.SetVolume(mute);
+	msg.pSender->SetVisible(false);
+	assert(ppm);
+	CControlUI* c = ppm->FindControl(CTR_VOICE);
+	if (!c) return;
+	c->SetVisible(true);
 }
