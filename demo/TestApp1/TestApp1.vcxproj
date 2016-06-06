@@ -313,9 +313,6 @@
     <ResourceCompile Include="TestApp1.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\bin\skin\record\camera_LOGO.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="SisecObsApi" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
