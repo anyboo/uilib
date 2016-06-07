@@ -1,0 +1,7 @@
+#pragma once
+
+// Include Header which in the OBSE Project
+// Reference Property Pages | Additional Include Directories 
+// pro$(SolutionDir)\OBSE\Source\
+
+#include "SisecObsApi.h"
