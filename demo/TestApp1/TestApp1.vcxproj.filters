@@ -92,9 +92,9 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\bin\skin\record\camera_LOGO.ico" />
+    <None Include="SisecObsApi" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SisecObsApi" />
+    <Image Include="..\..\bin\skin\record\SRTools.ico" />
   </ItemGroup>
 </Project>

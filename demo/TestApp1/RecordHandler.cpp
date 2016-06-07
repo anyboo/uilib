@@ -5,22 +5,32 @@
 #include <Poco/Path.h>
 #include <Poco/SingletonHolder.h>
 #include <Poco/Exception.h>
+#include <Poco/Logger.h>
 #include "SisecObsApi"
 #include "Setting.h"
+
+using Poco::Logger;
 
 CRecordHandler::CRecordHandler()
 :MuteVolume(false),
 MuteMicroPhone(false),
 recording(false),
-count(0)
+count(0),
+_hwnd(0),
+_inited(0)
 {
-	init();
+	//init();
 }
 
 
 CRecordHandler::~CRecordHandler()
 {
 	uninit();
+}
+
+void CRecordHandler::SetMainWindows(const HWND& hwnd)
+{
+	_hwnd = hwnd;
 }
 
 CRecordHandler& CRecordHandler::Inst()
@@ -33,11 +43,13 @@ void CRecordHandler::init()
 {
 	CSetting& s = CSetting::Inst();
 	std::string config = Poco::Path::home();
-
-	if (!sscobs_init(config.c_str()))
+	
+	if (!sscobs_init(config.c_str(),(long)_hwnd))
 	{
 		throw std::exception("sscobs_init failed!");
 	}
+
+	_inited = true;
 }
 
 void CRecordHandler::uninit()
@@ -75,11 +87,17 @@ std::string CRecordHandler::GenerateFileName()
 
 void CRecordHandler::start()
 {
+	if (!_inited)
+		init();
+
 	if (recording) return;
 	
 	std::string filename = GenerateFileName();
 
 	sscobs_startRecording(filename.c_str(), _p.x, _p.y, _s.cx, _s.cy);
+
+	Logger::get("FileLogger").information("CRecordHandler::start() sscobs_startRecording args <x:%ld y:%ld cx:%ld cy:%ld>",
+		_p.x, _p.y, _s.cx, _s.cy);
 
 	if (MuteVolume)
 	{

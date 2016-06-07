@@ -315,6 +315,9 @@
   <ItemGroup>
     <None Include="SisecObsApi" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\bin\skin\record\SRTools.ico" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

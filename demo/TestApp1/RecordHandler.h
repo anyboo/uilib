@@ -18,6 +18,7 @@ public:
 	void SetVolume(bool mute = false);
 	void SetMicro(bool mute = false);
 	void SetArea(const POINT& p, const SIZE& s);
+	void SetMainWindows(const HWND& hwnd);
 
 protected:
 
@@ -35,7 +36,8 @@ private:
 	std::string file;
 	POINT _p;
 	SIZE _s;
-
+	HWND _hwnd;
 	size_t count;
+	bool _inited;
 };
 

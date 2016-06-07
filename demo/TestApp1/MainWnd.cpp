@@ -75,6 +75,7 @@ void CMainWnd::Notify(TNotifyUI& msg)
 }
 
 #include "Setting.h"
+#include "RecordHandler.h"
 void CMainWnd::InitWindow()
 {
 	std::wstring contorl_name;
@@ -82,6 +83,9 @@ void CMainWnd::InitWindow()
 	(encode == ".mp4") ? (contorl_name = CTR_ENCODE_MP4) : (contorl_name = CTR_ENCODE_FLV);
 	CControlUI* c = m_PaintManager.FindControl(contorl_name.c_str());
 	if(c) c->SetVisible(true);
+
+	CRecordHandler& handler = CRecordHandler::Inst();
+	handler.SetMainWindows(GetHWND());
 }
 
 void CMainWnd::OnFinalMessage(HWND hWnd)
