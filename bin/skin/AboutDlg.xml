@@ -9,7 +9,7 @@
 			<Button name="closebtn" width="35" height="19" padding="1,5,3,6" tooltip="点击退出则保存配置" normalimage="file='record/btn_close_normal.png'" hotimage="file='record/btn_close_hot.png'" pushedimage="file='record/btn_close_pushed.png'"/>
 		</HorizontalLayout>
 		<Container bkcolor="#FFFFFFFF">
-			<Label name="version" text="录屏工具 V1.0.0.0.8" float="true" pos="60, 15, 300, 35" />
+			<Label name="version" text="录屏工具 V1.0.0.0.12" float="true" pos="60, 15, 300, 35" />
 			<Label text="龙脉安信软件技术有限公司 @copyright 2015-2016" float="true" pos="60, 40, 300, 60" />
 		</Container>
     </VerticalLayout>

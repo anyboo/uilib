@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "SRTool"
-#define MyAppVersion "1.0.0.0.8"
+#define MyAppVersion "1.0.0.0.12"
 #define MyAppPublisher "sisec"
 #define MyAppURL "http://www.sisec.com.cn/"
 #define DesktopName "Â¼ÆÁ¹¤¾ß"
@@ -37,6 +37,11 @@ Source: "..\bin\SRTool.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\bin\DuiLib_u.dll"; DestDir: "{app}"; Flags: ignoreversion 
 Source: "..\bin\msvcr120.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\bin\msvcp120.dll"; DestDir: "{app}"; Flags: ignoreversion  
+
+;Source: "..\bin\d3d10_1.dll"; DestDir: "{app}"; Flags: ignoreversion  
+;Source: "..\bin\d3d10_1core.dll"; DestDir: "{app}"; Flags: ignoreversion  
+;Source: "..\bin\d3d11.dll"; DestDir: "{app}"; Flags: ignoreversion  
+;Source: "..\bin\d3dx10_43.dll"; DestDir: "{app}"; Flags: ignoreversion  
 
 Source: "..\bin\OBSApi.dll"; DestDir: "{app}"; Flags: ignoreversion 
 Source: "..\bin\OBSdll.dll"; DestDir: "{app}"; Flags: ignoreversion 

@@ -184,38 +184,53 @@ void CCaptureWnd::OnRBUTTONUP(WPARAM wParam, LPARAM lParam)
 	}
 }
 
+void CCaptureWnd::RectSelection(WPARAM wParam, LPARAM lParam)
+{
+	if (ClipBasePoint.x != GET_X_LPARAM(lParam) || ClipBasePoint.y != GET_Y_LPARAM(lParam))
+	{
+		ClipPadding.left = min(GET_X_LPARAM(lParam), ClipBasePoint.x) - Desktop.left; if (ClipPadding.left < 0) ClipPadding.left = 0;
+		ClipPadding.top = min(GET_Y_LPARAM(lParam), ClipBasePoint.y) - Desktop.top; if (ClipPadding.top < 0) ClipPadding.top = 0;
+		ClipPadding.right = Desktop.right - max(GET_X_LPARAM(lParam), ClipBasePoint.x); if (ClipPadding.right < 0) ClipPadding.right = 0;
+		ClipPadding.bottom = Desktop.bottom - max(GET_Y_LPARAM(lParam), ClipBasePoint.y); if (ClipPadding.bottom < 0) ClipPadding.bottom = 0;
+		MaskBorder->SetVisible(false);
+		CanvasContainer->SetVisible(true);
+		SetClipPadding(ClipPadding);
+		DUITRACE(_T("RectSelection ClipPadding: left:%d right:%d top:%d bottom:%d"), 
+			ClipPadding.left, ClipPadding.right, ClipPadding.top, ClipPadding.bottom);
+	}
+}
+
+void CCaptureWnd::RectSelectionByCursor(WPARAM wParam, LPARAM lParam)
+{
+	RECT rc;
+	HWND hWnd;
+	::EnableWindow(m_hWnd, FALSE);
+	hWnd = SmallestWindowFromCursor(rc);
+	::EnableWindow(m_hWnd, TRUE);
+	::SetFocus(m_hWnd);
+	rc.left = rc.left - Desktop.left; if (rc.left < 0) rc.left = 0;
+	rc.top = rc.top - Desktop.top; if (rc.top < 0) rc.top = 0;
+	rc.right = Desktop.right - rc.right; if (rc.right < 0) rc.right = 0;
+	rc.bottom = Desktop.bottom - rc.bottom; if (rc.bottom < 0) rc.bottom = 0;
+	if (rc.left != ClipPadding.left || rc.right != ClipPadding.right || rc.top != ClipPadding.top || rc.bottom != ClipPadding.bottom) {
+		SetClipPadding(rc);
+		MaskBorder->SetVisible(true);
+		CanvasContainer->SetVisible(false);
+
+		DUITRACE(_T("RectSelectionByCursor ClipPadding: left:%d right:%d top:%d bottom:%d"),
+			rc.left, rc.right, rc.top, rc.bottom);
+	}
+}
+
 void CCaptureWnd::OnMOUSEMOVE(WPARAM wParam, LPARAM lParam)
 {
-	if (!bClipChoiced) {
-		if (::GetKeyState(VK_LBUTTON) < 0) { // LBUTTON IS PUSHED
-			if (ClipBasePoint.x != GET_X_LPARAM(lParam) || ClipBasePoint.y != GET_Y_LPARAM(lParam)) {
-				ClipPadding.left = min(GET_X_LPARAM(lParam), ClipBasePoint.x) - Desktop.left; if (ClipPadding.left < 0) ClipPadding.left = 0;
-				ClipPadding.top = min(GET_Y_LPARAM(lParam), ClipBasePoint.y) - Desktop.top; if (ClipPadding.top < 0) ClipPadding.top = 0;
-				ClipPadding.right = Desktop.right - max(GET_X_LPARAM(lParam), ClipBasePoint.x); if (ClipPadding.right < 0) ClipPadding.right = 0;
-				ClipPadding.bottom = Desktop.bottom - max(GET_Y_LPARAM(lParam), ClipBasePoint.y); if (ClipPadding.bottom < 0) ClipPadding.bottom = 0;
-				MaskBorder->SetVisible(false);
-				CanvasContainer->SetVisible(true);
-				SetClipPadding(ClipPadding);
-			}
-		}
-		else {
-			RECT rc;
-			HWND hWnd;
-			::EnableWindow(m_hWnd, FALSE);
-			hWnd = SmallestWindowFromCursor(rc);
-			::EnableWindow(m_hWnd, TRUE);
-			::SetFocus(m_hWnd);
-			rc.left = rc.left - Desktop.left; if (rc.left < 0) rc.left = 0;
-			rc.top = rc.top - Desktop.top; if (rc.top < 0) rc.top = 0;
-			rc.right = Desktop.right - rc.right; if (rc.right < 0) rc.right = 0;
-			rc.bottom = Desktop.bottom - rc.bottom; if (rc.bottom < 0) rc.bottom = 0;
-			if (rc.left != ClipPadding.left || rc.right != ClipPadding.right || rc.top != ClipPadding.top || rc.bottom != ClipPadding.bottom) {
-				SetClipPadding(rc);
-				MaskBorder->SetVisible(true);
-				CanvasContainer->SetVisible(false);
-			}
-		}
+	if (bClipChoiced) return;
+
+	if (::GetKeyState(VK_LBUTTON) < 0) { // LBUTTON IS PUSHED
+		return RectSelection(wParam, lParam);
 	}
+
+	RectSelectionByCursor(wParam, lParam);
 }
 
 void CCaptureWnd::SetClipPadding(RECT rc) 

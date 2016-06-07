@@ -30,6 +30,9 @@ protected:
 	void OnLBUTTONDBLCLK(WPARAM wParam, LPARAM lParam);
 	void OnRBUTTONUP(WPARAM wParam, LPARAM lParam);
 	void OnMOUSEMOVE(WPARAM wParam, LPARAM lParam);
+
+	void RectSelection(WPARAM wParam, LPARAM lParam);
+	void RectSelectionByCursor(WPARAM wParam, LPARAM lParam);
 protected:
 	virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	virtual LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& /*bHandled*/);
