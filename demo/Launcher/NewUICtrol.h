@@ -11,16 +11,18 @@ public:
 private:
 	void CNewVerticalLayoutUI::DoEvent(TEventUI& event)
 	{
-		if (event.Type == UIEVENT_BUTTONUP)
-		{
-			m_pManager->SendNotify(this, DUI_MSGTYPE_CLICK);
-		}
-		if (event.Type == UIEVENT_MOUSEMOVE)
-		{
-			m_pManager->SendNotify(this, DUI_MSGTYPE_TABSELECT);
-		}
-		if (event.Type == UIEVENT_MOUSELEAVE){
-			m_pManager->SendNotify(this, DUI_MSGTYPE_SELECTCHANGED);
+		if (IsMouseEnabled()) {
+			if (event.Type == UIEVENT_BUTTONUP)
+			{
+				m_pManager->SendNotify(this, DUI_MSGTYPE_CLICK);
+			}
+			if (event.Type == UIEVENT_MOUSEMOVE)
+			{
+				m_pManager->SendNotify(this, DUI_MSGTYPE_TABSELECT);
+			}
+			if (event.Type == UIEVENT_MOUSELEAVE){
+				m_pManager->SendNotify(this, DUI_MSGTYPE_SELECTCHANGED);
+			}			
 		}
 		CContainerUI::DoEvent(event);
 	}
@@ -53,6 +55,7 @@ public:
 		CLabelUI::DoEvent(event);
 	}
 };
+
 
 typedef struct
 {

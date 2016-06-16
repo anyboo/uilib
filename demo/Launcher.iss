@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Launcher"
-#define MyAppVersion "1.0.0.0.8"
+#define MyAppVersion "1.0.0.1.2"
 #define MyAppPublisher "sisec"
 #define MyAppURL "http://www.sisec.com.cn/"
 
@@ -10,7 +10,7 @@
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{6F882F56-62C3-4609-AB7D-33C335207E39}
+AppId=FC1004DE-2231-4194-9991-4E36E3155B76
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}

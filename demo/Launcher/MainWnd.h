@@ -25,6 +25,9 @@ protected:
 	virtual CDuiString GetSkinFolder();
 	virtual CDuiString GetSkinFile();
 
+	int GetEncoderClsid(const WCHAR* format, CLSID* pClsid);
+	void BitmapToJpg(HBITMAP hbmpImage, int width, int height, const std::wstring& path);
+
 	LRESULT OnDropFiles(UINT uMsg, HDROP hDrop, LPARAM lParam, BOOL& bHandled);
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 private:

@@ -75,8 +75,8 @@ void CMainWnd::Notify(TNotifyUI& msg)
 	else if (msg.sType == _T("selectchanged")){
 		m_MyHandle.OnMouseLeave(m_AllLyt);
 	}
-	else if (msg.sType == _T("click")){
-		m_MyHandle.OpenExeFile(msg.ptMouse.x, msg.ptMouse.y, m_AllLyt);
+	else if (msg.sType == _T("click")){	
+		m_MyHandle.OpenExeFile(msg.ptMouse.x, msg.ptMouse.y, m_AllLyt);		
 	}
 	return WindowImplBase::NotifyPump(msg);
 }
@@ -115,11 +115,15 @@ LRESULT CMainWnd::OnDropFiles(UINT uMsg, HDROP hDrop, LPARAM lParam, BOOL& bHand
 		m_BmpNameHead[0] += m_LoadNum + 1;
 		BmpFileName = m_BmpNameHead + _T("tmp.bmp");
 		DragQueryFile(hDrop, i, strFileName, MAX_PATH);
-		strFilePath = strFileName;	
+		strFilePath = strFileName;
 		hIcon = m_MyHandle.QueryFileIcon(strFilePath);
 		HBITMAP IconHbmp = m_MyHandle.IconToBitmap(hIcon);
+
 		m_MyHandle.SaveBmp(IconHbmp, BmpFileName);
 		m_MyHandle.AddLayout(iDropPos, yDropPos, BmpFileName, strFilePath, m_PaintManager, m_AllLyt);
 	}
 	return 0;
 }
+
+
+

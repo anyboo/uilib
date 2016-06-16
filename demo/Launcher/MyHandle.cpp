@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "MyHandle.h"
 #include "MenuWnd.h"
+#include <commoncontrols.h>
+#include <shlwapi.h>
+#pragma comment(lib,"Shlwapi.lib")
 
 #define BUTTON_WIDTH					48
 #define BUTTON_HEIGHT					48
@@ -71,6 +74,7 @@ void CMyHandle::OpenExeFile(int xPos, int yPos, vector<LayOut_Info>& AllLyt)
 		return;
 	}
 	DUITRACE(_T("%s"), AllLyt[n].FilePath.c_str());
+
 	HINSTANCE hIns = ShellExecute(NULL, _T("Open"), AllLyt[n].FilePath.c_str(), NULL, NULL, SW_SHOWNORMAL);
 	int dret = (int)hIns;
 	if (dret < 32)
@@ -113,8 +117,7 @@ void CMyHandle::InitLayOut(CNewVerticalLayoutUI* cLyt, STDSTRING pFileName, STDS
 	cBtn->SetContextMenuUsed(true);
 	cBtn->SetFixedHeight(BUTTON_HEIGHT);
 	cBtn->SetFixedWidth(BUTTON_WIDTH);
-//	STDSTRING ImagePath = WriteablePath + pFileName;
-	
+
 	STDSTRING FileName = GetFileSavePath() + pFileName;
 	cBtn->SetBkImage(FileName.c_str());
 	cBtn->SetToolTip(strPath.c_str());
@@ -124,26 +127,37 @@ void CMyHandle::InitLayOut(CNewVerticalLayoutUI* cLyt, STDSTRING pFileName, STDS
 	r.bottom = 0;	r.top = 10;
 	cBtn->SetPadding(r);
 
-	STDSTRING path, displayName;
+	STDSTRING path, displayName, playName;
 	path = strPath;
 	displayName = path.substr(path.find_last_of(_T('\\')) + 1);
+	playName = displayName.substr(0, displayName.find_last_of(_T(".")));
 
-	Lab->SetText(displayName.c_str());
+	if (playName == _T("OVPlayer")){
+		Lab->SetText(_T("²¥·ÅÆ÷"));
+	}
+	else if (playName == _T("SRTool")){
+		Lab->SetText(_T("Â¼ÆÁ¹¤¾ß"));
+	}
+	else{
+		Lab->SetText(displayName.c_str());
+	}
+
 	Lab->SetFont(FONT_SIZE);
 	Lab->SetMultiLine(true);
 	RECT rect;
-	rect.left = 25;
-	rect.right = 22;
+	rect.left = 0;
+	rect.right = 0;
 	rect.bottom = 40;
 	rect.top = 5;
 	Lab->SetPadding(rect);
 	Lab->SetToolTip(strPath.c_str());
+	Lab->SetTextStyle(DT_CENTER);
 	Lab->SetMultiLine(true);
 }
 
 void CMyHandle::Push_LayOut(int xPos, int yPos, CNewVerticalLayoutUI* cLyt, STDSTRING strPath, vector<LayOut_Info>& AllLyt)
 {
-	
+
 	LayOut_Info Lyt_info = { 0 };
 	Lyt_info.Layout = cLyt;
 	Lyt_info.FilePath = strPath;
@@ -184,7 +198,14 @@ void CMyHandle::LoadIcon(STDSTRING strPath, vector<LayOut_Info>& AllLyt, CPaintM
 	STDSTRING BmpFileName;
 	m_BmpNameHead[0] += 1;
 	BmpFileName = m_BmpNameHead + _T("tmp.bmp");
-
+	
+	if (!PathFileExists(strPath.c_str()))
+	{
+		TCHAR PATH[MAX_PATH] = { 0 };
+		STDSTRING AppPath = STDSTRING(PATH, ::GetModuleFileName(NULL, PATH, MAX_PATH));
+		strPath[0] = AppPath[0];
+	}
+	
 	HICON hIcon = QueryFileIcon(strPath);
 	HBITMAP IconHbmp = IconToBitmap(hIcon);
 	SaveBmp(IconHbmp, BmpFileName);
@@ -202,14 +223,19 @@ void CMyHandle::LoadIcon(STDSTRING strPath, vector<LayOut_Info>& AllLyt, CPaintM
 
 HICON CMyHandle::QueryFileIcon(STDSTRING lpszFilePath)
 {
-	HICON hIcon = NULL;
-	SHFILEINFO FileInfo;
-	DWORD_PTR dwRet = ::SHGetFileInfo(lpszFilePath.c_str(), 0, &FileInfo, sizeof(SHFILEINFO), SHGFI_ICON);
-	if (dwRet)
+	SHFILEINFO sfi;
+	ZeroMemory(&sfi, sizeof(SHFILEINFO));
+	::SHGetFileInfo(lpszFilePath.c_str(), FILE_ATTRIBUTE_NORMAL, &sfi, sizeof(SHFILEINFO), SHGFI_SYSICONINDEX);
+	HIMAGELIST* imageList = NULL;
+
+	HRESULT hResult = ::SHGetImageList(SHIL_EXTRALARGE, IID_IImageList, (void**)&imageList);
+	
+	HICON icon_handle = NULL;
+	if (hResult == S_OK)
 	{
-		hIcon = FileInfo.hIcon;
+		hResult = ((IImageList*)imageList)->GetIcon(sfi.iIcon, ILD_NORMAL, &icon_handle);
 	}
-	return hIcon;
+	return icon_handle;
 }
 
 HBITMAP CMyHandle::IconToBitmap(HICON hIcon, SIZE* pTargetSize)
@@ -389,7 +415,7 @@ BOOL CMyHandle::SaveBmp(HBITMAP hBitmap, STDSTRING FileName)
 	else if (iBits <= 8)
 		wBitCount = 8;
 	else
-		wBitCount = BMPBITCOUNT;
+		wBitCount =BMPBITCOUNT;
 
 	GetObject(hBitmap, sizeof(Bitmap), (LPSTR)&Bitmap);
 	bi.biSize = sizeof(BITMAPINFOHEADER);
