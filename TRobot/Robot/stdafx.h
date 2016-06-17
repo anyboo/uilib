@@ -10,5 +10,4 @@
 #include <stdio.h>
 #include <tchar.h>
 
-#define CATCH_CONFIG_MAIN
 // TODO: reference additional headers your program requires here

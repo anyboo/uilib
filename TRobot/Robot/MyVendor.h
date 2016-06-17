@@ -17,7 +17,7 @@ public:
 	virtual void DownloadByName(const std::string& filename);
 	virtual void PlayVideo(const std::string& filename);
 
-private:
+protected:
 	void* handle;
 };
 

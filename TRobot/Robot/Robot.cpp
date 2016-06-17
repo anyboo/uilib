@@ -2,23 +2,20 @@
 //
 
 #include "stdafx.h"
-#include "catch.hpp"
 #include "MyVendor.h"
+#define CATCH_CONFIG_MAIN
+#include "catch.hpp"
 
 TEST_CASE("This is a demo", "[demo]")
 {
-	MyVendor test;
 	SECTION("Test login the device")
 	{
-		test.Init("127.0.0.1", 3000);
-		test.Login("user", "password");
+		MyVendor vendor;
 	}
 
 	SECTION("Test Search videos from the device")
 	{
-		test.SearchAll();
-		
-		//std::currenttime();
+
 	}
 
 	SECTION("Test Download videos from the device by name")
