@@ -37,5 +37,13 @@ void VideoLoginUI::OnFinalMessage(HWND hWnd)
 
 void VideoLoginUI::Notify(TNotifyUI& msg)
 {
+	if (msg.sType == DUI_MSGTYPE_CLICK)
+	{
+		if (msg.pSender->GetName() == _T("IP_match"))
+		{
+			POINT pt = { msg.ptMouse.x, msg.ptMouse.y };
+			int x = pt.x;
+		}		
+	}
 	WindowImplBase::Notify(msg);
 }

@@ -55,7 +55,7 @@
 						</HorizontalLayout>
 					</VerticalLayout>
 					<HorizontalLayout height="130" width="166" >
-						<Button name="find" pos="30,35,110,115" float="true" align="bottom" text="查询" textcolor="#00000000" font="1" textpadding="0,40,0,0" pushedimage="Downloader/chaxunanniu.png" foreimage="file='Downloader/chaxun.png' dest='27,20,52,40'" normalimage="file='Downloader/chaxunanniu.png'"/>
+						<Button name="Search" pos="30,35,110,115" float="true" align="bottom" text="查询" textcolor="#00000000" font="1" textpadding="0,40,0,0" pushedimage="Downloader/chaxunanniu.png" foreimage="file='Downloader/chaxun.png' dest='27,20,52,40'" normalimage="file='Downloader/chaxunanniu.png'"/>
 					</HorizontalLayout>
 				</HorizontalLayout>
 				<VerticalLayout width="824" height="565" padding="0,13,0,0">

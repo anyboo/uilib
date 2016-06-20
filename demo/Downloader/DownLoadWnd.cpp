@@ -78,14 +78,18 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 		if (msg.pSender->GetName() == BT_Calendar1 || msg.pSender->GetName() == BT_Calendar2){
 			OnSelectCalendar();
 		}
+		if (msg.pSender->GetName() == _T("Search")){
+			SearchFiles();
+		}
 	}
 	WindowImplBase::Notify(msg);
 }
 
-void DownLoadWnd::Set(STDSTRING& text)
+
+void DownLoadWnd::SearchFiles()
 {
-	CLabelUI* Lab = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("DatatimeText1")));
-	Lab->SetText(text.c_str());
+	m_fileInfo.clear();
+	//search files
 }
 
 
