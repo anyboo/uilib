@@ -35,19 +35,19 @@
 			</VerticalLayout>
 			<HorizontalLayout width="224" height="80" padding="0,15,0,15" >
 				<Button name="search" pos="10,0,90,80" float="true" align="bottom" text="查询" textcolor="#00000000" font="1" textpadding="0,40,0,0" pushedimage="Downloader/chaxunanniu.png" foreimage="file='Downloader/chaxun.png' dest='27,20,52,40'" normalimage="file='Downloader/chaxunanniu.png'" />
-				<Button name="export " pos="110,0,190,80" float="true" align="bottom" text="导出" textcolor="#00000000" font="1" textpadding="0,40,0,0" pushedimage="Downloader/chaxunanniu.png" foreimage="file='Downloader/save.png' dest='21,8,59,46'" normalimage="file='Downloader/chaxunanniu.png'"/>
+				<Button name="export" pos="110,0,190,80" float="true" align="bottom" text="导出" textcolor="#00000000" font="1" textpadding="0,40,0,0" pushedimage="Downloader/chaxunanniu.png" foreimage="file='Downloader/save.png' dest='21,8,59,46'" normalimage="file='Downloader/chaxunanniu.png'"/>
 			</HorizontalLayout>
 		</HorizontalLayout>
 		<VerticalLayout width="1024" height="598">
 			<List name="domainlist" padding="20,0,20,0" bkcolor="#FFFFFFFF" inset="0,0,0,0" itemshowhtml="true" vscrollbar="true" hscrollbar="true" headerbkimage="file='Downloader/lbl.png'" itemalign="center" itembkcolor="#FFE2DDDF" itemaltbk="true" hscrollbar="false" menu="true">
-				<ListHeader height="31" menu="true">
-					<ListHeaderItem text="时间" font="1" width="200" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
-					<ListHeaderItem text="操作" font="1" width="400" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
-					<ListHeaderItem text="描述" font="1" width="200" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
-					<ListHeaderItem text="" font="1" width="0" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
-					<ListHeaderItem text="" font="1" width="0" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
-					<ListHeaderItem text="" font="1" width="0" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
-					<ListHeaderItem text="" font="1" width="0" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
+				<ListHeader name="list_head" height="31" menu="true" width="980">
+					<ListHeaderItem name="Item1" text="时间" font="1" width="200" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
+					<ListHeaderItem name="Item2" text="操作" font="1" width="300" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
+					<ListHeaderItem name="Item3" text="描述" font="1" width="480" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
+					<ListHeaderItem name="Item4" text="" font="1" width="0" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
+					<ListHeaderItem name="Item5" text="" font="1" width="0" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
+					<ListHeaderItem name="Item6" text="" font="1" width="0" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
+					<ListHeaderItem name="Item7" text="" font="1" width="0" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
 				</ListHeader>
 			</List>
 		</VerticalLayout>

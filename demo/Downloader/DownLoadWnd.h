@@ -3,6 +3,7 @@
 		
 #define	BT_Calendar1			(_T("DataTime1"))
 #define	BT_Calendar2			(_T("DataTime2"))
+#define BT_OnVideoLoginUI		(_T("Add_device"))
 
 class DownLoadWnd :
 	public WindowImplBase
@@ -16,6 +17,8 @@ public:
 	void OnSelectTimeType();
 	void OnSelectCalendar();
 	void Set(STDSTRING& text);
+
+	void OnVideoLoginWnd(TNotifyUI& msg);
 
 protected:
 	virtual LPCTSTR GetWindowClassName() const;

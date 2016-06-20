@@ -21,7 +21,6 @@ DUI_ON_CLICK_CTRNAME(BT_CLOSE, OnClose)
 DUI_ON_CLICK_CTRNAME(BT_MINWIND, OnMin)
 DUI_ON_CLICK_CTRNAME(BT_DOWNLOAD, OnDownLoadWnd)
 DUI_ON_CLICK_CTRNAME(BT_LogWnd, OnLogWnd)
-DUI_ON_CLICK_CTRNAME(BT_VideoLogin, OnVideoLonginWnd)
 DUI_END_MESSAGE_MAP()
 
 LPCTSTR CMainWnd::GetWindowClassName() const
@@ -73,14 +72,14 @@ void CMainWnd::OnLogWnd(TNotifyUI& msg)
 	pDlg->ShowModal();
 }
 
-void CMainWnd::OnVideoLonginWnd(TNotifyUI& msg)
-{
-	VideoLoginUI* pDlg = new VideoLoginUI();
-	assert(pDlg);
-	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_DIALOG, 0L, 0, 0, 1024, 768);
-	pDlg->CenterWindow();
-	pDlg->ShowModal();
-}
+//void CMainWnd::OnVideoLonginWnd(TNotifyUI& msg)
+//{
+//	VideoLoginUI* pDlg = new VideoLoginUI();
+//	assert(pDlg);
+//	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_DIALOG, 0L, 0, 0, 1024, 768);
+//	pDlg->CenterWindow();
+//	pDlg->ShowModal();
+//}
 
 void CMainWnd::Notify(TNotifyUI& msg)
 {

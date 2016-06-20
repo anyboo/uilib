@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DownLoadWnd.h"
 #include "CalendarUI.h"
+#include "VideoLoginUI.h"
 
 DownLoadWnd::DownLoadWnd()
 {
@@ -13,7 +14,7 @@ DownLoadWnd::~DownLoadWnd()
 
 
 DUI_BEGIN_MESSAGE_MAP(DownLoadWnd, WindowImplBase)
-
+DUI_ON_CLICK_CTRNAME(BT_OnVideoLoginUI, OnVideoLoginWnd)
 DUI_END_MESSAGE_MAP()
 
 LPCTSTR DownLoadWnd::GetWindowClassName() const
@@ -55,6 +56,15 @@ void DownLoadWnd::OnSelectCalendar()
 	CalendarUI* pDlg = new CalendarUI();
 	assert(pDlg);
 	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 350, 380);
+	pDlg->CenterWindow();
+	pDlg->ShowModal();
+}
+
+void DownLoadWnd::OnVideoLoginWnd(TNotifyUI& msg)
+{
+	VideoLoginUI* pDlg = new VideoLoginUI();
+	assert(pDlg);
+	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 1024, 768);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
 }

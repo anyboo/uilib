@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window size="1024,768" caption="0,0,0,30" roundcorner="4,4" showdirty="false">
 	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
-	<VerticalLayout height="765" >
+	<VerticalLayout height="765" bkimage="file='Downloader/VideoLogin.png'">
 		<HorizontalLayout height="60" width="1024" bkimage="file='Downloader/beijing.png'">
 			<Button name="closebtn" width="38" height="38" padding="20,10,0,0" tooltip="返回" foreimage="file='Downloader/back.png'" hotimage="file='Downloader/hsbj.png'"/>
 			<Label text="视频登录" textcolor="#FFFFFFFF" font="1" width="860" align="center"/>
-		</HorizontalLayout>
-		<HorizontalLayout bkimage="file='Downloader/bsbj.png'">
-			<HorizontalLayout width="380" height="450" padding="100,80,0,0" bordersize="3" borderround="6" bordercolor="0x22222222">
-			</HorizontalLayout>
-			<HorizontalLayout width="380" height="450" padding="70,80,0,0" bordersize="3" borderround="6" bordercolor="0x22222222">
-			</HorizontalLayout>
 		</HorizontalLayout>
 	</VerticalLayout>
 </Window>

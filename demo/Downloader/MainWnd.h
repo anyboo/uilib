@@ -6,7 +6,6 @@
 #define BT_DOWNLOAD			(_T("download"))
 #define BT_LogWnd			(_T("Log_manager"))
 #define BT_VideoPlay		(_T("VideoPlay"))
-#define BT_VideoLogin		(_T("Other_tools"))
 
 class CMainWnd :
 	public WindowImplBase
