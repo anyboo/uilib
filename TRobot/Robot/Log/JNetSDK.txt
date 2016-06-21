@@ -1,0 +1,1266 @@
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:19:01 --------
+2016-06-21 16:19:01	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:19:26 --------
+2016-06-21 16:19:26	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:19:30	Success new lpConn:021D0090 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:19:30	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:19:30	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:20:44 --------
+2016-06-21 16:20:44	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:22:03 --------
+2016-06-21 16:22:03	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:23:29 --------
+2016-06-21 16:23:29	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:23:30	Success new lpConn:006B0078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:23:30	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:23:30	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:26:25 --------
+2016-06-21 16:26:25	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:26:26	Success new lpConn:02060078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:26:26	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:26:26	CJConnSock::Login end success
+2016-06-21 16:26:28	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:27:27 --------
+2016-06-21 16:27:27	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:27:28	Success new lpConn:022A0078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:27:28	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:27:28	CJConnSock::Login end success
+2016-06-21 16:27:32	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 16:27:36	CJConnJPF(192.168.0.89)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:28:13 --------
+2016-06-21 16:28:13	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:28:14	Success new lpConn:00420078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:28:14	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:28:14	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:28:21 --------
+2016-06-21 16:28:21	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:28:22	Success new lpConn:02320078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:28:22	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:28:22	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:29:20 --------
+2016-06-21 16:29:20	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:29:23	Success new lpConn:00450078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:29:23	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:29:23	CJConnSock::Login end success
+2016-06-21 16:29:23	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:29:31 --------
+2016-06-21 16:29:31	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:29:31	Success new lpConn:006E0078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:29:31	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:29:31	CJConnSock::Login end success
+2016-06-21 16:29:31	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 16:29:35	CJConnJPF(192.168.0.89)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:39:29 --------
+2016-06-21 16:39:29	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:39:29	Success new lpConn:004D0078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:39:29	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:39:29	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:39:58 --------
+2016-06-21 16:39:58	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:39:58	Success new lpConn:005F0078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:39:58	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:39:58	CJConnSock::Login end success
+2016-06-21 16:40:01	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 16:40:03	CJConnJPF(192.168.0.89)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-21 16:40:07	CJConnJPF(192.168.0.89)::OnSendLogin():192.168.0.89,3321
+2016-06-21 16:40:12	CJLSocket::Recv err:0
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:41:57 --------
+2016-06-21 16:41:57	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:41:57	Success new lpConn:00BB0078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:41:57	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:41:57	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:41:59 --------
+2016-06-21 16:41:59	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:41:59	Success new lpConn:004DC5B8 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:41:59	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:41:59	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:42:29 --------
+2016-06-21 16:42:29	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:42:29	Success new lpConn:0039C5B8 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:42:29	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:42:29	CJConnSock::Login end success
+2016-06-21 16:42:29	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:42:44 --------
+2016-06-21 16:42:44	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:42:44	Success new lpConn:00AA0078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:42:44	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:42:44	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:42:49 --------
+2016-06-21 16:42:49	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:42:49	Success new lpConn:01F50078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:42:49	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:42:49	CJConnSock::Login end success
+2016-06-21 16:42:49	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:42:51 --------
+2016-06-21 16:42:51	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:42:51	Success new lpConn:004F0078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:42:51	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:42:51	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:42:57 --------
+2016-06-21 16:42:57	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:42:57	Success new lpConn:00B00078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:42:57	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:42:57	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:43:01 --------
+2016-06-21 16:43:01	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:43:01	Success new lpConn:00AE0078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:43:01	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:43:01	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:43:06 --------
+2016-06-21 16:43:06	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:43:06	Success new lpConn:00A80078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:43:06	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:43:06	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:43:15 --------
+2016-06-21 16:43:15	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:43:15	Success new lpConn:00B60078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:43:15	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:43:15	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:43:35 --------
+2016-06-21 16:43:35	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:43:35	Success new lpConn:007D0078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:43:35	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:43:35	CJConnSock::Login end success
+2016-06-21 16:43:42	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 16:43:44	CJConnJPF(192.168.0.89)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:44:04 --------
+2016-06-21 16:44:04	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:44:04	Success new lpConn:004D0078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:44:04	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:44:04	CJConnSock::Login end success
+2016-06-21 16:44:10	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 16:44:11	CJConnJPF(192.168.0.89)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-21 16:44:29	CJConnJPF(192.168.0.89)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-21 16:44:30	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:47:09 --------
+2016-06-21 16:47:09	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:47:09	Success new lpConn:02170090 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:47:09	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:47:11	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:47:22 --------
+2016-06-21 16:47:22	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:47:22	Success new lpConn:02140090 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:47:22	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:47:22	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:47:25 --------
+2016-06-21 16:47:25	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:47:25	Success new lpConn:00BA1068 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:47:25	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:47:25	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:48:23 --------
+2016-06-21 16:48:23	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:48:23	Success new lpConn:002F1068 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:48:23	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:48:23	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:48:28 --------
+2016-06-21 16:48:28	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:48:28	Success new lpConn:00371068 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:48:28	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:48:28	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:48:44 --------
+2016-06-21 16:48:44	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:48:44	Success new lpConn:00C31068 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:48:44	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:48:44	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:48:49 --------
+2016-06-21 16:48:49	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:48:49	Success new lpConn:02181068 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:48:49	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:48:49	CJConnSock::Login end success
+2016-06-21 16:48:49	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:52:54 --------
+2016-06-21 16:52:54	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:52:54	Success new lpConn:00770090 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:52:54	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:52:54	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:53:17 --------
+2016-06-21 16:53:17	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:53:17	Success new lpConn:02270090 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:53:17	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:53:17	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:53:26 --------
+2016-06-21 16:53:26	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:53:26	Success new lpConn:00B00090 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:53:26	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:53:26	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:53:51 --------
+2016-06-21 16:53:51	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:53:51	Success new lpConn:006A0090 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:53:51	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:53:51	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:53:57 --------
+2016-06-21 16:53:57	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:53:57	Success new lpConn:003D0090 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:53:57	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:53:57	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:54:08 --------
+2016-06-21 16:54:08	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:54:08	Success new lpConn:004C0090 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:54:08	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:54:09	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:54:15 --------
+2016-06-21 16:54:15	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:54:15	Success new lpConn:00B90090 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 16:54:15	CJConnSock::Login 192.168.0.89,3321,, begin
+2016-06-21 16:54:16	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:56:16 --------
+2016-06-21 16:56:16	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:56:16	Success new lpConn:020C0090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 16:56:16	CJConnSock::Login 192.168.0.67,3321,, begin
+2016-06-21 16:56:16	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:56:37 --------
+2016-06-21 16:56:37	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:56:37	Success new lpConn:004F0090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 16:56:37	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 16:56:37	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:56:47 --------
+2016-06-21 16:56:47	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 16:56:47	Success new lpConn:00640090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 16:56:47	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 16:56:47	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 16:57:10 --------
+2016-06-21 16:57:10	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:02:32	Success new lpConn:01F60090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:02:32	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:02:32	CJConnSock::Login end success
+2016-06-21 17:02:32	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 17:02:34	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:02:42 --------
+2016-06-21 17:02:42	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:02:45	Success new lpConn:00200090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:02:45	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:02:45	CJConnSock::Login end success
+2016-06-21 17:02:45	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:02:53 --------
+2016-06-21 17:02:53	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:02:58	Success new lpConn:00A20090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:02:58	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:02:58	CJConnSock::Login end success
+2016-06-21 17:02:58	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 17:03:02	CJConnJPF(192.168.0.67)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-21 17:03:08	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:03:17 --------
+2016-06-21 17:03:17	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:03:17	Success new lpConn:01EF0090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:03:17	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:03:17	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:03:24 --------
+2016-06-21 17:03:24	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:03:26	Success new lpConn:00870090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:03:26	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:03:26	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:03:32 --------
+2016-06-21 17:03:32	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:03:35	Success new lpConn:007F0090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:03:35	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:03:35	CJConnSock::Login end success
+2016-06-21 17:03:35	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 17:03:40	CJConnJPF(192.168.0.67)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-21 17:03:47	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:04:05 --------
+2016-06-21 17:04:05	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:04:08	Success new lpConn:004B0090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:04:08	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:04:08	CJConnSock::Login end success
+2016-06-21 17:04:08	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:04:17 --------
+2016-06-21 17:04:17	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:04:17	Success new lpConn:00210090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:04:17	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:04:17	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:04:25 --------
+2016-06-21 17:04:25	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:04:27	Success new lpConn:00A80090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:04:27	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:04:27	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:04:39 --------
+2016-06-21 17:04:39	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:04:42	Success new lpConn:00600090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:04:42	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:04:42	CJConnSock::Login end success
+2016-06-21 17:04:44	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:04:46 --------
+2016-06-21 17:04:46	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:04:46	Success new lpConn:00430090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:04:46	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:04:46	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:04:49 --------
+2016-06-21 17:04:49	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:04:49	Success new lpConn:005F0090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:04:49	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:04:49	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:04:57 --------
+2016-06-21 17:04:57	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:05:02	Success new lpConn:02160090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:05:02	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:05:05	CJConnSock::Login end success
+2016-06-21 17:05:05	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:05:32 --------
+2016-06-21 17:05:32	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:05:36	Success new lpConn:004D0090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:05:36	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:05:36	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:05:45 --------
+2016-06-21 17:05:45	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:05:46	Success new lpConn:020E0090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:05:46	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:05:46	CJConnSock::Login end success
+2016-06-21 17:05:48	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 17:05:49	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:05:56 --------
+2016-06-21 17:05:56	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:05:57	Success new lpConn:02080090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:05:57	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:05:57	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:06:03 --------
+2016-06-21 17:06:03	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:06:04	Success new lpConn:00920090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:06:04	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:06:04	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:06:13 --------
+2016-06-21 17:06:13	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:06:14	Success new lpConn:009C0090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:06:14	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:06:14	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:06:22 --------
+2016-06-21 17:06:22	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:06:22	Success new lpConn:00660090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:06:22	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:06:22	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:06:30 --------
+2016-06-21 17:06:30	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:06:30	Success new lpConn:00590090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:06:30	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:06:30	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:08:41 --------
+2016-06-21 17:08:41	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:08:49 --------
+2016-06-21 17:08:49	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:08:50	Success new lpConn:00480090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:08:50	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:08:50	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:08:58 --------
+2016-06-21 17:08:58	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:08:58	Success new lpConn:009F0090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:08:58	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:09:03 --------
+2016-06-21 17:09:03	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:09:03	Success new lpConn:00650090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:09:03	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:09:03	CJConnSock::Login end success
+2016-06-21 17:09:06	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 17:09:08	CJConnJPF(192.168.0.67)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:09:13 --------
+2016-06-21 17:09:13	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:09:13	Success new lpConn:01F81068 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:09:13	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:09:13	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:09:20 --------
+2016-06-21 17:09:20	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:09:20	Success new lpConn:01FB1068 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:09:20	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:09:20	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:09:53 --------
+2016-06-21 17:09:53	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:09:53	Success new lpConn:00920090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:09:53	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:09:53	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:10:00 --------
+2016-06-21 17:10:00	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:10:00	Success new lpConn:00590090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:10:00	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:10:00	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:10:25 --------
+2016-06-21 17:10:25	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:10:25	Success new lpConn:00420090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:10:25	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:10:25	CJConnSock::Login end success
+2016-06-21 17:10:26	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:10:33 --------
+2016-06-21 17:10:33	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:10:33	Success new lpConn:00860090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:10:33	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:10:33	CJConnSock::Login end success
+2016-06-21 17:10:34	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:10:48 --------
+2016-06-21 17:10:48	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:10:49	Success new lpConn:00950090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:10:49	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:10:49	CJConnSock::Login end success
+2016-06-21 17:10:54	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 17:10:55	CJConnJPF(192.168.0.67)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:11:06 --------
+2016-06-21 17:11:06	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:11:07	Success new lpConn:00990090 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:11:07	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:11:07	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:11:13 --------
+2016-06-21 17:11:13	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:11:19 --------
+2016-06-21 17:11:19	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:11:21	Success new lpConn:00900078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:11:21	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:11:21	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:11:43 --------
+2016-06-21 17:11:43	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:11:45	Success new lpConn:00AB0078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:11:45	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:11:45	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:11:51 --------
+2016-06-21 17:11:51	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:11:51	Success new lpConn:00430078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:11:51	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:11:53	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:25:40 --------
+2016-06-21 17:25:40	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:25:48 --------
+2016-06-21 17:25:48	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:25:49	Success new lpConn:00A90078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:25:49	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:25:49	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:37:18 --------
+2016-06-21 17:37:18	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:37:26 --------
+2016-06-21 17:37:26	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:37:27	Success new lpConn:00890078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:37:27	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:37:27	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:40:09 --------
+2016-06-21 17:40:09	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:40:09	Success new lpConn:00490078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:40:09	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:40:09	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:40:11 --------
+2016-06-21 17:40:11	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:40:11	Success new lpConn:0035C5B8 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:40:11	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:40:11	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:43:39 --------
+2016-06-21 17:43:39	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:43:39	Success new lpConn:00A00078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:43:39	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:43:39	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:43:46 --------
+2016-06-21 17:43:46	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:43:46	Success new lpConn:00C4C5B8 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:43:46	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:43:46	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:44:23 --------
+2016-06-21 17:44:23	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:44:23	Success new lpConn:0087C5B8 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:44:23	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:44:23	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:45:03 --------
+2016-06-21 17:45:03	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:45:27 --------
+2016-06-21 17:45:27	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:45:28	Success new lpConn:00970078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:45:28	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:45:28	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:46:38 --------
+2016-06-21 17:46:38	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:46:40	Success new lpConn:00AC0078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:46:40	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:46:40	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:48:57 --------
+2016-06-21 17:48:57	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:48:57	Success new lpConn:00DFC5B8 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:48:57	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:48:57	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:50:05 --------
+2016-06-21 17:50:05	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:50:05	Success new lpConn:02030078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:50:05	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:50:05	CJConnSock::Login end success
+2016-06-21 17:50:05	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 17:50:05	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:50:32 --------
+2016-06-21 17:50:32	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:50:32	Success new lpConn:00960078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:50:32	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:50:32	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:50:34 --------
+2016-06-21 17:50:34	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:50:34	Success new lpConn:001DC398 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:50:34	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:50:34	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 17:51:18 --------
+2016-06-21 17:51:18	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 17:51:18	Success new lpConn:01F90078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 17:51:18	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 17:51:18	CJConnSock::Login end success
+2016-06-21 17:51:18	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 17:51:18	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:08:48 --------
+2016-06-21 18:08:48	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:08:48	Success new lpConn:00930078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 18:08:48	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 18:08:48	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:08:52 --------
+2016-06-21 18:08:52	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:08:52	Success new lpConn:0091C398 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 18:08:52	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 18:08:52	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:15:24 --------
+2016-06-21 18:15:24	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:15:24	Success new lpConn:000BC398 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 18:15:24	CJConnSock::Login 192.168.0.89,3321,admin,admin begin
+2016-06-21 18:15:24	CJConnSock::Login end success
+2016-06-21 18:15:24	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:15:57 --------
+2016-06-21 18:15:57	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:15:57	Success new lpConn:0053C398 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-21 18:15:57	CJConnSock::Login 192.168.0.89,3321,admin,admin begin
+2016-06-21 18:15:57	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:16:08 --------
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:16:28 --------
+2016-06-21 18:16:28	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:16:35	Success new lpConn:009E0078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 18:16:35	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 18:16:35	CJConnSock::Login end success
+2016-06-21 18:16:35	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:16:35	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+2016-06-21 18:16:36	Success new lpConn:00A228C8 lpszIP: iDevPort:-858993460 m_iID:2
+2016-06-21 18:16:36	CJConnSock::Login ,-858993460,, begin
+2016-06-21 18:16:36	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:16:42 --------
+2016-06-21 18:16:42	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:16:42	Success new lpConn:01F1C398 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 18:16:42	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 18:16:42	CJConnSock::Login end success
+2016-06-21 18:16:42	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:16:42	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+2016-06-21 18:16:42	Success new lpConn:01EE2E70 lpszIP: iDevPort:-858993460 m_iID:2
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:16:49 --------
+2016-06-21 18:16:49	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:16:49	Success new lpConn:0037C398 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 18:16:49	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 18:16:49	CJConnSock::Login end success
+2016-06-21 18:16:49	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:16:49	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+2016-06-21 18:16:49	Success new lpConn:00502E70 lpszIP: iDevPort:-858993460 m_iID:2
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:16:52 --------
+2016-06-21 18:16:52	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:16:52	Success new lpConn:0200C398 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 18:16:52	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 18:16:52	CJConnSock::Login end success
+2016-06-21 18:16:52	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:16:52	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+2016-06-21 18:16:52	Success new lpConn:020F2E70 lpszIP: iDevPort:-858993460 m_iID:2
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:23:54 --------
+2016-06-21 18:23:54	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:23:54	Success new lpConn:005A0078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 18:23:54	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 18:23:54	CJConnSock::Login end success
+2016-06-21 18:23:54	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:23:57	CJConnJPF(192.168.0.67)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-21 18:23:57	try-catch CJConnect::CallEventThread 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:24:03 --------
+2016-06-21 18:24:03	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:24:03	Success new lpConn:00740078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 18:24:03	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 18:24:03	CJConnSock::Login end success
+2016-06-21 18:24:03	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:24:06	CJConnJPF(192.168.0.67)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-21 18:24:06	try-catch CJConnect::CallEventThread 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:25:57 --------
+2016-06-21 18:25:57	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:25:57	Success new lpConn:01E70078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 18:25:57	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 18:25:57	CJConnSock::Login end success
+2016-06-21 18:25:57	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:26:00	CJConnJPF(192.168.0.67)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-21 18:26:00	try-catch CJConnect::CallEventThread 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:26:30 --------
+2016-06-21 18:26:30	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:26:30	Success new lpConn:02000078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-21 18:26:30	CJConnSock::Login ,-858993460,, begin
+2016-06-21 18:26:30	CJConnSock::Login end success
+2016-06-21 18:26:30	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:26:45	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-21 18:26:45	try-catch CJConnect::CallEventThread 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:26:58 --------
+2016-06-21 18:26:58	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:26:58	Success new lpConn:00520078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-21 18:26:58	CJConnSock::Login ,-858993460,, begin
+2016-06-21 18:26:58	CJConnSock::Login end success
+2016-06-21 18:26:58	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:27:13	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-21 18:27:13	try-catch CJConnect::CallEventThread 
+2016-06-21 18:27:28	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-21 18:27:28	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:27:42 --------
+2016-06-21 18:27:42	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:27:42	Success new lpConn:005AC398 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-21 18:27:42	CJConnSock::Login ,-858993460,, begin
+2016-06-21 18:27:42	CJConnSock::Login end success
+2016-06-21 18:27:42	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:27:57	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-21 18:27:57	try-catch CJConnect::CallEventThread 
+2016-06-21 18:28:12	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-21 18:28:12	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:28:27	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-21 18:28:42	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-21 18:28:42	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:28:49 --------
+2016-06-21 18:28:49	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:28:49	Success new lpConn:001E0078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-21 18:28:49	CJConnSock::Login ,-858993460,, begin
+2016-06-21 18:28:49	CJConnSock::Login end success
+2016-06-21 18:28:49	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:29:04	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-21 18:29:04	try-catch CJConnect::CallEventThread 
+2016-06-21 18:29:19	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-21 18:29:19	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:29:28 --------
+2016-06-21 18:29:28	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:29:28	Success new lpConn:00270078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-21 18:29:28	CJConnSock::Login ,-858993460,, begin
+2016-06-21 18:29:28	CJConnSock::Login end success
+2016-06-21 18:29:30	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:29:31	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-21 18:29:32	try-catch CJConnect::CallEventThread 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:29:47 --------
+2016-06-21 18:29:47	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:29:47	Success new lpConn:00520078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-21 18:29:47	CJConnSock::Login ,-858993460,, begin
+2016-06-21 18:29:47	CJConnSock::Login end success
+2016-06-21 18:29:47	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:29:50	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-21 18:30:05	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-21 18:30:08	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:30:08	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-21 18:30:23	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-21 18:30:25	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:30:27	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-21 18:30:42	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-21 18:30:42	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:31:26 --------
+2016-06-21 18:31:26	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:31:26	Success new lpConn:008C0078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-21 18:31:26	CJConnSock::Login ,-858993460,, begin
+2016-06-21 18:31:26	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:31:26	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:31:37 --------
+2016-06-21 18:31:37	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:31:37	Success new lpConn:009E0078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-21 18:31:37	CJConnSock::Login ,-858993460,, begin
+2016-06-21 18:31:37	CJConnSock::Login end success
+2016-06-21 18:31:37	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:31:43 --------
+2016-06-21 18:31:43	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:31:43	Success new lpConn:007CC398 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-21 18:31:43	CJConnSock::Login ,-858993460,, begin
+2016-06-21 18:31:43	CJConnSock::Login end success
+2016-06-21 18:31:43	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:33:53 --------
+2016-06-21 18:33:53	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:33:53	Success new lpConn:01FE0078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-21 18:33:53	CJConnSock::Login ,-858993460,, begin
+2016-06-21 18:33:53	CJConnSock::Login end success
+2016-06-21 18:33:53	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:34:14 --------
+2016-06-21 18:34:14	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:34:14	Success new lpConn:002C0078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 18:34:14	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 18:34:14	CJConnSock::Login end success
+2016-06-21 18:34:14	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:34:14	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+2016-06-21 18:34:15	Success new lpConn:003028C8 lpszIP: iDevPort:-858993460 m_iID:2
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:34:20 --------
+2016-06-21 18:34:20	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:34:20	Success new lpConn:00D4C398 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 18:34:20	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 18:34:20	CJConnSock::Login end success
+2016-06-21 18:34:20	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:34:20	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+2016-06-21 18:34:20	Success new lpConn:001F2E70 lpszIP: iDevPort:-858993460 m_iID:2
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:36:12 --------
+2016-06-21 18:36:12	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:37:43	Success new lpConn:009A0078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 18:37:43	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 18:37:43	CJConnSock::Login end success
+2016-06-21 18:37:43	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:56:09 --------
+2016-06-21 18:56:09	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:56:10	Success new lpConn:001F0078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 18:56:10	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 18:56:10	CJConnSock::Login end success
+2016-06-21 18:56:11	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:56:11	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+2016-06-21 18:56:14	Success new lpConn:002328C8 lpszIP: iDevPort:-858993460 m_iID:2
+2016-06-21 18:56:14	CJConnSock::Login ,-858993460,, begin
+2016-06-21 18:56:14	CJConnSock::Login end success
+2016-06-21 18:56:16	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:56:30 --------
+2016-06-21 18:56:30	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:56:32	Success new lpConn:004A0078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 18:56:32	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 18:56:32	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:56:33	CJConnSock::Login end success
+2016-06-21 18:56:34	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+2016-06-21 18:57:15	CJConnJPF(192.168.0.67)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-21 18:57:21	Success new lpConn:004E28C8 lpszIP: iDevPort:-858993460 m_iID:2
+2016-06-21 18:57:21	CJConnSock::Login ,-858993460,, begin
+2016-06-21 18:57:21	CJConnSock::Login end success
+2016-06-21 18:57:22	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:57:29 --------
+2016-06-21 18:57:29	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:57:29	Success new lpConn:00630078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 18:57:29	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 18:57:29	CJConnSock::Login end success
+2016-06-21 18:57:29	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:57:29	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+2016-06-21 18:57:30	Success new lpConn:006728C8 lpszIP: iDevPort:-858993460 m_iID:2
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:59:02 --------
+2016-06-21 18:59:02	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:59:03	Success new lpConn:00970078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 18:59:03	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 18:59:03	CJConnSock::Login end success
+2016-06-21 18:59:03	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:59:03	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+2016-06-21 18:59:05	Success new lpConn:009B28C8 lpszIP: iDevPort:-858993460 m_iID:2
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:59:25 --------
+2016-06-21 18:59:25	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:59:25	Success new lpConn:00910078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 18:59:25	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 18:59:25	CJConnSock::Login end success
+2016-06-21 18:59:25	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:59:25	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+2016-06-21 18:59:28	Success new lpConn:009528C8 lpszIP: iDevPort:-858993460 m_iID:2
+2016-06-21 18:59:28	CJConnSock::Login ,-858993460,, begin
+2016-06-21 18:59:28	CJConnSock::Login end success
+2016-06-21 18:59:29	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 18:59:31 --------
+2016-06-21 18:59:31	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 18:59:31	Success new lpConn:004B0078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 18:59:31	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 18:59:31	CJConnSock::Login end success
+2016-06-21 18:59:31	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 18:59:31	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+2016-06-21 18:59:32	Success new lpConn:004F28C8 lpszIP: iDevPort:-858993460 m_iID:2
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 19:00:11 --------
+2016-06-21 19:00:11	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 19:00:11	Success new lpConn:02000078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-21 19:00:11	CJConnSock::Login ,-858993460,admin,admin begin
+2016-06-21 19:00:11	CJConnSock::Login end success
+2016-06-21 19:00:11	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 19:01:04 --------
+2016-06-21 19:01:04	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 19:01:07	Success new lpConn:00900078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-21 19:01:07	CJConnSock::Login ,-858993460,admin,admin begin
+2016-06-21 19:01:07	CJConnSock::Login end success
+2016-06-21 19:01:09	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 19:01:10	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 19:02:01 --------
+2016-06-21 19:02:01	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 19:02:13	Success new lpConn:009D0078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-21 19:02:13	CJConnSock::Login ,-858993460,admin,admin begin
+2016-06-21 19:02:13	CJConnSock::Login end success
+2016-06-21 19:02:13	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 19:02:23 --------
+2016-06-21 19:02:23	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 19:02:54 --------
+2016-06-21 19:02:54	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 19:03:21 --------
+2016-06-21 19:03:21	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 19:03:46	Success new lpConn:00850078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-21 19:03:46	CJConnSock::Login ,-858993460,admin,admin begin
+2016-06-21 19:03:46	CJConnSock::Login end success
+2016-06-21 19:03:52	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 19:03:52	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-21 19:04:07	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-21 19:04:07	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 19:04:22	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-21 19:04:37	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-21 19:04:37	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 19:04:52	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-21 19:05:07	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-21 19:05:07	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 19:05:18 --------
+2016-06-21 19:05:18	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 19:05:23	Success new lpConn:00600078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-21 19:05:23	CJConnSock::Login ,-858993460,admin,admin begin
+2016-06-21 19:05:23	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 19:05:23	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 19:05:57 --------
+2016-06-21 19:05:57	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 19:06:00	Success new lpConn:00900078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 19:06:00	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 19:06:00	CJConnSock::Login end success
+2016-06-21 19:06:00	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 19:06:00	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+2016-06-21 19:06:05	Success new lpConn:009428C8 lpszIP: iDevPort:-858993460 m_iID:2
+2016-06-21 19:06:05	CJConnSock::Login ,-858993460,admin,admin begin
+2016-06-21 19:06:05	CJConnSock::Login end success
+2016-06-21 19:06:05	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 19:06:15 --------
+2016-06-21 19:06:15	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 19:06:15	Success new lpConn:0015C398 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 19:06:15	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 19:06:15	CJConnSock::Login end success
+2016-06-21 19:06:15	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 19:06:15	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+2016-06-21 19:06:15	Success new lpConn:00AA2E70 lpszIP: iDevPort:-858993460 m_iID:2
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 19:06:44 --------
+2016-06-21 19:06:44	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 19:06:51	Success new lpConn:02070078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 19:06:51	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 19:06:51	CJConnSock::Login end success
+2016-06-21 19:06:51	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 19:06:55 --------
+2016-06-21 19:06:55	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 19:06:55	Success new lpConn:00ADC398 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 19:06:55	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 19:06:55	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 19:07:25 --------
+2016-06-21 19:07:25	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 19:07:26	Success new lpConn:00B40078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 19:07:26	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 19:07:26	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 19:12:44 --------
+2016-06-21 19:12:44	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 19:12:48	Success new lpConn:00590078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 19:12:48	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 19:12:48	CJConnSock::Login end success
+2016-06-21 19:12:48	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 19:15:16 --------
+2016-06-21 19:15:16	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 19:15:16	Success new lpConn:004E0078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 19:15:16	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 19:15:16	CJConnSock::Login end success
+2016-06-21 19:15:16	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 19:15:16	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 19:17:37 --------
+2016-06-21 19:17:37	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 19:17:37	Success new lpConn:00820078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 19:17:37	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 19:17:37	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 19:17:40 --------
+2016-06-21 19:17:40	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 19:17:40	Success new lpConn:00220498 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 19:17:40	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 19:17:40	CJConnSock::Login end success
