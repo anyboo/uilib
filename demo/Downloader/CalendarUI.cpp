@@ -2,6 +2,7 @@
 #include "CalendarUI.h"
 
 CalendarUI::CalendarUI()
+:m_bTag(true)
 {
 	
 }
@@ -40,14 +41,26 @@ void CalendarUI::Notify(TNotifyUI& msg)
 {
 	if (msg.sType == DUI_MSGTYPE_CLICK)
 	{
-		Close();
+		STDSTRING btnName = msg.pSender->GetName();
+		STDSTRING strTag(_T("Button"));
+		int iRet = btnName.compare(0, 6, strTag);
+		if (iRet == 0){
+			Close();
+		}
+		if (btnName == _T("Add_Year")){
+			m_sysTime.wYear = m_sysTime.wYear + 1;
+			DrawCalendar(m_sysTime);
+		}
+		if (btnName == _T("Sub_Year")){
+			m_sysTime.wYear = m_sysTime.wYear - 1;
+			DrawCalendar(m_sysTime);
+		}
 	}
-	if (bTag)
-	{
-		CComboUI* Comb = static_cast<CComboUI*>(m_PaintManager.FindControl(_T("CB_month")));
-		m_PrevMonth = Comb->GetCurSel() + 1;
+	if (m_bTag)
+	{	
 		OnPrepare();
-		bTag = false;
+		m_PrevMonth = m_sysTime.wMonth;
+		m_bTag = false;
 	}
 	if (msg.sType == DUI_MSGTYPE_ITEMSELECT && msg.pSender->GetName() == _T("CB_month"))
 	{
@@ -63,11 +76,6 @@ void CalendarUI::Notify(TNotifyUI& msg)
 		}
 		m_PrevMonth = newmonth;		
 	}
-	if (msg.sType == DUI_MSGTYPE_KILLFOCUS && msg.pSender->GetName() == _T("InputYear"))
-	{
-		
-		int a = 0;
-	}
 	WindowImplBase::Notify(msg);
 }
 
@@ -81,51 +89,6 @@ void CalendarUI::OnPrepare()
 	::GetLocalTime(&m_sysTime);
 	DrawCalendar(m_sysTime);
 }
-
-//void Notify(TNotifyUI& msg)
-//{
-//	if (msg.sType == _T("windowinit")) OnPrepare();
-//	else if (msg.sType == _T("return"))
-//	{
-//		m_sysTime.wYear = SetTxtYear(0);
-//		m_sysTime.wMonth = GetCmbMonth();
-//		DrawCalendar(m_sysTime);
-//	}
-//	else if (msg.sType == _T("click"))
-//	{
-//		CControlUI* pOne = static_cast<CControlUI*>(m_pm.FindControl(msg.ptMouse));
-//		if (_tcsicmp(pOne->GetClass(), _T("ButtonUI")) == 0)
-//		{
-//			//上一月
-//			if (_tcsicmp(pOne->GetName(), _T("BTN_UP_MONTH")) == 0)
-//			{
-//				m_sysTime.wMonth = m_sysTime.wMonth - 1 == 0 ? 12 : m_sysTime.wMonth - 1;
-//				DrawCalendar(m_sysTime);
-//			}
-//			//上一年
-//			else if (_tcsicmp(pOne->GetName(), _T("BTN_UP_YEAR")) == 0)
-//			{
-//				m_sysTime.wYear = SetTxtYear(-1);
-//				m_sysTime.wMonth = GetCmbMonth();
-//				DrawCalendar(m_sysTime);
-//			}
-//			//下一年
-//			else if (_tcsicmp(pOne->GetName(), _T("BTN_DOWN_YEAR")) == 0)
-//			{
-//				m_sysTime.wYear = SetTxtYear(1);
-//				m_sysTime.wMonth = GetCmbMonth();
-//				DrawCalendar(m_sysTime);
-//			}
-//		}
-//	}
-//	else if (msg.sType == _T("itemselect")) {
-//		if (_tcsicmp(msg.pSender->GetName(), _T("CMB_MONTH")) == 0)
-//		{
-//			m_sysTime.wMonth = GetCmbMonth();
-//			DrawCalendar(m_sysTime);
-//		}
-//	}
-//}
 
 STDSTRING CalendarUI::intToString(int num)
 {
@@ -187,7 +150,7 @@ void CalendarUI::DrawCalendar(SYSTEMTIME m_sysTime)
 	itemLabe->Select(true);
 
 	cYear = intToString(m_sysTime.wYear);
-	CEditUI* edit_year = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("InputYear")));
+	CLabelUI* edit_year = static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("InputYear")));
 	edit_year->SetText(cYear.c_str());
 }
 
@@ -197,7 +160,6 @@ int CalendarUI::GetMonthDays(int iY, int iM)
 	int iTotalDay = 31;
 	if (iM == 2)
 	{
-		//闰年可以被4或者400整除 但是不能被100整除
 		if (iY % 4 == 0 && iY % 100 != 0 || iY % 400 == 0)
 			iTotalDay = 29;
 		else
@@ -213,21 +175,3 @@ int CalendarUI::GetDayOfWeek(SYSTEMTIME m_sysTime)
 	m_ctime.SetDate(m_sysTime.wYear, m_sysTime.wMonth, m_sysTime.wDay);
 	return m_ctime.GetDayOfWeek() - 1;
 }
-
-//int GetCmbMonth()
-//{
-//	CComboUI* pCmb = static_cast<CComboUI*>(m_pm.FindControl(_T("CMB_MONTH")));
-//	CDuiString cCurMonth = pCmb->GetText();
-//	return atoi(cCurMonth.Left(cCurMonth.GetLength() - 1));
-//}
-//
-//int SetTxtYear(int iY)
-//{
-//	CEditUI* pTxt = static_cast<CEditUI*>(m_pm.FindControl(_T("TXT_YEAR")));
-//	CDuiString cCurYear = pTxt->GetText();
-//	int iCurYear = 0;
-//	iCurYear = atoi(cCurYear) + iY;
-//	cCurYear.Format("%d", iCurYear);
-//	pTxt->SetText(cCurYear);
-//	return iCurYear;
-//}

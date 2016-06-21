@@ -80,6 +80,11 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 		}
 		if (msg.pSender->GetName() == _T("Search")){
 			SearchFiles();
+			ShowFileList();
+		}
+		if (msg.pSender->GetName() == _T("All"))
+		{
+			
 		}
 	}
 	WindowImplBase::Notify(msg);
@@ -90,6 +95,34 @@ void DownLoadWnd::SearchFiles()
 {
 	m_fileInfo.clear();
 	//search files
+}
+
+void DownLoadWnd::ShowFileList()
+{
+	
+	CListUI* pList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("domainlist")));
+	CListContainerElementUI* Sublist = new CListContainerElementUI;
+	CHorizontalLayoutUI* hLyt = new CHorizontalLayoutUI;
+	COptionUI* option = new COptionUI;
+	CLabelUI* Lab_Name = new CLabelUI;
+	int num = pList->GetCount();
+	pList->Add(Sublist);
+	Sublist->SetFixedHeight(30);
+	Sublist->Add(hLyt);
+	hLyt->Add(option);
+	hLyt->Add(Lab_Name);
+	option->SetName(_T("option1"));
+	option->SetNormalImage(_T("file='Downloader/quanxuan.png'"));
+	option->SetSelectedImage(_T("file='Downloader/quanxuanzhuangtai.png'"));
+	option->SetAttribute(_T("width"), _T("22"));
+	option->SetAttribute(_T("padding"), _T("20,4,2,4"));
+	Lab_Name->SetText(_T("123412"));
+	Lab_Name->SetFixedWidth(100);
+	
+	Lab_Name->SetAttribute(_T("font"), _T("2"));
+	Lab_Name->SetAttribute(_T("align"), _T("center"));
+
+
 }
 
 

@@ -26,7 +26,7 @@ public:
 	int GetMonthDays(int iY, int iM);
 
 private:
-	BOOL			bTag = true;
+	BOOL			m_bTag;
 	SYSTEMTIME		 m_sysTime;
 	COleDateTime	m_ctime;
 	int				 m_PrevMonth;

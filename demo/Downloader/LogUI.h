@@ -3,6 +3,8 @@
 #include <vector>
 
 #define  BT_SearchLog		(_T("search"))
+#define		BT_OnStartTime		(_T("DataTime1"))
+#define	 BT_OnStopTime		(_T("DataTime2"))
 
 typedef struct 
 {
@@ -42,10 +44,14 @@ public:
 	void InsertLogInfoToList();
 	void InsertCaseInfoToList();
 
+	void OnSelectStartTime(TNotifyUI& msg);
+	void OnSelectStopTime(TNotifyUI& msg);
 	void exportLog();
 protected:
 	vector<Log_Search>		m_LogInfo;
 	vector<Case_Search>		m_CaseInfo;
+	CListUI*				m_pList;
+	BOOL					m_bInit;
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();

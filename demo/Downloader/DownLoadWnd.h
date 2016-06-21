@@ -32,6 +32,7 @@ public:
 	void OnVideoLoginWnd(TNotifyUI& msg);
 
 	void SearchFiles();
+	void ShowFileList();
 
 protected:
 	vector<FILE_INFO>	m_fileInfo;

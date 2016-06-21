@@ -10,17 +10,17 @@
 			<HorizontalLayout width="320" height="110">
 				<Label text="开始时间：" width="100" height="46" font="1" align="center" padding="20,32,0,0" />
 				<HorizontalLayout width="180" height="46" bkimage="Downloader/szdk.png" padding="0,32,0,0">
-					<Button width="53" height="46" float="true" align="bottom" name="DataTime1" foreimage="file='Downloader/ical.png' dest='15,8,39,39'" pushedimage="file='Downloader/szdk.png'" normalimage="Downloader/szdk.png" hotimage="Downloader/cxbt.png"  />
-					<Control bkimage="file='Downloader/st.png'" width="2" padding="55,0,0,0"/>
-					<label name="DatatimeText1" text="2016-06-15" float="true" font="1" pos="56,0,180,46" align="center" />
+					<Button width="53" height="46" name="DataTime1" padding="1,0,0,0" foreimage="file='Downloader/ical.png' dest='15,8,39,39'" pushedimage="file='Downloader/szdk.png'" normalimage="Downloader/szdk.png" hotimage="Downloader/cxbt.png"  />
+					<Control bkimage="file='Downloader/st.png'" width="2"/>
+					<label name="DatatimeText1" text="2016-06-15" width="124" font="1" align="center" />
 				</HorizontalLayout>
 			</HorizontalLayout>
 			<HorizontalLayout width="320" height="110" >
 				<Label text="结束时间：" width="100" height="46" font="1" align="center" padding="20,32,0,0" />
 				<HorizontalLayout width="180" height="46" bkimage="Downloader/szdk.png" padding="0,32,0,0">
-					<Button pos="1,0,54,46" float="true" align="bottom" name="DataTime2" foreimage="file='Downloader/ical.png' dest='15,8,39,39'" pushedimage="file='Downloader/szdk.png'" normalimage="Downloader/szdk.png" hotimage="Downloader/cxbt.png"  />
-					<Control bkimage="file='Downloader/st.png'" width="2" padding="55,0,0,0"/>
-					<label name="DatatimeText2" text="2016-06-15" float="true" font="1" pos="56,0,180,46" align="center" />
+					<Button name="DataTime2" width="53" height="46" padding="1,0,0,0" foreimage="file='Downloader/ical.png' dest='15,8,39,39'" pushedimage="file='Downloader/szdk.png'" normalimage="Downloader/szdk.png" hotimage="Downloader/cxbt.png"  />
+					<Control bkimage="file='Downloader/st.png'" width="2" />
+					<label name="DatatimeText2" text="2016-06-15" font="1" width="124" align="center" />
 				</HorizontalLayout>
 			</HorizontalLayout>
 			<VerticalLayout width="120" height="80" padding="0,15,0,10" >
@@ -39,7 +39,7 @@
 			</HorizontalLayout>
 		</HorizontalLayout>
 		<VerticalLayout width="1024" height="598">
-			<List name="domainlist" padding="20,0,20,0" bkcolor="#FFFFFFFF" inset="0,0,0,0" itemshowhtml="true" vscrollbar="true" hscrollbar="true" headerbkimage="file='Downloader/lbl.png'" itemalign="center" itembkcolor="#FFE2DDDF" itemaltbk="true" hscrollbar="false" menu="true">
+			<List name="domainlist" width="980" padding="20,0,0,0" bkcolor="#FFFFFFFF" inset="0,0,0,0" itemshowhtml="true" vscrollbar="true" hscrollbar="true" headerbkimage="file='Downloader/lbl.png'" itemalign="center" itembkcolor="#FFE2DDDF" itemaltbk="true" hscrollbar="false" menu="true">
 				<ListHeader name="list_head" height="31" menu="true" width="980">
 					<ListHeaderItem name="Item1" text="时间" font="1" width="200" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
 					<ListHeaderItem name="Item2" text="操作" font="1" width="300" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>

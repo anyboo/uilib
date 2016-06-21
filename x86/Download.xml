@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window size="1024,768" caption="0,0,0,30" roundcorner="4,4" showdirty="false">
 	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+	<Font shared="true" id="2" name="宋体" size="16" bold="false" />
 	<VerticalLayout bkimage="file='Downloader/bsbj.png'" height="768" width="1024" >
 		<HorizontalLayout height="60" width="1024" bkimage="file='Downloader/beijing.png'">
 			<Button name="closebtn" width="38" height="38" padding="20,10,0,0" tooltip="返回" foreimage="file='Downloader/back.png'" hotimage="file='Downloader/hsbj.png'"/>
@@ -61,20 +62,20 @@
 				<VerticalLayout width="824" height="565" padding="0,13,0,0">
 					<List name="domainlist" padding="10,0,0,0" bkcolor="#FFFFFFFF" inset="0,0,0,0" itemshowhtml="true" vscrollbar="true" hscrollbar="true" headerbkimage="file='Downloader/lbl.png'" itemalign="center" itembkcolor="#FFE2DDDF" itemaltbk="true" hscrollbar="false" menu="true">
 						<ListHeader height="31" menu="true">
-						<option name="All" width="22" height="22" padding="20,5,2,4" normalimage="file='Downloader/quanxuan.png'" selectedimage="file='Downloader/quanxuanzhuangtai.png'"/>
-						<ListHeaderItem text="名称" font="1" width="100" hotimage="file='Downloader/lbl.png'" pushedimage="file='Downloader/lbl.png'" sepimage="file='Downloader/lbl.png'" sepwidth="1" dragable="false"/>
-						<Control bkimage="file='Downloader/st.png'" width="1" />
-						<ListHeaderItem text="大小" font="1" width="100" hotimage="file='Downloader/lbl.png'" pushedimage="file='Downloader/lbl.png'" sepimage="file='Downloader/lbl.png'" sepwidth="1" dragable="false"/>
-						<Control bkimage="file='Downloader/st.png'" width="1" />
-						<ListHeaderItem text="进度" font="1" width="160" hotimage="file='Downloader/lbl.png'" pushedimage="file='Downloader/lbl.png'" sepimage="file='Downloader/lbl.png'" sepwidth="1" dragable="false"/>
-						<Control bkimage="file='Downloader/st.png'" width="1" />
-						<ListHeaderItem text="速度" font="1" width="100" hotimage="file='Downloader/lbl.png'" pushedimage="file='Downloader/lbl.png'" sepimage="file='Downloader/lbl.png'" sepwidth="1" dragable="false"/>
-						<Control bkimage="file='Downloader/st.png'" width="1" />
-						<ListHeaderItem text="剩余时间" font="1" width="100" hotimage="file='Downloader/lbl.png'" pushedimage="file='Downloader/lbl.png'" sepimage="file='Downloader/lbl.png'" sepwidth="1" dragable="false"/>
-						<Control bkimage="file='Downloader/st.png'" width="1" />
-						<ListHeaderItem text="状态" font="1" width="100" hotimage="file='Downloader/lbl.png'" pushedimage="file='Downloader/lbl.png'" sepimage="file='Downloader/lbl.png'" sepwidth="1" dragable="false"/>
-						<Control bkimage="file='Downloader/st.png'" width="1" />
-						<ListHeaderItem text="操作" font="1" width="100" hotimage="file='Downloader/lbl.png'" pushedimage="file='Downloader/lbl.png'" sepimage="file='Downloader/lbl.png'" sepwidth="1" dragable="false"/>
+							<option name="All" width="22" height="22" padding="20,5,2,4" normalimage="file='Downloader/quanxuan.png'" selectedimage="file='Downloader/quanxuanzhuangtai.png'"/>
+							<ListHeaderItem text="名称" font="1" width="100" hotimage="file='Downloader/lbl.png'" pushedimage="file='Downloader/lbl.png'" sepimage="file='Downloader/lbl.png'" sepwidth="1" dragable="false"/>
+							<Control bkimage="file='Downloader/st.png'" width="1" />
+							<ListHeaderItem text="大小" font="1" width="100" hotimage="file='Downloader/lbl.png'" pushedimage="file='Downloader/lbl.png'" sepimage="file='Downloader/lbl.png'" sepwidth="1" dragable="false"/>
+							<Control bkimage="file='Downloader/st.png'" width="1" />
+							<ListHeaderItem text="进度" font="1" width="160" hotimage="file='Downloader/lbl.png'" pushedimage="file='Downloader/lbl.png'" sepimage="file='Downloader/lbl.png'" sepwidth="1" dragable="false"/>
+							<Control bkimage="file='Downloader/st.png'" width="1" />
+							<ListHeaderItem text="速度" font="1" width="100" hotimage="file='Downloader/lbl.png'" pushedimage="file='Downloader/lbl.png'" sepimage="file='Downloader/lbl.png'" sepwidth="1" dragable="false"/>
+							<Control bkimage="file='Downloader/st.png'" width="1" />
+							<ListHeaderItem text="剩余时间" font="1" width="100" hotimage="file='Downloader/lbl.png'" pushedimage="file='Downloader/lbl.png'" sepimage="file='Downloader/lbl.png'" sepwidth="1" dragable="false"/>
+							<Control bkimage="file='Downloader/st.png'" width="1" />
+							<ListHeaderItem text="状态" font="1" width="100" hotimage="file='Downloader/lbl.png'" pushedimage="file='Downloader/lbl.png'" sepimage="file='Downloader/lbl.png'" sepwidth="1" dragable="false"/>
+							<Control bkimage="file='Downloader/st.png'" width="1" />
+							<ListHeaderItem text="操作" font="1" width="100" hotimage="file='Downloader/lbl.png'" pushedimage="file='Downloader/lbl.png'" sepimage="file='Downloader/lbl.png'" sepwidth="1" dragable="false"/>
 						</ListHeader>
 					</List>
 				</VerticalLayout>

@@ -4,7 +4,7 @@
 	<Font shared="true" id="2" name="微软雅黑" size="16" bold="false" />
 	<VerticalLayout bkimage="file='Downloader/beijing.png'" height="380" width="350">
 		<HorizontalLayout width="350" height="40" >
-			<ComboBox name="CB_month" width="80" height="30" hotimage="file='Downloader/hsbj.png'" padding="80,6,0,0" itemlinecolor="0x45111111" itemfont="1" itemalign="center" dropboxsize="0,350" bordercolor="0x12345678" bordersize="1" bkimage="file='Downloader/hsbj.png'" itembkimage="Downloader/bsbj.png" itemhotimage="file='Downloader/hsbj.png'">
+			<ComboBox name="CB_month" width="80" height="30" hotimage="file='Downloader/hsbj.png'" padding="80,5,0,0" itemlinecolor="0x45111111" itemfont="1" itemalign="center" dropboxsize="0,350" bordercolor="0x12345678" bordersize="1" bkimage="file='Downloader/hsbj.png'" itembkimage="Downloader/bsbj.png" itemhotimage="file='Downloader/hsbj.png'">
 				<ListLabelElement name="Item1" userdata="1" text="一月" selected="true"/>
 				<ListLabelElement name="Item2" userdata="2" text="二月" />
 				<ListLabelElement name="Item3" userdata="3" text="三月" />
@@ -18,7 +18,13 @@
 				<ListLabelElement name="Item11" userdata="11" text="十一月" />
 				<ListLabelElement name="Item12" userdata="12" text="十二月" />
 			</ComboBox>
-			<RichEdit name="InputYear" width="80" height="30" align="center" multiline="false" inset="0,4,0,0" padding="10,6,0,0" vscrollbar="true" bordercolor="0x12345678" bordersize="1" font="1" text="2016" bkimage="file='Downloader/hsbj.png'" />
+			<HorizontalLayout width="80" height="32" bordercolor="0x12345678" bordersize="1" padding="20,5,0,0">
+				<Label name="InputYear" width="62" height="30" padding="1,1,0,1" font="1" bkimage="file='Downloader/hsbj.png'"/>
+				<VerticalLayout>
+					<Button name="Add_Year" width="15" height="15" padding="0,1,1,0" normalimage="file='Downloader/scrollbar.png' source='0,0,16,16'" pushedimage="file='Downloader/scrollbar.png' source='32,0,48,16'" />
+					<Button name="Sub_Year" width="15" height="15" padding="0,0,1,1" normalimage="file='Downloader/scrollbar.png' source='0,32,16,48'" pushedimage="file='Downloader/scrollbar.png' source='32,32,48,48'" />
+				</VerticalLayout>
+			</HorizontalLayout>
 		</HorizontalLayout>
 		<HorizontalLayout height="40" width="350" bkcolor="0x12345678">
 			<Label text="周日" font="1" width="50" align="center" textcolor="#FFFF0000"/>
