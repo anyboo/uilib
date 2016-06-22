@@ -36,6 +36,15 @@
     <ClInclude Include="MyVendor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DH_Head.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DHVendor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestWindows.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -48,6 +57,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MyVendor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DHVendor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestWindows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
