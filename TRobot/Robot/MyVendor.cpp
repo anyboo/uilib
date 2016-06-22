@@ -55,21 +55,21 @@ void MyVendor::PlayVideo(const std::string& filename)
 #include "catch.hpp"
 TEST_CASE_METHOD(MyVendor, "Init SDK","[Init]")
 {
-	REQUIRE_THROWS(Init("127.0.0.1", 3000));
+	REQUIRE_NOTHROW(Init("127.0.0.1", 3000));
 	REQUIRE(handle != nullptr);
 }
 
 TEST_CASE_METHOD(MyVendor, "Login Device", "[Login]")
 {
-	REQUIRE_THROWS(Login("user", "password"));
+	REQUIRE_NOTHROW(Login("user", "password"));
 }
 
 TEST_CASE_METHOD(MyVendor, "Logout Device", "[Logout]")
 {
-	REQUIRE_THROWS(Logout());
+	REQUIRE_NOTHROW(Logout());
 }
 
 TEST_CASE_METHOD(MyVendor, "Search all videos from device", "[SearchAll]")
 {
-	REQUIRE_THROWS(SearchAll());
+	REQUIRE_NOTHROW(SearchAll());
 }
