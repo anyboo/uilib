@@ -57,19 +57,7 @@ TEST_CASE_METHOD(MyVendor, "Init SDK","[Init]")
 {
 	REQUIRE_NOTHROW(Init("127.0.0.1", 3000));
 	REQUIRE(handle != nullptr);
-}
-
-TEST_CASE_METHOD(MyVendor, "Login Device", "[Login]")
-{
 	REQUIRE_NOTHROW(Login("user", "password"));
-}
-
-TEST_CASE_METHOD(MyVendor, "Logout Device", "[Logout]")
-{
-	REQUIRE_NOTHROW(Logout());
-}
-
-TEST_CASE_METHOD(MyVendor, "Search all videos from device", "[SearchAll]")
-{
 	REQUIRE_NOTHROW(SearchAll());
+	REQUIRE_NOTHROW(Logout());
 }
