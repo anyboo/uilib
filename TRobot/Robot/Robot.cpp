@@ -10,7 +10,7 @@ TEST_CASE("This is a demo", "[demo]")
 {
 	SECTION("Test login the device")
 	{
-		MyVendor vendor;
+
 	}
 
 	SECTION("Test Search videos from the device")

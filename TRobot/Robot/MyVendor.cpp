@@ -32,22 +32,37 @@ void MyVendor::SearchAll()
 
 }
 
-void MyVendor::SearchByTime(const std::time_t& start, const std::time_t& end)
+void MyVendor::Search(const size_t channel, const time_range& range)
 {
 
 }
 
-void MyVendor::DownloadByTime(const std::time_t& start, const std::time_t& end)
+void MyVendor::Download(const size_t channel, const time_range& range)
 {
 
 }
 
-void MyVendor::DownloadByName(const std::string& filename)
+void MyVendor::Download(const size_t channel, const std::string& filename)
 {
 
 }
 
-void MyVendor::PlayVideo(const std::string& filename)
+void MyVendor::PlayVideo(const size_t channel, const time_range& range)
+{
+
+}
+
+void MyVendor::PlayVideo(const size_t channel, const std::string& filename)
+{
+
+}
+
+void MyVendor::SetDownloadPath(const std::string& Root)
+{
+
+}
+
+void MyVendor::throwException()
 {
 
 }
