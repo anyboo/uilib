@@ -8,14 +8,23 @@ public:
 	CJxjVendor();
 	~CJxjVendor();
 
-	virtual void Init(const std::string& ip, size_t port);
-	virtual void Login(const std::string& user, const std::string& password);
-	virtual void Logout();
-	virtual void SearchAll();
-	virtual void SearchByTime(const std::time_t& time);
-	virtual void DownloadByTime(const std::time_t& time);
-	virtual void DownloadByName(const std::string& filename);
-	virtual void PlayVideo(const std::string& filename);
+	//virtual void Init(const std::string& ip, size_t port);
+	//virtual void Login(const std::string& user, const std::string& password);
+	//virtual void Logout();
+	//virtual void SearchAll();
+	//virtual void SearchByTime(const std::time_t& time);
+	//virtual void DownloadByTime(const std::time_t& time);
+	//virtual void DownloadByName(const std::string& filename);
+	//virtual void PlayVideo(const std::string& filename);
+
+	virtual void Init(const std::string& ip, size_t port) = 0;
+	virtual void Login(const std::string& user, const std::string& password) = 0;
+	virtual void Logout() = 0;
+	virtual void SearchAll() = 0;
+	virtual void SearchByTime(const std::time_t& start, const std::time_t& end) = 0;
+	virtual void DownloadByTime(const std::time_t& start, const std::time_t& end) = 0;
+	virtual void DownloadByName(const std::string& filename) = 0;
+	virtual void PlayVideo(const std::string& filename) = 0;
 
 protected:
 	static int WINAPI ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, void* pEventData, int iDataLen, void* pUserParam);

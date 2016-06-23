@@ -104,12 +104,11 @@ void CJxjVendor::SearchAll()
 		return;
 	}
 }
-
-void CJxjVendor::SearchByTime(const std::time_t& time)
+void CJxjVendor::SearchByTime(const std::time_t& start, const std::time_t& end)
 {
 }
 
-void CJxjVendor::DownloadByTime(const std::time_t& time)
+void CJxjVendor::DownloadByTime(const std::time_t& start, const std::time_t& end)
 {
 }
 
