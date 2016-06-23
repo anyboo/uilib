@@ -1,24 +1,39 @@
 #include "stdafx.h"
 #include "JxjVendor.h"
 
-int gNVRChn = 0;
-bool CJxjVendor::m_bIsLoginOk = false;
 eErrCode CJxjVendor::m_errCode = Err_No;
+long CJxjVendor::m_lDownloadHandle = -1;
+long CJxjVendor::m_lDownLoadStartTime = 0;
+long CJxjVendor::m_lDownLoadTotalTime = 0;
+int CJxjVendor::g_iDownLoadPos = 0;
+
+time_t gTimeStart = 1466352000; // 2016-6-20 00:00:00
+//time_t gTimeStart = 1434729600; // 2015-6-20 00:00:00
+time_t gTimeEnd = 1466697599; // 2016-6-23 23:59:59
 
 CJxjVendor::CJxjVendor()
 {
 	// Init Param
-	m_iBeginNode = 0;
-	m_iEndNode = 23;
-	m_iSsid = -1;
-	m_lLogin = -1;
+	/* Login */
+	m_lLoginHandle = -1;
+	m_ip = "";
+	m_port = 0;
+	m_NVRChn = 0;
 
+	/* Search */
+	m_recordType = TIMER_RECODE;
+	m_iBeginNode = 0;
+	m_iEndNode = J_SDK_MAX_STORE_LOG_SIZE - 1;
+	m_iSsid = -1;
+	
+	/* Download */
+	m_lRecHandle = -1;
+	
 	// Init JNetSdk
 	int iRet = JNetInit(NULL);
 	if (0 != iRet)
 	{
-		printf("JNetInit error!");
-		return;
+		throw std::exception("JNetInit Error!");
 	}
 }
 
@@ -30,7 +45,7 @@ CJxjVendor::~CJxjVendor()
 		iRet = JNetMBClose(m_hBhandle);
 		if( 0 != iRet )
 		{
-			printf("JNetMBClose error!");
+			throw std::exception("JNetMBClose Error!");
 		}
 	}
 }
@@ -43,7 +58,9 @@ void CJxjVendor::Init(const std::string& ip, size_t port)
 
 void CJxjVendor::Login(const std::string& user, const std::string& password)
 {
-	JNetLogin(m_ip.c_str(), m_port, user.c_str(), password.c_str(), 10, ConnEventCB, NULL, JNET_PRO_T_JPF, m_lLogin, NULL);
+	m_errCode = Err_No;
+
+	JNetLogin(m_ip.c_str(), m_port, user.c_str(), password.c_str(), 10, ConnEventCB, NULL, JNET_PRO_T_JPF, m_lLoginHandle, NULL);
 
 	while (m_errCode == Err_No)
 	{
@@ -54,6 +71,14 @@ void CJxjVendor::Login(const std::string& user, const std::string& password)
 	{
 		throw std::exception("Login Failed!");
 	}
+
+	//// Get Device Info
+	//JDeviceInfo deviceinfo;
+	//int iRet = JNetGetParam(m_lLoginHandle, m_NVRChn, PARAM_DEVICE_INFO, (char *)&deviceinfo, sizeof(deviceinfo), NULL, NULL);
+	//if (iRet != JNETErrSuccess)
+	//{
+	//	throw std::exception("Get Device Info Failed!");
+	//}
 
 	return;
 }
@@ -66,55 +91,68 @@ void CJxjVendor::Logout()
 		iRet = JNetMBClose(m_hBhandle);
 		if (0 != iRet)
 		{
-			printf("JNetMBClose error!");
+			throw std::exception("JNetMBClose Error!");
 		}
 	}
 }
 
 void CJxjVendor::SearchAll()
 {
-	//查询录像参数
-	ZeroMemory(&m_storeLog, sizeof(JStoreLog));
-	m_storeLog.rec_type = TIMER_RECODE;
-	m_storeLog.beg_node = m_iBeginNode;
-	m_storeLog.end_node = m_iEndNode;
-	m_storeLog.sess_id = m_iSsid;
-
-	m_storeLog.beg_time.year = 2016 - 1900;
-	m_storeLog.beg_time.month = 6;
-	m_storeLog.beg_time.date = 21;
-	m_storeLog.beg_time.weekday = 3;
-	m_storeLog.beg_time.hour = 0;
-	m_storeLog.beg_time.minute = 0;
-	m_storeLog.beg_time.second = 0;
-
-	m_storeLog.end_time.year = 2016 - 1900;
-	m_storeLog.end_time.month = 6;
-	m_storeLog.end_time.date = 21;
-	m_storeLog.end_time.weekday = 3;
-	m_storeLog.end_time.hour = 23;
-	m_storeLog.end_time.minute = 59;
-	m_storeLog.end_time.second = 59;
-
-	//获取设备能力集
-	int iRet = -1;
-	iRet = JNetGetParam(m_lLogin, gNVRChn, PARAM_STORE_LOG, (char *)&m_storeLog, sizeof(m_storeLog), NULL, NULL);
-	if (iRet != 0)
-	{
-		printf("Search Failed!");
-		return;
-	}
 }
 void CJxjVendor::SearchByTime(const std::time_t& start, const std::time_t& end)
 {
+	MakeStoreLog(m_storeLog, m_recordType,m_iBeginNode, m_iEndNode, m_iSsid, start, end);
+
+	// Get Search File Info
+	int iRet = -1;
+	iRet = JNetGetParam(m_lLoginHandle, m_NVRChn, PARAM_STORE_LOG, (char *)&m_storeLog, sizeof(m_storeLog), NULL, NULL);
+	if (iRet != 0)
+	{
+		throw std::exception("Search Error!");
+	}
+
+	if (m_storeLog.total_count > 0)
+	{
+		m_store = m_storeLog.store[0];
+	}
+	else
+	{
+		throw std::exception("Search No Files Error!");
+	}
 }
 
 void CJxjVendor::DownloadByTime(const std::time_t& start, const std::time_t& end)
 {
-	m_downloadHandle = JNetRecOpen4Time(m_lLogin, "", 0, 0, "20120101000000", "20120102235959", MANUAL_RECODE, 0, JRecDownload, this, m_lRecHandle);
-	if (m_downloadHandle > 0)
-	{
+	m_errCode = Err_No;
 
+	char cTimeStart[24];
+	char cTimeEnd[24];
+	memset(cTimeStart, 24, sizeof(cTimeStart));
+	memset(cTimeEnd, 24, sizeof(cTimeEnd));
+
+	struct tm ttime;
+	localtime_s(&ttime, &start);
+	strftime(cTimeStart, 24, "%Y%m%d%H%M%S", &ttime);
+	localtime_s(&ttime, &end);
+	strftime(cTimeEnd, 24, "%Y%m%d%H%M%S", &ttime);
+
+	string strTimeStart(cTimeStart);
+	string strTimeEnd(cTimeEnd);
+
+	m_lDownloadHandle = JNetRecOpen4Time(m_lLoginHandle, "", m_NVRChn, j_primary_stream, strTimeStart.c_str(), strTimeEnd.c_str(), m_recordType, IsPlay_Download, JRecDownload, this, m_lRecHandle);
+	if (m_lDownloadHandle > 0)
+	{
+		Sleep(1000);
+		JNetRecCtrl(m_lRecHandle, JNET_PB_CTRL_START, NULL);
+
+		while (m_errCode == Err_No)
+		{
+			::Sleep(100);
+		}
+	}
+	else
+	{
+		throw std::exception("Download File Error!");
 	}
 }
 
@@ -132,18 +170,15 @@ int CJxjVendor::ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, void*
 	{
 	case JNET_EET_LOGINING:		 //正在登陆
 	{
-									 //cout << "Logining" << endl;
 	}
 		break;
 	case JNET_EET_LOGIN_OK:		 //登录成功
 	{
-									 //cout << "LoginOK" << endl;
 									 m_errCode = Err_LoginSuccess;
 	}
 		break;
 	case JNET_EET_LOGIN_ERROR:   //登录失败
 	{
-									 cout << "LoginError" << endl;	
 									 m_errCode = Err_LoginFail;
 	}
 		break;
@@ -152,36 +187,74 @@ int CJxjVendor::ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, void*
 	return 0;
 }
 
+void CJxjVendor::MakeStoreLog(JStoreLog& storeLog, const JRecodeType recordType, 
+	const int beginNode, const int endNode, const int ssid, 
+	const std::time_t& start, const std::time_t& end)
+{
+	//查询录像参数
+	ZeroMemory(&storeLog, sizeof(JStoreLog));
+	storeLog.rec_type = recordType;
+	storeLog.beg_node = beginNode;
+	storeLog.end_node = endNode;
+	storeLog.sess_id = ssid;
+
+	struct tm ttimeStart;
+	struct tm ttimeEnd;
+	localtime_s(&ttimeStart, &start);
+	localtime_s(&ttimeEnd, &end);
+
+	storeLog.beg_time.year = (uint8_t)ttimeStart.tm_year;
+	storeLog.beg_time.month = (uint8_t)(ttimeStart.tm_mon + 1);
+	storeLog.beg_time.date = (uint8_t)ttimeStart.tm_mday;
+	storeLog.beg_time.weekday = (uint8_t)(ttimeStart.tm_wday + 1);
+	storeLog.beg_time.hour = (uint8_t)ttimeStart.tm_hour;
+	storeLog.beg_time.minute = (uint8_t)ttimeStart.tm_min;
+	storeLog.beg_time.second = (uint8_t)ttimeStart.tm_sec;
+
+	storeLog.end_time.year = (uint8_t)ttimeEnd.tm_year;
+	storeLog.end_time.month = (uint8_t)(ttimeEnd.tm_mon + 1);
+	storeLog.end_time.date = (uint8_t)ttimeEnd.tm_mday;
+	storeLog.end_time.weekday = (uint8_t)(ttimeEnd.tm_wday + 1);
+	storeLog.end_time.hour = (uint8_t)ttimeEnd.tm_hour;
+	storeLog.end_time.minute = (uint8_t)ttimeEnd.tm_min;
+	storeLog.end_time.second = (uint8_t)ttimeEnd.tm_sec;
+}
+
 int  CJxjVendor::JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam)
 {
 	if (pBuff)
 	{
 		j_frame_t *pFrame = (j_frame_t *)pBuff;
-		/*if (pDlg->m_lDownLoadStartTime == -1 && pFrame->frame_type != j_audio_frame)
+		if (m_lDownLoadStartTime == -1 && pFrame->frame_type != j_audio_frame)
 		{
-			pDlg->m_lDownLoadStartTime = pFrame->timestamp_sec;
+			m_lDownLoadStartTime = pFrame->timestamp_sec;
 		}
 
-
-		AVP_WriteRecFile(pDlg->m_lDownLoad, pBuff, dwRevLen, NULL, 0);
-
-		if (pDlg->m_lDownLoadTotalTime == 0)
+		if (m_lDownLoadTotalTime == 0)
 			return 0;
-		if (pFrame->timestamp_sec > 0 && pDlg->m_lDownLoadTotalTime > 0)
+		if (pFrame->timestamp_sec > 0 && m_lDownLoadTotalTime > 0)
 		{
-			g_PubData.g_iDownLoadPos = (pFrame->timestamp_sec - pDlg->m_lDownLoadStartTime) / (pDlg->m_lDownLoadTotalTime / 100);
-			TRACE("g_iDownLoadPos = %d , starttime = %ld, curtime = %ld, totaltime = %ld\r\n", g_PubData.g_iDownLoadPos, pDlg->m_lDownLoadStartTime, pFrame->timestamp_sec, pDlg->m_lDownLoadTotalTime);
+			g_iDownLoadPos = (pFrame->timestamp_sec - m_lDownLoadStartTime) / (m_lDownLoadTotalTime / 100);
+			//printf("g_idownloadpos = %d , starttime = %ld, curtime = %ld, totaltime = %ld\r\n", g_iDownLoadPos, m_lDownLoadStartTime, pFrame->timestamp_sec, m_lDownLoadTotalTime);
 		}
 
-		if ((pDlg->m_lDownLoadStartTime + pDlg->m_lDownLoadTotalTime) == pFrame->timestamp_sec)
+		if ((m_lDownLoadStartTime + m_lDownLoadTotalTime) == pFrame->timestamp_sec)
 		{
-
-			TRACE("DownLoad Success\r\n");
-			g_PubData.g_iDownLoadPos = 1000;
-			pDlg->CloseDownload();
-		}*/
+			g_iDownLoadPos = 1000;
+			m_errCode = Err_DownloadSuccess;
+			CloseDownload();
+		}
 	}
 	return 0;
+}
+
+void CJxjVendor::CloseDownload()
+{
+	if (m_lDownloadHandle)
+	{
+		JNetRecClose(m_lDownloadHandle);
+		m_lDownloadHandle = NULL;
+	}
 }
 
 #include "catch.hpp"
@@ -203,13 +276,21 @@ int  CJxjVendor::JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* 
 //{
 //	//REQUIRE_NOTHROW(Logout());
 //}
-//
-TEST_CASE_METHOD(CJxjVendor, "Search all videos from device", "[SearchAll]")
+
+TEST_CASE_METHOD(CJxjVendor, "Search videos by time_range from device", "[SearchByTime]")
 {
 	REQUIRE_NOTHROW(Init("192.168.0.89", 3321));
-	REQUIRE(handle != nullptr);
 
-	REQUIRE_NOTHROW(Login("", ""));
+	REQUIRE_NOTHROW(Login("admin", "admin"));
 
-	REQUIRE_NOTHROW(SearchAll());
+	REQUIRE_NOTHROW(SearchByTime(gTimeStart, gTimeEnd));
 }
+
+//TEST_CASE_METHOD(CJxjVendor, "Download by time range", "[DownloadByTime]")
+//{
+//	REQUIRE_NOTHROW(Init("192.168.0.89", 3321));
+//
+//	REQUIRE_NOTHROW(Login("admin", "admin"));
+//
+//	REQUIRE_NOTHROW(DownloadByTime(gTimeStart, gTimeEnd));
+//}
