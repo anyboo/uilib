@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="1024,768" caption="0,0,0,30" roundcorner="4,4" showdirty="false">
+	<Font shared="true" id="0" name="微软雅黑" size="30" bold="false" />
+	<VerticalLayout bkimage="file='Downloader/bg1.png'" height="765" >
+		<HorizontalLayout height="60" width="1024">
+			<Control width="45" height="45" padding="30,7,10,7"bkimage="Downloader/logo.png"/>
+			<Label text="视频高速下载器" textcolor="#FFFFFFFF" font="0" width="300" align="left"/>
+			<Button name="minbtn" width="30" height="30" padding="540,10,1,5" tooltip="最小化" normalimage="file='Downloader/reduce.png' source='0,90,30,120'" hotimage="file='Downloader/reduce.png' source='0,60,30,90'" />
+			<Button name="closebtn" width="30" height="30" padding="9,10,5,5" tooltip="关闭" normalimage="file='Downloader/close.png' source='0,90,30,120'" hotimage="file='Downloader/close.png' source='0,60,30,90'" />
+		</HorizontalLayout>
+		<Button name="download" float="true" pos="235,134,512,390" width="275" height="256" normalimage="file='Downloader/download_normal.png'" hotimage="file='Downloader/download_normal.png'" pushedimage="file='Downloader/download_normal.png"/>
+		<Button name="VideoPlay" float="true" pos="515,134,789,389" width="274" height="255" normalimage="file='Downloader/video_normal.png'" hotimage="file='Downloader/video_normal.png'" pushedimage="file='Downloader/video_normal.png"/>
+		<Button name="Log_manager" float="true" pos="235,393,512,649" width="274" height="254" normalimage="file='Downloader/log_normal.png'" hotimage="file='Downloader/log_normal.png'" pushedimage="file='Downloader/log_normal.png"/>
+		<Button name="Other_tools" float="true" pos="515,393,789,649" width="274" height="254" normalimage="file='Downloader/tool_normal.png'" hotimage="file='Downloader/tool_normal.png'" pushedimage="file='Downloader/tool_normal.png"/>
+		<Control float="true" pos="483,361,543,421" />
+	</VerticalLayout>
+</Window>
