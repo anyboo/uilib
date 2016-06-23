@@ -1633,3 +1633,21 @@
 2016-06-23 10:08:08	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
 2016-06-23 10:08:08	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
 2016-06-23 10:08:11	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:08:26	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:08:27	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:08:29	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:08:44	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:08:45	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:08:47	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:09:02	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:09:03	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:09:05	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:09:20	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:09:21	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:09:23	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:09:38	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:09:39	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:09:42	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:09:57	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:09:57	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:10:00	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
