@@ -11,7 +11,7 @@ TEST_CASE("This is a demo", "[demo]")
 {
 	SECTION("Test login the device")
 	{
-		MyVendor vendor;
+		//MyVendor vendor;
 		//CJxjVendor jxjVendor;
 	}
 

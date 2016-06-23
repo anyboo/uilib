@@ -3,7 +3,7 @@
 
 int gNVRChn = 0;
 bool CJxjVendor::m_bIsLoginOk = false;
-
+eErrCode CJxjVendor::m_errCode = Err_No;
 
 CJxjVendor::CJxjVendor()
 {
@@ -39,20 +39,21 @@ void CJxjVendor::Init(const std::string& ip, size_t port)
 {
 	m_ip = ip;
 	m_port = port;
-
-	Login("admin", "admin");
 }
 
 void CJxjVendor::Login(const std::string& user, const std::string& password)
 {
 	JNetLogin(m_ip.c_str(), m_port, user.c_str(), password.c_str(), 10, ConnEventCB, NULL, JNET_PRO_T_JPF, m_lLogin, NULL);
 
-	while (!m_bIsLoginOk)
+	while (m_errCode == Err_No)
 	{
 		::Sleep(100);
 	}
 
-	SearchAll();
+	if (m_errCode == Err_LoginFail)
+	{
+		throw std::exception("Login Failed!");
+	}
 
 	return;
 }
@@ -110,6 +111,11 @@ void CJxjVendor::SearchByTime(const std::time_t& start, const std::time_t& end)
 
 void CJxjVendor::DownloadByTime(const std::time_t& start, const std::time_t& end)
 {
+	m_downloadHandle = JNetRecOpen4Time(m_lLogin, "", 0, 0, "20120101000000", "20120102235959", MANUAL_RECODE, 0, JRecDownload, this, m_lRecHandle);
+	if (m_downloadHandle > 0)
+	{
+
+	}
 }
 
 void CJxjVendor::DownloadByName(const std::string& filename)
@@ -126,19 +132,19 @@ int CJxjVendor::ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, void*
 	{
 	case JNET_EET_LOGINING:		 //ÕýÔÚµÇÂ½
 	{
-									 cout << "Logining" << endl;
+									 //cout << "Logining" << endl;
 	}
 		break;
 	case JNET_EET_LOGIN_OK:		 //µÇÂ¼³É¹¦
 	{
-									 cout << "LoginOK" << endl;
-									 m_bIsLoginOk = true;								 
+									 //cout << "LoginOK" << endl;
+									 m_errCode = Err_LoginSuccess;
 	}
 		break;
 	case JNET_EET_LOGIN_ERROR:   //µÇÂ¼Ê§°Ü
 	{
-									 cout << "LoginError" << endl;
-									 throw std::exception("Login Error");
+									 cout << "LoginError" << endl;	
+									 m_errCode = Err_LoginFail;
 	}
 		break;
 	}
@@ -146,24 +152,64 @@ int CJxjVendor::ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, void*
 	return 0;
 }
 
+int  CJxjVendor::JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam)
+{
+	if (pBuff)
+	{
+		j_frame_t *pFrame = (j_frame_t *)pBuff;
+		/*if (pDlg->m_lDownLoadStartTime == -1 && pFrame->frame_type != j_audio_frame)
+		{
+			pDlg->m_lDownLoadStartTime = pFrame->timestamp_sec;
+		}
+
+
+		AVP_WriteRecFile(pDlg->m_lDownLoad, pBuff, dwRevLen, NULL, 0);
+
+		if (pDlg->m_lDownLoadTotalTime == 0)
+			return 0;
+		if (pFrame->timestamp_sec > 0 && pDlg->m_lDownLoadTotalTime > 0)
+		{
+			g_PubData.g_iDownLoadPos = (pFrame->timestamp_sec - pDlg->m_lDownLoadStartTime) / (pDlg->m_lDownLoadTotalTime / 100);
+			TRACE("g_iDownLoadPos = %d , starttime = %ld, curtime = %ld, totaltime = %ld\r\n", g_PubData.g_iDownLoadPos, pDlg->m_lDownLoadStartTime, pFrame->timestamp_sec, pDlg->m_lDownLoadTotalTime);
+		}
+
+		if ((pDlg->m_lDownLoadStartTime + pDlg->m_lDownLoadTotalTime) == pFrame->timestamp_sec)
+		{
+
+			TRACE("DownLoad Success\r\n");
+			g_PubData.g_iDownLoadPos = 1000;
+			pDlg->CloseDownload();
+		}*/
+	}
+	return 0;
+}
+
 #include "catch.hpp"
-TEST_CASE_METHOD(CJxjVendor, "Init SDK", "[Init]")
-{
-	REQUIRE_NOTHROW(Init("192.168.0.9", 3321));
-	REQUIRE(handle != nullptr);
-}
+//TEST_CASE_METHOD(CJxjVendor, "Init SDK", "[Init]")
+//{
+//	REQUIRE_NOTHROW(Init("192.168.0.89", 3321));
+//	REQUIRE(handle != nullptr);
+//}
 
-TEST_CASE_METHOD(CJxjVendor, "Login Device", "[Login]")
-{
-	//REQUIRE_NOTHROW(Login("", ""));
-}
+//TEST_CASE_METHOD(CJxjVendor, "Login Device", "[Login]")
+//{
+//	REQUIRE_NOTHROW(Init("192.168.0.89", 3321));
+//	REQUIRE(handle != nullptr);
+//
+//	REQUIRE_NOTHROW(Login("", ""));
+//}
 
-TEST_CASE_METHOD(CJxjVendor, "Logout Device", "[Logout]")
-{
-	//REQUIRE_NOTHROW(Logout());
-}
-
+//TEST_CASE_METHOD(CJxjVendor, "Logout Device", "[Logout]")
+//{
+//	//REQUIRE_NOTHROW(Logout());
+//}
+//
 TEST_CASE_METHOD(CJxjVendor, "Search all videos from device", "[SearchAll]")
 {
-	//REQUIRE_NOTHROW(SearchAll());
+	REQUIRE_NOTHROW(Init("192.168.0.89", 3321));
+	REQUIRE(handle != nullptr);
+
+	REQUIRE_NOTHROW(Login("", ""));
+
+	REQUIRE_NOTHROW(SearchAll());
 }
