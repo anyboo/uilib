@@ -28,11 +28,15 @@ public:
 	DUI_DECLARE_MESSAGE_MAP();
 	void OnSelectTimeType();
 	void OnSelectCalendar();
+	void OnSearchFileWnd();
 
+	STDSTRING intToString(int num);
 	void OnVideoLoginWnd(TNotifyUI& msg);
 
-	void SearchFiles();
+	BOOL SearchFiles();
 	void ShowFileList();
+
+	CListContainerElementUI* Add_FileInfoList(int n);
 
 protected:
 	vector<FILE_INFO>	m_fileInfo;

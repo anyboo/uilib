@@ -222,7 +222,7 @@ void CLogUI::CreateCaseList()
 
 void CLogUI::InsertLogInfoToList()
 {
-	m_pList->RemoveAll();
+	//m_pList->RemoveAll();
 	for (int i = 0; i < 10; i++)
 	{
 		CListTextElementUI* pListElement = new CListTextElementUI;
