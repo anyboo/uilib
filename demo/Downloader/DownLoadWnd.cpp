@@ -84,7 +84,8 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 		}
 		if (msg.pSender->GetName() == _T("All"))
 		{
-			
+			COptionUI* option = static_cast<COptionUI*>(m_PaintManager.FindControl(_T("option1")));
+			option->Selected(true);
 		}
 	}
 	WindowImplBase::Notify(msg);
@@ -107,6 +108,7 @@ void DownLoadWnd::ShowFileList()
 	CLabelUI* Lab_Name = new CLabelUI;
 	int num = pList->GetCount();
 	pList->Add(Sublist);
+	
 	Sublist->SetFixedHeight(30);
 	Sublist->Add(hLyt);
 	hLyt->Add(option);
