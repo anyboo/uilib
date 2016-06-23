@@ -11,6 +11,7 @@ CJxjVendor::CJxjVendor()
 	m_iBeginNode = 0;
 	m_iEndNode = 23;
 	m_iSsid = -1;
+	m_lLogin = -1;
 
 	// Init JNetSdk
 	int iRet = JNetInit(NULL);
@@ -44,15 +45,14 @@ void CJxjVendor::Init(const std::string& ip, size_t port)
 
 void CJxjVendor::Login(const std::string& user, const std::string& password)
 {
-	long lLogin = 0;
-	JNetLogin(m_ip.c_str(), m_port, user.c_str(), password.c_str(), 10, ConnEventCB, NULL, JNET_PRO_T_JPF, lLogin, NULL);
+	JNetLogin(m_ip.c_str(), m_port, user.c_str(), password.c_str(), 10, ConnEventCB, NULL, JNET_PRO_T_JPF, m_lLogin, NULL);
 
 	while (!m_bIsLoginOk)
 	{
 		::Sleep(100);
 	}
 
-	//SearchAll();
+	SearchAll();
 
 	return;
 }
@@ -95,9 +95,9 @@ void CJxjVendor::SearchAll()
 	m_storeLog.end_time.minute = 59;
 	m_storeLog.end_time.second = 59;
 
+	//获取设备能力集
 	int iRet = -1;
-	long lLogin = 0;
-	iRet = JNetGetParam(lLogin, gNVRChn, PARAM_STORE_LOG, (char *)&m_storeLog, sizeof(m_storeLog), NULL, NULL);
+	iRet = JNetGetParam(m_lLogin, gNVRChn, PARAM_STORE_LOG, (char *)&m_storeLog, sizeof(m_storeLog), NULL, NULL);
 	if (iRet != 0)
 	{
 		printf("Search Failed!");
@@ -132,13 +132,14 @@ int CJxjVendor::ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, void*
 		break;
 	case JNET_EET_LOGIN_OK:		 //登录成功
 	{
-									 cout << "OK" << endl;
-									 m_bIsLoginOk = true;
+									 cout << "LoginOK" << endl;
+									 m_bIsLoginOk = true;								 
 	}
 		break;
 	case JNET_EET_LOGIN_ERROR:   //登录失败
 	{
-									 cout << "Error" << endl;
+									 cout << "LoginError" << endl;
+									 throw std::exception("Login Error");
 	}
 		break;
 	}
@@ -149,13 +150,13 @@ int CJxjVendor::ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, void*
 #include "catch.hpp"
 TEST_CASE_METHOD(CJxjVendor, "Init SDK", "[Init]")
 {
-	REQUIRE_NOTHROW(Init("192.168.0.67", 3321));
+	REQUIRE_NOTHROW(Init("192.168.0.9", 3321));
 	REQUIRE(handle != nullptr);
 }
 
 TEST_CASE_METHOD(CJxjVendor, "Login Device", "[Login]")
 {
-	//REQUIRE_NOTHROW(Login("admin", "admin"));
+	//REQUIRE_NOTHROW(Login("", ""));
 }
 
 TEST_CASE_METHOD(CJxjVendor, "Logout Device", "[Logout]")

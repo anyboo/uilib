@@ -30,6 +30,7 @@ protected:
 	int	m_iBeginNode;
 	int	m_iEndNode;
 	int	m_iSsid;
+	long m_lLogin; // Handle of Login Device
 
 	void* handle;
 };

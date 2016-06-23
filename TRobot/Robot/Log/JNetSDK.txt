@@ -1264,3 +1264,363 @@
 2016-06-21 19:17:40	Success new lpConn:00220498 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
 2016-06-21 19:17:40	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
 2016-06-21 19:17:40	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 20:51:16 --------
+2016-06-21 20:51:16	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 20:51:16	Success new lpConn:00430078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 20:51:16	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 20:51:16	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 20:51:34 --------
+2016-06-21 20:51:34	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 20:51:34	Success new lpConn:00480078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 20:51:34	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 20:51:34	CJConnSock::Login end success
+2016-06-21 20:51:34	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 20:51:34	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 20:53:27 --------
+2016-06-21 20:53:27	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 20:53:27	Success new lpConn:01F70078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 20:53:27	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 20:53:27	CJConnSock::Login end success
+2016-06-21 20:53:27	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 20:53:27	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-21 20:55:39 --------
+2016-06-21 20:55:39	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-21 20:55:39	Success new lpConn:008A0078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-21 20:55:39	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-21 20:55:39	CJConnSock::Login end success
+2016-06-21 20:55:39	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-21 20:55:39	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-22 09:28:25 --------
+2016-06-22 09:28:25	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-22 09:28:25	Success new lpConn:004C0078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-22 09:28:25	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-22 09:28:25	CJConnSock::Login end success
+2016-06-22 09:28:25	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-22 09:28:25	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+2016-06-22 09:28:35	CJConnJPF(192.168.0.67)::OnSendGetParam:ip:192.168.0.67,chn:0,cmd:31,len=2152
+2016-06-22 09:28:35	CJConnSock::AddWaitTask iSeq:3 lpWaitData:0028DD64 iwaitDataLen:2152 hWaitEvent:000000E8 TaskSize:0
+2016-06-22 09:28:35	CJConnSock::FindWaitTask iSeq:3 success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-23 09:12:23 --------
+2016-06-23 09:12:23	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-23 09:12:23	Success new lpConn:01F10078 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-06-23 09:12:23	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-06-23 09:12:23	CJConnSock::Login end success
+2016-06-23 09:12:23	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 09:12:23	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+2016-06-23 09:12:27	CJConnJPF(192.168.0.67)::OnSendGetParam:ip:192.168.0.67,chn:0,cmd:31,len=2152
+2016-06-23 09:12:27	CJConnSock::AddWaitTask iSeq:2 lpWaitData:0015DB00 iwaitDataLen:2152 hWaitEvent:000000EC TaskSize:0
+2016-06-23 09:12:27	CJConnSock::FindWaitTask iSeq:2 success
+2016-06-23 09:12:27	CJConnJPF(192.168.0.67)::OnRetGetParam, Result:0 len:0 hWaitEvent:000000EC
+2016-06-23 09:12:27	CJConnSock::RemoveWaitTask iSeq:2 success, TaskSize:0
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-23 09:22:28 --------
+2016-06-23 09:22:28	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-23 09:22:28	Success new lpConn:01F50078 lpszIP:192.168.0.15 iDevPort:3321 m_iID:1
+2016-06-23 09:22:28	CJConnSock::Login 192.168.0.15,3321,admin,admin begin
+2016-06-23 09:22:28	CJConnSock::Login end success
+2016-06-23 09:22:28	CJAddrParse::AddTask devAddr:192.168.0.15 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-23 09:44:29 --------
+2016-06-23 09:44:29	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-23 09:44:29	Success new lpConn:004B0078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-23 09:44:29	CJConnSock::Login 192.168.0.89,3321,admin,admin begin
+2016-06-23 09:44:29	CJConnSock::Login end success
+2016-06-23 09:44:29	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 09:44:29	CJConnJPF(192.168.0.89)::OnSendLogin():192.168.0.89,3321
+2016-06-23 09:44:33	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:31,len=2152
+2016-06-23 09:44:33	CJConnSock::AddWaitTask iSeq:2 lpWaitData:0042E1D0 iwaitDataLen:2152 hWaitEvent:000000E8 TaskSize:0
+2016-06-23 09:44:33	CJConnSock::FindWaitTask iSeq:2 success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-23 09:44:42 --------
+2016-06-23 09:44:42	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-23 09:44:42	Success new lpConn:00960078 lpszIP:192.168.0.55 iDevPort:3321 m_iID:1
+2016-06-23 09:44:42	CJConnSock::Login 192.168.0.55,3321,admin,admin begin
+2016-06-23 09:44:42	CJConnSock::Login end success
+2016-06-23 09:44:42	CJAddrParse::AddTask devAddr:192.168.0.55 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-23 09:45:23 --------
+2016-06-23 09:45:23	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-23 09:45:23	Success new lpConn:008B0078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-23 09:45:23	CJConnSock::Login ,-858993460,admin,112233 begin
+2016-06-23 09:45:23	CJConnSock::Login end success
+2016-06-23 09:45:26	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 09:45:26	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 09:45:29	try-catch CJConnect::CallEventThread 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-23 09:45:46 --------
+2016-06-23 09:45:46	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-23 09:45:46	Success new lpConn:000BC398 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-23 09:45:46	CJConnSock::Login ,-858993460,admin,112233 begin
+2016-06-23 09:45:46	CJConnSock::Login end success
+2016-06-23 09:45:46	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-23 09:47:09 --------
+2016-06-23 09:47:09	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-23 09:47:09	Success new lpConn:00950078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-23 09:47:09	CJConnSock::Login ,-858993460,admin,admin begin
+2016-06-23 09:47:09	CJConnSock::Login end success
+2016-06-23 09:47:11	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 09:47:12	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 09:47:16	try-catch CJConnect::CallEventThread 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-23 09:47:22 --------
+2016-06-23 09:47:22	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-23 09:47:22	Success new lpConn:00A7C398 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-23 09:47:22	CJConnSock::Login ,-858993460,admin,admin begin
+2016-06-23 09:47:22	CJConnSock::Login end success
+2016-06-23 09:47:22	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-23 09:53:25 --------
+2016-06-23 09:53:25	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-23 09:53:25	Success new lpConn:02020078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-23 09:53:25	CJConnSock::Login ,-858993460,admin,admin begin
+2016-06-23 09:53:25	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-23 09:53:58 --------
+2016-06-23 09:53:58	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-23 09:53:58	Success new lpConn:01EE0078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-23 09:53:58	CJConnSock::Login ,-858993460,admin,admin begin
+2016-06-23 09:53:58	CJConnSock::Login end success
+2016-06-23 09:54:01	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 09:54:01	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-23 09:54:14 --------
+2016-06-23 09:54:14	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-23 09:54:14	Success new lpConn:0069C398 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-23 09:54:14	CJConnSock::Login ,-858993460,admin,admin begin
+2016-06-23 09:54:14	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-23 09:54:21 --------
+2016-06-23 09:54:21	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-23 09:54:21	Success new lpConn:00BEC398 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-23 09:54:21	CJConnSock::Login ,-858993460,admin,admin begin
+2016-06-23 09:54:21	CJConnSock::Login end success
+2016-06-23 09:54:21	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-23 09:55:13 --------
+2016-06-23 09:55:13	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-23 09:55:13	Success new lpConn:008C0078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-23 09:55:13	CJConnSock::Login ,-858993460,admin,admin begin
+2016-06-23 09:55:13	CJConnSock::Login end success
+2016-06-23 09:55:15	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 09:55:17	CJConnJPF()::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-23 09:55:36 --------
+2016-06-23 09:55:36	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-23 09:55:36	Success new lpConn:001DC398 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-23 09:55:36	CJConnSock::Login ,-858993460,admin,admin begin
+2016-06-23 09:55:36	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-23 09:55:40 --------
+2016-06-23 09:55:40	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-23 09:55:40	Success new lpConn:00470078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-23 09:55:40	CJConnSock::Login ,-858993460,admin,admin begin
+2016-06-23 09:55:40	CJConnSock::Login end success
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-23 09:55:57 --------
+2016-06-23 09:55:57	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-23 09:55:57	Success new lpConn:00590078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-23 09:55:57	CJConnSock::Login ,-858993460,, begin
+2016-06-23 09:55:57	CJConnSock::Login end success
+2016-06-23 09:55:57	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-23 09:56:21 --------
+2016-06-23 09:56:21	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-23 09:56:25	Success new lpConn:01F70078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-23 09:56:25	CJConnSock::Login ,-858993460,, begin
+2016-06-23 09:56:25	CJConnSock::Login end success
+2016-06-23 09:56:25	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-23 09:56:34 --------
+2016-06-23 09:56:34	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-23 09:56:38	Success new lpConn:00900078 lpszIP: iDevPort:-858993460 m_iID:1
+2016-06-23 09:56:38	CJConnSock::Login ,-858993460,, begin
+2016-06-23 09:56:38	CJConnSock::Login end success
+2016-06-23 09:56:38	CJAddrParse::AddTask devAddr: eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-23 09:57:25 --------
+2016-06-23 09:57:25	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-23 09:57:31	Success new lpConn:00930078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-23 09:57:31	CJConnSock::Login 192.168.0.89,3321,admin,admin begin
+2016-06-23 09:57:31	CJConnSock::Login end success
+2016-06-23 09:57:31	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 09:57:31	CJConnJPF(192.168.0.89)::OnSendLogin():192.168.0.89,3321
+2016-06-23 09:57:34	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:31,len=2152
+2016-06-23 09:57:34	CJConnSock::AddWaitTask iSeq:2 lpWaitData:003AE17C iwaitDataLen:2152 hWaitEvent:000000E8 TaskSize:0
+2016-06-23 09:57:34	CJConnSock::FindWaitTask iSeq:2 success
+2016-06-23 09:57:34	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:000000E8
+2016-06-23 09:57:34	CJConnSock::RemoveWaitTask iSeq:2 success, TaskSize:0
+2016-06-23 09:57:36	Success new lpConn:009728C8 lpszIP: iDevPort:-858993460 m_iID:2
+2016-06-23 09:57:36	CJConnSock::Login ,-858993460,, begin
+2016-06-23 09:57:36	CJConnSock::Login end success
+2016-06-23 09:57:36	CJConnJPF()::OnSendGetParam:ip:,chn:0,cmd:31,len=2152
+2016-06-23 09:57:36	CJConnSock::AddWaitTask iSeq:4 lpWaitData:003AE17C iwaitDataLen:2152 hWaitEvent:000000FC TaskSize:0
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-23 09:57:45 --------
+2016-06-23 09:57:45	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-23 09:57:47	Success new lpConn:02130078 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-06-23 09:57:47	CJConnSock::Login 192.168.0.89,3321,admin,admin begin
+2016-06-23 09:57:47	CJConnSock::Login end success
+2016-06-23 09:57:47	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 09:57:47	CJConnJPF(192.168.0.89)::OnSendLogin():192.168.0.89,3321
+2016-06-23 09:57:50	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:31,len=2152
+2016-06-23 09:57:50	CJConnSock::AddWaitTask iSeq:2 lpWaitData:0036DE84 iwaitDataLen:2152 hWaitEvent:000000E8 TaskSize:0
+2016-06-23 09:57:50	CJConnSock::FindWaitTask iSeq:2 success
+2016-06-23 09:57:50	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:000000E8
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-06-23 09:58:08 --------
+2016-06-23 09:58:08	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-06-23 09:58:13	Success new lpConn:00450078 lpszIP:192.168.0.9 iDevPort:3321 m_iID:1
+2016-06-23 09:58:13	CJConnSock::Login 192.168.0.9,3321,admin,admin begin
+2016-06-23 09:58:13	CJConnSock::Login end success
+2016-06-23 09:58:13	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 09:58:16	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 09:58:18	try-catch CJConnect::CallEventThread 
+2016-06-23 09:58:31	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 09:58:31	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 09:58:34	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 09:58:49	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 09:58:49	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 09:58:52	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 09:59:07	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 09:59:07	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 09:59:10	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 09:59:25	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 09:59:26	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 09:59:28	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 09:59:43	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 09:59:44	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 09:59:46	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:00:01	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:00:02	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:00:04	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:00:20	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:00:20	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:00:23	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:00:38	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:00:38	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:00:41	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:00:56	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:00:56	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:00:59	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:01:14	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:01:14	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:01:17	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:01:32	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:01:32	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:01:35	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:01:50	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:01:50	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:01:53	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:02:08	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:02:08	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:02:11	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:02:26	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:02:26	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:02:29	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:02:44	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:02:44	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:02:47	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:03:02	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:03:02	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:03:05	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:03:20	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:03:20	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:03:23	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:03:38	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:03:38	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:03:41	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:03:56	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:03:56	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:03:59	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:04:14	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:04:14	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:04:17	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:04:32	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:04:32	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:04:35	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:04:50	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:04:50	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:04:53	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:05:08	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:05:08	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:05:11	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:05:26	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:05:26	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:05:29	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:05:44	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:05:44	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:05:47	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:06:02	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:06:02	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:06:05	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:06:20	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:06:20	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:06:23	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:06:38	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:06:38	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:06:41	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:06:56	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:06:56	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:06:59	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+2016-06-23 10:07:14	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-06-23 10:07:14	CJAddrParse::AddTask devAddr:192.168.0.9 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-06-23 10:07:17	CJConnJPF(192.168.0.9)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
