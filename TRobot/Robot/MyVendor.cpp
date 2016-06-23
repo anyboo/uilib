@@ -32,12 +32,12 @@ void MyVendor::SearchAll()
 
 }
 
-void MyVendor::SearchByTime(const std::time_t& time)
+void MyVendor::SearchByTime(const std::time_t& start, const std::time_t& end)
 {
 
 }
 
-void MyVendor::DownloadByTime(const std::time_t& time)
+void MyVendor::DownloadByTime(const std::time_t& start, const std::time_t& end)
 {
 
 }
