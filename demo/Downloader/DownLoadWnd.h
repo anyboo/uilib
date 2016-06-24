@@ -1,6 +1,7 @@
 #pragma once
 #include <DuiLib/UIlib.h>
 #include <vector>
+#include "Vendor.h"
 		
 #define	BT_Calendar1			(_T("DataTime1"))
 #define	BT_Calendar2			(_T("DataTime2"))
@@ -36,12 +37,15 @@ public:
 	BOOL SearchFiles();
 	void ShowFileList();
 
-	CListContainerElementUI* Add_FileInfoList(int n);
+	CListContainerElementUI* Add_FileInfoList(int n, bool IsShowCloseBT);
 
 protected:
 	vector<FILE_INFO>	m_fileInfo;
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();
 	virtual CDuiString GetSkinFile();
+
+private:
+	CVendor	m_Vendor;
 };
 

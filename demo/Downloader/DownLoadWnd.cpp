@@ -6,11 +6,14 @@
 
 DownLoadWnd::DownLoadWnd()
 {
+	m_Vendor.SetPaintMagager(&m_PaintManager);
+	AddVirtualWnd(_T("Vendor"), &m_Vendor);
 }
 
 
 DownLoadWnd::~DownLoadWnd()
 {
+	RemoveVirtualWnd(_T("Vendor"));
 }
 
 
@@ -92,8 +95,53 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 	if (msg.sType == DUI_MSGTYPE_VALUECHANGED && msg.pSender->GetName() == _T("Select_time")){
 		OnSelectTimeType();
 	}
-	if (msg.sType == DUI_MSGTYPE_ITEMCLICK){
-		INT a = 0;
+	if (msg.sType == DUI_MSGTYPE_ITEMACTIVATE && msg.pSender->GetName() == _T("DownloadList")){
+		CListUI* m_List = static_cast<CListUI*>(m_PaintManager.FindControl(_T("DownloadList")));
+		int CurSel = m_List->GetCurSel();
+		int filesize = 5;
+		STDSTRING strUserData;
+		CListContainerElementUI* ContList = static_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByClass(m_List, DUI_CTR_LISTCONTAINERELEMENT, CurSel));
+		CListContainerElementUI* SubContList = static_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByClass(m_List, DUI_CTR_LISTCONTAINERELEMENT, CurSel + 1));
+		if (SubContList == NULL)
+		{
+			if (ContList->GetUserData() == _T("0"))
+			{
+				for (int i = CurSel + 1; i <= CurSel + filesize; i++)
+				{
+					SubContList = Add_FileInfoList(i, false);
+					SubContList->SetUserData(_T("Sub"));
+					m_List->AddAt(SubContList, i);
+				}
+				strUserData = intToString(filesize);
+				ContList->SetUserData(strUserData.c_str());
+			}		
+		}
+		else{
+			if (ContList->GetUserData() == _T("0") && SubContList->GetUserData() != _T("Sub"))
+			{
+				CListContainerElementUI* SubContList = new CListContainerElementUI;
+
+				for (int i = CurSel + 1; i <= CurSel + filesize; i++)
+				{
+					SubContList = Add_FileInfoList(i, false);
+					SubContList->SetUserData(_T("Sub"));
+					m_List->AddAt(SubContList, i);
+				}
+				strUserData = intToString(filesize);
+				ContList->SetUserData(strUserData.c_str());
+			}
+			if (ContList->GetUserData() != _T("0") && SubContList->GetUserData() == _T("Sub"))
+			{
+				strUserData = ContList->GetUserData();
+				int Count = atoi(strUserData.c_str());
+				for (int j = CurSel + 1; j <= CurSel + Count; j++)
+				{
+					m_List->RemoveAt(CurSel + 1, false);
+				}
+				ContList->SetUserData(_T("0"));
+			}
+		}
+	
 	}
 	if (msg.sType == DUI_MSGTYPE_CLICK){
 		STDSTRING SendName = msg.pSender->GetName();
@@ -119,8 +167,10 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 		{
 			CListUI* pList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("DownloadList")));
 			STDSTRING Serial = SendName.substr(9);
-			int index = atoi(Serial.c_str()) - 1;
-			pList->RemoveAt(index, true);
+			STDSTRING ContListName = STDSTRING(_T("ContList")) + Serial;
+			CListContainerElementUI* ContList = static_cast<CListContainerElementUI*>(m_PaintManager.FindSubControlByName(pList, ContListName.c_str()));
+			//pList->RemoveAt(index, true);
+			pList->Remove(ContList, true);
 		}
 	}
 	WindowImplBase::Notify(msg);
@@ -139,20 +189,21 @@ void DownLoadWnd::ShowFileList()
 	CListUI* pList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("DownloadList")));
 	//pList->RemoveAll();
 	CListContainerElementUI* SubList = new CListContainerElementUI;
-	int filesize = 10;
+
+	int filesize = 4;
 	for (int i = 1; i <= filesize; i++)
 	{
-		SubList = Add_FileInfoList(i);
+		SubList = Add_FileInfoList(i, true);
 		pList->Add(SubList);
 	}
 
 }
 
-CListContainerElementUI* DownLoadWnd::Add_FileInfoList(int n)
+CListContainerElementUI* DownLoadWnd::Add_FileInfoList(int n, bool IsShowCloseBT)
 {
 	CListContainerElementUI* Sublist = new CListContainerElementUI;
 	CHorizontalLayoutUI* hLyt = new CHorizontalLayoutUI;
-	
+
 	CLabelUI* Lab_Name = new CLabelUI;
 	CLabelUI* Lab_Size = new CLabelUI;
 	CProgressUI* Pro_Download = new CProgressUI;
@@ -160,10 +211,15 @@ CListContainerElementUI* DownLoadWnd::Add_FileInfoList(int n)
 	CLabelUI* Lab_LastTime = new CLabelUI;
 	CLabelUI* Lab_State = new CLabelUI;
 	CButtonUI* BT_Cancel = new CButtonUI;
-
+	CTreeViewUI* sas = new CTreeViewUI;
+	
+	if (IsShowCloseBT){
+		STDSTRING SublistName = STDSTRING(_T("ContList")) + intToString(n);
+		Sublist->SetUserData(_T("0"));
+		Sublist->SetName(SublistName.c_str());
+	}
 	Sublist->SetFixedHeight(30);
 	Sublist->Add(hLyt);
-	
 	hLyt->Add(Lab_Name);
 	hLyt->Add(Lab_Size);
 	hLyt->Add(Pro_Download);
@@ -194,6 +250,7 @@ CListContainerElementUI* DownLoadWnd::Add_FileInfoList(int n)
 	STDSTRING buttonName = STDSTRING(_T("BT_Cancel")) + intToString(n);
 	BT_Cancel->SetAttributeList(_T("width=\"30\" height=\"20\" padding=\"35,5,35,5\" normalimage=\"file='Downloader/hot_del.png' dest='8,3,22,17'\" hotimage=\"file='Downloader/del_download.png' dest='8,3,22,17'\""));
 	BT_Cancel->SetName(buttonName.c_str());
+	BT_Cancel->SetVisible(IsShowCloseBT);
 
 	return Sublist;
 }
