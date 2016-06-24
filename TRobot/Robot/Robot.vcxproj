@@ -97,7 +97,6 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AbstractVendor.cpp" />
     <ClCompile Include="JxjVendor\JxjVendor.cpp" />
     <ClCompile Include="MyVendor.cpp" />
     <ClCompile Include="Robot.cpp" />

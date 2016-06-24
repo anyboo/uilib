@@ -74,9 +74,6 @@
     <ClCompile Include="Robot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AbstractVendor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MyVendor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
