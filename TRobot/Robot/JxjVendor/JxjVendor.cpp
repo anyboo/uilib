@@ -113,7 +113,7 @@ void CJxjVendor::SearchByTime(const std::time_t& start, const std::time_t& end)
 
 	if (m_storeLog.total_count > 0)
 	{
-		m_store = m_storeLog.store[0];
+		//m_store = m_storeLog.store[0];
 	}
 	else
 	{

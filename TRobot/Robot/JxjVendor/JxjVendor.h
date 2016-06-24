@@ -1,6 +1,8 @@
 #pragma once
 #include "AbstractVendor.h"
 
+#include <vector>
+
 typedef enum
 {
 	Err_No = 0,
@@ -14,6 +16,90 @@ typedef enum
 	IsPlay_Download = 0,
 	IsPlay_Play
 }eIsPlay;
+
+//单个视频文件信息
+struct RecordFile
+{
+	RecordFile()
+	{
+		channel = 0;
+		size = 0;
+		pPrivateData = nullptr;
+		PrivateDataDataSize = 0;
+	}
+
+	~RecordFile()
+	{
+		if (nullptr != pPrivateData)
+		{
+			delete pPrivateData;
+			pPrivateData = nullptr;
+			PrivateDataDataSize = 0;
+		}
+	}
+
+	RecordFile(const RecordFile& other)
+	{
+		channel = other.channel;
+		size = other.size;
+		name = other.name;
+		beginTime = other.beginTime;
+		endTime = other.endTime;
+		pPrivateData = nullptr;
+		PrivateDataDataSize = 0;
+		setPrivateData(other.pPrivateData, other.PrivateDataDataSize);
+	}
+
+	RecordFile& operator= (const RecordFile& other)
+	{
+		if (&other == this)
+		{
+			return *this;
+		}
+		channel = other.channel;
+		size = other.size;
+		name = other.name;
+		beginTime = other.beginTime;
+		endTime = other.endTime;
+		setPrivateData(other.pPrivateData, other.PrivateDataDataSize);
+		return *this;
+	}
+
+	void setPrivateData(void* pData, int size)
+	{
+		if (nullptr != pPrivateData)
+		{
+			delete pPrivateData;
+			pPrivateData = nullptr;
+			PrivateDataDataSize = 0;
+		}
+
+
+		if (size > 0)
+		{
+			pPrivateData = new char[size];
+			PrivateDataDataSize = size;
+			memcpy(pPrivateData, pData, size);
+		}
+	}
+	//取得私有数据
+	void* getPrivateData() const
+	{
+		return pPrivateData;
+	}
+	__int32 getPrivateDataSize() const
+	{
+		return PrivateDataDataSize;
+	}
+
+	__int32 channel;      //通道
+	__int64 size;         //文件大小(byte)
+	std::string  name;    //文件名称
+	__time64_t beginTime; //本地时间
+	__time64_t endTime;   //本地时间
+	char* pPrivateData;   //私有数据
+	__int32 PrivateDataDataSize;//私有数据大小
+};
 
 class CJxjVendor :
 	public AbstractVendor
@@ -32,11 +118,15 @@ public:
 	virtual void PlayVideo(const std::string& filename);
 
 protected:
+	// Login Callback
 	static int WINAPI ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, void* pEventData, int iDataLen, void* pUserParam);
+	// Search Param Init
+	void MakeStoreLog(JStoreLog& storeLog, const JRecodeType recordType, const int beginNode, const int endNode, const int ssid, const std::time_t& start, const std::time_t& end);
+	// Add Search Result List
+	void AddSearchFileList();
+	// Download Callback
 	static int  __stdcall JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam);
-	void MakeStoreLog(JStoreLog& storeLog, 
-		const JRecodeType recordType, const int beginNode,  const int endNode, const int ssid,
-		const std::time_t& start, const std::time_t& end);
+	// Download Finish Handle
 	static void CloseDownload();
 
 	long m_hBhandle;
@@ -53,7 +143,8 @@ protected:
 	int	m_iBeginNode;
 	int	m_iEndNode;
 	int	m_iSsid;
-	Store m_store;
+	//Store m_store;
+	vector<RecordFile> m_files;
 
 	/* Download */
 	static long m_lDownloadHandle; // Handle of Download
@@ -66,4 +157,3 @@ protected:
 
 	void* handle;
 };
-

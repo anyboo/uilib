@@ -55,7 +55,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\WorkFolder\Code\uilib\TRobot\Robot\inc;E:\WorkFolder\Code\uilib\TRobot\Robot;E:\WorkFolder\Code\uilib\TRobot\Robot\JxjVendor;$(SolutionDir)\Test\single_include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\WorkFolder\Code\uilib\TRobot\Robot\inc;E:\WorkFolder\Code\uilib\TRobot\Robot;E:\WorkFolder\Code\uilib\TRobot\Robot\JxjVendor;$(SolutionDir)\Test\single_include;E:\WorkFolder\Code\uilib\Test\single_include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
