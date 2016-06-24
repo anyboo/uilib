@@ -30,51 +30,6 @@ typedef BOOL(CALL_METHOD *pCLIENT_PausePlayBack)(LLONG lPlayHandle, BOOL bPause)
 typedef BOOL(CALL_METHOD *pCLIENT_StopPlayBack)(LLONG lPlayHandle);
 
 
-static void CALLBACK BTDownLoadPos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, int index, NET_RECORDFILE_INFO recordfileinfo, LDWORD dwUser)
-{
-	// 	if (m_pdownloadfile != iHandle)
-	// 	{
-	// 		//MessageBox(ConvertString(MSG_SCHRECORD_DOWNLORD_CB_ERR));
-	// 		return;
-	// 	}
-
-	// 	m_downloadtotal = dwTotal;
-	// 	m_downloadsize = dwDownload;
-	// 
-	// 	m_strIdx.Format("%d", index);
-	// 	m_strPos.Format("%d / %d", dwDownload, dwTotal);
-	// 	m_strFileInfo.Format(ConvertString("channel: %d, driver no: %d, size: %d\r\nstart time: %d-%d-%d-%d-%d-%d\r\nend time: %d-%d-%d-%d-%d-%d")
-	// 	, recordfileinfo.ch, recordfileinfo.driveno, recordfileinfo.size,
-	// 		recordfileinfo.starttime.dwYear,
-	// 		recordfileinfo.starttime.dwMonth,
-	// 		recordfileinfo.starttime.dwDay,
-	// 		recordfileinfo.starttime.dwHour,
-	// 		recordfileinfo.starttime.dwMinute,
-	// 		recordfileinfo.starttime.dwSecond,
-	// 		recordfileinfo.endtime.dwYear,
-	// 		recordfileinfo.endtime.dwMonth,
-	// 		recordfileinfo.endtime.dwDay,
-	// 		recordfileinfo.endtime.dwHour,
-	// 		recordfileinfo.endtime.dwMinute,
-	// 		recordfileinfo.endtime.dwSecond);
-	// 
-	// 		if (-1 == m_downloadsize || m_downloadsize >= m_downloadtotal)
-	// 		{
-	// 			MessageBox(ConvertString(MSG_SCHRECORD_DOWNLOAD_FIN));
-	// 			if (m_pdownloadfile)
-	// 			{
-	// 				BOOL b = CLIENT_StopDownload(m_pdownloadfile);
-	// 				if (!b)
-	// 				{
-	// 					((CNetSDKDemoDlg *)GetParent())->LastError();//Zhengdh 06.11.24
-	// 				}
-	// 				m_pdownloadfile = NULL;
-	// 			}
-	// 			((CButton *)GetDlgItem(IDC_BTN_DOWNLOAD))->SetWindowText(ConvertString(MSG_SCHRECORD_DOWNLOAD));
-	// 			/**/
-	// 		}
-}
-
 static void CALLBACK PlayCallBack(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser)
 {
 	if (dwUser == 0)

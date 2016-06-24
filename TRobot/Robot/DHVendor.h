@@ -3,6 +3,9 @@
 #include "DH_Head.h"
 
 #define MAX_SEARCH_COUNT 1000
+#define ONE_DAY		 (24 * 60 * 60)
+#define ONE_HOUR	 (60 * 60)
+#define ONE_MINUTE	 (60)
 
 class DHVendor :
 	public AbstractVendor
@@ -15,28 +18,25 @@ public:
 	void Login(const std::string& user, const std::string& password);
 	void Logout();
 	void SearchAll();
-	void SearchByTime(const std::time_t& start, const std::time_t& end);
-	void DownloadByTime(const std::time_t& start, const std::time_t& end);
-	void DownloadByTime();
-	void DownloadByName(const std::string& filename);
-	void PlayVideo(const std::string& filename);
-	void PlayVideoByTime(const std::time_t& start, const std::time_t& end);
-
 	void Search(const size_t channel, const time_range& range);
 	void Download(const size_t channel, const time_range& range);
-	void PlayVideo(const size_t channel, const time_range& range);
 	void Download(const size_t channel, const std::string& filename);
+	void PlayVideo(const size_t channel, const time_range& range);
 	void PlayVideo(const size_t channel, const std::string& filename);
 	void SetDownloadPath(const std::string& Root);
 	void throwException();
 
+	static void CALLBACK BTDownLoadPos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, int index, NET_RECORDFILE_INFO recordfileinfo, LDWORD dwUser);
+	static void CALLBACK PlayCallBack(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser);
+	static int CALLBACK PBDataCallBack(LLONG lRealHandle, DWORD dwDataType, BYTE *pBuffer, DWORD dwBufSize, LDWORD dwUser);
 
 private:
 	string GetLastErrorString();
 	void timeDHToStd(NET_TIME *pTimeDH, tm *pTimeStd);
 	void timeStdToDH(tm *pTimeStd, NET_TIME *pTimeDH);
-	
+	vector<time_range> MakeTimeRangeList(const time_range& range);
 
+	
 
 protected:
 	HMODULE m_hMod;
@@ -52,6 +52,7 @@ protected:
 	NET_TIME m_stime;
 	NET_TIME m_etime;
 	LONG m_pdownloadfile;
+	string m_strPath;
 
 	vector<RecordFile> m_files;
 	vector<int> m_channelVec;
