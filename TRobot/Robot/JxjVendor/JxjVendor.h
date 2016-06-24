@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <time.h>
+#include <fstream>
 
 typedef enum
 {
@@ -25,6 +26,8 @@ struct RecordFile
 	{
 		channel = 0;
 		size = 0;
+		duration = 0;
+		strTimeSection = "";
 		pPrivateData = nullptr;
 		PrivateDataDataSize = 0;
 	}
@@ -46,6 +49,8 @@ struct RecordFile
 		name = other.name;
 		beginTime = other.beginTime;
 		endTime = other.endTime;
+		duration = other.duration;
+		strTimeSection = other.strTimeSection;
 		pPrivateData = nullptr;
 		PrivateDataDataSize = 0;
 		setPrivateData(other.pPrivateData, other.PrivateDataDataSize);
@@ -62,6 +67,8 @@ struct RecordFile
 		name = other.name;
 		beginTime = other.beginTime;
 		endTime = other.endTime;
+		duration = other.duration;
+		strTimeSection = other.strTimeSection;
 		setPrivateData(other.pPrivateData, other.PrivateDataDataSize);
 		return *this;
 	}
@@ -97,6 +104,8 @@ struct RecordFile
 	std::string  name;    //文件名称
 	__time64_t beginTime; //本地时间
 	__time64_t endTime;   //本地时间
+	long duration;
+	std::string strTimeSection;
 	char* pPrivateData;   //私有数据
 	__int32 PrivateDataDataSize;//私有数据大小
 };
@@ -141,6 +150,9 @@ protected:
 
 	long m_hBhandle;
 
+	/* Init */
+	string m_strRoot;
+
 	/* Login */
 	long m_lLoginHandle; // Handle of Login Device
 	string m_ip;	// Device IP Address
@@ -156,6 +168,7 @@ protected:
 
 	/* Download */
 	static long m_lDownloadHandle; // Handle of Download
+	static long m_lDownloadFileHandle;
 	long m_lRecHandle;
 	static long m_lDownLoadStartTime;
 	static long m_lDownLoadTotalTime;

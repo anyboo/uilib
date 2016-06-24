@@ -7,8 +7,9 @@
 
 eErrCode CJxjVendor::m_errCode = Err_No;
 long CJxjVendor::m_lDownloadHandle = -1;
-long CJxjVendor::m_lDownLoadStartTime = 0;
-long CJxjVendor::m_lDownLoadTotalTime = 0;
+long CJxjVendor::m_lDownloadFileHandle = -1;
+long CJxjVendor::m_lDownLoadStartTime = -1;
+long CJxjVendor::m_lDownLoadTotalTime = -1;
 int CJxjVendor::g_iDownLoadPos = 0;
 
 time_t gTimeStart = 1466265600; // 2016-6-19 00:00:00 1466352000
@@ -17,6 +18,7 @@ time_t gTimeEnd = 1466697599; // 2016-6-23 23:59:59
 CJxjVendor::CJxjVendor()
 {
 	// Init Param
+	m_strRoot = "";
 	/* Login */
 	m_lLoginHandle = -1;
 	m_ip = "";
@@ -33,8 +35,19 @@ CJxjVendor::CJxjVendor()
 	int iRet = JNetInit(NULL);
 	if (0 != iRet)
 	{
+		OutputDebugString("JNetInit Error!");
 		throw std::exception("JNetInit Error!");
 	}
+
+	// Init AVP_Init
+	iRet = AVP_Init();
+	if (iRet != AVPErrSuccess)
+	{
+		OutputDebugString("AVP_Init Error!");
+		throw std::exception("AVP_Init Error!");
+	}
+
+	AVP_InitRecMng(128, 8);
 }
 
 CJxjVendor::~CJxjVendor()
@@ -45,6 +58,7 @@ CJxjVendor::~CJxjVendor()
 		iRet = JNetMBClose(m_hBhandle);
 		if( 0 != iRet )
 		{
+			OutputDebugString("JNetMBClose Error!");
 			throw std::exception("JNetMBClose Error!");
 		}
 	}
@@ -69,6 +83,7 @@ void CJxjVendor::Login(const std::string& user, const std::string& password)
 
 	if (m_errCode == Err_LoginFail)
 	{
+		OutputDebugString("Login Failed!");
 		throw std::exception("Login Failed!");
 	}
 
@@ -91,6 +106,7 @@ void CJxjVendor::Logout()
 		iRet = JNetMBClose(m_hBhandle);
 		if (0 != iRet)
 		{
+			OutputDebugString("JNetMBClose Error!");
 			throw std::exception("JNetMBClose Error!");
 		}
 	}
@@ -104,6 +120,12 @@ void CJxjVendor::SearchAll()
 //void CJxjVendor::SearchByTime(const std::time_t& start, const std::time_t& end)
 void CJxjVendor::Search(const size_t channel, const time_range& range)
 {
+	if (range.start > range.end)
+	{
+		OutputDebugString("Time Range Error!");
+		return;
+	}
+
 	vector<time_range> timeRangeList = MakeTimeRangeList(range);
 	for (size_t i = 0; i < timeRangeList.size(); i++)
 	{
@@ -118,25 +140,60 @@ void CJxjVendor::Download(const size_t channel, const time_range& range)
 {
 	m_errCode = Err_No;
 
+	RecordFile file;
+	if (m_files.size() > 0)
+	{
+		file = m_files[0];
+	}
+
+	// Init File Starttime and Endtime
 	char cTimeStart[24];
 	char cTimeEnd[24];
-	memset(cTimeStart, 24, sizeof(cTimeStart));
-	memset(cTimeEnd, 24, sizeof(cTimeEnd));
+	char cTimeStartZero[24];
+	char cTimeEndZero[24];
+	//memset(cTimeStart, 0, sizeof(cTimeStart));
+	//memset(cTimeEnd, 0, sizeof(cTimeEnd));
 
 	struct tm ttime;
-	localtime_s(&ttime, &range.start);
+	//localtime_s(&ttime, &range.start);
+	localtime_s(&ttime, &file.beginTime);
 	strftime(cTimeStart, 24, "%Y%m%d%H%M%S", &ttime);
-	localtime_s(&ttime, &range.end);
+	strftime(cTimeStartZero, 24, "%Y%m%d0000", &ttime);
+
+	//localtime_s(&ttime, &range.end);
+	localtime_s(&ttime, &file.endTime);
 	strftime(cTimeEnd, 24, "%Y%m%d%H%M%S", &ttime);
+	strftime(cTimeEndZero, 24, "%Y%m%d2359", &ttime);
 
-	string strTimeStart(cTimeStart);
-	string strTimeEnd(cTimeEnd);
+	// Set File Total Time
+	m_lDownLoadTotalTime = file.duration;
 
-	m_lDownloadHandle = JNetRecOpen4Time(m_lLoginHandle, "", channel, j_primary_stream, strTimeStart.c_str(), strTimeEnd.c_str(), m_recordType, IsPlay_Download, JRecDownload, this, m_lRecHandle);
+	// Init File Save Path 
+	//string strPath = m_strRoot;
+	string strPath = "D:\\DOWNLOAD_SRC";
+	strPath.append("\\");
+	strPath.append(cTimeStartZero);
+	strPath.append("-");
+	strPath.append(cTimeEndZero);
+	strPath.append("\\");
+
+	CreateDirectory(strPath.c_str(), NULL);
+
+	strPath.append(file.name);
+	strPath.append(".jav");
+
+	m_lDownloadHandle = JNetRecOpen4Time(m_lLoginHandle, "", channel, j_primary_stream, cTimeStart, cTimeEnd, 4096, IsPlay_Download, JRecDownload, this, m_lRecHandle);
 	if (m_lDownloadHandle > 0)
 	{
 		Sleep(1000);
 		JNetRecCtrl(m_lRecHandle, JNET_PB_CTRL_START, NULL);
+
+		m_lDownloadFileHandle = AVP_CreateRecFile(strPath.c_str(), AVP_PROTOCOL_JPF, Encoder_DM365);
+		if (m_lDownloadFileHandle == -1)
+		{
+			OutputDebugString("Create File Error!");
+			throw std::exception("Create File Error!");
+		}
 
 		while (m_errCode == Err_No)
 		{
@@ -145,6 +202,7 @@ void CJxjVendor::Download(const size_t channel, const time_range& range)
 	}
 	else
 	{
+		OutputDebugString("Download File Error!");
 		throw std::exception("Download File Error!");
 	}
 }
@@ -163,6 +221,9 @@ void CJxjVendor::PlayVideo(const size_t channel, const std::string& filename)
 }
 void CJxjVendor::SetDownloadPath(const std::string& Root)
 {
+	m_strRoot = Root;
+
+	CreateDirectory(Root.c_str(), NULL);
 }
 void CJxjVendor::throwException()
 {
@@ -232,22 +293,18 @@ void CJxjVendor::SearchUnit(const size_t channel, const time_range& range)
 	iRet = JNetGetParam(m_lLoginHandle, channel, PARAM_STORE_LOG, (char *)&m_storeLog, sizeof(m_storeLog), NULL, NULL);
 	if (iRet != 0)
 	{
+		OutputDebugString("Search Error!");
 		throw std::exception("Search Error!");
 	}
 
 	if (m_storeLog.total_count > 0)
 	{
-		// if re-search file list, you should initation the file vector first.
 		if (m_storeLog.beg_node == 0)
 		{
 			m_files.empty();
 		}
 
 		ReFreshVideoList(channel, range);
-	}
-	else
-	{
-		//throw std::exception("Search No Files Error!");
 	}
 }
 
@@ -347,18 +404,18 @@ void CJxjVendor::InitSearchTime(JTime& jStartTime, JTime& jStopTime, const __tim
 {
 	struct tm Tm;
 
-	_localtime64_s(&Tm, (const time_t*)&timeStart);
+	localtime_s(&Tm, (const time_t*)&timeStart);
 	jStartTime.year = Tm.tm_year;
-	jStartTime.month = Tm.tm_mon + 1;
+	jStartTime.month = Tm.tm_mon;
 	jStartTime.date = Tm.tm_mday;
 	jStartTime.hour = Tm.tm_hour;
 	jStartTime.minute = Tm.tm_min;
 	jStartTime.second = Tm.tm_sec;
 	jStartTime.weekday = Tm.tm_wday;
 
-	_localtime64_s(&Tm, (const time_t*)&timeEnd);
+	localtime_s(&Tm, (const time_t*)&timeEnd);
 	jStopTime.year = Tm.tm_year;
-	jStopTime.month = Tm.tm_mon + 1;
+	jStopTime.month = Tm.tm_mon;
 	jStopTime.date = Tm.tm_mday;
 	jStopTime.hour = Tm.tm_hour;
 	jStopTime.minute = Tm.tm_min;
@@ -404,7 +461,15 @@ void CJxjVendor::AddSearchFileList(int channel)
 		recordFile.endTime = MakeTimestampByJTime(jTime);
 		char strEndTime[20];
 		sprintf_s(strEndTime, 20, "%d%02d%02d%02d%02d%02d", jTime.year, jTime.month, jTime.date, jTime.hour, jTime.minute, jTime.second);
+	
+		// File Belong Time Secton 
+		recordFile.strTimeSection = strStartTime;
+		recordFile.strTimeSection.append("-");
+		recordFile.strTimeSection.append(strEndTime);
 		
+		// File Duration
+		recordFile.duration = recordFile.endTime - recordFile.beginTime;
+
 		// File Channel and File Size
 		recordFile.channel = channel;
 		//recordFile.size = m_storeLog.store[i].file_size / (1024 * 1024); // MB
@@ -412,7 +477,7 @@ void CJxjVendor::AddSearchFileList(int channel)
 
 		// File Name
 		char fileName[50];
-		sprintf_s(fileName, 50, "channel%d-%s-%s", recordFile.channel, strStartTime, strEndTime);
+		sprintf_s(fileName, 50, "channel%02d-%s-%s", recordFile.channel, strStartTime, strEndTime);
 		recordFile.name = fileName;
 
 		if (!CheckFileExist(recordFile, m_files))
@@ -445,7 +510,7 @@ time_t CJxjVendor::MakeTimestampByJTime(JTime jTime)
 {
 	struct tm ttime;
 	ttime.tm_year = jTime.year;
-	ttime.tm_mon = jTime.month;
+	ttime.tm_mon = jTime.month - 1;
 	ttime.tm_mday = jTime.date;
 	ttime.tm_hour = jTime.hour;
 	ttime.tm_min = jTime.minute;
@@ -465,18 +530,31 @@ int  CJxjVendor::JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* 
 			m_lDownLoadStartTime = pFrame->timestamp_sec;
 		}
 
+		AVP_WriteRecFile(m_lDownloadFileHandle, pBuff, dwRevLen, NULL, 0);
+
 		if (m_lDownLoadTotalTime == 0)
+		{
 			return 0;
+		}
+		
 		if (pFrame->timestamp_sec > 0 && m_lDownLoadTotalTime > 0)
 		{
 			g_iDownLoadPos = (pFrame->timestamp_sec - m_lDownLoadStartTime) / (m_lDownLoadTotalTime / 100);
 			//printf("g_idownloadpos = %d , starttime = %ld, curtime = %ld, totaltime = %ld\r\n", g_iDownLoadPos, m_lDownLoadStartTime, pFrame->timestamp_sec, m_lDownLoadTotalTime);
+			char cDownInfo[100];
+			sprintf_s(cDownInfo, 100, "g_idownloadpos = %d , starttime = %ld, curtime = %ld, totaltime = %ld\r\n", g_iDownLoadPos, m_lDownLoadStartTime, pFrame->timestamp_sec, m_lDownLoadTotalTime);
+			string strDownInfo(cDownInfo);
+			OutputDebugString(strDownInfo.c_str());
 		}
 
 		if ((m_lDownLoadStartTime + m_lDownLoadTotalTime) == pFrame->timestamp_sec)
 		{
-			g_iDownLoadPos = 1000;
 			m_errCode = Err_DownloadSuccess;
+
+			g_iDownLoadPos = 100;
+			m_lDownLoadStartTime = -1;
+			m_lDownLoadTotalTime = -1;
+
 			CloseDownload();
 		}
 	}
@@ -485,6 +563,12 @@ int  CJxjVendor::JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* 
 
 void CJxjVendor::CloseDownload()
 {
+	if (m_lDownloadFileHandle)
+	{
+		AVP_CloseRecFile(m_lDownloadFileHandle);
+		m_lDownloadFileHandle = NULL;
+	}
+
 	if (m_lDownloadHandle)
 	{
 		JNetRecClose(m_lDownloadHandle);
@@ -523,6 +607,8 @@ TEST_CASE_METHOD(CJxjVendor, "Search videos by time_range from device", "[Search
 	timeRange.end = gTimeEnd;
 
 	REQUIRE_NOTHROW(Search(0, timeRange));
+
+	REQUIRE_NOTHROW(Download(0, timeRange));
 }
 
 //TEST_CASE_METHOD(CJxjVendor, "Logout Device", "[SearchAll]")
