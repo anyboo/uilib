@@ -2,6 +2,7 @@
 #include "AbstractVendor.h"
 
 #include <vector>
+#include <time.h>
 
 typedef enum
 {
@@ -74,7 +75,6 @@ struct RecordFile
 			PrivateDataDataSize = 0;
 		}
 
-
 		if (size > 0)
 		{
 			pPrivateData = new char[size];
@@ -112,18 +112,28 @@ public:
 	virtual void Login(const std::string& user, const std::string& password);
 	virtual void Logout();
 	virtual void SearchAll();
-	virtual void SearchByTime(const std::time_t& start, const std::time_t& end);
-	virtual void DownloadByTime(const std::time_t& start, const std::time_t& end);
-	virtual void DownloadByName(const std::string& filename);
-	virtual void PlayVideo(const std::string& filename);
+	virtual void Search(const size_t channel, const time_range& range);
+	virtual void Download(const size_t channel, const time_range& range);
+	virtual void PlayVideo(const size_t channel, const time_range& range);
+
+	virtual void Download(const size_t channel, const std::string& filename);
+	virtual void PlayVideo(const size_t channel, const std::string& filename);
+	virtual void SetDownloadPath(const std::string& Root);
+	virtual void throwException();
 
 protected:
 	// Login Callback
 	static int WINAPI ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, void* pEventData, int iDataLen, void* pUserParam);
-	// Search Param Init
+
 	void MakeStoreLog(JStoreLog& storeLog, const JRecodeType recordType, const int beginNode, const int endNode, const int ssid, const std::time_t& start, const std::time_t& end);
-	// Add Search Result List
-	void AddSearchFileList();
+	vector<time_range> MakeTimeRangeList(const time_range& range);
+	void SearchUnit(const size_t channel, const time_range& range);
+	void ReFreshVideoList(int channel, const time_range& range);
+	void InitSearchTime(JTime& jStartTime, JTime& jStopTime, const __time64_t& timeStart, const __time64_t& timeEnd);
+	void AddSearchFileList(int channel);
+	bool CheckFileExist(const RecordFile& file, const vector<RecordFile>& fileList);
+	time_t MakeTimestampByJTime(JTime jTime);
+
 	// Download Callback
 	static int  __stdcall JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam);
 	// Download Finish Handle
@@ -135,7 +145,6 @@ protected:
 	long m_lLoginHandle; // Handle of Login Device
 	string m_ip;	// Device IP Address
 	size_t m_port;	// Device Port
-	int m_NVRChn = 0;
 
 	/* Search */
 	JStoreLog m_storeLog;
@@ -143,7 +152,6 @@ protected:
 	int	m_iBeginNode;
 	int	m_iEndNode;
 	int	m_iSsid;
-	//Store m_store;
 	vector<RecordFile> m_files;
 
 	/* Download */

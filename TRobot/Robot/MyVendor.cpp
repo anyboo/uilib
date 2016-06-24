@@ -32,44 +32,47 @@ void MyVendor::SearchAll()
 
 }
 
-void MyVendor::SearchByTime(const std::time_t& start, const std::time_t& end)
+void MyVendor::Search(const size_t channel, const time_range& range)
 {
 
 }
 
-void MyVendor::DownloadByTime(const std::time_t& start, const std::time_t& end)
+void MyVendor::Download(const size_t channel, const time_range& range)
 {
 
 }
 
-void MyVendor::DownloadByName(const std::string& filename)
+void MyVendor::Download(const size_t channel, const std::string& filename)
 {
 
 }
 
-void MyVendor::PlayVideo(const std::string& filename)
+void MyVendor::PlayVideo(const size_t channel, const time_range& range)
 {
 
 }
-//
+
+void MyVendor::PlayVideo(const size_t channel, const std::string& filename)
+{
+
+}
+
+void MyVendor::SetDownloadPath(const std::string& Root)
+{
+
+}
+
+void MyVendor::throwException()
+{
+
+}
+
 //#include "catch.hpp"
 //TEST_CASE_METHOD(MyVendor, "Init SDK","[Init]")
 //{
-//	REQUIRE_THROWS(Init("127.0.0.1", 3000));
+//	REQUIRE_NOTHROW(Init("127.0.0.1", 3000));
 //	REQUIRE(handle != nullptr);
-//}
-//
-//TEST_CASE_METHOD(MyVendor, "Login Device", "[Login]")
-//{
-//	REQUIRE_THROWS(Login("user", "password"));
-//}
-//
-//TEST_CASE_METHOD(MyVendor, "Logout Device", "[Logout]")
-//{
-//	REQUIRE_THROWS(Logout());
-//}
-//
-//TEST_CASE_METHOD(MyVendor, "Search all videos from device", "[SearchAll]")
-//{
-//	REQUIRE_THROWS(SearchAll());
+//	REQUIRE_NOTHROW(Login("user", "password"));
+//	REQUIRE_NOTHROW(SearchAll());
+//	REQUIRE_NOTHROW(Logout());
 //}

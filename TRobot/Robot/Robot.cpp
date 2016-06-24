@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 #include "MyVendor.h"
-#include "JxjVendor\JxjVendor.h"
+#include "JxjVendor/JxjVendor.h"
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
@@ -11,8 +11,7 @@ TEST_CASE("This is a demo", "[demo]")
 {
 	SECTION("Test login the device")
 	{
-		//MyVendor vendor;
-		//CJxjVendor jxjVendor;
+
 	}
 
 	SECTION("Test Search videos from the device")
