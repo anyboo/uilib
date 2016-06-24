@@ -12,12 +12,16 @@ public:
 	virtual void Login(const std::string& user, const std::string& password);
 	virtual void Logout();
 	virtual void SearchAll();
-	virtual void SearchByTime(const std::time_t& start, const std::time_t& end);
-	virtual void DownloadByTime(const std::time_t& start, const std::time_t& end);
-	virtual void DownloadByName(const std::string& filename);
-	virtual void PlayVideo(const std::string& filename);
+	virtual void Search(const size_t channel, const time_range& range);
+	virtual void Download(const size_t channel, const time_range& range);
+	virtual void Download(const size_t channel, const std::string& filename);
+	virtual void PlayVideo(const size_t channel, const time_range& range);
+	virtual void PlayVideo(const size_t channel, const std::string& filename);
+	virtual void SetDownloadPath(const std::string& Root);
+	virtual void throwException();
 
 protected:
 	void* handle;
+	size_t channelCount;
 };
 

@@ -15,19 +15,19 @@ m_hMod(NULL)
 {
 	memset(&m_deviceInfo, 0, sizeof(m_deviceInfo));
 
-	m_stime.dwYear = 2016;
-	m_stime.dwMonth = 6;
-	m_stime.dwDay = 21;
-	m_stime.dwHour = 0;
-	m_stime.dwMinute = 0;
-	m_stime.dwSecond = 0;
-
-	m_etime.dwYear = 2016;
-	m_etime.dwMonth = 6;
-	m_etime.dwDay = 22;
-	m_etime.dwHour = 23;
-	m_etime.dwMinute = 0;
-	m_etime.dwSecond = 0;
+// 	m_stime.dwYear = 2016;
+// 	m_stime.dwMonth = 6;
+// 	m_stime.dwDay = 21;
+// 	m_stime.dwHour = 0;
+// 	m_stime.dwMinute = 0;
+// 	m_stime.dwSecond = 0;
+// 
+// 	m_etime.dwYear = 2016;
+// 	m_etime.dwMonth = 6;
+// 	m_etime.dwDay = 22;
+// 	m_etime.dwHour = 23;
+// 	m_etime.dwMinute = 0;
+// 	m_etime.dwSecond = 0;
 
 	m_hMod = LoadLibraryA("C:\\Users\\TL\\Desktop\\Robot1\\TRobot\\Robot\\DHsdk\\dhnetsdk.dll");
 	if (NULL == m_hMod)
@@ -81,8 +81,6 @@ DHVendor::~DHVendor()
 void DHVendor::Init(const std::string& ip, size_t port)
 {
 	BOOL bInit = m_pInit(0, 0);
-
-	cout << "bInit:" << bInit << endl;
 	
 	m_strIP = ip;
 	m_dwPort = port;
@@ -151,7 +149,6 @@ void DHVendor::SearchAll()
 
 }
 
-#define MAX_SEARCH_COUNT 1000
 void DHVendor::SearchByTime(const std::time_t& start, const std::time_t& end)
 {
 	if (0 >= m_lLoginHandle)
@@ -175,15 +172,15 @@ void DHVendor::SearchByTime(const std::time_t& start, const std::time_t& end)
 
 		tm STime;
 		tm ETime;
+		NET_TIME ntStime;
+		NET_TIME ntEtime;
 
 		_localtime64_s(&STime, (const time_t*)&start);
 		_localtime64_s(&ETime, (const time_t*)&end);
 
-		//timeStdToDH(&STime, &stime);
-		//timeStdToDH(&ETime, &etime);
 		
-		timeDHToStd(&m_stime, &STime);
-		timeDHToStd(&m_etime, &ETime);
+		timeDHToStd(&ntStime, &STime);
+		timeDHToStd(&ntEtime, &ETime);
 
 		char szTime[512];
 		ZeroMemory(szTime, 512);
@@ -193,7 +190,7 @@ void DHVendor::SearchByTime(const std::time_t& start, const std::time_t& end)
 		NET_RECORDFILE_INFO ifileinfo[MAX_SEARCH_COUNT];
 		ZeroMemory(ifileinfo, sizeof(ifileinfo));
 		int iMaxNum = 0;
-		BOOL bRet = m_pSearchFileByTime(m_lLoginHandle, nChannelId - 1, 0, &m_stime, &m_etime, 0, ifileinfo, sizeof(ifileinfo), &iMaxNum, 5000, true);
+		BOOL bRet = m_pSearchFileByTime(m_lLoginHandle, nChannelId - 1, 0, &ntStime, &ntEtime, 0, ifileinfo, sizeof(ifileinfo), &iMaxNum, 5000, true);
 
 		cout << "bRet:" << bRet << endl;
 		if (!bRet)
@@ -289,6 +286,10 @@ void DHVendor::DownloadByTime(const std::time_t& start, const std::time_t& end)
 			cout << "downLoadByRecordFile 下载录像失败，错误原因：" << GetLastErrorString() << endl;
 			return ;
 		}
+		else
+		{
+			cout << "downLoadByRecordFile 下载录像成功！"<<endl;
+		}
 	}
 }	
 
@@ -319,12 +320,17 @@ void DHVendor::PlayVideoByTime(const std::time_t& start, const std::time_t& end)
 	timeDHToStd(&m_stime, &STime);
 	timeDHToStd(&m_etime, &ETime);
 
+	TestWindows Test;
+	Test.Init();
 	auto itr = m_channelVec.begin();
 	for (; itr != m_channelVec.end(); itr++)
 	{
 		int nChannelId = *itr;
+		
 		BOOL lPlayID = m_pPlayBackByTimeEx(m_lLoginHandle, nChannelId, &m_stime, &m_etime, g_hWnd, PlayCallBack, (DWORD)this, PBDataCallBack, (DWORD)this);
+		system("PAUSE");
 
+		
 		if (!lPlayID)
 		{
 			cout << "播放失败原因：" << GetLastErrorString() << endl;
@@ -352,6 +358,146 @@ void DHVendor::timeStdToDH(tm *pTimeStd, NET_TIME *pTimeDH)
 	pTimeDH->dwMinute = pTimeStd->tm_min;
 	pTimeDH->dwSecond = pTimeStd->tm_sec;
 }
+
+void DHVendor::Search(const size_t channel, const time_range& range)
+{
+	if (0 >= m_lLoginHandle)
+	{
+		cout << "请先登录!" << endl;
+		return;
+	}
+
+	if (range.start >= range.end)
+	{
+		cout << "时间范围不对!" << endl;
+		return;
+	}
+
+	m_files.clear();
+
+	tm tmStartTime;
+	tm tmEndTime;
+	NET_TIME ntStime;
+	NET_TIME ntEtime;
+
+	_localtime64_s(&tmStartTime, (const time_t*)&range.start);
+	_localtime64_s(&tmEndTime, (const time_t*)&range.end);
+
+	
+	timeStdToDH(&tmStartTime, &ntStime);
+	timeStdToDH(&tmEndTime, &ntEtime);
+
+	NET_RECORDFILE_INFO ifileinfo[MAX_SEARCH_COUNT];
+	ZeroMemory(ifileinfo, sizeof(ifileinfo));
+	int iMaxNum = 0;
+	BOOL bRet = m_pSearchFileByTime(m_lLoginHandle, channel, 0, &ntStime, &ntEtime, 0, ifileinfo, sizeof(ifileinfo), &iMaxNum, 5000, true);
+
+	cout << "bRet:" << bRet << endl;
+	if (!bRet)
+	{
+		cout << "GetRecordFileList 查询录像失败，错误原因：" << GetLastErrorString() << endl;
+	}
+	if (iMaxNum <= 0)
+	{
+		cout << "GetRecordFileList 查询录像成功，录像个数为0" << endl;
+	}
+
+	NET_RECORDFILE_INFO item;
+	RecordFile info;
+	tm sTm;
+	tm eTm;
+
+	char szTime[512];
+
+	for (int i = 0; i < iMaxNum; i++)
+	{
+		item = ifileinfo[i];
+
+		timeDHToStd(&item.starttime, &sTm);
+		timeDHToStd(&item.endtime, &eTm);
+
+		ZeroMemory(szTime, 512);
+		sprintf_s(szTime, "channel%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d-%d", channel,
+			ntStime.dwYear, ntStime.dwMonth, ntStime.dwDay,
+			ntStime.dwHour, ntStime.dwMinute, ntStime.dwSecond,
+			ntEtime.dwYear, ntEtime.dwMonth, ntEtime.dwDay, ntEtime.dwHour, ntEtime.dwMinute, ntEtime.dwSecond, i);
+
+		info.channel = item.ch + 1;
+		info.size = item.size * 1024;
+		info.name = szTime;
+		info.beginTime = mktime(&sTm);
+		info.endTime = mktime(&eTm);
+		info.setPrivateData(&ifileinfo[i], sizeof(NET_RECORDFILE_INFO));
+		m_files.push_back(info);
+
+		cout << "GetRecordFileList 文件名:" << item.filename << "  " << "文件大小:" << item.size << "  " << "通道:" << item.ch << endl;
+	}
+}
+
+void DHVendor::Download(const size_t channel, const time_range& range)
+{
+	if (0 >= m_lLoginHandle)
+	{
+		cout << "请先登录!" << endl;
+		return;
+	}
+
+	tm tmStartTime;
+	tm tmEndTime;
+	NET_TIME ntStime;
+	NET_TIME ntEtime;
+
+	_localtime64_s(&tmStartTime, (const time_t*)&range.start);
+	_localtime64_s(&tmEndTime, (const time_t*)&range.end);
+
+
+	timeStdToDH(&tmStartTime, &ntStime);
+	timeStdToDH(&tmEndTime, &ntEtime);
+
+	char szTime[512];
+	ZeroMemory(szTime, 512);
+	sprintf_s(szTime, "channel%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d", channel, ntStime.dwYear, ntStime.dwMonth, ntStime.dwDay,
+		ntStime.dwHour, ntStime.dwMinute, ntStime.dwSecond, ntEtime.dwYear, ntEtime.dwMonth, ntEtime.dwDay, ntEtime.dwHour, ntEtime.dwMinute, ntEtime.dwSecond);
+
+	m_pdownloadfile = m_pDownloadByTime(m_lLoginHandle, channel, 0, &ntStime, &ntEtime, szTime, BTDownLoadPos, (DWORD)this);
+	cout << "strName:" << szTime << endl;
+
+	if (0 == m_pdownloadfile)
+	{
+		cout << "downLoadByRecordFile 下载录像失败，错误原因：" << GetLastErrorString() << endl;
+		return;
+	}
+	else
+	{
+		cout << "downLoadByRecordFile 下载录像成功！" << endl;
+	}
+}
+
+void DHVendor::PlayVideo(const size_t channel, const time_range& range)
+{
+
+}
+
+void DHVendor::Download(const size_t channel, const std::string& filename)
+{
+
+}
+
+void DHVendor::PlayVideo(const size_t channel, const std::string& filename)
+{
+
+}
+
+void DHVendor::SetDownloadPath(const std::string& Root)
+{
+
+}
+
+void DHVendor::throwException()
+{
+
+}
+
 
 
 string DHVendor::GetLastErrorString()
@@ -592,14 +738,13 @@ DHVendor Obj;
 
 TEST_CASE_METHOD(DHVendor, "Init DH SDK", "[Init]")
 {
-	REQUIRE_NOTHROW(Obj.Init("192.168.0.55", 37777));
+	REQUIRE_NOTHROW(Obj.Init("192.168.0.96", 37777));
 	REQUIRE(m_hMod != nullptr);
 }
 
 TEST_CASE_METHOD(DHVendor, "Login  DH Device", "[Login]")
 {
-	//REQUIRE_NOTHROW(Init("192.168.0.55", 37777));
-	REQUIRE_NOTHROW(Obj.Login("admin", "112233"));
+	REQUIRE_NOTHROW(Obj.Login("admin", ""));
 }
 
 TEST_CASE_METHOD(DHVendor, "Logout DH Device", "[Logout]")
@@ -607,21 +752,64 @@ TEST_CASE_METHOD(DHVendor, "Logout DH Device", "[Logout]")
 	//REQUIRE_THROWS(Logout());
 }
 
-TEST_CASE_METHOD(DHVendor, "Search all videos from DH device", "[SearchByTime]")
+TEST_CASE_METHOD(DHVendor, "Search all videos from DH device", "[Search]")
 {
-	REQUIRE_THROWS(Obj.SearchByTime(1466438400, 1466524800));
+	time_range range;
+	range.start = 1466438400;
+	range.end = 1466524800;
+
+	REQUIRE_THROWS(Obj.Search(0, range));
+	
+
+}
+TEST_CASE_METHOD(DHVendor, "Search all videos from DH device1 ", "[Search]")
+{
+	time_range range;
+	range.start = 1466438400;
+	range.end = 1466524800;
+	
+	REQUIRE_THROWS(Obj.Search(1, range));
 }
 
-TEST_CASE_METHOD(DHVendor, " Download by time from DH device", "[DownloadByTime]")
+TEST_CASE_METHOD(DHVendor, "Search all videos from DH device2 ", "[Search]")
 {
-	REQUIRE_THROWS(Obj.DownloadByTime(1466438400, 1466524800));
+	time_range range;
+	range.start = 1466438400;
+	range.end = 1466524800;
+
+	REQUIRE_THROWS(Obj.Search(2, range));
+}
+
+TEST_CASE_METHOD(DHVendor, "Search all videos from DH device3 ", "[Search]")
+{
+	time_range range;
+	range.start = 1466438400;
+	range.end = 1466524800;
+
+	REQUIRE_THROWS(Obj.Search(3, range));
+}
+
+TEST_CASE_METHOD(DHVendor, "Search all videos from DH device4 ", "[Search]")
+{
+	time_range range;
+	range.start = 1466438400;
+	range.end = 1466524800;
+
+	REQUIRE_THROWS(Obj.Search(16, range));
+}
+
+TEST_CASE_METHOD(DHVendor, " Download by time from DH device", "[Download]")
+{
+	time_range range;
+	range.start = 1466438400;
+	range.end = 1466524800;
+
+	REQUIRE_THROWS(Obj.Download(0, range));
 }
 
 TEST_CASE_METHOD(DHVendor, " PlayVideo  from  filename", "[PlayVideo]")
 {
 	
-	TestWindows Test;
-	Test.Init();
-	REQUIRE_THROWS(Obj.PlayVideoByTime(1466438400, 1466524800));
+	//REQUIRE_THROWS(Obj.PlayVideoByTime(1466438400, 1466524800));
 
 }

@@ -13,7 +13,7 @@ public:
 	int Init();
 
 private:
-	ATOM MyRegisterClass(HINSTANCE hInstance);
+	ATOM MyRegisterClass();
 	BOOL InitInstance();
 
 private:

@@ -2,6 +2,8 @@
 #include "AbstractVendor.h"
 #include "DH_Head.h"
 
+#define MAX_SEARCH_COUNT 1000
+
 class DHVendor :
 	public AbstractVendor
 {
@@ -19,6 +21,14 @@ public:
 	void DownloadByName(const std::string& filename);
 	void PlayVideo(const std::string& filename);
 	void PlayVideoByTime(const std::time_t& start, const std::time_t& end);
+
+	void Search(const size_t channel, const time_range& range);
+	void Download(const size_t channel, const time_range& range);
+	void PlayVideo(const size_t channel, const time_range& range);
+	void Download(const size_t channel, const std::string& filename);
+	void PlayVideo(const size_t channel, const std::string& filename);
+	void SetDownloadPath(const std::string& Root);
+	void throwException();
 
 
 private:
