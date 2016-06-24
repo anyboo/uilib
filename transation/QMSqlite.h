@@ -61,6 +61,8 @@ private:
 	bool creatSessionPool();
 	void closeConnect(Session sess);
 	bool checkConnect(Session sess);
+	bool unInitialize();
+	void closeSessionPool();
 	Session connectDb();
 	SessionPool *m_pool;
 	

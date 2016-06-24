@@ -21,12 +21,13 @@ QMSqlite::QMSqlite() :m_pool(NULL)
 {
 	Initialize();
 	creatSessionPool();
-
 }
 
 
 QMSqlite::~QMSqlite()
 {
+	closeSessionPool();
+	unInitialize();
 }
 
 
@@ -63,7 +64,7 @@ bool QMSqlite::creatSessionPool()
 	{
 		//create pool
 		m_pool = new SessionPool(SQLite::Connector::KEY, ":memory:", 1, 100, 10);
-		if (!m_pool->isActive)
+		if (!m_pool->isActive())
 			throw "new session fail";
 	}
 	catch (Poco::Exception &ex)
@@ -225,4 +226,24 @@ bool QMSqlite::checkConnect(Session sess)
 		return false;
 
 	return true;
+}
+
+bool QMSqlite::unInitialize()
+{
+	try
+	{
+		SQLite::Connector::unregisterConnector();
+	}
+	catch (Poco::Exception &ex)
+	{
+		throw(ex.displayText());		
+		return false;
+	}
+
+	return true;
+}
+
+void QMSqlite::closeSessionPool()
+{
+	delete m_pool;	
 }
