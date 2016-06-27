@@ -7,8 +7,7 @@
 #include <iostream>
 #include <vector>
 
-typedef Poco::Tuple<std::string, int, __time64_t, __time64_t, LONGLONG, std::string> SearchRecord;
-
+typedef Poco::Tuple<std::string, int, __time64_t, __time64_t, __int64, std::string> SearchRecord;
 
 using namespace Poco::Data;
 using namespace std;
@@ -17,11 +16,11 @@ class QMSqlite
 {
 public:
 	
-	static const QMSqlite *getInstance();
+	static QMSqlite *getInstance();
 private:
 	QMSqlite();
 	~QMSqlite();
-	static const QMSqlite* m_instance;
+	static QMSqlite* m_instance;
 
 	class Garbo
 

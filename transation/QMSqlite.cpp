@@ -8,7 +8,7 @@
 
 QMSqlite::Garbo QMSqlite::garbo;  // 一定要初始化，不然程序结束时不会析构garbo  
 
-const QMSqlite* QMSqlite::m_instance = NULL;
+QMSqlite* QMSqlite::m_instance = NULL;
 
 using namespace Poco::Data::Keywords;
 using namespace Poco::Data;
@@ -31,7 +31,7 @@ QMSqlite::~QMSqlite()
 }
 
 
-const QMSqlite *QMSqlite::getInstance()
+QMSqlite *QMSqlite::getInstance()
 {
 	if (NULL == m_instance)
 		m_instance = new QMSqlite;
