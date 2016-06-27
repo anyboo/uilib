@@ -8,7 +8,7 @@
 
 QMSqlite::Garbo QMSqlite::garbo;  // 一定要初始化，不然程序结束时不会析构garbo  
 
-const QMSqlite* QMSqlite::m_instance = NULL;
+QMSqlite* QMSqlite::m_instance = NULL;
 
 using namespace Poco::Data::Keywords;
 using namespace Poco::Data;
@@ -21,16 +21,17 @@ QMSqlite::QMSqlite() :m_pool(NULL)
 {
 	Initialize();
 	creatSessionPool();
-
 }
 
 
 QMSqlite::~QMSqlite()
 {
+	closeSessionPool();
+	unInitialize();
 }
 
 
-const QMSqlite *QMSqlite::getInstance()
+QMSqlite *QMSqlite::getInstance()
 {
 	if (NULL == m_instance)
 		m_instance = new QMSqlite;
@@ -63,7 +64,7 @@ bool QMSqlite::creatSessionPool()
 	{
 		//create pool
 		m_pool = new SessionPool(SQLite::Connector::KEY, ":memory:", 1, 100, 10);
-		if (!m_pool->isActive)
+		if (!m_pool->isActive())
 			throw "new session fail";
 	}
 	catch (Poco::Exception &ex)
@@ -225,4 +226,24 @@ bool QMSqlite::checkConnect(Session sess)
 		return false;
 
 	return true;
+}
+
+bool QMSqlite::unInitialize()
+{
+	try
+	{
+		SQLite::Connector::unregisterConnector();
+	}
+	catch (Poco::Exception &ex)
+	{
+		throw(ex.displayText());		
+		return false;
+	}
+
+	return true;
+}
+
+void QMSqlite::closeSessionPool()
+{
+	delete m_pool;	
 }
