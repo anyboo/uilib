@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "DHVendor.h"
 
-#include <atltime.h>
+#include <ctime>
 #include "TestWindows.h"
+#include <fstream>
 
 DHVendor::DHVendor():
 m_strName("´ó»ª"),
@@ -243,6 +244,8 @@ void DHVendor::Search(const size_t channel, const time_range& range)
 		}
 	}
 
+	SaveSearchFileListToFile();
+
 	cout << "totals:" << m_files.size() << endl;
 }
 
@@ -317,11 +320,6 @@ void DHVendor::Download(const size_t channel, const std::string& filename)
 		return;
 	}
 
-	//NET_TIME ntStime;
-	//NET_TIME ntEtime;
-
-	//typeCast(ntStime, ntEtime, range);
-
 	CreatePath(channel);
 
 	char szTime[512];
@@ -370,10 +368,6 @@ void DHVendor::PlayVideo(const size_t channel, const std::string& filename)
 		throw std::exception("Login handle by Record file failed");
 		return;
 	}
-
-
-
-	//BOOL lPlayID = m_pPlayBackByFile(m_lLoginHandle, g_hWnd, (DWORD)this, PBDataCallBack, (DWORD)this);
 
 	vector<RecordFile>::iterator it;
 	int nSize = 0;
@@ -487,6 +481,92 @@ void DHVendor::typeCast(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_r
 
 	timeStdToDH(&tmStartTime, &ntStartTime);
 	timeStdToDH(&tmEndTime, &ntEndTime);
+}
+
+void DHVendor::SaveSearchFileListToFile()
+{
+	Document document;
+	string configfile = "SearchFileList.config";
+	document.Parse(configfile.c_str());
+	ofstream ofs(configfile);
+	OStreamWrapper osw(ofs);
+	Document::AllocatorType& alloc = document.GetAllocator();
+
+	Value root(kObjectType);
+
+	for (size_t i = 0; i < m_files.size(); i++)
+	{
+		string fileKey = "videoFile";
+		Value key(fileKey.c_str(), fileKey.length(), alloc);
+
+		RecordFile file = m_files[i];
+		Value name(file.name.c_str(), file.name.length(), alloc);
+		Value channel(MakeStrByInteger(file.channel).c_str(), MakeStrByInteger(file.channel).length(), alloc);
+		Value beginTime(MakeStrTimeByTimestamp(file.beginTime).c_str(), MakeStrTimeByTimestamp(file.beginTime).length(), alloc);
+		Value endTime(MakeStrTimeByTimestamp(file.endTime).c_str(), MakeStrTimeByTimestamp(file.endTime).length(), alloc);
+		Value size(MakeStrByInteger(file.size / 1024 / 1024).c_str(), MakeStrByInteger(file.size / 1024 / 1024).length(), alloc);
+
+		Value a(kArrayType);
+		a.PushBack(name, alloc).PushBack(channel, alloc).PushBack(beginTime, alloc).PushBack(endTime, alloc).PushBack(size, alloc);
+		root.AddMember(key.Move(), a.Move(), alloc);
+	}
+
+	Writer<OStreamWrapper> writer(osw);
+	root.Accept(writer);
+}
+
+void DHVendor::LoadSearchFileListFromFile()
+{
+	string configfile = "SearchFileList.config";
+	ifstream ifs(configfile);
+	IStreamWrapper isw(ifs);
+	Document d;
+	d.ParseStream(isw);
+	size_t file_size = isw.Tell();
+	if (isw.Tell() == 0)
+	{
+		return;
+	}
+
+	typedef Value::ConstMemberIterator Iter;
+	for (Iter it = d.MemberBegin(); it != d.MemberEnd(); ++it)
+	{
+		string keyName = it->name.GetString();
+		const Value& a = d[keyName.c_str()];
+
+		assert(a.IsArray());
+		if (!a.IsArray() || a.Size() < 5)
+			continue;
+
+		string fileName = a[0].GetString();
+		string channel = a[1].GetString();
+		string beginTime = a[2].GetString();
+		string endTime = a[3].GetString();
+		string size = a[4].GetString();
+	}
+}
+
+string DHVendor::MakeStrTimeByTimestamp(time_t time)
+{
+	char cTime[50];
+	struct tm ttime;
+
+	localtime_s(&ttime, &time);
+	strftime(cTime, 50, "%Y%m%d%H%M%S", &ttime);
+
+	string strTime(cTime);
+
+	return strTime;
+}
+string DHVendor::MakeStrByInteger(int data)
+{
+	char cData[50];
+
+	sprintf_s(cData, 50, "%d", data);
+
+	string strTime(cData);
+
+	return strTime;
 }
 
 vector<time_range> DHVendor::MakeTimeRangeList(const time_range& range)
