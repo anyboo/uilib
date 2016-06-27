@@ -17,18 +17,9 @@
 				<HorizontalLayout  width="120" height="80" padding="40,30,40,10," bkimage="file='Downloader/cxbt.png'" >				
 					<Button borderround="5,5" name="Add_device" text="添加设备" textcolor="#00000000" font="1" textpadding="0,40,0,2" foreimage="file='Downloader/tianjia.png' dest='47,10,70,33'" pushedimage="file='Downloader/cxbt.png'" normalimage="Downloader/cxbt.png" hotimage="Downloader/bsbj.png"  />
 				</HorizontalLayout>
-		<VerticalLayout width="200" height="560" >					
-			<List name="VendorList" itemhotbkcolor="0x00000000" itemselectedbkcolor="0x00000000">
-				<ListContainerElement height="80" width="200" bkimage="file='Downloader/tdxzanniu.png'">
-					<HorizontalLayout>
-						<Control width="40" bkimage="file='Downloader/network_offline.png' dest='10,20,39,48'" />
-						<VerticalLayout width="120">
-							<Label text="海康" font="5" padding="10,30,0,0" textcolor="#FFFFFFFF"/>
-							<Label text="(192.168.0.46)" font="5" padding="10,0,0,0" textcolor="#FFFFFFFF"/>
-						</VerticalLayout>
-						<Control width="35" bkimage="file='Downloader/xxzk.png' dest='5,36,24,48'"  />
-					</HorizontalLayout>
-				</ListContainerElement>
+		<VerticalLayout width="200" height="580" >					
+			<List name="VendorList" itemhotbkcolor="0x00000000" itemselectedbkcolor="0x22224822" vscrollbar="true">
+
 			</List>
 		</VerticalLayout>
 			</VerticalLayout>

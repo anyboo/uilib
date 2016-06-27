@@ -9,9 +9,12 @@ public:
 	~CVendor();
 
 	void SetPaintMagager(CPaintManagerUI* pPaintMgr);
+	CListContainerElementUI* ShowVendor(bool IsOnLine);
+	void AddVendorList();
+
 	DUI_DECLARE_MESSAGE_MAP();
 	
-
+	
 
 private:
 	CPaintManagerUI* ppm;

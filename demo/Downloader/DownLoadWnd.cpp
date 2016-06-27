@@ -154,9 +154,10 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 		}
 		if (msg.pSender->GetName() == _T("test"))
 		{
-			if (SearchFiles()){
+			m_Vendor.AddVendorList();
+			/*if (SearchFiles()){
 				ShowFileList();
-			}
+				}*/
 		}
 		if (!strSendName.compare(0, BTNAMELONG, BTNAMETAG))
 		{
