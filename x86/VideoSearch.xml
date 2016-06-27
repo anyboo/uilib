@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="1024,700" caption="0,0,0,30" roundcorner="4,4" showdirty="false">
+	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+	<Font shared="true" id="2" name="宋体" size="14" bold="false" />
+	<Include source="scrollbar.xml" />
+	<VerticalLayout bkimage="file='Downloader/bsbj.png'" height="700" >
+		<HorizontalLayout width="1024" height="60" bkimage="file='Downloader/beijing.png'">
+			<Button name="test" width="40" height="40" foreimage="file='Downloader/tianjia.png' dest='8,9,31,32'" normalimage="Downloader/timeOut.png" />
+			<Label text="下载视频" font="1" padding="400,0,0,0" textcolor="#FFFFFFFF" align="center" />
+			<Button name="close" width="30" height="30" padding="480,10,5,5" tooltip="关闭" normalimage="file='Downloader/close.png' source='0,90,30,120'" hotimage="file='Downloader/close.png' source='0,60,30,90'" />
+		</HorizontalLayout>
+		<VerticalLayout height="570" >
+			<List name="domainlist" padding="10,0,10,0" bkcolor="#FFFFFFFF" inset="0,0,0,0" itemshowhtml="true" vscrollbar="true" hscrollbar="true" headerbkimage="file='Downloader/lbl.png'" itemalign="center" itembkcolor="#FFE2DDDF" itemaltbk="true" hscrollbar="false" menu="true">
+				<ListHeader height="30" width="1004" menu="true">
+					<option name="All" width="22" height="22" padding="10,5,2,4" normalimage="file='Downloader/quanxuan.png'" selectedimage="file='Downloader/quanxuanzhuangtai.png'"/>
+					<Label text="全选" width="40" font="1" align="center" />
+					<ListHeaderItem text="名称" font="1" width="240" hotimage="file='Downloader/lbl.png'" pushedimage="file='Downloader/lbl.png'" sepimage="file='Downloader/lbl.png'" sepwidth="1" dragable="false"/>
+					<Control bkimage="file='Downloader/st.png'" width="1" />
+					<ListHeaderItem text="通道" font="1" width="100" hotimage="file='Downloader/lbl.png'" pushedimage="file='Downloader/lbl.png'" sepimage="file='Downloader/lbl.png'" sepwidth="1" dragable="false"/>
+					<Control bkimage="file='Downloader/st.png'" width="1" />
+					<ListHeaderItem text="开始时间" font="1" width="200" hotimage="file='Downloader/lbl.png'" pushedimage="file='Downloader/lbl.png'" sepimage="file='Downloader/lbl.png'" sepwidth="1" dragable="false"/>
+					<Control bkimage="file='Downloader/st.png'" width="1" />
+					<ListHeaderItem text="结束时间" font="1" width="200" hotimage="file='Downloader/lbl.png'" pushedimage="file='Downloader/lbl.png'" sepimage="file='Downloader/lbl.png'" sepwidth="1" dragable="false"/>
+					<Control bkimage="file='Downloader/st.png'" width="1" />
+					<ListHeaderItem text="大小" font="1" width="100" hotimage="file='Downloader/lbl.png'" pushedimage="file='Downloader/lbl.png'" sepimage="file='Downloader/lbl.png'" sepwidth="1" dragable="false"/>
+					<Control bkimage="file='Downloader/st.png'" width="1" />
+					<ListHeaderItem text="操作" font="1" width="100" hotimage="file='Downloader/lbl.png'" pushedimage="file='Downloader/lbl.png'" sepimage="file='Downloader/lbl.png'" sepwidth="1" dragable="false"/>
+				</ListHeader>
+			</List>	
+		</VerticalLayout>
+		<HorizontalLayout height="70" bkcolor="0xc3324534">
+			<Button name="BT_Download" width="117" height="50" padding="420,10,0,0" text="开始下载" normalimage="file='Downloader/cxbt.png'" />
+		</HorizontalLayout>
+	</VerticalLayout>
+</Window>

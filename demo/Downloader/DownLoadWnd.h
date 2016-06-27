@@ -6,6 +6,10 @@
 #define	BT_Calendar1			(_T("DataTime1"))
 #define	BT_Calendar2			(_T("DataTime2"))
 #define BT_OnVideoLoginUI		(_T("Add_device"))
+#define BTNAMELONG				9
+#define SUBLISTNAMELONG				8
+#define BTNAMETAG				STDSTRING(_T("BT_Cancel"))
+#define SUBLISTNAMETAG			STDSTRING(_T("ContList"))
 
 typedef struct 
 {
@@ -37,6 +41,8 @@ public:
 	BOOL SearchFiles();
 	void ShowFileList();
 
+	int GetSubListCurSel(CListContainerElementUI* SubList);
+
 	CListContainerElementUI* Add_FileInfoList(int n, bool IsShowCloseBT);
 
 protected:
@@ -46,6 +52,7 @@ protected:
 	virtual CDuiString GetSkinFile();
 
 private:
-	CVendor	m_Vendor;
+	CVendor		m_Vendor;
+	int			m_FileCount;
 };
 

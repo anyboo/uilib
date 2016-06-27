@@ -16,9 +16,8 @@
 				<HorizontalLayout  width="120" height="80" padding="40,30,40,20," bkimage="file='Downloader/cxbt.png'" >				
 					<Button pos="0,0,120,80" float="true" align="bottom" borderround="5,5" name="Add_device" text="添加设备" textcolor="#00000000" font="1" textpadding="0,40,0,2" foreimage="file='Downloader/tianjia.png' dest='47,10,70,33'" pushedimage="file='Downloader/cxbt.png'" normalimage="Downloader/cxbt.png" hotimage="Downloader/bsbj.png"  />
 				</HorizontalLayout>
-				<VerticalLayout width="200" height="560" padding="0,0,0,0" >
-					
-		     <TreeView name="treePlaylist" headerbkimage="Downloader/timeIn.png" childpadding="4" multipleitem="true" inset="4,0,3,0" bordersize="1" bordercolor="#FF2B2B2B" itemtextcolor="#FFC8C6CB" itemhottextcolor="#FFC8C6CB" selitemtextcolor="#FFC8C6CB" itemhotbkcolor="#FF1B1B1B" itemselectedbkcolor="#FF151C2C" vscrollbar="true" hscrollbar="true" >
+				<VerticalLayout width="200" height="560" padding="0,0,0,0" >					
+		     <TreeView name="treePlaylist" headerbkimage="Downloader/timeIn.png" childpadding="4" multipleitem="true" inset="4,0,3,0" bordersize="1" bordercolor="#FF2B2B2B" itemtextcolor="#FFC8C6CB" itemhottextcolor="#FFC8C6CB" selitemtextcolor="#FFC8C6CB" itemhotbkcolor="#FF1B1B1B" itemselectedbkcolor="#FF151C2C" vscrollbar="true" >
 		        <TreeNode text="在线媒体" height="33" bkimage="skin/treeview_header.png" >
                     <TreeNode text="今日热播" height="22" textcolor="#FFC8C6CB" folderattr="padding=&quot;0,4,0,0&quot; width=&quot;14&quot; height=&quot;14&quot; normalimage=&quot;file='skin/treeview_expand.png' source='0,0,14,14' &quot; selectedimage=&quot;file='skin/treeview_expand.png' source='0,24,14,38' &quot;">
                         <TreeNode text="八公" />
@@ -28,7 +27,7 @@
                         <TreeNode text="八公" />
                         <TreeNode text="HACHI" />                                    
                     </TreeNode>
-            </TreeNode>
+				</TreeNode>
 			</TreeView>
 				</VerticalLayout>
 			</VerticalLayout>

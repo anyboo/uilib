@@ -4,7 +4,7 @@
 	<VerticalLayout bkimage="file='Downloader/beijing.png'" height="380" width="350">
 		<HorizontalLayout width="350" height="40" >
 			<Combo name="CB_month" width="80" height="30" hotimage="file='Downloader/hsbj.png'" padding="80,5,0,0" itemlinecolor="0x45111111" itemfont="1" itemalign="center" dropboxsize="0,200" bordercolor="0x12345678" bordersize="1" bkimage="file='Downloader/hsbj.png'" itembkimage="Downloader/bsbj.png" itemhotimage="file='Downloader/hsbj.png'">
-				<ListContainerElement name="Item1" userdata="1" text="一月" />
+				<ListLabelElement name="Item1" userdata="1" text="一月" />
 				<ListLabelElement name="Item2" userdata="2" text="二月" />
 				<ListLabelElement name="Item3" userdata="3" text="三月" />
 				<ListLabelElement name="Item4" userdata="4" text="四月" />
