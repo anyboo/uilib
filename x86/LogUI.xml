@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="1024,768" caption="0,0,0,30" roundcorner="4,4" showdirty="false">
+	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+	<Include source="scrollbar.xml" />
+	<VerticalLayout bkimage="file='Downloader/bsbj.png'" width="1024" height="768" bordersize="3" bordercolor="0xf1234567">
+		<HorizontalLayout height="60" width="1024" bkimage="file='Downloader/beijing.png'">
+			<Button name="closebtn" width="38" height="38" padding="20,10,0,0" tooltip="返回" foreimage="file='Downloader/back.png'" hotimage="file='Downloader/beijing.png'"/>
+			<Label text="日志管理" textcolor="#FFFFFFFF" font="1" padding="400,1,1,1" />
+		</HorizontalLayout>
+		<HorizontalLayout width="1024" height="110">
+			<HorizontalLayout width="320" height="110">
+				<Label text="开始时间：" width="100" height="46" font="1" align="center" padding="20,32,0,0" />
+				<HorizontalLayout width="180" height="46" bkimage="Downloader/szdk.png" padding="0,32,0,0">
+					<Button width="53" height="46" name="DataTime1" padding="1,0,0,0" foreimage="file='Downloader/ical.png' dest='15,8,39,39'" pushedimage="file='Downloader/szdk.png'" normalimage="Downloader/szdk.png" hotimage="Downloader/cxbt.png"  />
+					<Control bkimage="file='Downloader/st.png'" width="2"/>
+					<label name="DatatimeText1" text="2016-06-15" width="124" font="1" align="center" />
+				</HorizontalLayout>
+			</HorizontalLayout>
+			<HorizontalLayout width="320" height="110" >
+				<Label text="结束时间：" width="100" height="46" font="1" align="center" padding="20,32,0,0" />
+				<HorizontalLayout width="180" height="46" bkimage="Downloader/szdk.png" padding="0,32,0,0">
+					<Button name="DataTime2" width="53" height="46" padding="1,0,0,0" foreimage="file='Downloader/ical.png' dest='15,8,39,39'" pushedimage="file='Downloader/szdk.png'" normalimage="Downloader/szdk.png" hotimage="Downloader/cxbt.png"  />
+					<Control bkimage="file='Downloader/st.png'" width="2" />
+					<label name="DatatimeText2" text="2016-06-15" font="1" width="124" align="center" />
+				</HorizontalLayout>
+			</HorizontalLayout>
+			<VerticalLayout width="120" height="80" padding="0,15,0,10" >
+				<HorizontalLayout height="40">
+					<option name="LogType1" width="22" height="22" padding="8,9,10,9" group="RadioBoxTest" selected="true" normalimage="file='Downloader/quanxuan.png'" selectedimage="file='Downloader/quanxuanzhuangtai.png'"/>
+					<Label text="日志查询" font="1" align="center"/>
+				</HorizontalLayout>
+					<HorizontalLayout height="40">
+					<option name="LogType2" width="22" height="22" padding="8,9,10,9" group="RadioBoxTest" normalimage="file='Downloader/quanxuan.png'" selectedimage="file='Downloader/quanxuanzhuangtai.png'"/>
+					<Label text="案件查询" font="1" align="center"/>
+				</HorizontalLayout>
+			</VerticalLayout>
+			<HorizontalLayout width="224" height="80" padding="0,15,0,15" >
+				<Button name="search" pos="10,0,90,80" float="true" align="bottom" text="查询" textcolor="#00000000" font="1" textpadding="0,40,0,0" pushedimage="Downloader/chaxunanniu.png" foreimage="file='Downloader/chaxun.png' dest='27,20,52,40'" normalimage="file='Downloader/chaxunanniu.png'" />
+				<Button name="export" pos="110,0,190,80" float="true" align="bottom" text="导出" textcolor="#00000000" font="1" textpadding="0,40,0,0" pushedimage="Downloader/chaxunanniu.png" foreimage="file='Downloader/save.png' dest='21,8,59,46'" normalimage="file='Downloader/chaxunanniu.png'"/>
+			</HorizontalLayout>
+		</HorizontalLayout>
+		<VerticalLayout width="1024" height="590">
+			<List name="domainlist" width="980" padding="20,0,0,0" bkcolor="#FFFFFFFF" inset="0,0,0,0" itemshowhtml="true" vscrollbar="true" hscrollbar="true" headerbkimage="file='Downloader/lbl.png'" itemalign="center" itembkcolor="#FFE2DDDF" itemaltbk="true" hscrollbar="false" menu="true">
+				<ListHeader name="list_head" height="31" menu="true" width="980">
+					<ListHeaderItem name="Item1" text="时间" font="1" width="200" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
+					<ListHeaderItem name="Item2" text="操作" font="1" width="300" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
+					<ListHeaderItem name="Item3" text="描述" font="1" width="480" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
+					<ListHeaderItem name="Item4" text="" font="1" width="0" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
+					<ListHeaderItem name="Item5" text="" font="1" width="0" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
+					<ListHeaderItem name="Item6" text="" font="1" width="0" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
+					<ListHeaderItem name="Item7" text="" font="1" width="0" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
+				</ListHeader>
+			</List>
+		</VerticalLayout>
+	</VerticalLayout>
+</Window>

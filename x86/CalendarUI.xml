@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="350,380" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
+	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
+	<VerticalLayout bkimage="file='Downloader/beijing.png'" height="380" width="350">
+		<HorizontalLayout width="350" height="40" >
+			<Combo name="CB_month" width="80" height="30" hotimage="file='Downloader/hsbj.png'" padding="80,5,0,0" itemlinecolor="0x45111111" itemfont="1" itemalign="center" dropboxsize="0,200" bordercolor="0x12345678" bordersize="1" bkimage="file='Downloader/hsbj.png'" itembkimage="Downloader/bsbj.png" itemhotimage="file='Downloader/hsbj.png'">
+				<ListLabelElement name="Item1" userdata="1" text="一月" />
+				<ListLabelElement name="Item2" userdata="2" text="二月" />
+				<ListLabelElement name="Item3" userdata="3" text="三月" />
+				<ListLabelElement name="Item4" userdata="4" text="四月" />
+				<ListLabelElement name="Item5" userdata="5" text="五月" />
+				<ListLabelElement name="Item6" userdata="6" text="六月" />
+				<ListLabelElement name="Item7" userdata="7" text="七月" />
+				<ListLabelElement name="Item8" userdata="8" text="八月" />
+				<ListLabelElement name="Item9" userdata="9" text="九月" />
+				<ListLabelElement name="Item10" userdata="10" text="十月" />
+				<ListLabelElement name="Item11" userdata="11" text="十一月" />
+				<ListLabelElement name="Item12" userdata="12" text="十二月" />
+			</Combo>
+			<HorizontalLayout width="80" height="32" bordercolor="0x12345678" bordersize="1" padding="20,5,0,0">
+				<Label name="InputYear" width="62" height="30" padding="1,1,0,1" font="1" bkimage="file='Downloader/hsbj.png'"/>
+				<VerticalLayout>
+					<Button name="Add_Year" width="15" height="15" padding="0,1,1,0" normalimage="file='Downloader/scrollbar.png' source='0,0,16,16'" pushedimage="file='Downloader/scrollbar.png' source='32,0,48,16'" />
+					<Button name="Sub_Year" width="15" height="15" padding="0,0,1,1" normalimage="file='Downloader/scrollbar.png' source='0,32,16,48'" pushedimage="file='Downloader/scrollbar.png' source='32,32,48,48'" />
+				</VerticalLayout>
+			</HorizontalLayout>
+		</HorizontalLayout>
+		<HorizontalLayout height="40" width="350" bkcolor="0x12345678">
+			<Label text="周日" font="1" width="50" align="center" textcolor="#FFFF0000"/>
+			<Label text="周一" font="1" width="50" align="center" />
+			<Label text="周二" font="1" width="50" align="center" />
+			<Label text="周三" font="1" width="50" align="center" />
+			<Label text="周四" font="1" width="50" align="center" />
+			<Label text="周五" font="1" width="50" align="center" />
+			<Label text="周六" font="1" width="50" align="center" textcolor="#FFFF0000"/>
+		</HorizontalLayout>
+		<TileLayout width="350" height="300" columns="7" itemsize="50,50" bkimage="file='Downloader/bsbj.png'">
+			<Button name="Button0" width="50" height="50" text="25" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button1" width="50" height="50" text="26" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button2" width="50" height="50" text="27" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button3" width="50" height="50" text="28" textcolor="#00000000" font="1"  bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button4" width="50" height="50" text="29" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button5" width="50" height="50" text="30" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button6" width="50" height="50" text="1" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button7" width="50" height="50" text="2" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button8" width="50" height="50" text="3" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button9" width="50" height="50" text="4" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button10" width="50" height="50" text="5" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button11" width="50" height="50" text="6" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button12" width="50" height="50" text="7" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button13" width="50" height="50" text="8" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button14" width="50" height="50" text="9" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button15" width="50" height="50" text="10" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button16" width="50" height="50" text="11" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button17" width="50" height="50" text="12" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button18" width="50" height="50" text="13" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button19" width="50" height="50" text="14" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button20" width="50" height="50" text="15" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button21" width="50" height="50" text="16" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button22" width="50" height="50" text="17" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button23" width="50" height="50" text="18" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button24" width="50" height="50" text="19" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button25" width="50" height="50" text="20" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button26" width="50" height="50" text="21" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button27" width="50" height="50" text="22" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button28" width="50" height="50" text="23" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button29" width="50" height="50" text="24" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button30" width="50" height="50" text="25" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button31" width="50" height="50" text="26" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button32" width="50" height="50" text="27" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button33" width="50" height="50" text="28" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button34" width="50" height="50" text="29" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button35" width="50" height="50" text="30" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button36" width="50" height="50" text="31" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button37" width="50" height="50" text="1" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button38" width="50" height="50" text="2" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button39" width="50" height="50" text="3" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button40" width="50" height="50" text="4" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+			<Button name="Button41" width="50" height="50" text="5" textcolor="#00000000" font="1" bkcolor="0xc3324534" pushedimage="Downloader/bsbj.png"/>
+		</TileLayout>		
+	</VerticalLayout>
+</Window>
