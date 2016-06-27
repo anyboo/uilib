@@ -39,6 +39,12 @@
     <ClInclude Include="VideoLoginUI.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="SearchFileUI.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vendor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -62,6 +68,12 @@
     <ClCompile Include="VideoLoginUI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="SearchFileUI.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Vendor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Downloader.rc">
@@ -69,7 +81,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\bin\skin\Downloader\logoIcon.ico">
+    <Image Include="..\..\x86\Downloader\logoIcon.ico">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>
