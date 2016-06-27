@@ -55,7 +55,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\WorkFolder\Code\uilib\TRobot\Robot\inc;E:\WorkFolder\Code\uilib\TRobot\Robot;E:\WorkFolder\Code\uilib\TRobot\Robot\JxjVendor;$(SolutionDir)\Test\single_include;E:\WorkFolder\Code\uilib\Test\single_include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\WorkFolder\Code\uilib\JSON\include\rapidjson;E:\WorkFolder\Code\uilib\TRobot\Robot\inc;E:\WorkFolder\Code\uilib\TRobot\Robot;E:\WorkFolder\Code\uilib\TRobot\Robot\JxjVendor;$(SolutionDir)\Test\single_include;E:\WorkFolder\Code\uilib\Test\single_include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -92,12 +92,14 @@
     <ClInclude Include="inc\mb_api.h" />
     <ClInclude Include="inc\stdint.h" />
     <ClInclude Include="JxjVendor\JxjVendor.h" />
+    <ClInclude Include="JxjVendor\TestWindows.h" />
     <ClInclude Include="MyVendor.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="JxjVendor\JxjVendor.cpp" />
+    <ClCompile Include="JxjVendor\TestWindows.cpp" />
     <ClCompile Include="MyVendor.cpp" />
     <ClCompile Include="Robot.cpp" />
     <ClCompile Include="stdafx.cpp">

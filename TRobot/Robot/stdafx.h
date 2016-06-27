@@ -11,12 +11,18 @@
 #include <tchar.h>
 
 // TODO: reference additional headers your program requires here
-
+// System
 #include "windows.h"
 #include <iostream>
 
-using namespace std;
+// Json 
+#include "document.h"
+#include "prettywriter.h"
+#include "stringbuffer.h"
+#include "ostreamwrapper.h"
+#include "istreamwrapper.h"
 
+// Jxj SDK
 #include "inc\mb_api.h"
 #include "inc\JNetSDK.h"
 #include "inc\stdint.h"
@@ -25,6 +31,9 @@ using namespace std;
 
 #pragma comment(lib, "lib\\JNetSDK")
 #pragma comment(lib, "lib\\AVPlayer")
+
+using namespace std;
+using namespace rapidjson;
 
 #define DRAW_MAX_COUNT		2048*10
 #define DRAW_MAX_TROUGH_COUNT		16

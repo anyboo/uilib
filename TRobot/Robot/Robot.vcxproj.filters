@@ -66,6 +66,9 @@
     <ClInclude Include="inc\JNetSDK.h">
       <Filter>JNetSDK</Filter>
     </ClInclude>
+    <ClInclude Include="JxjVendor\TestWindows.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -78,6 +81,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="JxjVendor\JxjVendor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JxjVendor\TestWindows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

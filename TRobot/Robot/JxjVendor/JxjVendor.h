@@ -134,6 +134,7 @@ protected:
 	// Login Callback
 	static int WINAPI ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, void* pEventData, int iDataLen, void* pUserParam);
 
+	// Search Callback
 	void MakeStoreLog(JStoreLog& storeLog, const JRecodeType recordType, const int beginNode, const int endNode, const int ssid, const std::time_t& start, const std::time_t& end);
 	vector<time_range> MakeTimeRangeList(const time_range& range);
 	void SearchUnit(const size_t channel, const time_range& range);
@@ -142,15 +143,21 @@ protected:
 	void AddSearchFileList(int channel);
 	bool CheckFileExist(const RecordFile& file, const vector<RecordFile>& fileList);
 	time_t MakeTimestampByJTime(JTime jTime);
+	string MakeStrTimeByTimestamp(time_t time);
+	string MakeStrByInteger(int data);
+	void SaveSearchFileListToFile();
+	void LoadSearchFileListFromFile();
 
 	// Download Callback
 	static int  __stdcall JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam);
-	// Download Finish Handle
 	static void CloseDownload();
 
-	long m_hBhandle;
+	// PlayVideo Callback
+	static int  __stdcall JRecStream(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam);
+	static  DWORD PlayThreadFun(LPVOID lpThreadParameter);
 
 	/* Init */
+	long m_hBhandle;
 	string m_strRoot;
 
 	/* Login */
@@ -173,6 +180,9 @@ protected:
 	static long m_lDownLoadStartTime;
 	static long m_lDownLoadTotalTime;
 	static int g_iDownLoadPos;
+
+	/* PlayVideo */
+	static int m_iPlayVideoChannel;
 
 	static eErrCode m_errCode; // Error Code
 

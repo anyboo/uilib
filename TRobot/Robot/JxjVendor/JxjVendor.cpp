@@ -1,19 +1,27 @@
 #include "stdafx.h"
 #include "JxjVendor.h"
+#include "TestWindows.h"
+
+#define Test_Bug
+#define Test_Filename
 
 #define oneDay		(24 * 60 * 60)
 #define oneHour		(60 * 60)
 #define oneMinute	(60)
 
 eErrCode CJxjVendor::m_errCode = Err_No;
+
 long CJxjVendor::m_lDownloadHandle = -1;
 long CJxjVendor::m_lDownloadFileHandle = -1;
 long CJxjVendor::m_lDownLoadStartTime = -1;
 long CJxjVendor::m_lDownLoadTotalTime = -1;
 int CJxjVendor::g_iDownLoadPos = 0;
 
+int CJxjVendor::m_iPlayVideoChannel = -1;
+
 time_t gTimeStart = 1466265600; // 2016-6-19 00:00:00 1466352000
 time_t gTimeEnd = 1466697599; // 2016-6-23 23:59:59
+
 
 CJxjVendor::CJxjVendor()
 {
@@ -30,6 +38,7 @@ CJxjVendor::CJxjVendor()
 	m_iSsid = -1;
 	/* Download */
 	m_lRecHandle = -1;
+	/* PlayVideo*/
 	
 	// Init JNetSdk
 	int iRet = JNetInit(NULL);
@@ -87,14 +96,6 @@ void CJxjVendor::Login(const std::string& user, const std::string& password)
 		throw std::exception("Login Failed!");
 	}
 
-	//// Get Device Info
-	//JDeviceInfo deviceinfo;
-	//int iRet = JNetGetParam(m_lLoginHandle, m_NVRChn, PARAM_DEVICE_INFO, (char *)&deviceinfo, sizeof(deviceinfo), NULL, NULL);
-	//if (iRet != JNETErrSuccess)
-	//{
-	//	throw std::exception("Get Device Info Failed!");
-	//}
-
 	return;
 }
 
@@ -132,6 +133,12 @@ void CJxjVendor::Search(const size_t channel, const time_range& range)
 		SearchUnit(channel, timeRangeList[i]);
 	}
 
+	// Save Search Video List Result to Config File
+	SaveSearchFileListToFile();
+
+	// Load Search Video List Result From Config File (For Test)
+	//LoadSearchFileListFromFile();
+
 	return;
 }
 
@@ -140,48 +147,74 @@ void CJxjVendor::Download(const size_t channel, const time_range& range)
 {
 	m_errCode = Err_No;
 
-	RecordFile file;
-	if (m_files.size() > 0)
-	{
-		file = m_files[0];
-	}
-
 	// Init File Starttime and Endtime
 	char cTimeStart[24];
 	char cTimeEnd[24];
 	char cTimeStartZero[24];
 	char cTimeEndZero[24];
-	//memset(cTimeStart, 0, sizeof(cTimeStart));
-	//memset(cTimeEnd, 0, sizeof(cTimeEnd));
 
 	struct tm ttime;
-	//localtime_s(&ttime, &range.start);
-	localtime_s(&ttime, &file.beginTime);
+
+	localtime_s(&ttime, &range.start);
 	strftime(cTimeStart, 24, "%Y%m%d%H%M%S", &ttime);
 	strftime(cTimeStartZero, 24, "%Y%m%d0000", &ttime);
-
-	//localtime_s(&ttime, &range.end);
-	localtime_s(&ttime, &file.endTime);
-	strftime(cTimeEnd, 24, "%Y%m%d%H%M%S", &ttime);
 	strftime(cTimeEndZero, 24, "%Y%m%d2359", &ttime);
+	localtime_s(&ttime, &range.end);
+	strftime(cTimeEnd, 24, "%Y%m%d%H%M%S", &ttime);
 
-	// Set File Total Time
-	m_lDownLoadTotalTime = file.duration;
+	char cFileName[50];
+	sprintf_s(cFileName, 50, "channel%02d-%s-%s", channel, cTimeStart, cTimeEnd);
+
+	if (m_files.size() == 0)
+	{
+		OutputDebugString("Search File List Empty!");
+		throw std::exception("Search File List Empty!");
+		return;
+	}
+
+	RecordFile file;
+	size_t i = 0;
+	string strFileName(cFileName);
+	for (; i < m_files.size(); i++)
+	{
+		file = m_files[i];
+		if (strFileName.compare(file.name) == 0)
+		{
+			break;
+		}
+	}
+
+	if (i >= m_files.size())
+	{
+		OutputDebugString("Search File List Not Contain the Range!");
+		throw std::exception("Search File List Not Contain the Range!");
+		return;
+	}
 
 	// Init File Save Path 
-	//string strPath = m_strRoot;
+#ifdef Test_Bug
 	string strPath = "D:\\DOWNLOAD_SRC";
+#else
+	string strPath = m_strRoot;
+#endif
 	strPath.append("\\");
 	strPath.append(cTimeStartZero);
 	strPath.append("-");
 	strPath.append(cTimeEndZero);
 	strPath.append("\\");
-
 	CreateDirectory(strPath.c_str(), NULL);
-
+	strPath.append("JiaXinJie\\");
+	CreateDirectory(strPath.c_str(), NULL);
+	char cChannel[10];
+	sprintf_s(cChannel, 10, "channel%02d", channel);
+	strPath.append(cChannel);
+	strPath.append("\\");
+	CreateDirectory(strPath.c_str(), NULL);
 	strPath.append(file.name);
 	strPath.append(".jav");
 
+	// Set File Total Time
+	m_lDownLoadTotalTime = file.duration;
 	m_lDownloadHandle = JNetRecOpen4Time(m_lLoginHandle, "", channel, j_primary_stream, cTimeStart, cTimeEnd, 4096, IsPlay_Download, JRecDownload, this, m_lRecHandle);
 	if (m_lDownloadHandle > 0)
 	{
@@ -210,14 +243,257 @@ void CJxjVendor::Download(const size_t channel, const time_range& range)
 //void CJxjVendor::DownloadByName(const std::string& filename)
 void CJxjVendor::Download(const size_t channel, const std::string& filename)
 {
+	if (m_files.size() == 0)
+	{
+		OutputDebugString("Search File List Empty!");
+		throw std::exception("Search File List Empty!");
+		return;
+	}
+
+	RecordFile file;
+	size_t i = 0;
+	for (; i < m_files.size(); i++)
+	{
+		file = m_files[i];
+		if (filename.compare(file.name) == 0)
+		{
+			break;
+		}
+	}
+
+	if (i >= m_files.size())
+	{
+		OutputDebugString("Search File List Not Contain the Filename!");
+		throw std::exception("Search File List Not Contain the Filename!");
+		return;
+	}
+
+	m_errCode = Err_No;
+
+	// Init File Starttime and Endtime
+	char cTimeStart[24];
+	char cTimeEnd[24];
+	char cTimeStartZero[24];
+	char cTimeEndZero[24];
+
+	struct tm ttime;
+
+	localtime_s(&ttime, &file.beginTime);
+	strftime(cTimeStart, 24, "%Y%m%d%H%M%S", &ttime);
+	strftime(cTimeStartZero, 24, "%Y%m%d0000", &ttime);
+	strftime(cTimeEndZero, 24, "%Y%m%d2359", &ttime);
+	localtime_s(&ttime, &file.endTime);
+	strftime(cTimeEnd, 24, "%Y%m%d%H%M%S", &ttime);
+
+	// Init File Save Path 
+#ifdef Test_Bug
+	string strPath = "D:\\DOWNLOAD_SRC";
+#else
+	string strPath = m_strRoot;
+#endif
+	strPath.append("\\");
+	strPath.append(cTimeStartZero);
+	strPath.append("-");
+	strPath.append(cTimeEndZero);
+	strPath.append("\\");
+	CreateDirectory(strPath.c_str(), NULL);
+	strPath.append("JiaXinJie\\");
+	CreateDirectory(strPath.c_str(), NULL);
+	char cChannel[10];
+	sprintf_s(cChannel, 10, "channel%02d", channel);
+	strPath.append(cChannel);
+	strPath.append("\\");
+	CreateDirectory(strPath.c_str(), NULL);
+	strPath.append(file.name);
+	strPath.append(".jav");
+
+	// Set File Total Time
+	m_lDownLoadTotalTime = file.duration;
+	m_lDownloadHandle = JNetRecOpen4Time(m_lLoginHandle, "", channel, j_primary_stream, cTimeStart, cTimeEnd, 4096, IsPlay_Download, JRecDownload, this, m_lRecHandle);
+	if (m_lDownloadHandle > 0)
+	{
+		Sleep(1000);
+		JNetRecCtrl(m_lRecHandle, JNET_PB_CTRL_START, NULL);
+
+		m_lDownloadFileHandle = AVP_CreateRecFile(strPath.c_str(), AVP_PROTOCOL_JPF, Encoder_DM365);
+		if (m_lDownloadFileHandle == -1)
+		{
+			OutputDebugString("Create File Error!");
+			throw std::exception("Create File Error!");
+		}
+
+		while (m_errCode == Err_No)
+		{
+			::Sleep(100);
+		}
+	}
+	else
+	{
+		OutputDebugString("Download File Error!");
+		throw std::exception("Download File Error!");
+	}
 }
 
 //void CJxjVendor::PlayVideo(const std::string& filename)
 void CJxjVendor::PlayVideo(const size_t channel, const time_range& range)
 {
+	m_errCode = Err_No;
+
+	// Init File Starttime and Endtime
+	char cTimeStart[24];
+	char cTimeEnd[24];
+
+	struct tm ttime;
+
+	localtime_s(&ttime, &range.start);
+	strftime(cTimeStart, 24, "%Y%m%d%H%M%S", &ttime);
+	localtime_s(&ttime, &range.end);
+	strftime(cTimeEnd, 24, "%Y%m%d%H%M%S", &ttime);
+
+	char cFileName[50];
+	sprintf_s(cFileName, 50, "channel%02d-%s-%s", channel, cTimeStart, cTimeEnd);
+	if (m_files.size() == 0)
+	{
+		OutputDebugString("Search File List Empty!");
+		throw std::exception("Search File List Empty!");
+		return;
+	}
+
+	RecordFile file;
+	size_t i = 0;
+	string strFileName(cFileName);
+	for (; i < m_files.size(); i++)
+	{
+		file = m_files[i];
+		if (strFileName.compare(file.name) == 0)
+		{
+			break;
+		}
+	}
+
+	if (i >= m_files.size())
+	{
+		OutputDebugString("Search File List Not Contain the Range!");
+		throw std::exception("Search File List Not Contain the Range!");
+		return;
+	}
+
+	m_iPlayVideoChannel = AVP_GetFreePort();
+
+	m_lRecHandle = JNetRecOpen4Time(m_lLoginHandle, "", channel, 0, cTimeStart, cTimeEnd, 4096, IsPlay_Play, JRecStream, this, m_lRecHandle);
+	if (m_lRecHandle > 0)
+	{
+		Sleep(1000);
+		JNetRecCtrl(m_lRecHandle, JNET_PB_CTRL_START, NULL);
+	}
+
+	int iRet = -1;
+	AVP_SetPlayPriority(m_iPlayVideoChannel, AVPPlaySmooth);
+	AVP_SetDataProtocol(m_iPlayVideoChannel, AVP_PROTOCOL_JPF);
+
+	//AVP_EnableYUVDraw(gChannel,TRUE);
+	// 设置通道使用的解码器
+	iRet = AVP_SetCoder(m_iPlayVideoChannel, AVP_CODER_JXJ);
+	if (iRet != AVPErrSuccess)
+	{
+		OutputDebugString("AVP_SetCoder Error!");
+		throw std::exception("AVP_SetCoder Error!");
+		return;
+	}
+
+	// 设置显示窗口
+#ifdef Test_Bug
+	TestWindows testWindows;
+	testWindows.Init();
+#endif
+	AVP_AddPlayWnd(m_iPlayVideoChannel, NULL, g_hWnd, NULL, NULL);
+
+	// 开启解码
+	AVP_Play(m_iPlayVideoChannel);
+
+	while (m_errCode == Err_No)
+	{
+		::Sleep(100);
+	}
 }
 void CJxjVendor::PlayVideo(const size_t channel, const std::string& filename)
 {
+	if (m_files.size() == 0)
+	{
+		OutputDebugString("Search File List Empty!");
+		throw std::exception("Search File List Empty!");
+		return;
+	}
+
+	RecordFile file;
+	size_t i = 0;
+	for (; i < m_files.size(); i++)
+	{
+		file = m_files[i];
+		if (filename.compare(file.name) == 0)
+		{
+			break;
+		}
+	}
+
+	if (i >= m_files.size())
+	{
+		OutputDebugString("Search File List Not Contain the Filename!");
+		throw std::exception("Search File List Not Contain the Filename!");
+		return;
+	}
+
+	m_errCode = Err_No;
+
+	// Init File Starttime and Endtime
+	char cTimeStart[24];
+	char cTimeEnd[24];
+
+	struct tm ttime;
+
+	localtime_s(&ttime, &file.beginTime);
+	strftime(cTimeStart, 24, "%Y%m%d%H%M%S", &ttime);
+	localtime_s(&ttime, &file.endTime);
+	strftime(cTimeEnd, 24, "%Y%m%d%H%M%S", &ttime);
+
+	m_iPlayVideoChannel = AVP_GetFreePort();
+
+	m_lRecHandle = JNetRecOpen4Time(m_lLoginHandle, "", channel, 0, cTimeStart, cTimeEnd, 4096, IsPlay_Play, JRecStream, this, m_lRecHandle);
+	if (m_lRecHandle > 0)
+	{
+		Sleep(1000);
+		JNetRecCtrl(m_lRecHandle, JNET_PB_CTRL_START, NULL);
+	}
+
+	int iRet = -1;
+	AVP_SetPlayPriority(m_iPlayVideoChannel, AVPPlaySmooth);
+	AVP_SetDataProtocol(m_iPlayVideoChannel, AVP_PROTOCOL_JPF);
+
+	//AVP_EnableYUVDraw(gChannel,TRUE);
+	// 设置通道使用的解码器
+	iRet = AVP_SetCoder(m_iPlayVideoChannel, AVP_CODER_JXJ);
+	if (iRet != AVPErrSuccess)
+	{
+		OutputDebugString("AVP_SetCoder Error!");
+		throw std::exception("AVP_SetCoder Error!");
+		return;
+	}
+
+	// 设置显示窗口
+#ifdef Test_Bug
+	TestWindows testWindows;
+	testWindows.Init();
+#endif
+	AVP_AddPlayWnd(m_iPlayVideoChannel, NULL, g_hWnd, NULL, NULL);
+
+	// 开启解码
+	AVP_Play(m_iPlayVideoChannel);
+
+	while (m_errCode == Err_No)
+	{
+		::Sleep(100);
+	}
+
 }
 void CJxjVendor::SetDownloadPath(const std::string& Root)
 {
@@ -229,7 +505,7 @@ void CJxjVendor::throwException()
 {
 }
 
-/***************************************************/
+/***********************************************************************************************/
 int CJxjVendor::ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, void* pEventData, int iDataLen, void* pUserParam)
 {
 	switch (eType)
@@ -301,7 +577,7 @@ void CJxjVendor::SearchUnit(const size_t channel, const time_range& range)
 	{
 		if (m_storeLog.beg_node == 0)
 		{
-			m_files.empty();
+			//m_files.clear();
 		}
 
 		ReFreshVideoList(channel, range);
@@ -454,13 +730,13 @@ void CJxjVendor::AddSearchFileList(int channel)
 		JTime jTime = m_storeLog.store[i].beg_time;
 		recordFile.beginTime = MakeTimestampByJTime(jTime);
 		char strStartTime[20];
-		sprintf_s(strStartTime, 20, "%d%02d%02d%02d%02d%02d", jTime.year, jTime.month, jTime.date, jTime.hour, jTime.minute, jTime.second);
+		sprintf_s(strStartTime, 20, "%d%02d%02d%02d%02d%02d", jTime.year+1900, jTime.month, jTime.date, jTime.hour, jTime.minute, jTime.second);
 
 		// File End Time
 		jTime = m_storeLog.store[i].end_time;
 		recordFile.endTime = MakeTimestampByJTime(jTime);
 		char strEndTime[20];
-		sprintf_s(strEndTime, 20, "%d%02d%02d%02d%02d%02d", jTime.year, jTime.month, jTime.date, jTime.hour, jTime.minute, jTime.second);
+		sprintf_s(strEndTime, 20, "%d%02d%02d%02d%02d%02d", jTime.year+1900, jTime.month, jTime.date, jTime.hour, jTime.minute, jTime.second);
 	
 		// File Belong Time Secton 
 		recordFile.strTimeSection = strStartTime;
@@ -520,6 +796,91 @@ time_t CJxjVendor::MakeTimestampByJTime(JTime jTime)
 	return time;
 }
 
+string CJxjVendor::MakeStrTimeByTimestamp(time_t time)
+{
+	char cTime[50];
+	struct tm ttime;
+
+	localtime_s(&ttime, &time);
+	strftime(cTime, 50, "%Y%m%d%H%M%S", &ttime);
+
+	string strTime(cTime);
+
+	return strTime;
+}
+string CJxjVendor::MakeStrByInteger(int data)
+{
+	char cData[50];
+
+	sprintf_s(cData, 50, "%d", data);
+
+	string strTime(cData);
+
+	return strTime;
+}
+
+void CJxjVendor::SaveSearchFileListToFile()
+{
+	Document document;
+	string configfile = "SearchFileList.config";
+	document.Parse(configfile.c_str());
+	ofstream ofs(configfile);
+	OStreamWrapper osw(ofs);
+	Document::AllocatorType& alloc = document.GetAllocator();
+
+	Value root(kObjectType);
+
+	for (size_t i = 0; i < m_files.size(); i++)
+	{
+		string fileKey = "videoFile";
+		Value key(fileKey.c_str(), fileKey.length(), alloc);
+
+		RecordFile file = m_files[i];
+		Value name(file.name.c_str(), file.name.length(), alloc);
+		Value channel(MakeStrByInteger(file.channel).c_str(), MakeStrByInteger(file.channel).length(), alloc);
+		Value beginTime(MakeStrTimeByTimestamp(file.beginTime).c_str(), MakeStrTimeByTimestamp(file.beginTime).length(), alloc);
+		Value endTime(MakeStrTimeByTimestamp(file.endTime).c_str(), MakeStrTimeByTimestamp(file.endTime).length(), alloc);
+		Value size(MakeStrByInteger(file.size / 1024 / 1024).c_str(), MakeStrByInteger(file.size / 1024 / 1024).length(), alloc);
+
+		Value a(kArrayType);
+		a.PushBack(name, alloc).PushBack(channel, alloc).PushBack(beginTime, alloc).PushBack(endTime, alloc).PushBack(size, alloc);
+		root.AddMember(key.Move(), a.Move(), alloc);
+	}
+
+	Writer<OStreamWrapper> writer(osw);
+	root.Accept(writer);
+}
+
+void CJxjVendor::LoadSearchFileListFromFile()
+{
+	string configfile = "SearchFileList.config";
+	ifstream ifs(configfile);
+	IStreamWrapper isw(ifs);
+	Document d;
+	d.ParseStream(isw);
+	size_t file_size = isw.Tell();
+	if (isw.Tell() == 0)
+	{
+		return;
+	}
+
+	typedef Value::ConstMemberIterator Iter;
+	for (Iter it = d.MemberBegin(); it != d.MemberEnd(); it++)
+	{
+		string keyName = it->name.GetString();
+		const Value& a = d[keyName.c_str()];
+
+		assert(a.IsArray());
+		if (!a.IsArray() || a.Size() < 5)
+			continue;
+
+		string fileName = a[0].GetString();
+		string channel = a[1].GetString();
+		string beginTime = a[2].GetString();
+		string endTime = a[3].GetString();
+		string size = a[4].GetString();
+	}
+}
 int  CJxjVendor::JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam)
 {
 	if (pBuff)
@@ -540,11 +901,9 @@ int  CJxjVendor::JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* 
 		if (pFrame->timestamp_sec > 0 && m_lDownLoadTotalTime > 0)
 		{
 			g_iDownLoadPos = (pFrame->timestamp_sec - m_lDownLoadStartTime) / (m_lDownLoadTotalTime / 100);
-			//printf("g_idownloadpos = %d , starttime = %ld, curtime = %ld, totaltime = %ld\r\n", g_iDownLoadPos, m_lDownLoadStartTime, pFrame->timestamp_sec, m_lDownLoadTotalTime);
 			char cDownInfo[100];
 			sprintf_s(cDownInfo, 100, "g_idownloadpos = %d , starttime = %ld, curtime = %ld, totaltime = %ld\r\n", g_iDownLoadPos, m_lDownLoadStartTime, pFrame->timestamp_sec, m_lDownLoadTotalTime);
-			string strDownInfo(cDownInfo);
-			OutputDebugString(strDownInfo.c_str());
+			OutputDebugString(cDownInfo);
 		}
 
 		if ((m_lDownLoadStartTime + m_lDownLoadTotalTime) == pFrame->timestamp_sec)
@@ -576,27 +935,45 @@ void CJxjVendor::CloseDownload()
 	}
 }
 
-#include "catch.hpp"
+int CJxjVendor::JRecStream(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam)
+{
+	j_frame_t *pFrame = (j_frame_t *)pBuff;
 
-//CJxjVendor jxjVendor;
+	char cPlayInfo[100];
+	sprintf_s(cPlayInfo, 100, "--------%d    %d\r\n", pFrame->timestamp_sec, pFrame->timestamp_usec);
+	OutputDebugString(cPlayInfo);
+	AVP_PutFrame(m_iPlayVideoChannel, pBuff);
+
+	return 0;
+}
+
+DWORD CJxjVendor::PlayThreadFun(LPVOID lpThreadParameter)
+{
+	return 0;
+}
+
+
+#include "catch.hpp"
 
 //TEST_CASE_METHOD(CJxjVendor, "Init SDK", "[Init]")
 //{
 //	REQUIRE_NOTHROW(Init("192.168.0.89", 3321));
 //	REQUIRE(handle != nullptr);
 //}
-//
+
 //TEST_CASE_METHOD(CJxjVendor, "Login Device", "[Login]")
 //{
-//	REQUIRE_NOTHROW(Login("", ""));
+//	REQUIRE_NOTHROW(Init("192.168.0.89", 3321));
+//
+//	REQUIRE_NOTHROW(Login("admin", "admin"));
 //}
 
 //TEST_CASE_METHOD(CJxjVendor, "Logout Device", "[Logout]")
 //{
-//	//REQUIRE_NOTHROW(Logout());
+//	REQUIRE_NOTHROW(Logout());
 //}
 
-TEST_CASE_METHOD(CJxjVendor, "Search videos by time_range from device", "[Search]")
+TEST_CASE_METHOD(CJxjVendor, "Search videos by time_range from device", "[Download]")
 {
 	REQUIRE_NOTHROW(Init("192.168.0.89", 3321));
 
@@ -605,26 +982,39 @@ TEST_CASE_METHOD(CJxjVendor, "Search videos by time_range from device", "[Search
 	time_range timeRange;
 	timeRange.start = gTimeStart;
 	timeRange.end = gTimeEnd;
-
 	REQUIRE_NOTHROW(Search(0, timeRange));
 
+#ifdef Test_Filename
+	string filename = "channel00-20160619235245-20160620001144";
+	REQUIRE_NOTHROW(Download(0, filename));
+#else
+	time_t start = 1466351565;
+	time_t end = 1466352704;
+	timeRange.start = start;
+	timeRange.end = end;
 	REQUIRE_NOTHROW(Download(0, timeRange));
+#endif
 }
 
-//TEST_CASE_METHOD(CJxjVendor, "Logout Device", "[SearchAll]")
+//TEST_CASE_METHOD(CJxjVendor, "Download by time range", "[PlayVideo]")
 //{
 //	REQUIRE_NOTHROW(Init("192.168.0.89", 3321));
 //
 //	REQUIRE_NOTHROW(Login("admin", "admin"));
 //
-//	REQUIRE_NOTHROW(SearchAll());
-//}
-
-//TEST_CASE_METHOD(CJxjVendor, "Download by time range", "[DownloadByTime]")
-//{
-//	REQUIRE_NOTHROW(Init("192.168.0.89", 3321));
+//	time_range timeRange;
+//	timeRange.start = gTimeStart;
+//	timeRange.end = gTimeEnd;
+//	REQUIRE_NOTHROW(Search(0, timeRange));
 //
-//	REQUIRE_NOTHROW(Login("admin", "admin"));
-//
-//	REQUIRE_NOTHROW(DownloadByTime(gTimeStart, gTimeEnd));
+//#ifdef Test_Filename
+//	string filename = "channel00-20160619235245-20160620001144";
+//	REQUIRE_NOTHROW(PlayVideo(0, filename));
+//#else
+//	time_t start = 1466351565;
+//	time_t end = 1466352704;
+//	timeRange.start = start;
+//	timeRange.end = end;
+//	REQUIRE_NOTHROW(PlayVideo(0, timeRange));
+//#endif
 //}
