@@ -27,6 +27,7 @@ public:
 	void throwException();
 
 	static void CALLBACK BTDownLoadPos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, int index, NET_RECORDFILE_INFO recordfileinfo, LDWORD dwUser);
+	static void CALLBACK BTDownLoadFile(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser);
 	static void CALLBACK PlayCallBack(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser);
 	static int CALLBACK PBDataCallBack(LLONG lRealHandle, DWORD dwDataType, BYTE *pBuffer, DWORD dwBufSize, LDWORD dwUser);
 
@@ -35,6 +36,8 @@ private:
 	void timeDHToStd(NET_TIME *pTimeDH, tm *pTimeStd);
 	void timeStdToDH(tm *pTimeStd, NET_TIME *pTimeDH);
 	vector<time_range> MakeTimeRangeList(const time_range& range);
+	void typeCast(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_range range);
+	void CreatePath(const size_t channel);
 
 	
 
