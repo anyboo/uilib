@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "MyVendor.h"
+#include "JxjVendor/JxjVendor.h"
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
