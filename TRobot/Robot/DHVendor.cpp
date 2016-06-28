@@ -17,57 +17,11 @@ m_strPath(""),
 m_DHChannels(0)
 {
 	memset(&m_deviceInfo, 0, sizeof(m_deviceInfo));
-
-	m_hMod = LoadLibraryA(".\\DHsdk\\dhnetsdk.dll");
-	if (NULL == m_hMod)
-	{
-		return;
-	}
-
-	m_pGetLastError = (pCLIENT_GetLastError)GetProcAddress(m_hMod, "CLIENT_GetLastError");
-	assert(m_pGetLastError);
-	m_pGetChannel = (pCLIENT_QueryChannelName)GetProcAddress(m_hMod, "CLIENT_QueryChannelName");
-	assert(m_pGetChannel);
-	m_pDevState = (pCLIENT_QueryDevState)GetProcAddress(m_hMod, "CLIENT_QueryDevState");
-	assert(m_pDevState);
-	m_pInit = (pCLIENT_Init)GetProcAddress(m_hMod, "CLIENT_Init");
-	assert(m_pInit);
-	m_pUninit = (pCLIENT_Cleanup)GetProcAddress(m_hMod, "CLIENT_Cleanup");
-	assert(m_pUninit);
-	m_pLogin = (pCLIENT_Login)GetProcAddress(m_hMod, "CLIENT_Login");
-	assert(m_pLogin);
-	m_pLogout = (pCLIENT_Logout)GetProcAddress(m_hMod, "CLIENT_Logout");
-	assert(m_pLogout);
-	m_pSearchFileByTime = (pCLIENT_QueryRecordFile)GetProcAddress(m_hMod, "CLIENT_QueryRecordFile");
-	assert(m_pSearchFileByTime);
-	m_pDownloadByFile = (pCLIENT_DownloadByRecordFile)GetProcAddress(m_hMod, "CLIENT_DownloadByRecordFile");
-	assert(m_pDownloadByFile);
-	m_pDownloadByTime = (pCLIENT_DownloadByTime)GetProcAddress(m_hMod, "CLIENT_DownloadByTime");
-	assert(m_pDownloadByTime);
-	m_pGetDownloadPos = (pCLIENT_GetDownloadPos)GetProcAddress(m_hMod, "CLIENT_GetDownloadPos");
-	assert(m_pGetDownloadPos);
-	m_pStopDownload = (pCLIENT_StopDownload)GetProcAddress(m_hMod, "CLIENT_StopDownload");
-	assert(m_pStopDownload);
-	m_pPlayBackByFile = (pCLIENT_PlayBackByRecordFile)GetProcAddress(m_hMod, "CLIENT_PlayBackByRecordFile");
-	assert(m_pPlayBackByFile);
-	m_pPlayBackByTimeEx = (pCLIENT_PlayBackByTimeEx)GetProcAddress(m_hMod, "CLIENT_PlayBackByTimeEx");
-	m_pSeekPlayBack = (pCLIENT_SeekPlayBack)GetProcAddress(m_hMod, "CLIENT_SeekPlayBack");
-	assert(m_pSeekPlayBack);
-	m_pPausePlayBack = (pCLIENT_PausePlayBack)GetProcAddress(m_hMod, "CLIENT_PausePlayBack");
-	assert(m_pPausePlayBack);
-	m_pStopPlayBack = (pCLIENT_StopPlayBack)GetProcAddress(m_hMod, "CLIENT_StopPlayBack");
-	assert(m_pStopPlayBack);
 }
 
 
 DHVendor::~DHVendor()
 {
-	if (m_hMod)
-	{
-		FreeLibrary(m_hMod);
-		m_hMod = NULL;
-	}
-
 	if (!m_files.empty())
 	{
 		m_files.clear();
@@ -76,7 +30,7 @@ DHVendor::~DHVendor()
 
 void DHVendor::Init(const std::string& ip, size_t port)
 {
-	BOOL bInit = m_pInit(0, 0);
+	BOOL bInit = CLIENT_Init(0, 0);
 	
 	m_strIP = ip;
 	m_dwPort = port;
@@ -84,7 +38,7 @@ void DHVendor::Init(const std::string& ip, size_t port)
 	cout << "m_strIP:" << m_strIP << endl;
 	if (!bInit)
 	{
-		cout << "初始化错误：" << m_pGetLastError() << endl;
+		cout << "初始化错误：" << CLIENT_GetLastError() << endl;
 		throw std::exception("Init failed");
 
 	}
@@ -99,7 +53,7 @@ void DHVendor::Login(const std::string& user, const std::string& password)
 	int nError = 0;
 	m_strUser = user;
 	m_strPasswords = password;
-	m_lLoginHandle = m_pLogin((char *)(m_strIP.c_str()), m_dwPort, (char *)(m_strUser.c_str()), (char *)(m_strPasswords.c_str()), &m_deviceInfo, &nError);
+	m_lLoginHandle = CLIENT_Login((char *)m_strIP.c_str(), m_dwPort, (char *)(m_strUser.c_str()), (char *)(m_strPasswords.c_str()), &m_deviceInfo, &nError);
 
 	if (0 != nError)
 	{
@@ -110,7 +64,6 @@ void DHVendor::Login(const std::string& user, const std::string& password)
 	if (0 == m_lLoginHandle)
 	{
 		cout << "登录错误(lLogin)：" << GetLastErrorString().c_str() << endl;
-		throw std::exception("Login failed");
 	}
 
 	if (m_lLoginHandle > 0)
@@ -120,7 +73,7 @@ void DHVendor::Login(const std::string& user, const std::string& password)
 		stuChn.stuVideoIn.dwSize = sizeof(stuChn.stuVideoIn);
 		stuChn.stuVideoOut.dwSize = sizeof(stuChn.stuVideoOut);
 
-		BOOL bDevState = m_pDevState(m_lLoginHandle, DH_DEVSTATE_DEV_CHN_COUNT, (char*)&stuChn, stuChn.dwSize, &nRetLen, 1000);
+		BOOL bDevState = CLIENT_QueryDevState(m_lLoginHandle, DH_DEVSTATE_DEV_CHN_COUNT, (char*)&stuChn, stuChn.dwSize, &nRetLen, 1000);
 
 		if (bDevState)
 		{
@@ -128,27 +81,26 @@ void DHVendor::Login(const std::string& user, const std::string& password)
 		}
 		else
 		{
-			cout << "登录错误(lLogin)：" << GetLastErrorString().c_str() << endl;
+			cout << "Get channel failed" << GetLastErrorString() << endl;
 			throw std::exception("Get channel failed");
 			return;
 		}
 	}
 
-
-	for (int i = 1; i <= m_DHChannels; i++)
-	{
-		char szName[20];
-		ZeroMemory(szName, sizeof(szName));
-		cout << szName << "通道" << i << endl;
-		string strName = szName;
-		m_channels.insert(std::make_pair(i, strName));
-		m_channelVec.push_back(i);
-	}
+// 	for (int i = 1; i <= m_DHChannels; i++)
+// 	{
+// 		char szName[20];
+// 		ZeroMemory(szName, sizeof(szName));
+// 		cout << szName << "通道" << i << endl;
+// 		string strName = szName;
+// 		m_channels.insert(std::make_pair(i, strName));
+// 		m_channelVec.push_back(i);
+// 	}
 }
 
 void DHVendor::Logout()
 {
-	if (m_lLoginHandle > 0 && !m_pLogout(m_lLoginHandle))
+	if (m_lLoginHandle > 0 && !CLIENT_Logout(m_lLoginHandle))
 	{
 		cout << "退出错误：" << GetLastErrorString().c_str() << endl;
 		throw std::exception("Logout failed");
@@ -206,15 +158,14 @@ void DHVendor::Search(const size_t channel, const time_range& range)
 		NET_TIME ntStime;
 		NET_TIME ntEtime;
 
-		typeCast(ntStime, ntEtime, *it);
+		trTOnt(ntStime, ntEtime, *it);
 
 		NET_RECORDFILE_INFO ifileinfo[MAX_SEARCH_COUNT];
 		ZeroMemory(ifileinfo, sizeof(ifileinfo));
 		int iMaxNum = 0;
 
-		BOOL bRet = m_pSearchFileByTime(m_lLoginHandle, channel, 0, &ntStime, &ntEtime, 0, ifileinfo, sizeof(ifileinfo), &iMaxNum, 5000, true);
+		BOOL bRet = CLIENT_QueryRecordFile(m_lLoginHandle, channel, 0, &ntStime, &ntEtime, 0, ifileinfo, sizeof(ifileinfo), &iMaxNum, 5000, true);
 
-		cout << "--------iMaxNum:" << iMaxNum << endl;
 		if (!bRet)
 		{
 			cout << "GetRecordFileList 查询录像失败，错误原因：" << GetLastErrorString() << endl;
@@ -272,7 +223,7 @@ void DHVendor::Download(const size_t channel, const time_range& range)
 	NET_TIME ntStime;
 	NET_TIME ntEtime;
 
-	typeCast(ntStime, ntEtime, range);
+	trTOnt(ntStime, ntEtime, range);
 
 	CreatePath(channel);
 
@@ -281,7 +232,7 @@ void DHVendor::Download(const size_t channel, const time_range& range)
 	sprintf_s(szTime, "D:\\DownLoadVideo\\DaHua\\通道%d\\channel%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d.dav", channel, channel, ntStime.dwYear, ntStime.dwMonth, ntStime.dwDay,
 		ntStime.dwHour, ntStime.dwMinute, ntStime.dwSecond, ntEtime.dwYear, ntEtime.dwMonth, ntEtime.dwDay, ntEtime.dwHour, ntEtime.dwMinute, ntEtime.dwSecond);
 
-	BOOL bRet = m_pDownloadByTime(m_lLoginHandle, channel, 0, &ntStime, &ntEtime, szTime, BTDownLoadPos, (DWORD)this);
+	BOOL bRet = CLIENT_DownloadByTime(m_lLoginHandle, channel, 0, &ntStime, &ntEtime, szTime, BTDownLoadPos, (DWORD)this);
 	cout << "strName:" << szTime << endl;
 
 	if (0 == bRet)
@@ -308,12 +259,12 @@ void DHVendor::PlayVideo(const size_t channel, const time_range& range)
 	NET_TIME ntStime;
 	NET_TIME ntEtime;
 
-	typeCast(ntStime, ntEtime, range);
+	trTOnt(ntStime, ntEtime, range);
 
 	TestWindows Test;
 	Test.Init();
 
-	BOOL lPlayID = m_pPlayBackByTimeEx(m_lLoginHandle, channel, &ntStime, &ntEtime, g_hWnd, PlayCallBack, (DWORD)this, PBDataCallBack, (DWORD)this);
+	BOOL lPlayID = CLIENT_PlayBackByTimeEx(m_lLoginHandle, channel, &ntStime, &ntEtime, g_hWnd, PlayCallBack, (DWORD)this, PBDataCallBack, (DWORD)this);
 
 	system("PAUSE");
 
@@ -331,11 +282,6 @@ void DHVendor::Download(const size_t channel, const std::string& filename)
 		cout << "请先登录!" << endl;
 		return;
 	}
-
-	//NET_TIME ntStime;
-	//NET_TIME ntEtime;
-
-	//typeCast(ntStime, ntEtime, range);
 
 	CreatePath(channel);
 
@@ -356,7 +302,7 @@ void DHVendor::Download(const size_t channel, const std::string& filename)
 		if (it->name == filename)
 		{
 			NET_RECORDFILE_INFO* pData = (NET_RECORDFILE_INFO*)it->getPrivateData();
-			BOOL bRet = m_pDownloadByFile(m_lLoginHandle, pData, szTime, BTDownLoadFile, (DWORD)this);
+			BOOL bRet = CLIENT_DownloadByRecordFile(m_lLoginHandle, pData, szTime, BTDownLoadFile, (DWORD)this);
 
 			if (0 == bRet)
 			{
@@ -382,13 +328,8 @@ void DHVendor::PlayVideo(const size_t channel, const std::string& filename)
 	if (0 >= m_lLoginHandle)
 	{
 		cout << "PlayVideo 在线播放失败原因：" << GetLastErrorString() << endl;
-		throw std::exception("Login handle by Record file failed");
 		return;
 	}
-
-
-
-	//BOOL lPlayID = m_pPlayBackByFile(m_lLoginHandle, g_hWnd, (DWORD)this, PBDataCallBack, (DWORD)this);
 
 	vector<RecordFile>::iterator it;
 	int nSize = 0;
@@ -400,7 +341,7 @@ void DHVendor::PlayVideo(const size_t channel, const std::string& filename)
 			Test.Init();
 
 			NET_RECORDFILE_INFO* pData = (NET_RECORDFILE_INFO*)it->getPrivateData();
-			BOOL lPlayID = m_pPlayBackByFile(m_lLoginHandle, pData, g_hWnd, PlayCallBack, (DWORD)this);
+			BOOL lPlayID = CLIENT_PlayBackByRecordFile(m_lLoginHandle, pData, g_hWnd, PlayCallBack, (DWORD)this);
 
 			system("PAUSE");
 
@@ -424,7 +365,7 @@ void DHVendor::PlayVideo(const size_t channel, const std::string& filename)
 
 void DHVendor::SetDownloadPath(const std::string& Root)
 {
-	m_strPath = Root;
+
 }
 
 void DHVendor::throwException()
@@ -492,7 +433,7 @@ void DHVendor::CreatePath(const size_t channel)
 	}
 }
 
-void DHVendor::typeCast(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_range range)
+void DHVendor::trTOnt(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_range range)
 {
 	tm tmStartTime;
 	tm tmEndTime;
@@ -694,7 +635,7 @@ string DHVendor::MakeStrByInteger(int data)
 string DHVendor::GetLastErrorString()
 {
 	DWORD dwError;
-	dwError = m_pGetLastError();
+	dwError = CLIENT_GetLastError();
 
 	switch (dwError)
 	{
@@ -934,7 +875,7 @@ TEST_CASE_METHOD(DHVendor, "Init DH SDK", "[DHVendor]")
 	range.end = 1466629200;
 	//range.end = 1478833871;
 	REQUIRE_NOTHROW(Init("192.168.0.96", 37777));
-	REQUIRE(m_hMod != nullptr);
+
 	REQUIRE_NOTHROW(Login("admin", ""));
 
 	REQUIRE_NOTHROW(Search(0, range));
@@ -945,6 +886,6 @@ TEST_CASE_METHOD(DHVendor, "Init DH SDK", "[DHVendor]")
 
 	//REQUIRE_NOTHROW(PlayVideo(0, range));
 	REQUIRE_NOTHROW(PlayVideo(0, "channel0-20160621000000-20160621235959-0"));
-	//REQUIRE_NOTHROW(Logout());
+	REQUIRE_NOTHROW(Logout());
 
 }

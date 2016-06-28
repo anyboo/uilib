@@ -26,6 +26,8 @@ public:
 	void SetDownloadPath(const std::string& Root);
 	void throwException();
 
+
+private:
 	static void CALLBACK BTDownLoadPos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, int index, NET_RECORDFILE_INFO recordfileinfo, LDWORD dwUser);
 	static void CALLBACK BTDownLoadFile(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser);
 	static void CALLBACK PlayCallBack(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser);
@@ -36,53 +38,30 @@ public:
 	string MakeStrByInteger(int data);
 	string MakeStrTimeByTimestamp(time_t time);
 
-private:
 	string GetLastErrorString();
 	void timeDHToStd(NET_TIME *pTimeDH, tm *pTimeStd);
 	void timeStdToDH(tm *pTimeStd, NET_TIME *pTimeDH);
 	vector<time_range> MakeTimeRangeList(const time_range& range);
-	void typeCast(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_range range);
+	void trTOnt(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_range range);
 	void CreatePath(const size_t channel);
-
-	
 
 protected:
 	HMODULE m_hMod;
 
+	//login & Init
 	string m_strName;
 	int m_dwPort;
 	string m_strUser;
 	string m_strPasswords;
 	string m_strIP;
+
+
 	NET_DEVICEINFO m_deviceInfo;
-	map<__int32, string> m_channels;
 	LLONG m_lLoginHandle;
-	NET_TIME m_stime;
-	NET_TIME m_etime;
 	LONG m_pdownloadfile;
 	string m_strPath;
 	int m_DHChannels;
 
 	vector<RecordFile> m_files;
-	vector<int> m_channelVec;
-
-protected:
-	pCLIENT_GetLastError m_pGetLastError;
-	pCLIENT_QueryChannelName m_pGetChannel;
-	pCLIENT_QueryDevState m_pDevState;
-	pCLIENT_Init m_pInit;
-	pCLIENT_Cleanup m_pUninit;
-	pCLIENT_Login m_pLogin;
-	pCLIENT_Logout m_pLogout;
-	pCLIENT_QueryRecordFile m_pSearchFileByTime;
-	pCLIENT_DownloadByRecordFile m_pDownloadByFile;
-	pCLIENT_DownloadByTime m_pDownloadByTime;
-	pCLIENT_GetDownloadPos m_pGetDownloadPos;
-	pCLIENT_StopDownload m_pStopDownload;
-	pCLIENT_PlayBackByRecordFile m_pPlayBackByFile;
-	pCLIENT_PlayBackByTimeEx m_pPlayBackByTimeEx;
-	pCLIENT_SeekPlayBack m_pSeekPlayBack;
-	pCLIENT_PausePlayBack m_pPausePlayBack;
-	pCLIENT_StopPlayBack m_pStopPlayBack;
 };
 
