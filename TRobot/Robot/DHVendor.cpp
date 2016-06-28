@@ -12,7 +12,6 @@ m_strUser(""),
 m_strPasswords(""),
 m_strIP(""),
 m_lLoginHandle(0),
-m_hMod(NULL),
 m_strPath(""),
 m_DHChannels(0)
 {

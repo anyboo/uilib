@@ -46,7 +46,7 @@ private:
 	void CreatePath(const size_t channel);
 
 protected:
-	HMODULE m_hMod;
+	//HMODULE m_hMod;
 
 	//login & Init
 	string m_strName;
