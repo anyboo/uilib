@@ -5,6 +5,8 @@
 #include <time.h>
 #include <fstream>
 
+#include "CommonUtrl.h"
+
 typedef enum
 {
 	Err_No = 0,
@@ -136,15 +138,10 @@ protected:
 
 	// Search Callback
 	void MakeStoreLog(JStoreLog& storeLog, const JRecodeType recordType, const int beginNode, const int endNode, const int ssid, const std::time_t& start, const std::time_t& end);
-	vector<time_range> MakeTimeRangeList(const time_range& range);
 	void SearchUnit(const size_t channel, const time_range& range);
 	void ReFreshVideoList(int channel, const time_range& range);
-	void InitSearchTime(JTime& jStartTime, JTime& jStopTime, const __time64_t& timeStart, const __time64_t& timeEnd);
 	void AddSearchFileList(int channel);
 	bool CheckFileExist(const RecordFile& file, const vector<RecordFile>& fileList);
-	time_t MakeTimestampByJTime(JTime jTime);
-	string MakeStrTimeByTimestamp(time_t time);
-	string MakeStrByInteger(int data);
 	void SaveSearchFileListToFile();
 	void LoadSearchFileListFromFile();
 

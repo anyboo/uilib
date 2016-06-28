@@ -72,6 +72,9 @@
     <ClInclude Include="DZPVendor\DZPVendor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CommonUtrl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -90,6 +93,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DZPVendor\DZPVendor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CommonUtrl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
