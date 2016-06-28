@@ -31,7 +31,7 @@ QMSqlite::~QMSqlite()
 }
 
 
-QMSqlite *QMSqlite::getInstance()
+QMSqlite* QMSqlite::getInstance()
 {
 	if (NULL == m_instance)
 		m_instance = new QMSqlite;
@@ -88,15 +88,45 @@ Session QMSqlite::connectDb()
 }
 
 
-bool QMSqlite::createSearchTable()
+bool QMSqlite::createTable(int tag)
 {
 	Session sess = connectDb();
 	if (!checkConnect(sess))
 		return false;
 
 	try
+	{
+		switch (tag)
+		{
+		case SEARCH_VIDEO:
+			sess << "CREATE TABLE SearchVideo(name VARCHAR(100), channel INTEGER, starttime DATETIME, stoptime DATETIME, size BIGINT, alias VARCHAR(100))", now;
+			break;
+		case SEARCH_DEVICE:
+			sess << "CREATE TABLE SearchDevice(fcatoryname VARCHAR(20), ip VARCHAR(30), port INTEGER)", now;
+			break;
+		default:;
+		}
+		closeConnect(sess);
+	}
+	catch (Poco::Exception &ex)
+	{
+		throw(ex.displayText());
+		closeConnect(sess);
+		return false;
+	}
+
+	return true;
+}
+
+bool QMSqlite::GetData(std::vector<SearchVideo>& Record)
+{
+	Session sess = connectDb();
+	if (!checkConnect(sess))
+		return false;
+	try
 	{		
-		sess << "CREATE TABLE Search(name VARCHAR(100), channel INTEGER, starttime DATETIME, stoptime DATETIME, size BIGINT, alias VARCHAR(100))", now;
+		Statement select(sess);		
+		select << "SELECT * FROM SearchVideo", into(Record), now;
 		closeConnect(sess);
 	}
 	catch (Poco::Exception &ex)
@@ -109,16 +139,15 @@ bool QMSqlite::createSearchTable()
 	return true;
 }
 
-
-bool QMSqlite::GetSearchData(std::vector<SearchRecord>&Record)
+bool QMSqlite::GetData(std::vector<SearchDevice>& Record)
 {
 	Session sess = connectDb();
 	if (!checkConnect(sess))
 		return false;
 	try
-	{		
+	{
 		Statement select(sess);
-		select << "SELECT * FROM Search", into(Record), now;
+		select << "SELECT * FROM SearchDevice", into(Record), now;		
 		closeConnect(sess);
 	}
 	catch (Poco::Exception &ex)
@@ -127,19 +156,19 @@ bool QMSqlite::GetSearchData(std::vector<SearchRecord>&Record)
 		closeConnect(sess);
 		return false;
 	}
-	
+
 	return true;
 }
 
 
-bool QMSqlite::writeSearchData(SearchRecord searchrecode)
+bool QMSqlite::writeData(SearchVideo searchrecode)
 {
 	Session sess = connectDb();
 	if (!checkConnect(sess))
 		return false;
 	try
-	{		
-		sess << "INSERT INTO Search VALUES(:name, :channel, :starttime, :stoptime, :size, :alias)", use(searchrecode), now;
+	{
+		sess << "INSERT INTO SearchVideo VALUES(:name, :channel, :starttime, :stoptime, :size, :alias)", use(searchrecode), now;
 		closeConnect(sess);
 	}
 	catch (Poco::Exception &ex)
@@ -152,7 +181,28 @@ bool QMSqlite::writeSearchData(SearchRecord searchrecode)
 	return true;
 }
 
-bool QMSqlite::writeSearchDataByVector(std::vector<SearchRecord>&Record)
+bool QMSqlite::writeData(SearchDevice searchrecode)
+{
+	Session sess = connectDb();
+	if (!checkConnect(sess))
+		return false;
+	try
+	{
+		sess << "INSERT INTO SearchDevice VALUES(:fcatoryname, :ip, :port)", use(searchrecode), now;		
+		closeConnect(sess);
+	}
+	catch (Poco::Exception &ex)
+	{
+		throw(ex.displayText());
+		closeConnect(sess);
+		return false;
+	}
+
+	return true;
+}
+
+
+bool QMSqlite::writeDataByVector(std::vector<SearchVideo>&Record)
 {
 	Session sess = connectDb();
 	if (!checkConnect(sess))
@@ -160,7 +210,59 @@ bool QMSqlite::writeSearchDataByVector(std::vector<SearchRecord>&Record)
 	try
 	{
 		Statement insert(sess);
-		insert << "INSERT INTO Search VALUES(:name, :channel, :starttime, :stoptime, :size, :alias)", use(Record), now;
+		insert << "INSERT INTO SearchVideo VALUES(:name, :channel, :starttime, :stoptime, :size, :alias)", use(Record), now;
+		closeConnect(sess);
+	}
+	catch (Poco::Exception &ex)
+	{
+		throw(ex.displayText());
+		closeConnect(sess);
+		return false;
+	}
+
+	return true;
+}
+
+bool QMSqlite::writeDataByVector(std::vector<SearchDevice>& Record)
+{
+	Session sess = connectDb();
+	if (!checkConnect(sess))
+		return false;
+	try
+	{
+		Statement insert(sess);
+		insert << "INSERT INTO SearchDevice VALUES(:fcatoryname, :ip, :port)", use(Record), now;
+		closeConnect(sess);
+	}
+	catch (Poco::Exception &ex)
+	{
+		throw(ex.displayText());
+		closeConnect(sess);
+		return false;
+	}
+
+	return true;
+}
+
+
+bool QMSqlite::cleanData(int tag)
+{
+	Session sess = connectDb();
+	if (!checkConnect(sess))
+		return false;
+	try
+	{		
+		switch (tag)
+		{
+		case SEARCH_DEVICE:
+			sess << "delete from SearchDevice" << now;
+			break;
+		case SEARCH_VIDEO:
+			sess << "delete from SearchVideo" << now;
+			break;
+		default:;
+		}
+		
 		closeConnect(sess);
 	}
 	catch (Poco::Exception &ex)
@@ -174,35 +276,23 @@ bool QMSqlite::writeSearchDataByVector(std::vector<SearchRecord>&Record)
 }
 
 
-bool QMSqlite::cleanSearchData()
+bool QMSqlite::dropTable(int tag)
 {
 	Session sess = connectDb();
 	if (!checkConnect(sess))
 		return false;
 	try
 	{		
-		sess << "delete from Search" << now;
-		closeConnect(sess);
-	}
-	catch (Poco::Exception &ex)
-	{
-		throw(ex.displayText());
-		closeConnect(sess);
-		return false;
-	}
-	
-	return true;
-}
-
-
-bool QMSqlite::dropSearchTable()
-{
-	Session sess = connectDb();
-	if (!checkConnect(sess))
-		return false;
-	try
-	{		
-		sess << "DROP TABLE IF EXISTS Search" << now;
+		switch (tag)
+		{
+		case SEARCH_DEVICE:
+			sess << "DROP TABLE IF EXISTS SearchDevice" << now;
+			break;
+		case SEARCH_VIDEO:
+			sess << "DROP TABLE IF EXISTS SearchVideo" << now;
+			break;
+		default:;
+		}		
 		closeConnect(sess);
 	}
 	catch (Poco::Exception &ex)
@@ -247,3 +337,4 @@ void QMSqlite::closeSessionPool()
 {
 	delete m_pool;	
 }
+
