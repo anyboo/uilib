@@ -26,3 +26,4 @@ public:
 	virtual void SetDownloadPath(const std::string& Root) = 0;
 	virtual void throwException() = 0;
 };
+

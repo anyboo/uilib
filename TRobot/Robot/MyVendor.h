@@ -24,3 +24,4 @@ protected:
 	void* handle;
 	size_t channelCount;
 };
+

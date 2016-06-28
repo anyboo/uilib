@@ -19,15 +19,6 @@
     <Filter Include="Header Files\sdk">
       <UniqueIdentifier>{e1574f80-21ee-495c-9dad-142b7709b50e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="AVPlayer">
-      <UniqueIdentifier>{4de47ce6-157c-4774-b8ca-bc73238d8fc7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="JNetSDK">
-      <UniqueIdentifier>{733bac46-badc-4916-8e6f-4586ff926d2c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="inc">
-      <UniqueIdentifier>{a150abbd-936e-4897-a3b6-8cf40aaaa153}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -45,28 +36,13 @@
     <ClInclude Include="MyVendor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="JxjVendor\JxjVendor.h">
+    <ClInclude Include="DH_Head.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\stdint.h">
-      <Filter>inc</Filter>
+    <ClInclude Include="DHVendor.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\mb_api.h">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\Jtype.h">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\j_sdk.h">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\AVPlayer.h">
-      <Filter>AVPlayer</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\JNetSDK.h">
-      <Filter>JNetSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="JxjVendor\TestWindows.h">
+    <ClInclude Include="TestWindows.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -80,10 +56,10 @@
     <ClCompile Include="MyVendor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="JxjVendor\JxjVendor.cpp">
+    <ClCompile Include="DHVendor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="JxjVendor\TestWindows.cpp">
+    <ClCompile Include="TestWindows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
