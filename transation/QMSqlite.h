@@ -7,7 +7,16 @@
 #include <iostream>
 #include <vector>
 
-typedef Poco::Tuple<std::string, int, __time64_t, __time64_t, __int64, std::string> SearchRecord;
+typedef Poco::Tuple<std::string, int, __time64_t, __time64_t, __int64, std::string> SearchVideo;
+typedef Poco::Tuple<std::string, std::string, int> SearchDevice;
+
+
+typedef enum _TABLE_TAG
+{
+	SEARCH_DEVICE = 1,               //search device table
+	SEARCH_VIDEO,                    //search video table
+}TABLE_TAG;
+
 
 using namespace Poco::Data;
 using namespace std;
@@ -16,7 +25,7 @@ class QMSqlite
 {
 public:
 	
-	static QMSqlite *getInstance();
+	static QMSqlite* getInstance();
 private:
 	QMSqlite();
 	~QMSqlite();
@@ -48,13 +57,15 @@ private:
 
 	static Garbo garbo;
 public:
-	
-	bool createSearchTable();
-	bool GetSearchData(std::vector<SearchRecord>&Record);
-	bool writeSearchData(SearchRecord searchrecode);
-	bool writeSearchDataByVector(std::vector<SearchRecord>&Record);
-	bool cleanSearchData();
-	bool dropSearchTable();
+	bool GetData(std::vector<SearchVideo>& Record);
+	bool GetData(std::vector<SearchDevice>& Record);
+	bool writeData(SearchVideo searchrecode);
+	bool writeData(SearchDevice searchrecode);
+	bool writeDataByVector(std::vector<SearchVideo>& Record);
+	bool writeDataByVector(std::vector<SearchDevice>& Record);
+	bool cleanData(int tag);
+	bool dropTable(int tag);
+	bool createTable(int tag);
 private:
 	bool Initialize();
 	bool creatSessionPool();
