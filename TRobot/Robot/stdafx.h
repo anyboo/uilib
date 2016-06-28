@@ -32,6 +32,13 @@
 #pragma comment(lib, "lib\\JNetSDK")
 #pragma comment(lib, "lib\\AVPlayer")
 
+// DZP SDK
+#include "DZPVendor\sdk\netsdk.h"
+#include "DZPVendor\sdk\H264Play.h"
+
+#pragma comment(lib, "DZPVendor\\sdk\\NetSdk")
+#pragma comment(lib, "DZPVendor\\sdk\\H264Play")
+
 using namespace std;
 using namespace rapidjson;
 
