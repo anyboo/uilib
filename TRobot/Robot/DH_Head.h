@@ -8,8 +8,18 @@
 using namespace std;
 
 #include < assert.h> 
+#include <tchar.h>
 
 #include "Depend/dhnetsdk.h"
+
+// Json 
+#include "document.h"
+#include "prettywriter.h"
+#include "stringbuffer.h"
+#include "ostreamwrapper.h"
+#include "istreamwrapper.h"
+
+using namespace rapidjson;
 
 typedef DWORD(CALL_METHOD *pCLIENT_GetLastError)(void);
 typedef BOOL(CALL_METHOD *pCLIENT_QueryChannelName)(LLONG lLoginID, char *pChannelName, int maxlen, int *nChannelCount, int waittime);

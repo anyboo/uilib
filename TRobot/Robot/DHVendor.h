@@ -31,6 +31,11 @@ public:
 	static void CALLBACK PlayCallBack(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser);
 	static int CALLBACK PBDataCallBack(LLONG lRealHandle, DWORD dwDataType, BYTE *pBuffer, DWORD dwBufSize, LDWORD dwUser);
 
+	void SaveSearchFileListToFile();
+	void LoadSearchFileListFromFile();
+	string MakeStrByInteger(int data);
+	string MakeStrTimeByTimestamp(time_t time);
+
 private:
 	string GetLastErrorString();
 	void timeDHToStd(NET_TIME *pTimeDH, tm *pTimeStd);
