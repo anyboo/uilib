@@ -8,7 +8,7 @@
 	
 	<VerticalLayout bkimage="file='Downloader/bsbj.png'" height="768" width="1024" bordersize="3" bordercolor="0xf1234567">
 		<HorizontalLayout height="60" width="1024" bkimage="file='Downloader/beijing.png'">
-			<Button name="closebtn" width="38" height="38" padding="20,10,0,0" tooltip="返回" foreimage="file='Downloader/back.png'" hotimage="file='Downloader/hsbj.png'"/>
+			<Button name="closebtn" width="30" height="30" padding="10,10,0,0" tooltip="返回" foreimage="file='Downloader/xz.png' dest='6,2,20,29'" hotimage="file='Downloader/hsbj.png'"/>
 			<Label text="视频下载" textcolor="#FFFFFFFF" font="1" padding="400,1,1,1" />
 			<Button name="test" width="40" height="40" padding="300,10,0,0" foreimage="file='Downloader/tianjia.png' dest='8,9,31,32'" normalimage="Downloader/timeOut.png" />
 		</HorizontalLayout>
@@ -17,7 +17,7 @@
 				<HorizontalLayout  width="120" height="80" padding="40,30,40,10," bkimage="file='Downloader/cxbt.png'" >				
 					<Button borderround="5,5" name="Add_device" text="添加设备" textcolor="#00000000" font="1" textpadding="0,40,0,2" foreimage="file='Downloader/tianjia.png' dest='47,10,70,33'" pushedimage="file='Downloader/cxbt.png'" normalimage="Downloader/cxbt.png" hotimage="Downloader/bsbj.png"  />
 				</HorizontalLayout>
-		<VerticalLayout width="200" height="580" >					
+		<VerticalLayout width="200" height="585" >					
 			<List name="VendorList" itemhotbkcolor="0x00000000" itemselectedbkcolor="0x22224822" vscrollbar="true">
 
 			</List>

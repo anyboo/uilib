@@ -41,7 +41,7 @@ public:
 	BOOL SearchFiles();
 	void ShowFileList();
 
-	int GetSubListCurSel(CListContainerElementUI* SubList);
+	int GetSubListCurSel(CListContainerElementUI* SubList, CListUI* pList);
 
 	CListContainerElementUI* Add_FileInfoList(int n, bool IsShowCloseBT);
 
