@@ -237,10 +237,10 @@ void CJxjVendor::Download(const size_t channel, const time_range& range)
 	strPath.append(cTimeEndZero);
 	strPath.append("\\");
 	CreateDirectory(strPath.c_str(), NULL);
-	strPath.append("JiaXinJie\\");
+	strPath.append("佳信捷\\");
 	CreateDirectory(strPath.c_str(), NULL);
 	char cChannel[10];
-	sprintf_s(cChannel, 10, "channel%02d", channel);
+	sprintf_s(cChannel, 10, "通道%02d", channel);
 	strPath.append(cChannel);
 	strPath.append("\\");
 	CreateDirectory(strPath.c_str(), NULL);
@@ -331,10 +331,10 @@ void CJxjVendor::Download(const size_t channel, const std::string& filename)
 	strPath.append(cTimeEndZero);
 	strPath.append("\\");
 	CreateDirectory(strPath.c_str(), NULL);
-	strPath.append("JiaXinJie\\");
+	strPath.append("佳信捷\\");
 	CreateDirectory(strPath.c_str(), NULL);
 	char cChannel[10];
-	sprintf_s(cChannel, 10, "channel%02d", channel);
+	sprintf_s(cChannel, 10, "通道%02d", channel);
 	strPath.append(cChannel);
 	strPath.append("\\");
 	CreateDirectory(strPath.c_str(), NULL);
@@ -1007,28 +1007,28 @@ DWORD CJxjVendor::PlayThreadFun(LPVOID lpThreadParameter)
 //	REQUIRE_NOTHROW(Logout());
 //}
 
-//TEST_CASE_METHOD(CJxjVendor, "Search videos by time_range from device", "[Download]")
-//{
-//	REQUIRE_NOTHROW(Init("192.168.0.89", 3321));
-//
-//	REQUIRE_NOTHROW(Login("admin", "admin"));
-//
-//	time_range timeRange;
-//	timeRange.start = gTimeStart;
-//	timeRange.end = gTimeEnd;
-//	REQUIRE_NOTHROW(Search(0, timeRange));
-//
-//#ifdef Test_Filename
-//	string filename = "channel00-20160619235245-20160620001144";
-//	REQUIRE_NOTHROW(Download(0, filename));
-//#else
-//	time_t start = 1466351565;
-//	time_t end = 1466352704;
-//	timeRange.start = start;
-//	timeRange.end = end;
-//	REQUIRE_NOTHROW(Download(0, timeRange));
-//#endif
-//}
+TEST_CASE_METHOD(CJxjVendor, "Search videos by time_range from device", "[Download]")
+{
+	REQUIRE_NOTHROW(Init("192.168.0.89", 3321));
+
+	REQUIRE_NOTHROW(Login("admin", "admin"));
+
+	time_range timeRange;
+	timeRange.start = gTimeStart;
+	timeRange.end = gTimeEnd;
+	REQUIRE_NOTHROW(Search(0, timeRange));
+
+#ifdef Test_Filename
+	string filename = "channel00-20160619235245-20160620001144";
+	REQUIRE_NOTHROW(Download(0, filename));
+#else
+	time_t start = 1466351565;
+	time_t end = 1466352704;
+	timeRange.start = start;
+	timeRange.end = end;
+	REQUIRE_NOTHROW(Download(0, timeRange));
+#endif
+}
 
 //TEST_CASE_METHOD(CJxjVendor, "Download by time range", "[PlayVideo]")
 //{
