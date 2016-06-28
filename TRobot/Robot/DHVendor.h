@@ -61,6 +61,7 @@ protected:
 	NET_TIME m_etime;
 	LONG m_pdownloadfile;
 	string m_strPath;
+	int m_DHChannels;
 
 	vector<RecordFile> m_files;
 	vector<int> m_channelVec;
@@ -68,6 +69,7 @@ protected:
 protected:
 	pCLIENT_GetLastError m_pGetLastError;
 	pCLIENT_QueryChannelName m_pGetChannel;
+	pCLIENT_QueryDevState m_pDevState;
 	pCLIENT_Init m_pInit;
 	pCLIENT_Cleanup m_pUninit;
 	pCLIENT_Login m_pLogin;

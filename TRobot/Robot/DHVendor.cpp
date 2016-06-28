@@ -13,7 +13,8 @@ m_strPasswords(""),
 m_strIP(""),
 m_lLoginHandle(0),
 m_hMod(NULL),
-m_strPath("")
+m_strPath(""),
+m_DHChannels(0)
 {
 	memset(&m_deviceInfo, 0, sizeof(m_deviceInfo));
 
@@ -27,6 +28,8 @@ m_strPath("")
 	assert(m_pGetLastError);
 	m_pGetChannel = (pCLIENT_QueryChannelName)GetProcAddress(m_hMod, "CLIENT_QueryChannelName");
 	assert(m_pGetChannel);
+	m_pDevState = (pCLIENT_QueryDevState)GetProcAddress(m_hMod, "CLIENT_QueryDevState");
+	assert(m_pDevState);
 	m_pInit = (pCLIENT_Init)GetProcAddress(m_hMod, "CLIENT_Init");
 	assert(m_pInit);
 	m_pUninit = (pCLIENT_Cleanup)GetProcAddress(m_hMod, "CLIENT_Cleanup");
@@ -110,21 +113,31 @@ void DHVendor::Login(const std::string& user, const std::string& password)
 		throw std::exception("Login failed");
 	}
 
-	char szChannelNames[16 * 32];
-	ZeroMemory(szChannelNames, sizeof(szChannelNames));
-	int nChannelCount = 0;
-	BOOL bRet = m_pGetChannel(m_lLoginHandle, szChannelNames, 16 * 32, &nChannelCount, 500);
-	if (!bRet)
+	if (m_lLoginHandle > 0)
 	{
-		cout << "µÇÂ¼´íÎó(lLogin)£º" << GetLastErrorString().c_str() << endl;
-		throw std::exception("Get channel failed");
-		return;
-	}
-	m_channels.clear();
+		int nRetLen = 0;
+		NET_DEV_CHN_COUNT_INFO stuChn = { sizeof(NET_DEV_CHN_COUNT_INFO) };
+		stuChn.stuVideoIn.dwSize = sizeof(stuChn.stuVideoIn);
+		stuChn.stuVideoOut.dwSize = sizeof(stuChn.stuVideoOut);
 
-	char szName[32 + 2];
-	for (int i = 1; i <= nChannelCount; i++)
+		BOOL bDevState = m_pDevState(m_lLoginHandle, DH_DEVSTATE_DEV_CHN_COUNT, (char*)&stuChn, stuChn.dwSize, &nRetLen, 1000);
+
+		if (bDevState)
+		{
+			m_DHChannels = stuChn.stuVideoIn.nMaxTotal;
+		}
+		else
+		{
+			cout << "µÇÂ¼´íÎó(lLogin)£º" << GetLastErrorString().c_str() << endl;
+			throw std::exception("Get channel failed");
+			return;
+		}
+	}
+
+
+	for (int i = 1; i <= m_DHChannels; i++)
 	{
+		char szName[20];
 		ZeroMemory(szName, sizeof(szName));
 		cout << szName << "Í¨µÀ" << i << endl;
 		string strName = szName;

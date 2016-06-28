@@ -23,6 +23,7 @@ using namespace rapidjson;
 
 typedef DWORD(CALL_METHOD *pCLIENT_GetLastError)(void);
 typedef BOOL(CALL_METHOD *pCLIENT_QueryChannelName)(LLONG lLoginID, char *pChannelName, int maxlen, int *nChannelCount, int waittime);
+typedef BOOL(CALL_METHOD *pCLIENT_QueryDevState)(LLONG lLoginID, int nType, char *pBuf, int nBufLen, int *pRetLen, int waittime);
 typedef BOOL(CALL_METHOD*pCLIENT_Init)(fDisConnect cbDisConnect, LDWORD dwUser);
 typedef void (CALL_METHOD*pCLIENT_Cleanup)();
 typedef LLONG(CALL_METHOD*pCLIENT_Login)(char *pchDVRIP, WORD wDVRPort, char *pchUserName, char *pchPassword, LPNET_DEVICEINFO lpDeviceInfo, int *error);
@@ -57,8 +58,6 @@ static int CALLBACK PBDataCallBack(LLONG lRealHandle, DWORD dwDataType, BYTE *pB
 	
 	return 1;
 }
-
-
 
 //单个视频文件信息
 struct RecordFile
