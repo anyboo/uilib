@@ -157,7 +157,8 @@ protected:
 	static  DWORD PlayThreadFun(LPVOID lpThreadParameter);
 
 	/* Init */
-	long m_hBhandle;
+	std::string  m_sLastError;
+
 	string m_strRoot;
 
 	/* Login */

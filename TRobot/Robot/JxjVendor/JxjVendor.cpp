@@ -23,6 +23,36 @@ time_t gTimeStart = 1466265600; // 2016-6-19 00:00:00 1466352000
 time_t gTimeEnd = 1466697599; // 2016-6-23 23:59:59
 
 
+const char* GetErrorString(int error)
+{
+	switch (error)
+	{
+	case JNETErrSuccess: return "成功";
+	case JNETErrUnInit: return "未初始化";
+	case JNETErrHandle: return "句柄不存在";
+	case JNETErrParam: return "参数错误";
+	case JNETErrBuffSize: return "缓存满";
+	case JNETErrNoMem: return "内存不足";
+	case JNETErrRecv: return "接收错误";
+	case JNETErrSend: return "发送错误";
+	case JNETErrOperate: return "操作错误";
+	case JNETErrURL: return "URL有误";
+	case JNETErrLogining: return "用户正在登录";
+	case JNETErrLogout: return "已经登出";
+	case JNETErrNoFreePort: return "没有空闲通道";
+	case JNETErrProtocol: return "协议错误";
+	case JNETErrXMLFormat: return "错误的XML数据";
+	case JNETErrNotSupport: return "不支持的操作";
+	case JNETErrGetParam: return "获取参数错误";
+	case JNETErrSetParam: return "设置参数错误";
+	case JNETErrOpenFile: return "打开文件出错";
+	case JNETErrUpgOpen: return "升级出错";
+
+	}
+
+	return "未定义";
+}
+
 CJxjVendor::CJxjVendor()
 {
 	// Init Param
@@ -39,13 +69,30 @@ CJxjVendor::CJxjVendor()
 	/* Download */
 	m_lRecHandle = -1;
 	/* PlayVideo*/
-	
+}
+
+CJxjVendor::~CJxjVendor()
+{
+	if (m_lLoginHandle)
+	{
+		int iRet = -1;
+		iRet = JNetMBClose(m_lLoginHandle);
+		if( 0 != iRet )
+		{
+			OutputDebugString("JNetMBClose Error!");
+			throw std::exception("JNetMBClose Error!");
+		}
+	}
+}
+
+void CJxjVendor::Init(const std::string& ip, size_t port)
+{
 	// Init JNetSdk
 	int iRet = JNetInit(NULL);
 	if (0 != iRet)
 	{
-		OutputDebugString("JNetInit Error!");
-		throw std::exception("JNetInit Error!");
+		m_sLastError = GetErrorString(iRet);
+		throw std::exception(m_sLastError.c_str());
 	}
 
 	// Init AVP_Init
@@ -57,24 +104,7 @@ CJxjVendor::CJxjVendor()
 	}
 
 	AVP_InitRecMng(128, 8);
-}
 
-CJxjVendor::~CJxjVendor()
-{
-	if(m_hBhandle)
-	{
-		int iRet = -1;
-		iRet = JNetMBClose(m_hBhandle);
-		if( 0 != iRet )
-		{
-			OutputDebugString("JNetMBClose Error!");
-			throw std::exception("JNetMBClose Error!");
-		}
-	}
-}
-
-void CJxjVendor::Init(const std::string& ip, size_t port)
-{
 	m_ip = ip;
 	m_port = port;
 }
@@ -83,7 +113,12 @@ void CJxjVendor::Login(const std::string& user, const std::string& password)
 {
 	m_errCode = Err_No;
 
-	JNetLogin(m_ip.c_str(), m_port, user.c_str(), password.c_str(), 10, ConnEventCB, NULL, JNET_PRO_T_JPF, m_lLoginHandle, NULL);
+	int iRet = JNetLogin(m_ip.c_str(), m_port, user.c_str(), password.c_str(), 10, ConnEventCB, NULL, JNET_PRO_T_JPF, m_lLoginHandle, NULL);
+	if (iRet < 0)
+	{
+		m_sLastError = GetErrorString(iRet);
+		throw std::exception(m_sLastError.c_str());
+	}
 
 	while (m_errCode == Err_No)
 	{
@@ -92,8 +127,7 @@ void CJxjVendor::Login(const std::string& user, const std::string& password)
 
 	if (m_errCode == Err_LoginFail)
 	{
-		OutputDebugString("Login Failed!");
-		throw std::exception("Login Failed!");
+		throw std::exception("登陆失败");
 	}
 
 	return;
@@ -101,14 +135,13 @@ void CJxjVendor::Login(const std::string& user, const std::string& password)
 
 void CJxjVendor::Logout()
 {
-	if (m_hBhandle)
+	if (m_lLoginHandle)
 	{
-		int iRet = -1;
-		iRet = JNetMBClose(m_hBhandle);
-		if (0 != iRet)
+		int iRet = JNetMBClose(m_lLoginHandle);
+		if (JNETErrSuccess != iRet)
 		{
-			OutputDebugString("JNetMBClose Error!");
-			throw std::exception("JNetMBClose Error!");
+			m_sLastError = GetErrorString(iRet);
+			throw std::exception(m_sLastError.c_str());
 		}
 	}
 }
@@ -124,6 +157,7 @@ void CJxjVendor::Search(const size_t channel, const time_range& range)
 	if (range.start > range.end)
 	{
 		OutputDebugString("Time Range Error!");
+		throw std::exception("Time Range Error!");
 		return;
 	}
 
@@ -973,28 +1007,28 @@ DWORD CJxjVendor::PlayThreadFun(LPVOID lpThreadParameter)
 //	REQUIRE_NOTHROW(Logout());
 //}
 
-TEST_CASE_METHOD(CJxjVendor, "Search videos by time_range from device", "[Download]")
-{
-	REQUIRE_NOTHROW(Init("192.168.0.89", 3321));
-
-	REQUIRE_NOTHROW(Login("admin", "admin"));
-
-	time_range timeRange;
-	timeRange.start = gTimeStart;
-	timeRange.end = gTimeEnd;
-	REQUIRE_NOTHROW(Search(0, timeRange));
-
-#ifdef Test_Filename
-	string filename = "channel00-20160619235245-20160620001144";
-	REQUIRE_NOTHROW(Download(0, filename));
-#else
-	time_t start = 1466351565;
-	time_t end = 1466352704;
-	timeRange.start = start;
-	timeRange.end = end;
-	REQUIRE_NOTHROW(Download(0, timeRange));
-#endif
-}
+//TEST_CASE_METHOD(CJxjVendor, "Search videos by time_range from device", "[Download]")
+//{
+//	REQUIRE_NOTHROW(Init("192.168.0.89", 3321));
+//
+//	REQUIRE_NOTHROW(Login("admin", "admin"));
+//
+//	time_range timeRange;
+//	timeRange.start = gTimeStart;
+//	timeRange.end = gTimeEnd;
+//	REQUIRE_NOTHROW(Search(0, timeRange));
+//
+//#ifdef Test_Filename
+//	string filename = "channel00-20160619235245-20160620001144";
+//	REQUIRE_NOTHROW(Download(0, filename));
+//#else
+//	time_t start = 1466351565;
+//	time_t end = 1466352704;
+//	timeRange.start = start;
+//	timeRange.end = end;
+//	REQUIRE_NOTHROW(Download(0, timeRange));
+//#endif
+//}
 
 //TEST_CASE_METHOD(CJxjVendor, "Download by time range", "[PlayVideo]")
 //{
