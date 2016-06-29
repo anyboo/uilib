@@ -6,7 +6,7 @@
 	<Font shared="true" id="5" name="宋体" size="16" bold="false" />
 	<Include source="scrollbar.xml" />
 	
-	<VerticalLayout bkimage="file='Downloader/bsbj.png'" height="768" width="1024" bordersize="3" bordercolor="0xf1234567">
+	<VerticalLayout bkimage="file='Downloader/bsbj.png'" height="738" width="1024" bordersize="3" bordercolor="0xf1234567">
 		<HorizontalLayout height="60" width="1024" bkimage="file='Downloader/beijing.png'">
 			<Button name="closebtn" width="30" height="30" padding="10,10,0,0" tooltip="返回" foreimage="file='Downloader/xz.png' dest='6,2,20,29'" hotimage="file='Downloader/hsbj.png'"/>
 			<Label text="视频下载" textcolor="#FFFFFFFF" font="1" padding="400,1,1,1" />

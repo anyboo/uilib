@@ -1,19 +1,24 @@
+
 #pragma once
 #include <DuiLib/UIlib.h>
+#include <vector>
 
-#define BT_VideoVendor			(_T("Vendor"))
 
-class VideoLoginUI :
+
+class CVideoVendorUI :
 	public WindowImplBase
 {
 public:
-	VideoLoginUI();
-	~VideoLoginUI();
+	CVideoVendorUI();
+	~CVideoVendorUI();
 	virtual void OnFinalMessage(HWND /*hWnd*/);
 	virtual void Notify(TNotifyUI& msg);
 	DUI_DECLARE_MESSAGE_MAP();
 
-	void OnOpenVideoVendorWnd(TNotifyUI& msg);
+	STDSTRING intToString(int num);
+	void GetPrevPage();
+	void GetNextPage();
+	void SelectEquipment();
 
 protected:
 	virtual LPCTSTR GetWindowClassName() const;

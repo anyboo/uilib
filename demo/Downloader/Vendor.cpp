@@ -102,7 +102,7 @@ CListContainerElementUI* CVendor::AddChannels()
 	CListContainerElementUI* ContList = new CListContainerElementUI;
 	CVerticalLayoutUI* vLyt = new CVerticalLayoutUI;
 
-	int Channel_Count = 14;
+	int Channel_Count = 4;
 
 	ContList->SetName(_T("Channel_List"));
 	ContList->SetFixedHeight(30 * Channel_Count + 30);

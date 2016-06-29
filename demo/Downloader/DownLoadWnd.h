@@ -41,6 +41,13 @@ public:
 	BOOL SearchFiles();
 	void ShowFileList();
 
+	void Show_Off_SubList(STDSTRING& strSendName);
+	void RemoveSubList(STDSTRING& strSendName);
+
+	void Show_Off_VendorList(STDSTRING& strSendName);
+	void All_SelectChannels();
+	void RemoveVendor(STDSTRING& strSendName);
+
 	int GetSubListCurSel(CListContainerElementUI* SubList, CListUI* pList);
 
 	CListContainerElementUI* Add_FileInfoList(int n, bool IsShowCloseBT);
