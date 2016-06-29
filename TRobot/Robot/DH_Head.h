@@ -1,25 +1,13 @@
-#ifndef __H_HEAD__
-#define __H_HEAD__
+#pragma once
 
 #include <iostream>
 #include <string>
 #include <map>
 #include <vector>
-using namespace std;
-
-#include < assert.h> 
+#include <assert.h> 
 #include <tchar.h>
 
 #include "Depend/dhnetsdk.h"
-
-// Json 
-#include "document.h"
-#include "prettywriter.h"
-#include "stringbuffer.h"
-#include "ostreamwrapper.h"
-#include "istreamwrapper.h"
-
-using namespace rapidjson;
 
 //单个视频文件信息
 struct RecordFile
@@ -104,5 +92,3 @@ struct RecordFile
 	char* pPrivateData;   //私有数据
 	__int32 PrivateDataDataSize;//私有数据大小
 };
-
-#endif 

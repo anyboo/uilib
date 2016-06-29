@@ -1,11 +1,10 @@
 #pragma once
+
 #include "AbstractVendor.h"
 #include "DH_Head.h"
 
-#define MAX_SEARCH_COUNT 1000
-#define ONE_DAY		 (24 * 60 * 60)
-#define ONE_HOUR	 (60 * 60)
-#define ONE_MINUTE	 (60)
+#include <string>
+#include <vector>
 
 class DHVendor :
 	public AbstractVendor
@@ -35,13 +34,13 @@ private:
 
 	void SaveSearchFileListToFile();
 	void LoadSearchFileListFromFile();
-	string MakeStrByInteger(int data);
-	string MakeStrTimeByTimestamp(time_t time);
+	std::string MakeStrByInteger(int data);
+	std::string MakeStrTimeByTimestamp(time_t time);
 
-	string GetLastErrorString();
+	std::string GetLastErrorString();
 	void timeDHToStd(NET_TIME *pTimeDH, tm *pTimeStd);
 	void timeStdToDH(tm *pTimeStd, NET_TIME *pTimeDH);
-	vector<time_range> MakeTimeRangeList(const time_range& range);
+	std::vector<time_range> MakeTimeRangeList(const time_range& range);
 	void trTOnt(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_range range);
 	void CreatePath(const size_t channel);
 
@@ -49,19 +48,19 @@ protected:
 	HMODULE m_hMod;
 
 	//login & Init
-	string m_strName;
+	std::string m_strName;
 	int m_dwPort;
-	string m_strUser;
-	string m_strPasswords;
-	string m_strIP;
+	std::string m_strUser;
+	std::string m_strPasswords;
+	std::string m_strIP;
 
 
 	NET_DEVICEINFO m_deviceInfo;
 	LLONG m_lLoginHandle;
 	LONG m_pdownloadfile;
-	string m_strPath;
+	std::string m_strPath;
 	int m_DHChannels;
 
-	vector<RecordFile> m_files;
+	std::vector<RecordFile> m_files;
 };
 

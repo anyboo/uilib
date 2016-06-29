@@ -20,14 +20,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -50,17 +50,16 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Test\single_include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\TRobot\Robot\DZPVendor\sdk;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\TRobot\Robot\inc;$(SolutionDir)\TRobot\Robot;$(SolutionDir)\TRobot\Robot\JxjVendor;$(SolutionDir)\Test\single_include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(ProjectDir)Depend\dhnetsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -72,7 +71,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Test\single_include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\TRobot\Robot\inc;$(SolutionDir)\TRobot\Robot;$(SolutionDir)\TRobot\Robot\JxjVendor;$(SolutionDir)\Test\single_include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -85,23 +84,35 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AbstractVendor.h" />
     <ClInclude Include="DHVendor.h" />
     <ClInclude Include="DH_Head.h" />
+    <ClInclude Include="AbstractVendor.h" />
+    <ClInclude Include="CommonUtrl.h" />
+    <ClInclude Include="DownloadTest.h" />
+    <ClInclude Include="DZPVendor\DZPVendor.h" />
+    <ClInclude Include="inc\AVPlayer.h" />
+    <ClInclude Include="inc\JNetSDK.h" />
+    <ClInclude Include="inc\Jtype.h" />
+    <ClInclude Include="inc\j_sdk.h" />
+    <ClInclude Include="inc\mb_api.h" />
+    <ClInclude Include="inc\stdint.h" />
+    <ClInclude Include="JxjVendor\JxjVendor.h" />
+    <ClInclude Include="JxjVendor\TestWindows.h" />
     <ClInclude Include="MyVendor.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
-    <ClInclude Include="TestWindows.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DHVendor.cpp" />
+    <ClCompile Include="CommonUtrl.cpp" />
+    <ClCompile Include="DownloadTest.cpp" />
+    <ClCompile Include="DZPVendor\DZPVendor.cpp" />
+    <ClCompile Include="JxjVendor\JxjVendor.cpp" />
+    <ClCompile Include="JxjVendor\TestWindows.cpp" />
     <ClCompile Include="MyVendor.cpp" />
     <ClCompile Include="Robot.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="TestWindows.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Robot.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

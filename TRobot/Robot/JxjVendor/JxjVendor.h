@@ -1,9 +1,19 @@
 #pragma once
+
 #include "AbstractVendor.h"
 
 #include <vector>
 #include <time.h>
 #include <fstream>
+
+#include "CommonUtrl.h"
+// Jxj Sdk
+#include "inc\mb_api.h"
+#include "inc\JNetSDK.h"
+#include "inc\stdint.h"
+#include "inc\Jtype.h"
+#include "inc\AVPlayer.h"
+#include "JxjVendor.h"
 
 typedef enum
 {
@@ -136,15 +146,10 @@ protected:
 
 	// Search Callback
 	void MakeStoreLog(JStoreLog& storeLog, const JRecodeType recordType, const int beginNode, const int endNode, const int ssid, const std::time_t& start, const std::time_t& end);
-	vector<time_range> MakeTimeRangeList(const time_range& range);
 	void SearchUnit(const size_t channel, const time_range& range);
 	void ReFreshVideoList(int channel, const time_range& range);
-	void InitSearchTime(JTime& jStartTime, JTime& jStopTime, const __time64_t& timeStart, const __time64_t& timeEnd);
 	void AddSearchFileList(int channel);
-	bool CheckFileExist(const RecordFile& file, const vector<RecordFile>& fileList);
-	time_t MakeTimestampByJTime(JTime jTime);
-	string MakeStrTimeByTimestamp(time_t time);
-	string MakeStrByInteger(int data);
+	bool CheckFileExist(const RecordFile& file, const std::vector<RecordFile>& fileList);
 	void SaveSearchFileListToFile();
 	void LoadSearchFileListFromFile();
 
@@ -157,12 +162,13 @@ protected:
 	static  DWORD PlayThreadFun(LPVOID lpThreadParameter);
 
 	/* Init */
-	long m_hBhandle;
-	string m_strRoot;
+	std::string  m_sLastError;
+
+	std::string m_strRoot;
 
 	/* Login */
 	long m_lLoginHandle; // Handle of Login Device
-	string m_ip;	// Device IP Address
+	std::string m_ip;	// Device IP Address
 	size_t m_port;	// Device Port
 
 	/* Search */
@@ -171,7 +177,7 @@ protected:
 	int	m_iBeginNode;
 	int	m_iEndNode;
 	int	m_iSsid;
-	vector<RecordFile> m_files;
+	std::vector<RecordFile> m_files;
 
 	/* Download */
 	static long m_lDownloadHandle; // Handle of Download
