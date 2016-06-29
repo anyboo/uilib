@@ -88,24 +88,15 @@ Session QMSqlite::connectDb()
 }
 
 
-bool QMSqlite::createTable(int tag)
+bool QMSqlite::createTable(string sql)
 {
 	Session sess = connectDb();
 	if (!checkConnect(sess))
 		return false;
 
 	try
-	{
-		switch (tag)
-		{
-		case SEARCH_VIDEO:
-			sess << "CREATE TABLE SearchVideo(name VARCHAR(100), channel INTEGER, starttime DATETIME, stoptime DATETIME, size BIGINT, alias VARCHAR(100))", now;
-			break;
-		case SEARCH_DEVICE:
-			sess << "CREATE TABLE SearchDevice(fcatoryname VARCHAR(20), ip VARCHAR(30), port INTEGER)", now;
-			break;
-		default:;
-		}
+	{		
+		sess << sql, now;
 		closeConnect(sess);
 	}
 	catch (Poco::Exception &ex)
@@ -118,7 +109,7 @@ bool QMSqlite::createTable(int tag)
 	return true;
 }
 
-bool QMSqlite::GetData(std::vector<SearchVideo>& Record)
+bool QMSqlite::GetData(string sql, std::vector<readSearchVideo>& Record)
 {
 	Session sess = connectDb();
 	if (!checkConnect(sess))
@@ -126,7 +117,7 @@ bool QMSqlite::GetData(std::vector<SearchVideo>& Record)
 	try
 	{		
 		Statement select(sess);		
-		select << "SELECT * FROM SearchVideo", into(Record), now;
+		select << sql, into(Record), now;
 		closeConnect(sess);
 	}
 	catch (Poco::Exception &ex)
@@ -139,7 +130,7 @@ bool QMSqlite::GetData(std::vector<SearchVideo>& Record)
 	return true;
 }
 
-bool QMSqlite::GetData(std::vector<SearchDevice>& Record)
+bool QMSqlite::GetData(string sql, std::vector<SearchDevice>& Record)
 {
 	Session sess = connectDb();
 	if (!checkConnect(sess))
@@ -147,7 +138,7 @@ bool QMSqlite::GetData(std::vector<SearchDevice>& Record)
 	try
 	{
 		Statement select(sess);
-		select << "SELECT * FROM SearchDevice", into(Record), now;		
+		select << sql, into(Record), now;		
 		closeConnect(sess);
 	}
 	catch (Poco::Exception &ex)
@@ -161,14 +152,14 @@ bool QMSqlite::GetData(std::vector<SearchDevice>& Record)
 }
 
 
-bool QMSqlite::writeData(SearchVideo searchrecode)
+bool QMSqlite::writeData(writeSearchVideo searchrecode)
 {
 	Session sess = connectDb();
 	if (!checkConnect(sess))
 		return false;
 	try
 	{
-		sess << "INSERT INTO SearchVideo VALUES(:name, :channel, :starttime, :stoptime, :size, :alias)", use(searchrecode), now;
+		sess << "INSERT INTO SearchVideo VALUES(:name, :channel, :starttime, :stoptime, :size, :id)", use(searchrecode), now;
 		closeConnect(sess);
 	}
 	catch (Poco::Exception &ex)
@@ -202,7 +193,7 @@ bool QMSqlite::writeData(SearchDevice searchrecode)
 }
 
 
-bool QMSqlite::writeDataByVector(std::vector<SearchVideo>&Record)
+bool QMSqlite::writeDataByVector(std::vector<writeSearchVideo>&Record)
 {
 	Session sess = connectDb();
 	if (!checkConnect(sess))
@@ -210,7 +201,7 @@ bool QMSqlite::writeDataByVector(std::vector<SearchVideo>&Record)
 	try
 	{
 		Statement insert(sess);
-		insert << "INSERT INTO SearchVideo VALUES(:name, :channel, :starttime, :stoptime, :size, :alias)", use(Record), now;
+		insert << "INSERT INTO SearchVideo VALUES(:name, :channel, :starttime, :stoptime, :size, :id)", use(Record), now;
 		closeConnect(sess);
 	}
 	catch (Poco::Exception &ex)
@@ -245,24 +236,14 @@ bool QMSqlite::writeDataByVector(std::vector<SearchDevice>& Record)
 }
 
 
-bool QMSqlite::cleanData(int tag)
+bool QMSqlite::cleanData(string sql)
 {
 	Session sess = connectDb();
 	if (!checkConnect(sess))
 		return false;
 	try
-	{		
-		switch (tag)
-		{
-		case SEARCH_DEVICE:
-			sess << "delete from SearchDevice" << now;
-			break;
-		case SEARCH_VIDEO:
-			sess << "delete from SearchVideo" << now;
-			break;
-		default:;
-		}
-		
+	{			
+		sess << sql << now;		
 		closeConnect(sess);
 	}
 	catch (Poco::Exception &ex)
@@ -276,23 +257,14 @@ bool QMSqlite::cleanData(int tag)
 }
 
 
-bool QMSqlite::dropTable(int tag)
+bool QMSqlite::dropTable(string sql)
 {
 	Session sess = connectDb();
 	if (!checkConnect(sess))
 		return false;
 	try
-	{		
-		switch (tag)
-		{
-		case SEARCH_DEVICE:
-			sess << "DROP TABLE IF EXISTS SearchDevice" << now;
-			break;
-		case SEARCH_VIDEO:
-			sess << "DROP TABLE IF EXISTS SearchVideo" << now;
-			break;
-		default:;
-		}		
+	{				
+		sess << sql << now;			
 		closeConnect(sess);
 	}
 	catch (Poco::Exception &ex)

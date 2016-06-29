@@ -7,15 +7,24 @@
 #include <iostream>
 #include <vector>
 
-typedef Poco::Tuple<std::string, int, __time64_t, __time64_t, __int64, std::string> SearchVideo;
+
+typedef Poco::Tuple<std::string, int, __time64_t, __time64_t, __int64, int> readSearchVideo;
+typedef Poco::Tuple<std::string, int, __time64_t, __time64_t, __int64> writeSearchVideo;
 typedef Poco::Tuple<std::string, std::string, int> SearchDevice;
 
+//search video result table
+#define CREATE_SEARCH_VIDEO_TABLE   "CREATE TABLE SearchVideo(name VARCHAR(100), channel INTEGER, starttime DATETIME, stoptime DATETIME, size BIGINT, id INTEGER PRIMARY KEY)"
+#define DELETE_ALL_SEARCH_VIDEO     "delete from SearchDevice"
+#define DROP_SEARCH_VIDEO_TABLE		"DROP TABLE IF EXISTS SearchDevice"
+#define SELECT_ALL_SEARCH_VIDEO		"SELECT * FROM SearchVideo"
+#define SELECT_ID_SEARCH_VIDEO		"SELECT * FROM SearchVideo where id="
 
-typedef enum _TABLE_TAG
-{
-	SEARCH_DEVICE = 1,               //search device table
-	SEARCH_VIDEO,                    //search video table
-}TABLE_TAG;
+//search device result table
+#define CREATE_SEARCH_DEVICE_TABLE  "CREATE TABLE SearchDevice(fcatoryname VARCHAR(20), ip VARCHAR(30), port INTEGER)"
+#define DELETE_ALL_SEARCH_DEVICE    "delete from SearchVideo"
+#define DROP_SEARCH_DEVICE_TABLE	"DROP TABLE IF EXISTS SearchVideo"
+#define SELECT_ALL_SEARCH_DEVICE	"SELECT * FROM SearchDevice"
+
 
 
 using namespace Poco::Data;
@@ -57,15 +66,15 @@ private:
 
 	static Garbo garbo;
 public:
-	bool GetData(std::vector<SearchVideo>& Record);
-	bool GetData(std::vector<SearchDevice>& Record);
-	bool writeData(SearchVideo searchrecode);
+	bool GetData(string sql, vector<readSearchVideo>& Record);
+	bool GetData(string sql, vector<SearchDevice>& Record);
+	bool writeData(writeSearchVideo searchrecode);
 	bool writeData(SearchDevice searchrecode);
-	bool writeDataByVector(std::vector<SearchVideo>& Record);
-	bool writeDataByVector(std::vector<SearchDevice>& Record);
-	bool cleanData(int tag);
-	bool dropTable(int tag);
-	bool createTable(int tag);
+	bool writeDataByVector(vector<writeSearchVideo>& Record);
+	bool writeDataByVector(vector<SearchDevice>& Record);
+	bool cleanData(string sql);
+	bool dropTable(string sql);
+	bool createTable(string sql);
 private:
 	bool Initialize();
 	bool creatSessionPool();
