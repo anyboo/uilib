@@ -8,12 +8,14 @@
 
 3.插入数据
     分两种模式
-    1.一次插入一条记录
+    1.一次插入一条视频搜索记录
     writeSearchVideo sr1("10000", 10000, curTime1, curTime1, 1 * 1024 * 1024 * 1024);
-    writeData(sr1);
-    2.一次插入所有数据
+    string sql(INSERT_SEARCH_VIDEO);
+    writeData(sql, sr1);
+    2.一次插入所有视频搜索数据
     vector<writeSearchVideo> Record;
-    writeDataByVector(Record);
+    string sql(INSERT_SEARCH_VIDEO);
+    writeDataByVector(INSERT_SEARCH_VIDEO, Record);
 
 4.读记录
     传入查询语句，vector，返回所有结果
@@ -49,12 +51,12 @@ int _tmain(int argc, _TCHAR* argv[])
     pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
 
     //一次插入所有数据
-    vector<writeSearchVideo> Record;
+    std::vector<writeSearchVideo> Record;
     int i;
     for (i = 0; i < 10000; i++)
     {
         writeSearchVideo sr;
-        std::string strName = "test" + std::to_string(i);
+        std::string strName = "测试" + std::to_string(i);
         //文件名称
         sr.set<0>(strName);
         //通道号
@@ -70,18 +72,20 @@ int _tmain(int argc, _TCHAR* argv[])
         sr.set<4>(fileszie);        
         Record.push_back(sr);
     }   
-    pDb->writeDataByVector(Record);
+    string sql(INSERT_SEARCH_VIDEO);
+    pDb->writeDataByVector(sql, Record);
 
     //一次写一条记录
     __time64_t curTime1;
     _time64(&curTime1);
     writeSearchVideo sr1("10000", 10000, curTime1, curTime1, 1 * 1024 * 1024 * 1024);
-    pDb->writeData(sr1);
+    sql = INSERT_SEARCH_VIDEO;
+    pDb->writeData(sql, sr1);
     
 
     //读记录
-    vector<readSearchVideo> readRecord;
-    string sql(SELECT_ID_SEARCH_VIDEO);
+    std::vector<readSearchVideo> readRecord;
+    sql = SELECT_ID_SEARCH_VIDEO;
     sql.append("100");
     cout << sql << endl;
     pDb->GetData(sql, readRecord);
@@ -104,8 +108,7 @@ int _tmain(int argc, _TCHAR* argv[])
         std::cout << i << "--" << str1 << std::endl;        
     }
 
-    //getchar();
-
+    
     //删除所有记录
     pDb->cleanData(DELETE_ALL_SEARCH_VIDEO);
     //getchar();
@@ -113,6 +116,10 @@ int _tmain(int argc, _TCHAR* argv[])
     //删除表
     pDb->dropTable(DROP_SEARCH_DEVICE_TABLE);
 
+    //创建厂商表
+    pDb->createTable(CREATE_SEARCH_FACTORY_TABLE);
+    
+
     getchar();
     return 0;
-})
+}
