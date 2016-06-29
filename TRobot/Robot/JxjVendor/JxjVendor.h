@@ -29,95 +29,15 @@ typedef enum
 	IsPlay_Play
 }eIsPlay;
 
-//单个视频文件信息
-struct RecordFile
+struct Record
 {
-	RecordFile()
-	{
-		channel = 0;
-		size = 0;
-		duration = 0;
-		strTimeSection = "";
-		pPrivateData = nullptr;
-		PrivateDataDataSize = 0;
-	}
-
-	~RecordFile()
-	{
-		if (nullptr != pPrivateData)
-		{
-			delete pPrivateData;
-			pPrivateData = nullptr;
-			PrivateDataDataSize = 0;
-		}
-	}
-
-	RecordFile(const RecordFile& other)
-	{
-		channel = other.channel;
-		size = other.size;
-		name = other.name;
-		beginTime = other.beginTime;
-		endTime = other.endTime;
-		duration = other.duration;
-		strTimeSection = other.strTimeSection;
-		pPrivateData = nullptr;
-		PrivateDataDataSize = 0;
-		setPrivateData(other.pPrivateData, other.PrivateDataDataSize);
-	}
-
-	RecordFile& operator= (const RecordFile& other)
-	{
-		if (&other == this)
-		{
-			return *this;
-		}
-		channel = other.channel;
-		size = other.size;
-		name = other.name;
-		beginTime = other.beginTime;
-		endTime = other.endTime;
-		duration = other.duration;
-		strTimeSection = other.strTimeSection;
-		setPrivateData(other.pPrivateData, other.PrivateDataDataSize);
-		return *this;
-	}
-
-	void setPrivateData(void* pData, int size)
-	{
-		if (nullptr != pPrivateData)
-		{
-			delete pPrivateData;
-			pPrivateData = nullptr;
-			PrivateDataDataSize = 0;
-		}
-
-		if (size > 0)
-		{
-			pPrivateData = new char[size];
-			PrivateDataDataSize = size;
-			memcpy(pPrivateData, pData, size);
-		}
-	}
-	//取得私有数据
-	void* getPrivateData() const
-	{
-		return pPrivateData;
-	}
-	__int32 getPrivateDataSize() const
-	{
-		return PrivateDataDataSize;
-	}
-
-	__int32 channel;      //通道
-	__int64 size;         //文件大小(byte)
-	std::string  name;    //文件名称
-	__time64_t beginTime; //本地时间
-	__time64_t endTime;   //本地时间
-	long duration;
+	size_t channel;      
+	size_t size;         
+	std::string  name;   
+	std::time_t beginTime; 
+	std::time_t endTime;
+	unsigned long duration;
 	std::string strTimeSection;
-	char* pPrivateData;   //私有数据
-	__int32 PrivateDataDataSize;//私有数据大小
 };
 
 class CJxjVendor :
@@ -149,7 +69,7 @@ protected:
 	void SearchUnit(const size_t channel, const time_range& range);
 	void ReFreshVideoList(int channel, const time_range& range);
 	void AddSearchFileList(int channel);
-	bool CheckFileExist(const RecordFile& file, const std::vector<RecordFile>& fileList);
+	bool CheckFileExist(const Record& file, const std::vector<Record>& fileList);
 	void SaveSearchFileListToFile();
 	void LoadSearchFileListFromFile();
 
@@ -177,12 +97,12 @@ protected:
 	int	m_iBeginNode;
 	int	m_iEndNode;
 	int	m_iSsid;
-	std::vector<RecordFile> m_files;
+	std::vector<Record> m_files;
 
 	/* Download */
 	static long m_lDownloadHandle; // Handle of Download
 	static long m_lDownloadFileHandle;
-	long m_lRecHandle;
+	static long m_lRecHandle;
 	static long m_lDownLoadStartTime;
 	static long m_lDownLoadTotalTime;
 	static int g_iDownLoadPos;

@@ -29,6 +29,7 @@ eErrCode CJxjVendor::m_errCode = Err_No;
 
 long CJxjVendor::m_lDownloadHandle = -1;
 long CJxjVendor::m_lDownloadFileHandle = -1;
+long CJxjVendor::m_lRecHandle = -1;
 long CJxjVendor::m_lDownLoadStartTime = -1;
 long CJxjVendor::m_lDownLoadTotalTime = -1;
 int CJxjVendor::g_iDownLoadPos = 0;
@@ -105,7 +106,6 @@ CJxjVendor::CJxjVendor()
 	m_iEndNode = J_SDK_MAX_STORE_LOG_SIZE - 1;
 	m_iSsid = -1;
 	/* Download */
-	m_lRecHandle = -1;
 	/* PlayVideo*/
 }
 
@@ -236,7 +236,7 @@ void CJxjVendor::Download(const size_t channel, const time_range& range)
 		return;
 	}
 
-	RecordFile file;
+	Record file;
 	size_t i = 0;
 	//string strFileName(cFileName);
 	for (; i < m_files.size(); i++)
@@ -296,7 +296,7 @@ void CJxjVendor::Download(const size_t channel, const std::string& filename)
 		return;
 	}
 
-	RecordFile file;
+	Record file;
 	size_t i = 0;
 	for (; i < m_files.size(); i++)
 	{
@@ -389,7 +389,7 @@ void CJxjVendor::PlayVideo(const size_t channel, const time_range& range)
 		return;
 	}
 
-	RecordFile file;
+	Record file;
 	size_t i = 0;
 	for (; i < m_files.size(); i++)
 	{
@@ -438,9 +438,16 @@ void CJxjVendor::PlayVideo(const size_t channel, const time_range& range)
 	// 开启解码
 	AVP_Play(m_iPlayVideoChannel);
 
+	int index = 0;
 	while (m_errCode == Err_No)
 	{
 		::Sleep(100);
+
+		if (index++ >= 100)
+		{
+			JNetRecClose(m_lRecHandle);
+			m_lRecHandle = -1;
+		}
 	}
 }
 void CJxjVendor::PlayVideo(const size_t channel, const std::string& filename)
@@ -451,7 +458,7 @@ void CJxjVendor::PlayVideo(const size_t channel, const std::string& filename)
 		return;
 	}
 
-	RecordFile file;
+	Record file;
 	size_t i = 0;
 	for (; i < m_files.size(); i++)
 	{
@@ -513,11 +520,19 @@ void CJxjVendor::PlayVideo(const size_t channel, const std::string& filename)
 	// 开启解码
 	AVP_Play(m_iPlayVideoChannel);
 
+	int index = 0;
 	while (m_errCode == Err_No)
 	{
 		::Sleep(100);
+		if (index++ >= 100)
+		{
+			JNetRecClose(m_lRecHandle);
+			m_lRecHandle = -1;
+			break;
+		}
 	}
 
+	return;
 }
 void CJxjVendor::SetDownloadPath(const std::string& Root)
 {
@@ -633,24 +648,25 @@ void CJxjVendor::AddSearchFileList(int channel)
 
 	for (int i = 0; i< (int)m_storeLog.node_count; i++)
 	{
-		RecordFile recordFile;
+		
+		Record recordFile;
 		
 		// File Start Time
 		JTime jTime = m_storeLog.store[i].beg_time;
 		recordFile.beginTime = CCommonUtrl::getInstance()->MakeTimestampByJTime(jTime);
-		char strStartTime[20];
-		sprintf_s(strStartTime, 20, "%d%02d%02d%02d%02d%02d", jTime.year+1900, jTime.month, jTime.date, jTime.hour, jTime.minute, jTime.second);
+		std::string strStartTime;
+		sprintf((char*)strStartTime.c_str(), "%d%02d%02d%02d%02d%02d", jTime.year+1900, jTime.month, jTime.date, jTime.hour, jTime.minute, jTime.second);
 
 		// File End Time
 		jTime = m_storeLog.store[i].end_time;
 		recordFile.endTime = CCommonUtrl::getInstance()->MakeTimestampByJTime(jTime);
-		char strEndTime[20];
-		sprintf_s(strEndTime, 20, "%d%02d%02d%02d%02d%02d", jTime.year+1900, jTime.month, jTime.date, jTime.hour, jTime.minute, jTime.second);
-	
+		std::string strEndTime;
+		sprintf((char *)strEndTime.data(), "%d%02d%02d%02d%02d%02d", jTime.year + 1900, jTime.month, jTime.date, jTime.hour, jTime.minute, jTime.second);
+
 		// File Belong Time Secton 
 		recordFile.strTimeSection = strStartTime;
 		recordFile.strTimeSection.append("-");
-		recordFile.strTimeSection.append(strEndTime);
+		recordFile.strTimeSection += strEndTime.data();
 		
 		// File Duration
 		recordFile.duration = recordFile.endTime - recordFile.beginTime;
@@ -673,11 +689,11 @@ void CJxjVendor::AddSearchFileList(int channel)
 	}
 }
 
-bool CJxjVendor::CheckFileExist(const RecordFile& file, const std::vector<RecordFile>& fileList)
+bool CJxjVendor::CheckFileExist(const Record& file, const std::vector<Record>& fileList)
 {
 	for (size_t i = 0; i < fileList.size(); i++)
 	{
-		RecordFile fileItem = fileList[i];
+		Record fileItem = fileList[i];
 		if (file.name.compare(fileItem.name) == 0
 			&& file.size == fileItem.size
 			&& file.beginTime == fileItem.beginTime
@@ -706,7 +722,7 @@ void CJxjVendor::SaveSearchFileListToFile()
 		std::string fileKey = "videoFile";
 		Value key(fileKey.c_str(), fileKey.length(), alloc);
 
-		RecordFile file = m_files[i];
+		Record file = m_files[i];
 		Value name(file.name.c_str(), file.name.length(), alloc);
 		Value channel(std::to_string(file.channel).c_str(), std::to_string(file.channel).length(), alloc);
 		Value beginTime(CCommonUtrl::getInstance()->MakeStrTimeByTimestamp(file.beginTime).c_str(), CCommonUtrl::getInstance()->MakeStrTimeByTimestamp(file.beginTime).length(), alloc);
@@ -752,10 +768,17 @@ void CJxjVendor::LoadSearchFileListFromFile()
 		std::string size = a[4].GetString();
 	}
 }
+
+#include "DownloadTest.h"
+
 int  CJxjVendor::JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam)
 {
+	static int index = 0;
+
 	if (pBuff)
 	{
+		index++;
+
 		j_frame_t *pFrame = (j_frame_t *)pBuff;
 		if (m_lDownLoadStartTime == -1 && pFrame->frame_type != j_audio_frame)
 		{
@@ -775,6 +798,11 @@ int  CJxjVendor::JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* 
 			char cDownInfo[100];
 			sprintf_s(cDownInfo, 100, "g_idownloadpos = %d , starttime = %ld, curtime = %ld, totaltime = %ld\r\n", g_iDownLoadPos, m_lDownLoadStartTime, pFrame->timestamp_sec, m_lDownLoadTotalTime);
 			OutputDebugString(cDownInfo);
+
+			if (index++ >= 10)
+			{
+				CDownloadTest::CallBack();
+			}
 		}
 
 		if ((m_lDownLoadStartTime + m_lDownLoadTotalTime) == pFrame->timestamp_sec)
@@ -796,13 +824,13 @@ void CJxjVendor::CloseDownload()
 	if (m_lDownloadFileHandle)
 	{
 		AVP_CloseRecFile(m_lDownloadFileHandle);
-		m_lDownloadFileHandle = NULL;
+		m_lDownloadFileHandle = -1;
 	}
 
 	if (m_lDownloadHandle)
 	{
 		JNetRecClose(m_lDownloadHandle);
-		m_lDownloadHandle = NULL;
+		m_lDownloadHandle = -1;
 	}
 }
 
@@ -879,8 +907,8 @@ DWORD CJxjVendor::PlayThreadFun(LPVOID lpThreadParameter)
 //	REQUIRE_NOTHROW(Search(0, timeRange));
 //
 //#ifdef Test_Filename
-//	std::string filename = "channel00-20160619235245-20160620001144";
-//	REQUIRE_NOTHROW(PlayVideo(0, filename));
+//	//std::string filename = "channel00-20160619235245-20160620001144";
+//	//REQUIRE_NOTHROW(PlayVideo(0, filename));
 //#else
 //	time_t start = 1466351565;
 //	time_t end = 1466352704;

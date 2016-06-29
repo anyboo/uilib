@@ -8,7 +8,9 @@ public:
 	~CDownloadTest();
 
 	void Test();
+	static void CallBack();
 
 	CJxjVendor jxjVendor;
+	int m_id;
 };
 

@@ -24,6 +24,11 @@ void CDownloadTest::Test()
 	jxjVendor.PlayVideo(0, filename);
 }
 
+void CDownloadTest::CallBack()
+{
+	int time = 0;
+}
+
 #include "catch.hpp"
 
 TEST_CASE_METHOD(CDownloadTest, "Init SDK", "[Test]")
