@@ -90,7 +90,7 @@ Session QMSqlite::connectDb()
 
 bool QMSqlite::createTable(string sql)
 {
-	Session sess = connectDb();
+	/*Session sess = connectDb();
 	if (!checkConnect(sess))
 		return false;
 
@@ -106,7 +106,8 @@ bool QMSqlite::createTable(string sql)
 		return false;
 	}
 
-	return true;
+	return true;*/
+	return execSql(sql);
 }
 
 bool QMSqlite::GetData(string sql, std::vector<readSearchVideo>& Record)
@@ -237,43 +238,14 @@ bool QMSqlite::writeDataByVector(std::vector<SearchDevice>& Record)
 
 
 bool QMSqlite::cleanData(string sql)
-{
-	Session sess = connectDb();
-	if (!checkConnect(sess))
-		return false;
-	try
-	{			
-		sess << sql << now;		
-		closeConnect(sess);
-	}
-	catch (Poco::Exception &ex)
-	{
-		throw(ex.displayText());
-		closeConnect(sess);
-		return false;
-	}
-	
-	return true;
+{	
+	return execSql(sql);
 }
 
 
 bool QMSqlite::dropTable(string sql)
 {
-	Session sess = connectDb();
-	if (!checkConnect(sess))
-		return false;
-	try
-	{				
-		sess << sql << now;			
-		closeConnect(sess);
-	}
-	catch (Poco::Exception &ex)
-	{
-		throw(ex.displayText());
-		closeConnect(sess);
-		return false;
-	}
-	return true;
+	return execSql(sql);
 }
 
 void QMSqlite::closeConnect(Session sess)
@@ -310,3 +282,21 @@ void QMSqlite::closeSessionPool()
 	delete m_pool;	
 }
 
+bool QMSqlite::execSql(string sql)
+{
+	Session sess = connectDb();
+	if (!checkConnect(sess))
+		return false;
+	try
+	{
+		sess << sql , now;
+		closeConnect(sess);
+	}
+	catch (Poco::Exception &ex)
+	{
+		throw(ex.displayText());
+		closeConnect(sess);
+		return false;
+	}
+	return true;
+}
