@@ -1,6 +1,8 @@
 #ifndef QM_SQLITE_H
 #define QM_SQLITE_H
 
+
+#include "Poco/Tuple.h"
 #include "Poco/Data/Session.h"
 #include "Poco/Data/SessionPool.h"
 #include "Poco/Data/SQLite/Connector.h"
@@ -8,22 +10,41 @@
 #include <vector>
 
 
-typedef Poco::Tuple<std::string, int, __time64_t, __time64_t, __int64, int> readSearchVideo;
-typedef Poco::Tuple<std::string, int, __time64_t, __time64_t, __int64> writeSearchVideo;
-typedef Poco::Tuple<std::string, std::string, int> SearchDevice;
+using namespace Poco::Data::Keywords;
+using namespace Poco::Data;
+using Poco::Data::Session;
+using Poco::Data::Statement;
+using Poco::Data::Statement;
+using namespace std;
 
 //search video result table
 #define CREATE_SEARCH_VIDEO_TABLE   "CREATE TABLE SearchVideo(name VARCHAR(100), channel INTEGER, starttime DATETIME, stoptime DATETIME, size BIGINT, id INTEGER PRIMARY KEY)"
-#define DELETE_ALL_SEARCH_VIDEO     "delete from SearchVideo"
+#define DELETE_ALL_SEARCH_VIDEO     "DELETE from SearchVideo"
 #define DROP_SEARCH_VIDEO_TABLE		"DROP TABLE IF EXISTS SearchVideo"
 #define SELECT_ALL_SEARCH_VIDEO		"SELECT * FROM SearchVideo"
 #define SELECT_ID_SEARCH_VIDEO		"SELECT * FROM SearchVideo where id="
+#define INSERT_SEARCH_VIDEO			"INSERT INTO SearchVideo VALUES(:name, :channel, :starttime, :stoptime, :size, :id)"									 
+//struct search video
+typedef Poco::Tuple<std::string, int, __time64_t, __time64_t, __int64, int> readSearchVideo;
+typedef Poco::Tuple<std::string, int, __time64_t, __time64_t, __int64> writeSearchVideo;
 
 //search device result table
 #define CREATE_SEARCH_DEVICE_TABLE  "CREATE TABLE SearchDevice(fcatoryname VARCHAR(20), ip VARCHAR(30), port INTEGER)"
-#define DELETE_ALL_SEARCH_DEVICE    "delete from SearchDevice"
+#define DELETE_ALL_SEARCH_DEVICE    "DELETE from SearchDevice"
 #define DROP_SEARCH_DEVICE_TABLE	"DROP TABLE IF EXISTS SearchDevice"
 #define SELECT_ALL_SEARCH_DEVICE	"SELECT * FROM SearchDevice"
+#define INSERT_SEARCH_DEVICE		"INSERT INTO SearchDevice VALUES(:fcatoryname, :ip, :port)"
+//struct search device
+typedef Poco::Tuple<std::string, std::string, int> SearchDevice;
+
+//search factory table
+#define CREATE_SEARCH_FACTORY_TABLE	 "CREATE TABLE SearchFactory(sx VARCHAR(10), name VARCHAR(20))"
+#define DELETE_ALL_SEARCH_FACTORY	 "DELETE from SearchFactory"
+#define DROP_SEARCH_FACTORY_TABLE	 "DROP TABLE IF EXISTS SearchFactory"
+#define SELECT_ALL_SEARCH_FACTORY	 "SELECT name FROM SearchFactory where sx like \""
+//struct search factory
+typedef Poco::Tuple<std::string, std::string> SearchFactory;
+
 
 
 
@@ -66,12 +87,68 @@ private:
 
 	static Garbo garbo;
 public:
-	bool GetData(string sql, vector<readSearchVideo>& Record);
-	bool GetData(string sql, vector<SearchDevice>& Record);
-	bool writeData(writeSearchVideo searchrecode);
-	bool writeData(SearchDevice searchrecode);
-	bool writeDataByVector(vector<writeSearchVideo>& Record);
-	bool writeDataByVector(vector<SearchDevice>& Record);
+	template<typename T> 
+	bool GetData(string sql, std::vector<T>& Record)
+	{
+		Session sess = connectDb();
+		if (!checkConnect(sess))
+			return false;
+		try
+		{
+			Statement select(sess);
+			select << sql, into(Record), now;
+			closeConnect(sess);
+		}
+		catch (Poco::Exception &ex)
+		{
+			throw(ex.displayText());
+			closeConnect(sess);
+			return false;
+		}
+
+		return true;
+	}
+	template<typename T>
+	bool writeData(string sql, T searchrecode)
+	{
+		Session sess = connectDb();
+		if (!checkConnect(sess))
+			return false;
+		try
+		{
+			sess << sql , use(searchrecode), now;
+			closeConnect(sess);
+		}
+		catch (Poco::Exception &ex)
+		{
+			throw(ex.displayText());
+			closeConnect(sess);
+			return false;
+		}
+
+		return true;
+	}
+	
+	template<typename T>
+	bool writeDataByVector(string sql, std::vector<T>& Record)
+	{
+		Session sess = connectDb();
+		if (!checkConnect(sess))
+			return false;
+		try
+		{
+			Statement insert(sess);
+			insert << sql, use(Record), now;
+			closeConnect(sess);
+		}
+		catch (Poco::Exception &ex)
+		{
+			throw(ex.displayText());
+			closeConnect(sess);
+			return false;
+		}
+		return true;
+	}	
 	bool cleanData(string sql);
 	bool dropTable(string sql);
 	bool createTable(string sql);

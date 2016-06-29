@@ -1,10 +1,7 @@
 #include "QMSqlite.h"
 #include <stdio.h>
 #include <iostream>
-#include "Poco/Tuple.h"
-#include "Poco/Data/Session.h"
-#include "Poco/Data/SessionPool.h"
-#include "Poco/Data/SQLite/Connector.h"
+
 
 QMSqlite::Garbo QMSqlite::garbo;  // 一定要初始化，不然程序结束时不会析构garbo  
 
@@ -89,151 +86,8 @@ Session QMSqlite::connectDb()
 
 
 bool QMSqlite::createTable(string sql)
-{
-	/*Session sess = connectDb();
-	if (!checkConnect(sess))
-		return false;
-
-	try
-	{		
-		sess << sql, now;
-		closeConnect(sess);
-	}
-	catch (Poco::Exception &ex)
-	{
-		throw(ex.displayText());
-		closeConnect(sess);
-		return false;
-	}
-
-	return true;*/
+{	
 	return execSql(sql);
-}
-
-bool QMSqlite::GetData(string sql, std::vector<readSearchVideo>& Record)
-{
-	Session sess = connectDb();
-	if (!checkConnect(sess))
-		return false;
-	try
-	{		
-		Statement select(sess);		
-		select << sql, into(Record), now;
-		closeConnect(sess);
-	}
-	catch (Poco::Exception &ex)
-	{
-		throw(ex.displayText());
-		closeConnect(sess);
-		return false;
-	}
-	
-	return true;
-}
-
-bool QMSqlite::GetData(string sql, std::vector<SearchDevice>& Record)
-{
-	Session sess = connectDb();
-	if (!checkConnect(sess))
-		return false;
-	try
-	{
-		Statement select(sess);
-		select << sql, into(Record), now;		
-		closeConnect(sess);
-	}
-	catch (Poco::Exception &ex)
-	{
-		throw(ex.displayText());
-		closeConnect(sess);
-		return false;
-	}
-
-	return true;
-}
-
-
-bool QMSqlite::writeData(writeSearchVideo searchrecode)
-{
-	Session sess = connectDb();
-	if (!checkConnect(sess))
-		return false;
-	try
-	{
-		sess << "INSERT INTO SearchVideo VALUES(:name, :channel, :starttime, :stoptime, :size, :id)", use(searchrecode), now;
-		closeConnect(sess);
-	}
-	catch (Poco::Exception &ex)
-	{
-		throw(ex.displayText());
-		closeConnect(sess);
-		return false;
-	}
-	
-	return true;
-}
-
-bool QMSqlite::writeData(SearchDevice searchrecode)
-{
-	Session sess = connectDb();
-	if (!checkConnect(sess))
-		return false;
-	try
-	{
-		sess << "INSERT INTO SearchDevice VALUES(:fcatoryname, :ip, :port)", use(searchrecode), now;		
-		closeConnect(sess);
-	}
-	catch (Poco::Exception &ex)
-	{
-		throw(ex.displayText());
-		closeConnect(sess);
-		return false;
-	}
-
-	return true;
-}
-
-
-bool QMSqlite::writeDataByVector(std::vector<writeSearchVideo>&Record)
-{
-	Session sess = connectDb();
-	if (!checkConnect(sess))
-		return false;
-	try
-	{
-		Statement insert(sess);
-		insert << "INSERT INTO SearchVideo VALUES(:name, :channel, :starttime, :stoptime, :size, :id)", use(Record), now;
-		closeConnect(sess);
-	}
-	catch (Poco::Exception &ex)
-	{
-		throw(ex.displayText());
-		closeConnect(sess);
-		return false;
-	}
-
-	return true;
-}
-
-bool QMSqlite::writeDataByVector(std::vector<SearchDevice>& Record)
-{
-	Session sess = connectDb();
-	if (!checkConnect(sess))
-		return false;
-	try
-	{
-		Statement insert(sess);
-		insert << "INSERT INTO SearchDevice VALUES(:fcatoryname, :ip, :port)", use(Record), now;
-		closeConnect(sess);
-	}
-	catch (Poco::Exception &ex)
-	{
-		throw(ex.displayText());
-		closeConnect(sess);
-		return false;
-	}
-
-	return true;
 }
 
 
@@ -300,3 +154,4 @@ bool QMSqlite::execSql(string sql)
 	}
 	return true;
 }
+
