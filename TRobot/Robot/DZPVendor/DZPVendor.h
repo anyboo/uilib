@@ -26,6 +26,8 @@ public:
 
 protected:
 	void SearchUnit(const long loginHandle, const size_t channel, const time_range& range);
+	//typedef void(__stdcall *fDownLoadPosCallBack) (long lPlayHandle, long lTotalSize, long lDownLoadSize, long dwUser);
+	static void __stdcall DownLoadPosCallBack(long lPlayHandle, long lTotalSize, long lDownLoadSize, long dwUser);
 
 protected:
 	std::string  m_sLastError;

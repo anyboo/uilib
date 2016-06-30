@@ -41,9 +41,7 @@ std::string CCommonUtrl::MakeFileName(int channel, const std::string& startTime,
 	return strFileName;
 }
 
-std::string CCommonUtrl::MakeDownloadFileFolder(const std::string basePath,
-	const std::string& startTimeZero, const std::string& endTimeZero,
-	const std::string& venderName, int channel, const std::string& fileName, const std::string& fileType)
+std::string CCommonUtrl::MakeDownloadFileFolder(const std::string basePath, const std::string& startTimeZero, const std::string& endTimeZero, const std::string& venderName, int channel)
 {
 	std::string strPath = basePath;
 	strPath.append("\\");
@@ -51,10 +49,8 @@ std::string CCommonUtrl::MakeDownloadFileFolder(const std::string basePath,
 	strPath.append("-");
 	strPath += endTimeZero.data();
 	strPath.append("\\");
-	//CreateDirectory(strPath.c_str(), NULL);
 	strPath += venderName.data();
 	strPath.append("\\");
-	//CreateDirectory(strPath.c_str(), NULL);
 	strPath.append("Í¨µÀ");
 	if (channel < 10)
 	{
@@ -62,11 +58,29 @@ std::string CCommonUtrl::MakeDownloadFileFolder(const std::string basePath,
 	}
 	strPath += std::to_string(channel);
 	strPath.append("\\");
-	//CreateDirectory(strPath.c_str(), NULL);
-	strPath.append(fileName);
-	strPath += fileType.data();
+
+	MakeFolder(strPath);
 
 	return strPath;
+}
+
+void CCommonUtrl::MakeFolder(std::string fileName)
+{
+	char *tag;
+	for (tag = (char *)fileName.c_str(); *tag; tag++)
+	{
+		if (*tag == '\\')
+		{
+			char buf[1000], path[1000];
+			strcpy(buf, fileName.c_str());
+			buf[strlen(fileName.c_str()) - strlen(tag) + 1] = NULL;
+			strcpy(path, buf);
+			if (access(path, 6) == -1)
+			{
+				mkdir(path);
+			}
+		}
+	}
 }
 
 std::vector<time_range> CCommonUtrl::MakeTimeRangeList(const time_range& range)

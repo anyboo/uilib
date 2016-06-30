@@ -2,10 +2,14 @@
 
 // System
 #include <Windows.h>
+#include <iostream>
 #include <time.h>
 #include <string>
 #include <vector>
 #include <fstream>
+#include <tchar.h>
+#include "io.h"
+#include "direct.h"
 
 // Jxj SDK
 #include "inc\mb_api.h"
@@ -23,6 +27,10 @@
 
 #include "AbstractVendor.h"
 #include "TestWindows.h"
+#include "QMSqlite.h"
+
+#define Test_Bug
+#define Test_Filename
 
 typedef enum
 {
@@ -49,6 +57,38 @@ struct Record
 			pPrivateData = nullptr;
 			PrivateDataDataSize = 0;
 		}
+	}
+	Record(const Record& other)
+	{
+		channel = other.channel;
+		size = other.size;
+		name = other.name;
+		//alias = other.alias;
+		strTimeSection = other.strTimeSection;
+		beginTime = other.beginTime;
+		endTime = other.endTime;
+		duration = other.duration;
+		pPrivateData = nullptr;
+		PrivateDataDataSize = 0;
+		setPrivateData(other.pPrivateData, other.PrivateDataDataSize);
+	}
+
+	Record& operator= (const Record& other)
+	{
+		if (&other == this)
+		{
+			return *this;
+		}
+		channel = other.channel;
+		size = other.size;
+		name = other.name;
+		//alias = other.alias;
+		strTimeSection = other.strTimeSection;
+		beginTime = other.beginTime;
+		endTime = other.endTime;
+		duration = other.duration;
+		setPrivateData(other.pPrivateData, other.PrivateDataDataSize);
+		return *this;
 	}
 	// Set Private Data
 	void setPrivateData(void* pData, int size)
@@ -85,7 +125,7 @@ struct Record
 	int channel;
 	int size;
 	std::string name;
-	std::string alias;
+	//std::string alias;
 	std::string strTimeSection;
 	std::time_t beginTime;
 	std::time_t endTime;
@@ -104,9 +144,8 @@ public:
 
 	// File Name & File Folder
 	std::string MakeFileName(int channel, const std::string& startTime, const std::string& endTime);
-	std::string MakeDownloadFileFolder(const std::string basePath,
-		const std::string& startTimeZero, const std::string& endTimeZero,
-		const std::string& venderName, int channel, const std::string& fileName, const std::string& fileType);
+	std::string MakeDownloadFileFolder(const std::string basePath, const std::string& startTimeZero, const std::string& endTimeZero, const std::string& venderName, int channel);
+	void MakeFolder(std::string fileName);
 
 	// Video Time Range(JTime - JxjVendor)
 	std::vector<time_range> MakeTimeRangeList(const time_range& range);

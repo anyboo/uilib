@@ -34,6 +34,7 @@ protected:
 	void ReFreshVideoList(const long loginHandle, int channel, const time_range& range);
 	void AddSearchFileList(int channel);
 	bool CheckFileExist(const Record& file, const std::vector<Record>& fileList);
+	void WriteFileListToDB();
 
 	// Download Callback
 	static int  __stdcall JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam);
@@ -45,7 +46,7 @@ protected:
 
 	/* Init */
 	std::string  m_sLastError;
-	std::string m_strRoot;
+	//std::string m_strRoot;
 
 	/* Login */
 	/* Search */

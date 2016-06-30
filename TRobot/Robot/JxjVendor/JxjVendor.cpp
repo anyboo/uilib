@@ -5,9 +5,6 @@
 #pragma comment(lib, "lib\\JNetSDK")
 #pragma comment(lib, "lib\\AVPlayer")
 
-#define Test_Bug
-#define Test_Filename
-
 eErrCode CJxjVendor::m_errCode = Err_No;
 long CJxjVendor::m_lDownloadHandle = -1;
 long CJxjVendor::m_lDownloadFileHandle = -1;
@@ -182,6 +179,9 @@ void CJxjVendor::Search(const long loginHandle, const size_t channel, const time
 	// Save Search Video List Result to Config File
 	CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files);
 
+	// Write File List to DB
+	WriteFileListToDB();
+
 	return;
 }
 
@@ -232,12 +232,9 @@ void CJxjVendor::Download(const long loginHandle, const size_t channel, const ti
 	}
 
 	// Init File Save Path 
-	std::string strPath;
-#ifdef Test_Bug
-	strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder("D:\\DOWNLOAD_SRC", strTimeStartZero, strTimeEndZero, "佳信捷", channel, file.name, ".jav");
-#else
-	strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_strRoot, strTimeStartZero, strTimeEndZero, "佳信捷", channel, file.name, ".jav");
-#endif
+	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder("D:\\DOWNLOAD_SRC", strTimeStartZero, strTimeEndZero, "佳信捷", channel);
+	strPath += file.name.data();
+	strPath.append(".jav");
 
 	// Set File Total Time
 	m_lDownLoadTotalTime = file.duration;
@@ -310,12 +307,9 @@ void CJxjVendor::Download(const long loginHandle, const size_t channel, const st
 	std::string strFileName = CCommonUtrl::getInstance().MakeFileName(channel, strTimeStart, strTimeEnd);
 
 	// Init File Save Path 
-	std::string strPath;
-#ifdef Test_Bug
-	strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder("D:\\DOWNLOAD_SRC", strTimeStartZero, strTimeEndZero, "佳信捷", channel, file.name, ".jav");
-#else
-	strPath = CCommonUtrl::getInstance()->MakeDownloadFileFolder(m_strRoot, strTimeStartZero, strTimeEndZero, "佳信捷", channel, file.name, ".jav");
-#endif
+	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder("D:\\DOWNLOAD_SRC", strTimeStartZero, strTimeEndZero, "佳信捷", channel);
+	strPath += file.name.data();
+	strPath.append(".jav");
 
 	// Set File Total Time
 	m_lDownLoadTotalTime = file.duration;
@@ -513,10 +507,9 @@ void CJxjVendor::PlayVideo(const long loginHandle, const size_t channel, const s
 }
 void CJxjVendor::SetDownloadPath(const std::string& Root)
 {
-	m_strRoot = Root;
-
-	CreateDirectory(Root.c_str(), NULL);
+	//m_strRoot = Root;
 }
+
 void CJxjVendor::throwException()
 {
 }
@@ -649,7 +642,7 @@ void CJxjVendor::AddSearchFileList(int channel)
 
 		// File Name
 		std::string fileName = CCommonUtrl::getInstance().MakeFileName(recordFile.channel, strStartTime, strEndTime);
-		recordFile.alias = fileName;
+		recordFile.name = fileName;
 
 		if (!CheckFileExist(recordFile, m_files))
 		{
@@ -677,6 +670,35 @@ bool CJxjVendor::CheckFileExist(const Record& file, const std::vector<Record>& f
 	return false;
 }
 
+void CJxjVendor::WriteFileListToDB()
+{
+	//获取指针
+	QMSqlite *pDb = QMSqlite::getInstance();
+	//删除表
+	pDb->dropTable(DROP_SEARCH_VIDEO_TABLE);
+	//创建记录表
+	pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
+	//一次插入所有数据
+	std::vector<writeSearchVideo> RecordList;
+	for (size_t i = 0; i < m_files.size(); i++)
+	{
+		writeSearchVideo sr;
+		Record record = m_files[i];
+		//文件名称
+		sr.set<0>(record.name);
+		//通道号
+		sr.set<1>(record.channel);
+		//开始时间
+		sr.set<2>(record.beginTime);
+		//结束时间
+		sr.set<3>(record.endTime);
+		sr.set<4>(record.size);
+		RecordList.push_back(sr);
+	}
+
+	string sql(INSERT_SEARCH_VIDEO);
+	pDb->writeDataByVector(sql, RecordList);
+}
 
 
 int  CJxjVendor::JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam)
@@ -705,7 +727,7 @@ int  CJxjVendor::JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* 
 			g_iDownLoadPos = (pFrame->timestamp_sec - m_lDownLoadStartTime) / (m_lDownLoadTotalTime / 100);
 			char cDownInfo[100];
 			sprintf_s(cDownInfo, 100, "g_idownloadpos = %d , starttime = %ld, curtime = %ld, totaltime = %ld\r\n", g_iDownLoadPos, m_lDownLoadStartTime, pFrame->timestamp_sec, m_lDownLoadTotalTime);
-			OutputDebugString(cDownInfo);
+			std::cout << cDownInfo << std::endl;
 
 			if (index++ >= 10)
 			{
@@ -748,7 +770,7 @@ int CJxjVendor::JRecStream(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUs
 
 	char cPlayInfo[100];
 	sprintf_s(cPlayInfo, 100, "--------%d    %d\r\n", pFrame->timestamp_sec, pFrame->timestamp_usec);
-	OutputDebugString(cPlayInfo);
+	std::cout << cPlayInfo << std::endl;
 	AVP_PutFrame(m_iPlayVideoChannel, pBuff);
 
 	return 0;

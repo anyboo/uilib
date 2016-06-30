@@ -105,6 +105,9 @@
     <ClInclude Include="DeviceManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="QMSqlite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Robot.cpp">
@@ -135,6 +138,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DeviceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QMSqlite.cpp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
