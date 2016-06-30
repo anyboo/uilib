@@ -31,10 +31,10 @@ void CDownloadTest::CallBack()
 
 #include "catch.hpp"
 
-TEST_CASE_METHOD(CDownloadTest, "Init SDK", "[Test]")
-{
-	REQUIRE_NOTHROW(Test());
-}
+//TEST_CASE_METHOD(CDownloadTest, "Init SDK", "[Test]")
+//{
+//	REQUIRE_NOTHROW(Test());
+//}
 
 //TEST_CASE_METHOD(CJxjVendor, "Search videos by time_range from device", "[Download]")
 //{

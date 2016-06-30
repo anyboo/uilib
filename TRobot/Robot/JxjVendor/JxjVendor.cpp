@@ -1,43 +1,27 @@
-#include <Windows.h>
 
-#include "TestWindows.h"
-
-// Jxj Sdk
-#include "inc\mb_api.h"
-#include "inc\JNetSDK.h"
-#include "inc\stdint.h"
-#include "inc\Jtype.h"
-#include "inc\AVPlayer.h"
 #include "JxjVendor.h"
-
-// Json
-#include "document.h"
-#include "prettywriter.h"
-#include "stringbuffer.h"
-#include "ostreamwrapper.h"
-#include "istreamwrapper.h"
+#include "DownloadTest.h"
 
 #pragma comment(lib, "lib\\JNetSDK")
 #pragma comment(lib, "lib\\AVPlayer")
-
-using namespace rapidjson;
 
 #define Test_Bug
 #define Test_Filename
 
 eErrCode CJxjVendor::m_errCode = Err_No;
-
 long CJxjVendor::m_lDownloadHandle = -1;
 long CJxjVendor::m_lDownloadFileHandle = -1;
 long CJxjVendor::m_lRecHandle = -1;
 long CJxjVendor::m_lDownLoadStartTime = -1;
 long CJxjVendor::m_lDownLoadTotalTime = -1;
 int CJxjVendor::g_iDownLoadPos = 0;
-
 int CJxjVendor::m_iPlayVideoChannel = -1;
 
-time_t gTimeStart = 1466265600; // 2016-6-19 00:00:00 1466352000
-time_t gTimeEnd = 1466697599; // 2016-6-23 23:59:59
+typedef enum
+{
+	IsPlay_Download = 0,
+	IsPlay_Play
+}eIsPlay;
 
 typedef enum
 {
@@ -203,7 +187,7 @@ void CJxjVendor::Search(const size_t channel, const time_range& range)
 	}
 
 	// Save Search Video List Result to Config File
-	SaveSearchFileListToFile();
+	CCommonUtrl::getInstance()->SaveSearchFileListToFile(m_files);
 
 	return;
 }
@@ -664,7 +648,7 @@ void CJxjVendor::AddSearchFileList(int channel)
 		sprintf((char *)strEndTime.data(), "%d%02d%02d%02d%02d%02d", jTime.year + 1900, jTime.month, jTime.date, jTime.hour, jTime.minute, jTime.second);
 
 		// File Belong Time Secton 
-		recordFile.strTimeSection = strStartTime;
+		recordFile.strTimeSection = strStartTime.data();
 		recordFile.strTimeSection.append("-");
 		recordFile.strTimeSection += strEndTime.data();
 		
@@ -706,70 +690,7 @@ bool CJxjVendor::CheckFileExist(const Record& file, const std::vector<Record>& f
 	return false;
 }
 
-void CJxjVendor::SaveSearchFileListToFile()
-{
-	Document document;
-	std::string configfile = "SearchFileList.config";
-	document.Parse(configfile.c_str());
-	std::ofstream ofs(configfile);
-	OStreamWrapper osw(ofs);
-	Document::AllocatorType& alloc = document.GetAllocator();
 
-	Value root(kObjectType);
-
-	for (size_t i = 0; i < m_files.size(); i++)
-	{
-		std::string fileKey = "videoFile";
-		Value key(fileKey.c_str(), fileKey.length(), alloc);
-
-		Record file = m_files[i];
-		Value name(file.name.c_str(), file.name.length(), alloc);
-		Value channel(std::to_string(file.channel).c_str(), std::to_string(file.channel).length(), alloc);
-		Value beginTime(CCommonUtrl::getInstance()->MakeStrTimeByTimestamp(file.beginTime).c_str(), CCommonUtrl::getInstance()->MakeStrTimeByTimestamp(file.beginTime).length(), alloc);
-		Value endTime(CCommonUtrl::getInstance()->MakeStrTimeByTimestamp(file.endTime).c_str(), CCommonUtrl::getInstance()->MakeStrTimeByTimestamp(file.endTime).length(), alloc);
-		Value size(std::to_string(file.size / 1024 / 1024).c_str(), std::to_string(file.size / 1024 / 1024).length(), alloc);
-
-		Value a(kArrayType);
-		a.PushBack(name, alloc).PushBack(channel, alloc).PushBack(beginTime, alloc).PushBack(endTime, alloc).PushBack(size, alloc);
-		root.AddMember(key.Move(), a.Move(), alloc);
-	}
-
-	Writer<OStreamWrapper> writer(osw);
-	root.Accept(writer);
-}
-
-void CJxjVendor::LoadSearchFileListFromFile()
-{
-	std::string configfile = "SearchFileList.config";
-	std::ifstream ifs(configfile);
-	IStreamWrapper isw(ifs);
-	Document d;
-	d.ParseStream(isw);
-	size_t file_size = isw.Tell();
-	if (isw.Tell() == 0)
-	{
-		return;
-	}
-
-	typedef Value::ConstMemberIterator Iter;
-	for (Iter it = d.MemberBegin(); it != d.MemberEnd(); it++)
-	{
-		std::string keyName = it->name.GetString();
-		const Value& a = d[keyName.c_str()];
-
-		assert(a.IsArray());
-		if (!a.IsArray() || a.Size() < 5)
-			continue;
-
-		std::string fileName = a[0].GetString();
-		std::string channel = a[1].GetString();
-		std::string beginTime = a[2].GetString();
-		std::string endTime = a[3].GetString();
-		std::string size = a[4].GetString();
-	}
-}
-
-#include "DownloadTest.h"
 
 int  CJxjVendor::JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam)
 {
@@ -879,6 +800,8 @@ DWORD CJxjVendor::PlayThreadFun(LPVOID lpThreadParameter)
 //	REQUIRE_NOTHROW(Login("admin", "admin"));
 //
 //	time_range timeRange;
+//	time_t gTimeStart = 1466265600; // 2016-6-19 00:00:00 1466352000
+//	time_t gTimeEnd = 1466697599; // 2016-6-23 23:59:59
 //	timeRange.start = gTimeStart;
 //	timeRange.end = gTimeEnd;
 //	REQUIRE_NOTHROW(Search(0, timeRange));
@@ -902,13 +825,15 @@ DWORD CJxjVendor::PlayThreadFun(LPVOID lpThreadParameter)
 //	REQUIRE_NOTHROW(Login("admin", "admin"));
 //
 //	time_range timeRange;
+//	time_t gTimeStart = 1466265600; // 2016-6-19 00:00:00 1466352000
+//	time_t gTimeEnd = 1466697599; // 2016-6-23 23:59:59
 //	timeRange.start = gTimeStart;
 //	timeRange.end = gTimeEnd;
 //	REQUIRE_NOTHROW(Search(0, timeRange));
 //
 //#ifdef Test_Filename
-//	//std::string filename = "channel00-20160619235245-20160620001144";
-//	//REQUIRE_NOTHROW(PlayVideo(0, filename));
+//	std::string filename = "channel00-20160619235245-20160620001144";
+//	REQUIRE_NOTHROW(PlayVideo(0, filename));
 //#else
 //	time_t start = 1466351565;
 //	time_t end = 1466352704;

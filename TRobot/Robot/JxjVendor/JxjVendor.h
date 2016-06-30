@@ -1,44 +1,7 @@
 #pragma once
 
 #include "AbstractVendor.h"
-
-#include <vector>
-#include <time.h>
-#include <fstream>
-
 #include "CommonUtrl.h"
-// Jxj Sdk
-#include "inc\mb_api.h"
-#include "inc\JNetSDK.h"
-#include "inc\stdint.h"
-#include "inc\Jtype.h"
-#include "inc\AVPlayer.h"
-#include "JxjVendor.h"
-
-typedef enum
-{
-	Err_No = 0,
-	Err_LoginSuccess, // Login Success
-	Err_LoginFail,	// Login Fail
-	Err_DownloadSuccess, // Download Success
-}eErrCode;
-
-typedef enum
-{
-	IsPlay_Download = 0,
-	IsPlay_Play
-}eIsPlay;
-
-struct Record
-{
-	size_t channel;      
-	size_t size;         
-	std::string  name;   
-	std::time_t beginTime; 
-	std::time_t endTime;
-	unsigned long duration;
-	std::string strTimeSection;
-};
 
 class CJxjVendor :
 	public AbstractVendor
@@ -70,8 +33,6 @@ protected:
 	void ReFreshVideoList(int channel, const time_range& range);
 	void AddSearchFileList(int channel);
 	bool CheckFileExist(const Record& file, const std::vector<Record>& fileList);
-	void SaveSearchFileListToFile();
-	void LoadSearchFileListFromFile();
 
 	// Download Callback
 	static int  __stdcall JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam);
@@ -83,7 +44,6 @@ protected:
 
 	/* Init */
 	std::string  m_sLastError;
-
 	std::string m_strRoot;
 
 	/* Login */

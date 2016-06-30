@@ -1,16 +1,11 @@
-#include <Windows.h>
-
-#include "inc\mb_api.h"
-#include "inc\JNetSDK.h"
-#include "inc\stdint.h"
-#include "inc\Jtype.h"
-#include "inc\AVPlayer.h"
 
 #include "CommonUtrl.h"
 
 #define oneDay		(24 * 60 * 60)
 #define oneHour		(60 * 60)
 #define oneMinute	(60)
+
+using namespace rapidjson;
 
 CCommonUtrl* CCommonUtrl::m_instance;
 
@@ -214,4 +209,71 @@ std::string CCommonUtrl::MakeStrTimeByTimestamp(std::time_t time)
 	strftime((char *)strTime.c_str(), 50, "%Y%m%d%H%M%S", &ttime);
 
 	return strTime;
+}
+
+void CCommonUtrl::SaveSearchFileListToFile(const std::vector<Record>& files)
+{
+	Document document;
+	std::string configfile = "SearchFileList.config";
+	document.Parse(configfile.c_str());
+	std::ofstream ofs(configfile);
+	OStreamWrapper osw(ofs);
+	Document::AllocatorType& alloc = document.GetAllocator();
+
+	Value root(kObjectType);
+
+	for (size_t i = 0; i < files.size(); i++)
+	{
+		std::string fileKey = "videoFile";
+		Value key(fileKey.c_str(), fileKey.length(), alloc);
+
+		Record file = files[i];
+		Value name(file.name.c_str(), file.name.length(), alloc);
+		Value channel(std::to_string(file.channel).c_str(), std::to_string(file.channel).length(), alloc);
+		Value beginTime(CCommonUtrl::getInstance()->MakeStrTimeByTimestamp(file.beginTime).c_str(), CCommonUtrl::getInstance()->MakeStrTimeByTimestamp(file.beginTime).length(), alloc);
+		Value endTime(CCommonUtrl::getInstance()->MakeStrTimeByTimestamp(file.endTime).c_str(), CCommonUtrl::getInstance()->MakeStrTimeByTimestamp(file.endTime).length(), alloc);
+		Value size(std::to_string(file.size / 1024 / 1024).c_str(), std::to_string(file.size / 1024 / 1024).length(), alloc);
+
+		Value a(kArrayType);
+		a.PushBack(name, alloc).PushBack(channel, alloc).PushBack(beginTime, alloc).PushBack(endTime, alloc).PushBack(size, alloc);
+		root.AddMember(key.Move(), a.Move(), alloc);
+	}
+
+	Writer<OStreamWrapper> writer(osw);
+	root.Accept(writer);
+}
+
+std::vector<Record> CCommonUtrl::LoadSearchFileListFromFile()
+{
+	std::vector<Record> files;
+
+	std::string configfile = "SearchFileList.config";
+	std::ifstream ifs(configfile);
+	IStreamWrapper isw(ifs);
+	Document d;
+	d.ParseStream(isw);
+	size_t file_size = isw.Tell();
+	if (isw.Tell() == 0)
+	{
+		return files;
+	}
+
+	typedef Value::ConstMemberIterator Iter;
+	for (Iter it = d.MemberBegin(); it != d.MemberEnd(); it++)
+	{
+		std::string keyName = it->name.GetString();
+		const Value& a = d[keyName.c_str()];
+
+		assert(a.IsArray());
+		if (!a.IsArray() || a.Size() < 5)
+			continue;
+
+		std::string fileName = a[0].GetString();
+		std::string channel = a[1].GetString();
+		std::string beginTime = a[2].GetString();
+		std::string endTime = a[3].GetString();
+		std::string size = a[4].GetString();
+	}
+
+	return files;
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AbstractVendor.h"
+#include "CommonUtrl.h"
 
 class CDZPVendor :
 	public AbstractVendor
@@ -23,12 +24,18 @@ public:
 	virtual void throwException();
 
 protected:
+	void SearchUnit(const size_t channel, const time_range& range);
+
+protected:
 	std::string  m_sLastError;
 
 	/* Login */
 	long m_lLoginHandle; // Handle of Login Device
 	std::string m_ip;	// Device IP Address
 	size_t m_port;	// Device Port
+
+	/* Search */
+	std::vector<Record> m_files;
 
 	void* handle;
 };
