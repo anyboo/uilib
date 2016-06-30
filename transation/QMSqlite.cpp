@@ -60,7 +60,11 @@ bool QMSqlite::creatSessionPool()
 	try
 	{
 		//create pool
+#ifdef _DEBUG
+		m_pool = new SessionPool(SQLite::Connector::KEY, "memory.db", 1, 100, 10);
+#else
 		m_pool = new SessionPool(SQLite::Connector::KEY, ":memory:", 1, 100, 10);
+#endif
 		if (!m_pool->isActive())
 			throw "new session fail";
 	}
@@ -152,6 +156,29 @@ bool QMSqlite::execSql(string sql)
 		closeConnect(sess);
 		return false;
 	}
+	return true;
+}
+
+bool QMSqlite::searchFactoryName(string sx, std::vector<string>& Record)
+{
+	Session sess = connectDb();
+	if (!checkConnect(sess))
+		return false;
+	try
+	{
+		Statement select(sess);
+		string sql = "SELECT name FROM SearchFactory where sx like \"" + sx;
+		sql.append("%\"");		
+		select << sql, into(Record), now;
+		closeConnect(sess);
+	}
+	catch (Poco::Exception &ex)
+	{
+		throw(ex.displayText());
+		closeConnect(sess);
+		return false;
+	}
+
 	return true;
 }
 
