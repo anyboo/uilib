@@ -20,7 +20,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -55,12 +55,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Test\single_include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)poco\Data\include;$(SolutionDir)poco\Foundation\include;$(SolutionDir)poco\Data\SQLite\include;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\Test\single_include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(ProjectDir)Depend\dhnetsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)Depend\dhnetsdk.lib;$(SolutionDir)poco\lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -85,6 +85,11 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\RearchFile\Device.h" />
+    <ClInclude Include="..\..\RearchFile\DeviceManager.h" />
+    <ClInclude Include="..\..\RearchFile\SearchHead.h" />
+    <ClInclude Include="..\..\RearchFile\SearchVideo.h" />
+    <ClInclude Include="..\..\transation\QMSqlite.h" />
     <ClInclude Include="AbstractVendor.h" />
     <ClInclude Include="DHVendor.h" />
     <ClInclude Include="DH_Head.h" />
@@ -94,6 +99,10 @@
     <ClInclude Include="TestWindows.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\RearchFile\Device.cpp" />
+    <ClCompile Include="..\..\RearchFile\DeviceManager.cpp" />
+    <ClCompile Include="..\..\RearchFile\SearchVideo.cpp" />
+    <ClCompile Include="..\..\transation\QMSqlite.cpp" />
     <ClCompile Include="DHVendor.cpp" />
     <ClCompile Include="MyVendor.cpp" />
     <ClCompile Include="Robot.cpp" />
