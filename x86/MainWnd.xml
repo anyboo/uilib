@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Window size="1024,768" caption="0,0,0,30" roundcorner="4,4" showdirty="false">
+<Window size="1024,768" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
 	<Font shared="true" id="0" name="微软雅黑" size="30" bold="false" />
 	<VerticalLayout bkimage="file='Downloader/bg1.png'" height="765" >
 		<HorizontalLayout height="60" width="1024">

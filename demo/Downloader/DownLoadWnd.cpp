@@ -77,9 +77,10 @@ void DownLoadWnd::OnVideoLoginWnd(TNotifyUI& msg)
 {
 	VideoLoginUI* pDlg = new VideoLoginUI();
 	assert(pDlg);
-	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 1024, 768);
+	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_CONTAINER, 0L, 1024, 768, 0, 0);
 	pDlg->CenterWindow();
 	pDlg->ShowModal();
+	
 }
 
 void DownLoadWnd::OnSearchFileWnd()
@@ -101,18 +102,20 @@ void DownLoadWnd::Notify(TNotifyUI& msg)
 		Show_Off_SubList(strSendName);
 	}
 	if (msg.sType == DUI_MSGTYPE_CLICK){
-		if (msg.pSender->GetName() == BT_Calendar1 || msg.pSender->GetName() == BT_Calendar2){
+		if (strSendName == BT_Calendar1 || strSendName == BT_Calendar2){
 			OnSelectCalendar();
 		}
-		if (msg.pSender->GetName() == _T("Search")){
+		if (strSendName == _T("Search")){
 			OnSearchFileWnd();
 		}
-		if (msg.pSender->GetName() == _T("test"))
+		if (strSendName == _T("test"))
 		{	
 			m_Vendor.AddVendorList();
-			/*if (SearchFiles()){
-				ShowFileList();
-				}*/
+			
+		}
+		if (strSendName == _T("test2"))
+		{
+			ShowFileList();
 		}
 		if (!strSendName.compare(0, BTNAMELONG, BTNAMETAG))
 		{

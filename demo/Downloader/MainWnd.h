@@ -18,6 +18,7 @@ public:
 	virtual void OnFinalMessage(HWND hWnd);
 	virtual void Notify(TNotifyUI& msg);
 
+	virtual LRESULT OnNcActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	DUI_DECLARE_MESSAGE_MAP();
 
 	void OnMin(TNotifyUI& msg);
@@ -26,6 +27,10 @@ public:
 	void OnLogWnd(TNotifyUI& msg);
 	void OnOtherToolsWnd(TNotifyUI& msg);
 
+	void Show_HideTask(BOOL IsHide);
+
+private:
+	BOOL	m_IsMinWnd;
 
 protected:
 	virtual LPCTSTR GetWindowClassName() const;

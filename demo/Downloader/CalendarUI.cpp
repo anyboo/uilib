@@ -143,6 +143,7 @@ void CalendarUI::DrawCalendar(SYSTEMTIME m_sysTime)
 			btn->SetBkColor(0x64263232);
 		}
 	}
+	
 
 	cMonth = intToString(m_sysTime.wMonth);
 	itemName = "Item" + cMonth;
