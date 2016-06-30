@@ -48,9 +48,6 @@ typedef Poco::Tuple<std::string, std::string> SearchFactory;
 
 
 
-using namespace Poco::Data;
-using namespace std;
-
 class QMSqlite
 {
 public:
