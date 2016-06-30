@@ -1,4 +1,5 @@
-
+头文件包含路径：$(SolutionDir)poco\Data\include;$(SolutionDir)poco\Foundation\include;$(SolutionDir)poco\Data\SQLite\include;
+lib文件包含路径：$(SolutionDir)poco\lib;
 1.数据库类获取指针
     QMSqlite *pDb = QMSqlite::getInstance();
 
