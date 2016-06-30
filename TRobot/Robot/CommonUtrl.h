@@ -97,7 +97,10 @@ struct Record
 class CCommonUtrl
 {
 public:
-	static CCommonUtrl* getInstance();
+	CCommonUtrl();
+	~CCommonUtrl();
+
+	static CCommonUtrl& getInstance();
 
 	// File Name & File Folder
 	std::string MakeFileName(int channel, const std::string& startTime, const std::string& endTime);
@@ -115,11 +118,5 @@ public:
 	void SaveSearchFileListToFile(const std::vector<Record>& files);
 	std::vector<Record> LoadSearchFileListFromFile();
 
-private:
-	CCommonUtrl();
-	~CCommonUtrl();
-
-	static CCommonUtrl* m_instance;
-	
 };
 

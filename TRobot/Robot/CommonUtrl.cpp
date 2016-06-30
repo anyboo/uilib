@@ -1,13 +1,13 @@
 
+
 #include "CommonUtrl.h"
+#include <Poco/SingletonHolder.h>
 
 #define oneDay		(24 * 60 * 60)
 #define oneHour		(60 * 60)
 #define oneMinute	(60)
 
 using namespace rapidjson;
-
-CCommonUtrl* CCommonUtrl::m_instance;
 
 CCommonUtrl::CCommonUtrl()
 {
@@ -17,12 +17,10 @@ CCommonUtrl::~CCommonUtrl()
 {
 }
 
-CCommonUtrl* CCommonUtrl::getInstance()
+CCommonUtrl& CCommonUtrl::getInstance()
 {
-	if (NULL == m_instance)
-		m_instance = new CCommonUtrl;
-
-	return m_instance;
+	static Poco::SingletonHolder<CCommonUtrl> sh;
+	return *sh.get();
 }
 
 std::string CCommonUtrl::MakeFileName(int channel, const std::string& startTime, const std::string& endTime)
@@ -53,10 +51,10 @@ std::string CCommonUtrl::MakeDownloadFileFolder(const std::string basePath,
 	strPath.append("-");
 	strPath += endTimeZero.data();
 	strPath.append("\\");
-	CreateDirectory(strPath.c_str(), NULL);
+	//CreateDirectory(strPath.c_str(), NULL);
 	strPath += venderName.data();
 	strPath.append("\\");
-	CreateDirectory(strPath.c_str(), NULL);
+	//CreateDirectory(strPath.c_str(), NULL);
 	strPath.append("Í¨µÀ");
 	if (channel < 10)
 	{
@@ -64,7 +62,7 @@ std::string CCommonUtrl::MakeDownloadFileFolder(const std::string basePath,
 	}
 	strPath += std::to_string(channel);
 	strPath.append("\\");
-	CreateDirectory(strPath.c_str(), NULL);
+	//CreateDirectory(strPath.c_str(), NULL);
 	strPath.append(fileName);
 	strPath += fileType.data();
 
@@ -230,8 +228,8 @@ void CCommonUtrl::SaveSearchFileListToFile(const std::vector<Record>& files)
 		Record file = files[i];
 		Value name(file.name.c_str(), file.name.length(), alloc);
 		Value channel(std::to_string(file.channel).c_str(), std::to_string(file.channel).length(), alloc);
-		Value beginTime(CCommonUtrl::getInstance()->MakeStrTimeByTimestamp(file.beginTime).c_str(), CCommonUtrl::getInstance()->MakeStrTimeByTimestamp(file.beginTime).length(), alloc);
-		Value endTime(CCommonUtrl::getInstance()->MakeStrTimeByTimestamp(file.endTime).c_str(), CCommonUtrl::getInstance()->MakeStrTimeByTimestamp(file.endTime).length(), alloc);
+		Value beginTime(CCommonUtrl::getInstance().MakeStrTimeByTimestamp(file.beginTime).c_str(), CCommonUtrl::getInstance().MakeStrTimeByTimestamp(file.beginTime).length(), alloc);
+		Value endTime(CCommonUtrl::getInstance().MakeStrTimeByTimestamp(file.endTime).c_str(), CCommonUtrl::getInstance().MakeStrTimeByTimestamp(file.endTime).length(), alloc);
 		Value size(std::to_string(file.size / 1024 / 1024).c_str(), std::to_string(file.size / 1024 / 1024).length(), alloc);
 
 		Value a(kArrayType);
