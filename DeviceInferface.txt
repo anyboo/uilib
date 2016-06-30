@@ -1,0 +1,27 @@
+// 设备类
+Class Device:
+public:
+	void Search(const size_t channel, const time_range& range);
+	void Download(const size_t channel, const time_range& range);
+	void PlayVideo(const size_t channel, const time_range& range);
+	void Download(const size_t channel, const std::string& filename);
+	void PlayVideo(const size_t channel, const std::string& filename);
+protecte:
+	bool m_bLoginStatus;
+	std::string m_sIP;
+	int m_iPort;
+	std::string m_sUserName;
+	std::string m_sPassword;
+
+	void* m_pVendor;
+
+// 设备管理类
+Class DeviceManager:
+public:
+	bool getDeviceLoginStatus(std::string ip);
+	Device getDevice(std::string ip);
+	void loginoutDevice(std::string ip);
+	void deleteDevice(std::string ip);
+protecte:
+	std::vector<Device> m_vDeviceList;
+	
