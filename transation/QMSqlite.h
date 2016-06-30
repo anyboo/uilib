@@ -9,13 +9,13 @@
 #include <iostream>
 #include <vector>
 
-
+using namespace std;
 using namespace Poco::Data::Keywords;
 using namespace Poco::Data;
 using Poco::Data::Session;
 using Poco::Data::Statement;
 using Poco::Data::Statement;
-using namespace std;
+
 
 //search video result table
 #define CREATE_SEARCH_VIDEO_TABLE   "CREATE TABLE SearchVideo(name VARCHAR(100), channel INTEGER, starttime DATETIME, stoptime DATETIME, size BIGINT, id INTEGER PRIMARY KEY)"
@@ -41,7 +41,8 @@ typedef Poco::Tuple<std::string, std::string, int> SearchDevice;
 #define CREATE_SEARCH_FACTORY_TABLE	 "CREATE TABLE SearchFactory(sx VARCHAR(10), name VARCHAR(20))"
 #define DELETE_ALL_SEARCH_FACTORY	 "DELETE from SearchFactory"
 #define DROP_SEARCH_FACTORY_TABLE	 "DROP TABLE IF EXISTS SearchFactory"
-#define SELECT_ALL_SEARCH_FACTORY	 "SELECT name FROM SearchFactory where sx like \""
+#define INSERT_SEARCH_FACTORY		"INSERT INTO SearchFactory VALUES(:sx, :name)"
+//#define SELECT_ALL_SEARCH_FACTORY	 "SELECT name FROM SearchFactory where sx like \""
 //struct search factory
 typedef Poco::Tuple<std::string, std::string> SearchFactory;
 
@@ -149,6 +150,7 @@ public:
 	bool cleanData(string sql);
 	bool dropTable(string sql);
 	bool createTable(string sql);
+	bool searchFactoryName(string sx, std::vector<string>& Record);
 private:
 	bool Initialize();
 	bool creatSessionPool();
