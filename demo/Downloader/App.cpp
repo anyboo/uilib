@@ -4,6 +4,7 @@
 #include "MainWnd.h"
 #include "resource.h"
 
+
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
 
@@ -19,6 +20,21 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	pFrame->CenterWindow();
 	pFrame->ShowWindow(true);
 
+	LPARAM lParam;
+	lParam = ABS_AUTOHIDE | ABS_ALWAYSONTOP;
+	HWND task = FindWindow(_T("Shell_TrayWnd"), NULL);
+	::ShowWindow(task, SW_HIDE);
+
+	APPBARDATA apBar;
+	memset(&apBar, 0, sizeof(apBar));
+	apBar.cbSize = sizeof(apBar);
+	apBar.hWnd = task;
+	if (apBar.hWnd != NULL)
+	{
+		apBar.lParam = lParam;
+		SHAppBarMessage(ABM_SETSTATE, &apBar);
+	}
+	
 	CPaintManagerUI::MessageLoop();
 
 	::CoUninitialize();

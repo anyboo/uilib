@@ -1,22 +1,23 @@
 #pragma once
 #include <DuiLib/UIlib.h>
+#include <vector>
 
-#define BT_VideoVendor			(_T("Vendor"))
 
-class VideoLoginUI :
+class COtherTools :
 	public WindowImplBase
 {
 public:
-	VideoLoginUI();
-	~VideoLoginUI();
+	COtherTools();
+	~COtherTools();
 	virtual void OnFinalMessage(HWND /*hWnd*/);
 	virtual void Notify(TNotifyUI& msg);
 	DUI_DECLARE_MESSAGE_MAP();
 
-	void OnOpenVideoVendorWnd(TNotifyUI& msg);
 
 protected:
 	virtual LPCTSTR GetWindowClassName() const;
 	virtual CDuiString GetSkinFolder();
 	virtual CDuiString GetSkinFile();
 };
+
+
