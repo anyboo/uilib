@@ -5,11 +5,6 @@
 //da hua SDK
 #include "dhnetsdk.h"
 
-#define MAX_SEARCH_COUNT 1000
-#define ONE_DAY		 (24 * 60 * 60)
-#define ONE_HOUR	 (60 * 60)
-#define ONE_MINUTE	 (60)
-
 class DHVendor :
 	public AbstractVendor
 {

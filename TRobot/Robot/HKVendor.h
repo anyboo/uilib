@@ -23,5 +23,25 @@ public:
 	virtual void PlayVideo(const long loginHandle, const size_t channel, const std::string& filename);
 	virtual void SetDownloadPath(const std::string& Root);
 	virtual void throwException();
+
+private:
+	string GetLastErrorString();
+	void timeDHToStd(NET_DVR_TIME *pTimeDH, tm *pTimeStd);
+	void timeStdToDH(tm *pTimeStd, NET_DVR_TIME *pTimeDH);
+	void trTOndt(NET_DVR_TIME &ndtStartTime, NET_DVR_TIME &ndtEndTime, const time_range range);
+	vector<time_range> MakeTimeRangeList(const time_range& range);
+
+
+
+protected:
+	string m_strName;
+	int m_dwPort;
+	string m_strUser;
+	string m_strPasswords;
+	string m_strIP;
+	LONG m_lLoginHandle;
+	int m_nChannels;
+
+	vector<RecordFile> m_files;
 };
 
