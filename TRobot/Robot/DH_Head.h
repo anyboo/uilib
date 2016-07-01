@@ -6,6 +6,7 @@
 #include <vector>
 #include <assert.h> 
 #include <tchar.h>
+using namespace std;
 
 #include "Depend/dhnetsdk.h"
 

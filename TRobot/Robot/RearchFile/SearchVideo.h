@@ -3,7 +3,7 @@
 #include "SearchHead.h"
 
 #include "DeviceManager.h"
-
+#include "DHVendor.h"
 
 class CSearchVideo
 {
@@ -17,8 +17,9 @@ public:
 
 private:
 	time_range m_TimeRange;
-	DeviceManager m_DeviceManager;
-	Device m_Device;
+	CDeviceManager m_DeviceManager;
+//	Device m_Device;
+//	DHVendor m_DHObj;
 	int m_nNotify;
 
 };
