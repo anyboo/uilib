@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "DHVendor.h"
 
 #include <ctime>
@@ -32,8 +31,6 @@ void DHVendor::Init()
 {
 	BOOL bInit = CLIENT_Init(0, 0);
 	
-	cout << "m_dwPort:" << m_dwPort << endl;
-	cout << "m_strIP:" << m_strIP << endl;
 	if (!bInit)
 	{
 		cout << "³õÊ¼»¯´íÎó£º" << CLIENT_GetLastError() << endl;

@@ -2,6 +2,9 @@
 #include "AbstractVendor.h"
 #include "DH_Head.h"
 
+//da hua SDK
+#include "dhnetsdk.h"
+
 #define MAX_SEARCH_COUNT 1000
 #define ONE_DAY		 (24 * 60 * 60)
 #define ONE_HOUR	 (60 * 60)
@@ -13,18 +16,6 @@ class DHVendor :
 public:
 	DHVendor();
 	~DHVendor();
-
-	//void Init(const std::string& ip, size_t port);
-	//void Login(const std::string& user, const std::string& password);
-	//void Logout();
-	//void SearchAll();
-	//void Search(const size_t channel, const time_range& range);
-	//void Download(const size_t channel, const time_range& range);
-	//void Download(const size_t channel, const std::string& filename);
-	//void PlayVideo(const size_t channel, const time_range& range);
-	//void PlayVideo(const size_t channel, const std::string& filename);
-	//void SetDownloadPath(const std::string& Root);
-//	void throwException();
 
 	virtual void Init();
 	virtual long Login(const std::string& ip, size_t port, const std::string& user, const std::string& password);

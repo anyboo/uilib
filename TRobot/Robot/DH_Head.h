@@ -8,7 +8,15 @@
 #include <tchar.h>
 using namespace std;
 
-#include "Depend/dhnetsdk.h"
+
+// Json 
+#include "document.h"
+#include "prettywriter.h"
+#include "stringbuffer.h"
+#include "ostreamwrapper.h"
+#include "istreamwrapper.h"
+
+using namespace rapidjson;
 
 //单个视频文件信息
 struct RecordFile

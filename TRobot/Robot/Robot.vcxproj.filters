@@ -114,6 +114,9 @@
     <ClInclude Include="RearchFile\SearchVideo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HKVendor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Robot.cpp">
@@ -150,6 +153,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RearchFile\SearchVideo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HKVendor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

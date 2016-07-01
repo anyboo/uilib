@@ -56,12 +56,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)poco\Data\include;$(SolutionDir)poco\Foundation\include;$(SolutionDir)poco\Data\SQLite\include;$(SolutionDir)\bin;$(SolutionDir)\dll;$(SolutionDir)\TRobot\Robot\DZPVendor\sdk;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\TRobot\Robot\inc;$(SolutionDir)\TRobot\Robot;$(SolutionDir)\TRobot\Robot\JxjVendor;$(SolutionDir)\Test\single_include;$(SolutionDir)\TRobot\Robot\DZPVendor;$(SolutionDir)\poco\Foundation\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)HK_Head;$(ProjectDir)Depend;$(SolutionDir)poco\Data\include;$(SolutionDir)poco\Foundation\include;$(SolutionDir)poco\Data\SQLite\include;$(SolutionDir)\bin;$(SolutionDir)\dll;$(SolutionDir)\TRobot\Robot\DZPVendor\sdk;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\TRobot\Robot\inc;$(SolutionDir)\TRobot\Robot;$(SolutionDir)\TRobot\Robot\JxjVendor;$(SolutionDir)\Test\single_include;$(SolutionDir)\TRobot\Robot\DZPVendor;$(SolutionDir)\poco\Foundation\include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)poco\lib;$(SolutionDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(ProjectDir)Depend\dhnetsdk.lib;$(ProjectDir)HKbin\HCNetSDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -95,6 +96,7 @@
     <ClInclude Include="CommonUtrl.h" />
     <ClInclude Include="DownloadTest.h" />
     <ClInclude Include="DZPVendor\DZPVendor.h" />
+    <ClInclude Include="HKVendor.h" />
     <ClInclude Include="inc\AVPlayer.h" />
     <ClInclude Include="inc\JNetSDK.h" />
     <ClInclude Include="inc\Jtype.h" />
@@ -116,6 +118,7 @@
     <ClCompile Include="CommonUtrl.cpp" />
     <ClCompile Include="DownloadTest.cpp" />
     <ClCompile Include="DZPVendor\DZPVendor.cpp" />
+    <ClCompile Include="HKVendor.cpp" />
     <ClCompile Include="JxjVendor\JxjVendor.cpp" />
     <ClCompile Include="JxjVendor\TestWindows.cpp" />
     <ClCompile Include="MyVendor.cpp" />
