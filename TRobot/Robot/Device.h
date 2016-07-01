@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+#include <WinSock.h>
+
 /*
 Please make sure type of vendor before you create a Device Object
 */
@@ -22,7 +24,17 @@ class Device
 {
 public:
 	Device(const AbstractVendor* sdk);
+	Device();
 	~Device();
+
+	void Init();
+	void Login(const std::string& ip, size_t port, const std::string& userName, const std::string& password);
+	void Logout();
+	void SetDownloadPath(const std::string& root);
+
+	void StartSearchDevice();
+	std::vector<NET_DEVICE_INFO*> GetDeviceList(){ return m_pVendor->GetDeviceList(); }
+	void StopSearchDevice();
 
 	void SearchAll();
 	void Search(const size_t channel, const time_range& range);
@@ -31,17 +43,11 @@ public:
 	void Download(const size_t channel, const std::string& fileName);
 	void PlayVideo(const size_t channel, const std::string& fileName);
 
-	void setChannel(const size_t maxChannel, const std::vector<size_t>& channelList);
+	void setChannel(const size_t maxChannel, const std::vector<size_t>& channelList); 
 	size_t getMaxChannel(){ return m_iMaxChannel; }
 	std::vector<size_t> getChannelList(){ return m_vChannelList; }
 	std::string getIP(){ return m_sIP; }
 	DeviceLoginStatus getLoginStatus(){ return m_eLoginStatus; }
-
-public:
-	void Init();
-	void Login(const std::string& ip, size_t port, const std::string& userName, const std::string& password);
-	void Logout();
-	void SetDownloadPath(const std::string& root);
 	
 private:
 	AbstractVendor* m_pVendor;

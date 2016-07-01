@@ -14,6 +14,10 @@ public:
 	long Login(const std::string& ip, size_t port, const std::string& user, const std::string& password);
 	void Logout(const long loginHandle);
 
+	void StartSearchDevice();
+	std::vector<NET_DEVICE_INFO*>& GetDeviceList(){ return m_listDeviceInfo; }
+	void StopSearchDevice();
+
 	void SearchAll(const long loginHandle);
 	void Search(const long loginHandle, const size_t channel, const time_range& range);
 	void Download(const long loginHandle, const size_t channel, const time_range& range);
@@ -27,9 +31,13 @@ public:
 protected:
 	// Login Callback
 	static int WINAPI ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, void* pEventData, int iDataLen, void* pUserParam);
+	
+	// Search Device Callback
+	static int __stdcall fcbJMBNotify(long lHandle, DWORD dwPortocol, int iErr, int iMsgID, LPCTSTR lpszDstID, void* pData, int iDataLen, void* pUserParam);
 
 	// Search Callback
 	void MakeStoreLog(JStoreLog& storeLog, const JRecodeType recordType, const int beginNode, const int endNode, const int ssid, const std::time_t& start, const std::time_t& end);
+	std::string MakeFileName(int channel, const std::string& startTime, const std::string& endTime);
 	void SearchUnit(const long loginHandle, const size_t channel, const time_range& range);
 	void ReFreshVideoList(const long loginHandle, int channel, const time_range& range);
 	void AddSearchFileList(int channel);
@@ -49,6 +57,10 @@ protected:
 	//std::string m_strRoot;
 
 	/* Login */
+	/* Search Device */
+	long m_lSearchDeviceHandle;
+	std::vector<NET_DEVICE_INFO*> m_listDeviceInfo;
+
 	/* Search */
 	JStoreLog m_storeLog;
 	JRecodeType m_recordType;

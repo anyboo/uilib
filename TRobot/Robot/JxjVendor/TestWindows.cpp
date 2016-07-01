@@ -19,18 +19,7 @@ int TestWindows::Init()
 {
 	this->MyRegisterClass();
 	this->InitInstance();
-// 	{
-// 		return 0;
-// 	}
 
-// 	MSG msg;
-// 
-// 	while (GetMessage(&msg, NULL, 0, 0))
-// 	{
-// 		TranslateMessage(&msg);
-// 		DispatchMessage(&msg);
-// 		
-// 	}
 	return 0;
 }
 
@@ -68,8 +57,6 @@ BOOL TestWindows::InitInstance()
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-
-
 	switch (uMsg)
 	{
 	case WM_DESTROY:

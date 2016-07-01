@@ -10,6 +10,8 @@ Device::Device(const AbstractVendor* sdk)
 	m_iPort = 0;
 	m_sUserName = "";
 	m_sPassword = "";
+	m_iMaxChannel = 0;
+	m_vChannelList.clear();
 
 	if (!sdk)
 	{
@@ -18,6 +20,20 @@ Device::Device(const AbstractVendor* sdk)
 	}
 
 	m_pVendor = const_cast<AbstractVendor*>(sdk);
+
+	assert(m_pVendor);
+	Init();
+}
+
+Device::Device()
+{
+	m_eLoginStatus = Login_Status_No;
+	m_sIP = "";
+	m_iPort = 0;
+	m_sUserName = "";
+	m_sPassword = "";
+	m_iMaxChannel = 0;
+	m_vChannelList.clear();
 }
 
 Device::~Device()
@@ -30,25 +46,25 @@ Device::~Device()
 	m_iPort = 0;
 	m_sUserName = "";
 	m_sPassword = "";
+	m_iMaxChannel = 0;
+	m_vChannelList.clear();
 }
 
 void Device::Init()
 {
 	assert(m_pVendor);
-	m_pVendor->Init();
+	m_pVendor->Init();	
 }
 
-void Device::Login(const std::string& ip, size_t port, const std::string& user, const std::string& password)
+void Device::Login(const std::string& ip, size_t port, const std::string& userName, const std::string& password)
 {
-	Init();
-
 	assert(m_pVendor);
-	m_lLoginHandle = m_pVendor->Login(ip, port, user, password);
+	m_lLoginHandle = m_pVendor->Login(ip, port, userName, password);
 
 	m_eLoginStatus = Login_Status_Yes;
 	m_sIP = ip;
 	m_iPort = port;
-	m_sUserName = user;
+	m_sUserName = userName;
 	m_sPassword = password;
 }
 
@@ -58,6 +74,17 @@ void Device::Logout()
 	m_pVendor->Logout(m_lLoginHandle);
 }
 
+void Device::StartSearchDevice()
+{
+	assert(m_pVendor);
+	m_pVendor->StartSearchDevice();
+}
+
+void Device::StopSearchDevice()
+{
+	assert(m_pVendor);
+	m_pVendor->StopSearchDevice();
+}
 void Device::SearchAll()
 {
 	assert(m_pVendor);

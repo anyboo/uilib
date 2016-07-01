@@ -104,6 +104,7 @@
     <ClInclude Include="MyVendor.h" />
     <ClInclude Include="QMSqlite.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SearchDevice.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Device.cpp" />
@@ -117,6 +118,7 @@
     <ClCompile Include="MyVendor.cpp" />
     <ClCompile Include="QMSqlite.cpp.cpp" />
     <ClCompile Include="Robot.cpp" />
+    <ClCompile Include="SearchDevice.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Robot.rc" />

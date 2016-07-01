@@ -155,6 +155,46 @@ void CDZPVendor::Logout(const long loginHandle)
 	}
 }
 
+void CDZPVendor::StartSearchDevice()
+{
+	SDK_CONFIG_NET_COMMON_V2 Device[256] = { 0 };
+	int nRetLength = 0;
+
+	BOOL bRet = H264_DVR_SearchDevice((char*)Device, sizeof(SDK_CONFIG_NET_COMMON_V2) * 256, &nRetLength, 3000);
+	if (bRet)
+	{
+		int i;
+		for (i = 0; i < nRetLength / sizeof(SDK_CONFIG_NET_COMMON_V2); i++)
+		{
+			NET_DEVICE_INFO ndiInfo = { 0 };
+			int nLen = 0;
+			ndiInfo.nSDKType = DZP_SDK;
+
+			struct in_addr in1 = { 0 };
+			in1.s_addr = Device[i].HostIP.l;
+			nLen = (strlen(inet_ntoa(in1)) < MAX_IPADDR_LEN) ? strlen(inet_ntoa(in1)) : MAX_IPADDR_LEN;
+			memcpy(&ndiInfo.szIp, inet_ntoa(in1), nLen);
+
+
+			ndiInfo.nPort = Device[i].TCPPort;
+
+			struct in_addr in2 = { 0 };
+			in2.s_addr = Device[i].Submask.l;
+			nLen = (strlen(inet_ntoa(in2)) < MAX_IPADDR_LEN) ? strlen(inet_ntoa(in2)) : MAX_IPADDR_LEN;
+			memcpy(&ndiInfo.szSubmask, inet_ntoa(in2), nLen);
+
+			nLen = (strlen(Device[i].sMac) < MAX_MACADDR_LEN) ? strlen(Device[i].sMac) : MAX_MACADDR_LEN;
+			memcpy(&ndiInfo.szMac, &Device[i].sMac, nLen);
+
+			m_listDeviceInfo.push_back(&ndiInfo);
+		}
+	}
+}
+void CDZPVendor::StopSearchDevice()
+{
+}
+
+
 void CDZPVendor::SearchAll(const long loginHandle)
 {
 
@@ -206,11 +246,24 @@ void CDZPVendor::Download(const long loginHandle, const size_t channel, const ti
 	localtime_s(&ttime, &range.end);
 	strftime((char *)strTimeEnd.data(), 24, "%Y%m%d%H%M%S", &ttime);
 
-	std::string strFileName = CCommonUtrl::getInstance().MakeFileName(channel, strTimeStart, strTimeEnd);
+	std::string strFileName = MakeFileName(channel, strTimeStart);
 
-	/*if (m_files.size() == 0)
+	// Init File Save Path 
+	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder("D:\\DOWNLOAD_SRC", strTimeStartZero, strTimeEndZero, Vendor_DZP, channel);
+	int hdl = H264_DVR_GetFileByTime(loginHandle, &info, (char *)strPath.c_str(), true, DownLoadPosCallBack, 0);
+	if (hdl <= 0)
 	{
-		throw std::exception("Search File List Empty!");
+		m_sLastError = std::string("ÏÂÔØÊ§°Ü£¡´íÎóÎª:") + GZLL_GetLastErrorString();
+
+		return;
+	}
+}
+void CDZPVendor::Download(const long loginHandle, const size_t channel, const std::string& filename)
+{
+	if (0 == loginHandle)
+	{
+		m_sLastError = std::string("ÇëÏÈµÇÂ¼!");
+		throw std::exception(m_sLastError.c_str());
 		return;
 	}
 
@@ -219,7 +272,7 @@ void CDZPVendor::Download(const long loginHandle, const size_t channel, const ti
 	for (; i < m_files.size(); i++)
 	{
 		file = m_files[i];
-		if (strFileName.compare(file.name) == 0)
+		if (filename.compare(file.name) == 0)
 		{
 			break;
 		}
@@ -229,30 +282,107 @@ void CDZPVendor::Download(const long loginHandle, const size_t channel, const ti
 	{
 		throw std::exception("Search File List Not Contain the Range!");
 		return;
-	}*/
+	}
+
+	// Init File Starttime and Endtime
+	std::string strTimeStart;
+	std::string strTimeEnd;
+	std::string strTimeStartZero;
+	std::string strTimeEndZero;
+
+	struct tm ttime;
+
+	localtime_s(&ttime, &file.beginTime);
+	strftime((char *)strTimeStart.data(), 24, "%Y%m%d%H%M%S", &ttime);
+	strftime((char *)strTimeStartZero.data(), 24, "%Y%m%d0000", &ttime);
+	strftime((char *)strTimeEndZero.data(), 24, "%Y%m%d2359", &ttime);
+	localtime_s(&ttime, &file.endTime);
+	strftime((char *)strTimeEnd.data(), 24, "%Y%m%d%H%M%S", &ttime);
+
+	std::string strFileName = MakeFileName(channel, strTimeStart);
 
 	// Init File Save Path 
-	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder("D:\\DOWNLOAD_SRC", strTimeStartZero, strTimeEndZero, "µÏÖÇÆÕ", channel);
-
-	int hdl = H264_DVR_GetFileByTime(loginHandle, &info, (char *)strPath.c_str(), true, DownLoadPosCallBack, 0);
-	if (hdl <= 0)
+	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder("D:\\DOWNLOAD_SRC", strTimeStartZero, strTimeEndZero, Vendor_DZP, channel);
+	strPath.append(file.name);
+	H264_DVR_FILE_DATA* pData = (H264_DVR_FILE_DATA*)file.getPrivateData();
+	int hdl = H264_DVR_GetFileByName(loginHandle, pData, (char *)strPath.c_str(), DownLoadPosCallBack, 0);
+	if (0 == hdl)
 	{
-		m_sLastError = std::string("ÏÂÔØÊ§°Ü£¡´íÎóÎª:") + GZLL_GetLastErrorString();
-
+		m_sLastError = GZLL_GetLastErrorString();
+		throw std::exception(m_sLastError.c_str());
 		return;
 	}
 }
 void CDZPVendor::PlayVideo(const long loginHandle, const size_t channel, const time_range& range)
 {
+	H264_DVR_FINDINFO info;
 
-}
-void CDZPVendor::Download(const long loginHandle, const size_t channel, const std::string& filename)
-{
+	info.nChannelN0 = channel;
+	info.nFileType = SDK_RECORD_ALL;
 
+	struct tm Tm;
+	_localtime64_s(&Tm, (const time_t*)&range.start);
+	memset(&info, 0, sizeof(info));
+	TMToNetTime(Tm, info.startTime);
+	_localtime64_s(&Tm, (const time_t*)&range.end);
+	TMToNetTime(Tm, info.endTime);
+
+	// ÉèÖÃÏÔÊ¾´°¿Ú
+#ifdef Test_Bug
+	TestWindows testWindows;
+	testWindows.Init();
+#endif
+	info.hWnd = g_hWnd;
+	int hdl = H264_DVR_PlayBackByTime(loginHandle, &info, DownLoadPosCallBack, RealDataCallBack, 0);
+	if (0 == hdl)
+	{
+		m_sLastError = GZLL_GetLastErrorString();
+		throw std::exception(m_sLastError.c_str());
+		return;
+	}
 }
 void CDZPVendor::PlayVideo(const long loginHandle, const size_t channel, const std::string& filename)
 {
+	if (0 == loginHandle)
+	{
+		m_sLastError = std::string("ÇëÏÈµÇÂ¼!");
+		throw std::exception(m_sLastError.c_str());
+		return;
+	}
 
+	Record file;
+	size_t i = 0;
+	for (; i < m_files.size(); i++)
+	{
+		file = m_files[i];
+		if (filename.compare(file.name) == 0)
+		{
+			break;
+		}
+	}
+
+	if (i >= m_files.size())
+	{
+		throw std::exception("Search File List Not Contain the Range!");
+		return;
+	}
+
+	H264_DVR_FILE_DATA* fileData = (H264_DVR_FILE_DATA*)file.getPrivateData();
+	// ÉèÖÃÏÔÊ¾´°¿Ú
+#ifdef Test_Bug
+	TestWindows testWindows;
+	testWindows.Init();
+#endif
+	fileData->hWnd = g_hWnd;
+	int playbackHandle = H264_DVR_PlayBackByName(loginHandle, fileData, nullptr, NULL, 0);
+	if (playbackHandle == 0)
+	{
+		H264_DVR_StopPlayBack(playbackHandle);
+		m_sLastError = GZLL_GetLastErrorString();
+		throw std::exception(m_sLastError.c_str());
+	}
+
+	return;
 }
 void CDZPVendor::SetDownloadPath(const std::string& Root)
 {
@@ -263,6 +393,26 @@ void CDZPVendor::throwException()
 
 }
 /****************************************************************************************/
+std::string CDZPVendor::MakeFileName(int channel, const std::string& startTime)
+{
+	std::string strFileName;
+	std::string strStartTime = startTime.c_str();
+
+	channel += 1;
+
+	if (channel < 10)
+	{
+		strFileName += "0";
+	}
+	strFileName += std::to_string(channel);
+	strFileName += "-";
+	strFileName += strStartTime.substr(0, 8).data();
+	strFileName += "-";
+	strFileName += strStartTime.substr(8, strStartTime.length() - 8).data();
+	strFileName.append(".h264");
+
+	return strFileName;
+}
 void CDZPVendor::SearchUnit(const long loginHandle, const size_t channel, const time_range& range)
 {
 	H264_DVR_FINDINFO info;
@@ -323,7 +473,7 @@ void CDZPVendor::SearchUnit(const long loginHandle, const size_t channel, const 
 					// File Channel and so on
 					record.channel = channel;
 					//record.name = nriFileinfo[i].sFileName;
-					record.name = CCommonUtrl::getInstance().MakeFileName(channel, strStartTime, strEndTime);
+					record.name = MakeFileName(channel, strStartTime);
 
 					record.size = nriFileinfo[i].size * 1024;
 					record.setPrivateData(&nriFileinfo[i], sizeof(H264_DVR_FILE_DATA));
@@ -336,15 +486,24 @@ void CDZPVendor::SearchUnit(const long loginHandle, const size_t channel, const 
 	}
 }
 
-//void __stdcall* CDZPVendor::DownLoadPosCallBack(long lPlayHandle, long lTotalSize, long lDownLoadSize, long dwUser)
-//{
-//	int time = 0;
-//}
 void __stdcall CDZPVendor::DownLoadPosCallBack(long lPlayHandle, long lTotalSize, long lDownLoadSize, long dwUser)
 {
-	static int time = 0;
-	time++;
-	std::cout << time << std::endl;
+	std::cout << lDownLoadSize << "/" << lTotalSize << std::endl;
+
+	if (lDownLoadSize == -1)
+	{
+		std::cout << "Finish Download File" << std::endl;
+	}
+}
+int __stdcall CDZPVendor::RealDataCallBack(long lRealHandle, long dwDataType, unsigned char *pBuffer, long lbufsize, long dwUser)
+{
+	return 0;
+}
+int CDZPVendor::getDownloadPos(const long loginHandle)
+{
+	int pos = H264_DVR_GetDownloadPos(loginHandle);
+
+	return pos;
 }
 
 #include "catch.hpp"

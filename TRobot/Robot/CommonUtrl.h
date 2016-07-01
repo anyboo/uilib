@@ -32,6 +32,10 @@
 #define Test_Bug
 #define Test_Filename
 
+#define Vendor_JXJ	"º—–≈Ω›"
+#define Vendor_DZP	"µœ÷«∆’"
+
+
 typedef enum
 {
 	Err_No = 0,
@@ -143,7 +147,6 @@ public:
 	static CCommonUtrl& getInstance();
 
 	// File Name & File Folder
-	std::string MakeFileName(int channel, const std::string& startTime, const std::string& endTime);
 	std::string MakeDownloadFileFolder(const std::string basePath, const std::string& startTimeZero, const std::string& endTimeZero, const std::string& venderName, int channel);
 	void MakeFolder(std::string fileName);
 

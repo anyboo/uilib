@@ -76,6 +76,7 @@ const char* GetErrorString(int error)
 CJxjVendor::CJxjVendor()
 {
 	// Init Param
+	m_lSearchDeviceHandle = 0;
 	m_recordType = ALL_RECODE;
 	m_iBeginNode = 0;
 	m_iEndNode = J_SDK_MAX_STORE_LOG_SIZE - 1;
@@ -84,6 +85,7 @@ CJxjVendor::CJxjVendor()
 
 CJxjVendor::~CJxjVendor()
 {
+	m_lSearchDeviceHandle = 0;
 	m_recordType = ALL_RECODE;
 	m_iBeginNode = 0;
 	m_iEndNode = J_SDK_MAX_STORE_LOG_SIZE - 1;
@@ -155,6 +157,18 @@ void CJxjVendor::Logout(const long loginHandle)
 	}
 }
 
+void CJxjVendor::StartSearchDevice()
+{
+	char szIp[11] = "224.0.0.99";
+	int nPort = 40086;
+	long lResult = JNetMBOpen(szIp, nPort, fcbJMBNotify, this, JNET_PRO_T_JPF, m_lSearchDeviceHandle);
+	lResult = JNetMBSearch(m_lSearchDeviceHandle, 5);
+}
+void CJxjVendor::StopSearchDevice()
+{
+	JNetMBClose(m_lSearchDeviceHandle);
+}
+
 void CJxjVendor::SearchAll(const long loginHandle)
 {
 	
@@ -205,7 +219,7 @@ void CJxjVendor::Download(const long loginHandle, const size_t channel, const ti
 	localtime_s(&ttime, &range.end);
 	strftime((char *)strTimeEnd.data(), 24, "%Y%m%d%H%M%S", &ttime);
 
-	std::string strFileName = CCommonUtrl::getInstance().MakeFileName(channel, strTimeStart, strTimeEnd);
+	std::string strFileName = MakeFileName(channel, strTimeStart, strTimeEnd);
 
 	if (m_files.size() == 0)
 	{
@@ -232,9 +246,8 @@ void CJxjVendor::Download(const long loginHandle, const size_t channel, const ti
 	}
 
 	// Init File Save Path 
-	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder("D:\\DOWNLOAD_SRC", strTimeStartZero, strTimeEndZero, "佳信捷", channel);
+	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder("D:\\DOWNLOAD_SRC", strTimeStartZero, strTimeEndZero, Vendor_JXJ, channel);
 	strPath += file.name.data();
-	strPath.append(".jav");
 
 	// Set File Total Time
 	m_lDownLoadTotalTime = file.duration;
@@ -304,12 +317,11 @@ void CJxjVendor::Download(const long loginHandle, const size_t channel, const st
 	localtime_s(&ttime, &file.endTime);
 	strftime((char *)strTimeEnd.data(), 24, "%Y%m%d%H%M%S", &ttime);
 
-	std::string strFileName = CCommonUtrl::getInstance().MakeFileName(channel, strTimeStart, strTimeEnd);
+	std::string strFileName = MakeFileName(channel, strTimeStart, strTimeEnd);
 
 	// Init File Save Path 
-	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder("D:\\DOWNLOAD_SRC", strTimeStartZero, strTimeEndZero, "佳信捷", channel);
+	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder("D:\\DOWNLOAD_SRC", strTimeStartZero, strTimeEndZero, Vendor_JXJ, channel);
 	strPath += file.name.data();
-	strPath.append(".jav");
 
 	// Set File Total Time
 	m_lDownLoadTotalTime = file.duration;
@@ -352,7 +364,7 @@ void CJxjVendor::PlayVideo(const long loginHandle, const size_t channel, const t
 	localtime_s(&ttime, &range.end);
 	strftime((char *)strTimeEnd.c_str(), 24, "%Y%m%d%H%M%S", &ttime);
 
-	std::string strFileName = CCommonUtrl::getInstance().MakeFileName(channel, strTimeStart, strTimeEnd);
+	std::string strFileName = MakeFileName(channel, strTimeStart, strTimeEnd);
 
 	if (m_files.size() == 0)
 	{
@@ -538,6 +550,65 @@ int CJxjVendor::ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, void*
 	return 0;
 }
 
+int __stdcall CJxjVendor::fcbJMBNotify(long lHandle, DWORD dwPortocol, int iErr, int iMsgID, LPCTSTR lpszDstID, void* pData, int iDataLen, void* pUserParam)
+{
+	CJxjVendor *jxjVendor = (CJxjVendor *)pUserParam;
+
+	NET_DEVICE_INFO ndiInfo = { 0 };
+
+	assert(pData);
+	assert(iDataLen);
+
+	if (NULL == pData || iDataLen == 0)
+	{
+		return 0;
+	}
+
+	ndiInfo.nSDKType = JXJ_SDK;
+
+	j_Device_T jdtTmp = { 0 };
+
+	j_Device_T *pDev = (j_Device_T *)(pData);
+	int copy_size = 0;
+
+	if (iDataLen != sizeof(j_Device_T))
+	{
+		copy_size = sizeof(J_SysCfg_T);
+		if (pDev->SysSize < sizeof(J_SysCfg_T))
+		{
+			copy_size = pDev->SysSize;
+
+		}
+		jdtTmp.SysSize = sizeof(J_SysCfg_T);
+		memcpy(&jdtTmp.SysCfg, &pDev->SysCfg, copy_size);
+
+		copy_size = sizeof(JNetworkInfo);
+		if (pDev->NetSize < sizeof(JNetworkInfo))
+		{
+			copy_size = pDev->NetSize;
+
+		}
+		jdtTmp.NetSize = sizeof(JNetworkInfo);
+		memcpy(&jdtTmp.NetworkInfo, &pDev->NetworkInfo, copy_size);
+	}
+	else
+	{
+		memcpy(&jdtTmp, pData, sizeof(j_Device_T));
+	}
+
+	int nLen = (strlen((char *)jdtTmp.NetworkInfo.network[0].ip) < MAX_IPADDR_LEN) ? strlen((char *)jdtTmp.NetworkInfo.network[0].ip) : MAX_IPADDR_LEN;
+	memcpy(&ndiInfo.szIp, &jdtTmp.NetworkInfo.network[0].ip, nLen);
+
+	nLen = (strlen((char *)jdtTmp.NetworkInfo.network[0].netmask) < MAX_IPADDR_LEN) ? strlen((char *)jdtTmp.NetworkInfo.network[0].netmask) : MAX_IPADDR_LEN;
+	memcpy(&ndiInfo.szSubmask, &jdtTmp.NetworkInfo.network[0].netmask, nLen);
+
+	nLen = (strlen((char *)jdtTmp.NetworkInfo.network[0].mac) < MAX_MACADDR_LEN) ? strlen((char *)jdtTmp.NetworkInfo.network[0].mac) : MAX_MACADDR_LEN;
+	memcpy(&ndiInfo.szMac, &jdtTmp.NetworkInfo.network[0].mac, nLen);
+	ndiInfo.nPort = jdtTmp.NetworkInfo.cmd_port;
+
+	jxjVendor->m_listDeviceInfo.push_back(&ndiInfo);
+}
+
 void CJxjVendor::MakeStoreLog(JStoreLog& storeLog, const JRecodeType recordType, const int beginNode, const int endNode, const int ssid, const std::time_t& start, const std::time_t& end)
 {
 	//查询录像参数
@@ -567,6 +638,25 @@ void CJxjVendor::MakeStoreLog(JStoreLog& storeLog, const JRecodeType recordType,
 	storeLog.end_time.hour = (uint8_t)ttimeEnd.tm_hour;
 	storeLog.end_time.minute = (uint8_t)ttimeEnd.tm_min;
 	storeLog.end_time.second = (uint8_t)ttimeEnd.tm_sec;
+}
+
+std::string CJxjVendor::MakeFileName(int channel, const std::string& startTime, const std::string& endTime)
+{
+	std::string strFileName;
+
+	strFileName += "channel";
+	if (channel < 10)
+	{
+		strFileName += "0";
+	}
+	strFileName += std::to_string(channel);
+	strFileName += "-";
+	strFileName += startTime.data();
+	strFileName += "-";
+	strFileName += endTime.data();
+	strFileName.append(".jav");
+
+	return strFileName;
 }
 
 void CJxjVendor::SearchUnit(const long loginHandle, const size_t channel, const time_range& range)
@@ -641,7 +731,7 @@ void CJxjVendor::AddSearchFileList(int channel)
 		recordFile.size = m_storeLog.store[i].file_size; // Byte
 
 		// File Name
-		std::string fileName = CCommonUtrl::getInstance().MakeFileName(recordFile.channel, strStartTime, strEndTime);
+		std::string fileName = MakeFileName(recordFile.channel, strStartTime, strEndTime);
 		recordFile.name = fileName;
 
 		if (!CheckFileExist(recordFile, m_files))
