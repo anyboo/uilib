@@ -16,7 +16,7 @@ CSearchVideo::~CSearchVideo()
 {
 }
 
-void CSearchVideo::SearchFile(const std::string &ip, const time_range &range)
+int CSearchVideo::SearchFile(const std::string &ip, const time_range &range)
 {
 	assert(!ip.empty());
 	m_Device = m_DeviceManager.getDevice(ip);
@@ -35,6 +35,8 @@ void CSearchVideo::SearchFile(const std::string &ip, const time_range &range)
 	{
 		m_Device.Search(channel, range);
 	}
+
+	return SUCCES_REARCH_FILE;
 }
 
 void CSearchVideo::ReadDataFromTable(std::vector<readSearchVideo> &RSVObj)

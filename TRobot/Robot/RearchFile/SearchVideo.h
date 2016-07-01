@@ -6,13 +6,16 @@
 #include "DHVendor.h"
 #include "QMSqlite.h"
 
+#define SUCCES_REARCH_FILE  1
+
+
 class CSearchVideo
 {
 public:
 	CSearchVideo();
 	~CSearchVideo();
 
-	void SearchFile(const std::string &ip, const time_range &range);
+	int SearchFile(const std::string &ip, const time_range &range);
 
 	void ReadDataFromTable(std::vector<readSearchVideo> &RSVObj);
 
