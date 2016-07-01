@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AbstractVendor.h"
-
+#include <cassert>
 #include <string>
 #include <vector>
 
@@ -22,8 +22,10 @@ class Device
 {
 public:
 	Device(const AbstractVendor* sdk);
+	Device();
 	~Device();
 
+	void setSDK(AbstractVendor* sdk){ assert(m_pVendor); m_pVendor = sdk; }
 	void SearchAll();
 	void Search(const size_t channel, const time_range& range);
 	void Download(const size_t channel, const time_range& range);

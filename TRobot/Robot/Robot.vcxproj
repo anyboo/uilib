@@ -43,6 +43,7 @@
     <LinkIncremental>true</LinkIncremental>
     <TargetName>$(ProjectName)_d</TargetName>
     <OutDir>$(SolutionDir)\x86\</OutDir>
+    <IncludePath>$(LocalDebuggerWorkingDirectory);$(SolutionDir)transation;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -55,12 +56,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\bin;$(SolutionDir)\dll;$(SolutionDir)\TRobot\Robot\DZPVendor\sdk;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\TRobot\Robot\inc;$(SolutionDir)\TRobot\Robot;$(SolutionDir)\TRobot\Robot\JxjVendor;$(SolutionDir)\Test\single_include;$(SolutionDir)\TRobot\Robot\DZPVendor;$(SolutionDir)\poco\Foundation\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)poco\Data\include;$(SolutionDir)poco\Foundation\include;$(SolutionDir)poco\Data\SQLite\include;$(SolutionDir)\bin;$(SolutionDir)\dll;$(SolutionDir)\TRobot\Robot\DZPVendor\sdk;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\TRobot\Robot\inc;$(SolutionDir)\TRobot\Robot;$(SolutionDir)\TRobot\Robot\JxjVendor;$(SolutionDir)\Test\single_include;$(SolutionDir)\TRobot\Robot\DZPVendor;$(SolutionDir)\poco\Foundation\include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)poco\lib;$(SolutionDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -85,6 +86,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\transation\QMSqlite.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="DeviceManager.h" />
     <ClInclude Include="DHVendor.h" />
@@ -102,9 +104,12 @@
     <ClInclude Include="JxjVendor\JxjVendor.h" />
     <ClInclude Include="JxjVendor\TestWindows.h" />
     <ClInclude Include="MyVendor.h" />
+    <ClInclude Include="RearchFile\SearchHead.h" />
+    <ClInclude Include="RearchFile\SearchVideo.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\transation\QMSqlite.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="DeviceManager.cpp" />
     <ClCompile Include="DHVendor.cpp" />
@@ -114,6 +119,7 @@
     <ClCompile Include="JxjVendor\JxjVendor.cpp" />
     <ClCompile Include="JxjVendor\TestWindows.cpp" />
     <ClCompile Include="MyVendor.cpp" />
+    <ClCompile Include="RearchFile\SearchVideo.cpp" />
     <ClCompile Include="Robot.cpp" />
   </ItemGroup>
   <ItemGroup>

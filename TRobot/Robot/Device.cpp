@@ -3,6 +3,16 @@
 #include <cassert>
 #include <iostream>
 
+
+Device::Device()
+{
+	m_eLoginStatus = Login_Status_No;
+	m_sIP = "";
+	m_iPort = 0;
+	m_sUserName = "";
+	m_sPassword = "";
+}
+
 Device::Device(const AbstractVendor* sdk)
 {
 	m_eLoginStatus = Login_Status_No;
