@@ -12,7 +12,6 @@ struct _time_range
 class AbstractVendor
 {
 public:
-
 	virtual void Init() = 0;
 	virtual long Login(const std::string& ip, size_t port, const std::string& user, const std::string& password) = 0;
 	virtual void Logout(const long loginHandle) = 0;
@@ -26,4 +25,6 @@ public:
 
 	virtual void SetDownloadPath(const std::string& Root) = 0;
 	virtual void throwException() = 0;
+
 };
+

@@ -43,7 +43,7 @@
     <LinkIncremental>true</LinkIncremental>
     <TargetName>$(ProjectName)_d</TargetName>
     <OutDir>$(SolutionDir)\x86\</OutDir>
-    <IncludePath>$(LocalDebuggerWorkingDirectory);$(IncludePath)</IncludePath>
+    <IncludePath>$(LocalDebuggerWorkingDirectory);$(SolutionDir)transation;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
