@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Device.h"
-#include "Devicemanager.h"
 
 class CSearchDevice
 {
@@ -9,13 +8,11 @@ public:
 	CSearchDevice();
 	~CSearchDevice();
 
-	void Init(std::vector<AbstractVendor*> pVendorList);
-	void StartSearchDevice();
-	std::vector<NET_DEVICE_INFO*> GetDeviceList(){ return m_listDeviceInfo; }
-	void StopSearchDevice();
+	void DeleteDeviceInfoList();
+	void Search(std::vector<AbstractVendor*> pVendorList);
+	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_listDeviceInfo; }
 
 protected:
-	static long m_nRef;
-	std::vector<NET_DEVICE_INFO*> m_listDeviceInfo;
+	DEVICE_INFO_LIST m_listDeviceInfo;
 };
 

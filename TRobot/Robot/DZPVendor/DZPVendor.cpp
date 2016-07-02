@@ -166,27 +166,29 @@ void CDZPVendor::StartSearchDevice()
 		int i;
 		for (i = 0; i < nRetLength / sizeof(SDK_CONFIG_NET_COMMON_V2); i++)
 		{
-			NET_DEVICE_INFO ndiInfo = { 0 };
+			NET_DEVICE_INFO* ndiInfo = new NET_DEVICE_INFO();
 			int nLen = 0;
-			ndiInfo.nSDKType = DZP_SDK;
+			ndiInfo->nSDKType = DZP_SDK;
 
 			struct in_addr in1 = { 0 };
 			in1.s_addr = Device[i].HostIP.l;
 			nLen = (strlen(inet_ntoa(in1)) < MAX_IPADDR_LEN) ? strlen(inet_ntoa(in1)) : MAX_IPADDR_LEN;
-			memcpy(&ndiInfo.szIp, inet_ntoa(in1), nLen);
+			memcpy(&ndiInfo->szIp, inet_ntoa(in1), nLen);
 
 
-			ndiInfo.nPort = Device[i].TCPPort;
+			ndiInfo->nPort = Device[i].TCPPort;
 
 			struct in_addr in2 = { 0 };
 			in2.s_addr = Device[i].Submask.l;
 			nLen = (strlen(inet_ntoa(in2)) < MAX_IPADDR_LEN) ? strlen(inet_ntoa(in2)) : MAX_IPADDR_LEN;
-			memcpy(&ndiInfo.szSubmask, inet_ntoa(in2), nLen);
+			memcpy(&ndiInfo->szSubmask, inet_ntoa(in2), nLen);
 
 			nLen = (strlen(Device[i].sMac) < MAX_MACADDR_LEN) ? strlen(Device[i].sMac) : MAX_MACADDR_LEN;
-			memcpy(&ndiInfo.szMac, &Device[i].sMac, nLen);
+			memcpy(&ndiInfo->szMac, &Device[i].sMac, nLen);
 
-			m_listDeviceInfo.push_back(&ndiInfo);
+			ndiInfo->pVendor = this;
+
+			m_listDeviceInfo.push_back(ndiInfo);
 		}
 	}
 }
@@ -194,6 +196,10 @@ void CDZPVendor::StopSearchDevice()
 {
 }
 
+size_t CDZPVendor::GetMaxChannel()
+{
+	return 0;
+}
 
 void CDZPVendor::SearchAll(const long loginHandle)
 {
@@ -249,7 +255,7 @@ void CDZPVendor::Download(const long loginHandle, const size_t channel, const ti
 	std::string strFileName = MakeFileName(channel, strTimeStart);
 
 	// Init File Save Path 
-	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder("D:\\DOWNLOAD_SRC", strTimeStartZero, strTimeEndZero, Vendor_DZP, channel);
+	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_DZP, channel);
 	int hdl = H264_DVR_GetFileByTime(loginHandle, &info, (char *)strPath.c_str(), true, DownLoadPosCallBack, 0);
 	if (hdl <= 0)
 	{
@@ -302,7 +308,7 @@ void CDZPVendor::Download(const long loginHandle, const size_t channel, const st
 	std::string strFileName = MakeFileName(channel, strTimeStart);
 
 	// Init File Save Path 
-	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder("D:\\DOWNLOAD_SRC", strTimeStartZero, strTimeEndZero, Vendor_DZP, channel);
+	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_DZP, channel);
 	strPath.append(file.name);
 	H264_DVR_FILE_DATA* pData = (H264_DVR_FILE_DATA*)file.getPrivateData();
 	int hdl = H264_DVR_GetFileByName(loginHandle, pData, (char *)strPath.c_str(), DownLoadPosCallBack, 0);
@@ -386,7 +392,7 @@ void CDZPVendor::PlayVideo(const long loginHandle, const size_t channel, const s
 }
 void CDZPVendor::SetDownloadPath(const std::string& Root)
 {
-
+	m_sRoot = Root;
 }
 void CDZPVendor::throwException()
 {

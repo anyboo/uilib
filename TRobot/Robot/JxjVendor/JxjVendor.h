@@ -15,8 +15,9 @@ public:
 	void Logout(const long loginHandle);
 
 	void StartSearchDevice();
-	std::vector<NET_DEVICE_INFO*>& GetDeviceList(){ return m_listDeviceInfo; }
+	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_listDeviceInfo; }
 	void StopSearchDevice();
+	size_t GetMaxChannel();
 
 	void SearchAll(const long loginHandle);
 	void Search(const long loginHandle, const size_t channel, const time_range& range);
@@ -52,14 +53,15 @@ protected:
 	static int  __stdcall JRecStream(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam);
 	static  DWORD PlayThreadFun(LPVOID lpThreadParameter);
 
+private:
 	/* Init */
-	std::string  m_sLastError;
-	//std::string m_strRoot;
+	std::string m_sLastError;
+	std::string m_sRoot;
 
 	/* Login */
 	/* Search Device */
 	long m_lSearchDeviceHandle;
-	std::vector<NET_DEVICE_INFO*> m_listDeviceInfo;
+	DEVICE_INFO_LIST m_listDeviceInfo;
 
 	/* Search */
 	JStoreLog m_storeLog;

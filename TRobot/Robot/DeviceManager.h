@@ -16,7 +16,7 @@ public:
 	void deleteDevice(const std::string ip);
 
 private:
-	std::vector<Device*> m_vDeviceList;
+	std::vector<Device*> m_listDevice;
 
 };
 

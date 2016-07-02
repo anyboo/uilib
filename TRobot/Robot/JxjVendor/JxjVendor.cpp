@@ -169,6 +169,11 @@ void CJxjVendor::StopSearchDevice()
 	JNetMBClose(m_lSearchDeviceHandle);
 }
 
+size_t CJxjVendor::GetMaxChannel()
+{
+	return 0;
+}
+
 void CJxjVendor::SearchAll(const long loginHandle)
 {
 	
@@ -246,7 +251,7 @@ void CJxjVendor::Download(const long loginHandle, const size_t channel, const ti
 	}
 
 	// Init File Save Path 
-	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder("D:\\DOWNLOAD_SRC", strTimeStartZero, strTimeEndZero, Vendor_JXJ, channel);
+	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_JXJ, channel);
 	strPath += file.name.data();
 
 	// Set File Total Time
@@ -320,7 +325,7 @@ void CJxjVendor::Download(const long loginHandle, const size_t channel, const st
 	std::string strFileName = MakeFileName(channel, strTimeStart, strTimeEnd);
 
 	// Init File Save Path 
-	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder("D:\\DOWNLOAD_SRC", strTimeStartZero, strTimeEndZero, Vendor_JXJ, channel);
+	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_JXJ, channel);
 	strPath += file.name.data();
 
 	// Set File Total Time
@@ -519,7 +524,7 @@ void CJxjVendor::PlayVideo(const long loginHandle, const size_t channel, const s
 }
 void CJxjVendor::SetDownloadPath(const std::string& Root)
 {
-	//m_strRoot = Root;
+	m_sRoot = Root;
 }
 
 void CJxjVendor::throwException()
@@ -552,9 +557,9 @@ int CJxjVendor::ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, void*
 
 int __stdcall CJxjVendor::fcbJMBNotify(long lHandle, DWORD dwPortocol, int iErr, int iMsgID, LPCTSTR lpszDstID, void* pData, int iDataLen, void* pUserParam)
 {
-	CJxjVendor *jxjVendor = (CJxjVendor *)pUserParam;
+	CJxjVendor* jxjVendor = (CJxjVendor *)pUserParam;
 
-	NET_DEVICE_INFO ndiInfo = { 0 };
+	NET_DEVICE_INFO* ndiInfo = new NET_DEVICE_INFO();
 
 	assert(pData);
 	assert(iDataLen);
@@ -564,7 +569,7 @@ int __stdcall CJxjVendor::fcbJMBNotify(long lHandle, DWORD dwPortocol, int iErr,
 		return 0;
 	}
 
-	ndiInfo.nSDKType = JXJ_SDK;
+	ndiInfo->nSDKType = JXJ_SDK;
 
 	j_Device_T jdtTmp = { 0 };
 
@@ -597,16 +602,18 @@ int __stdcall CJxjVendor::fcbJMBNotify(long lHandle, DWORD dwPortocol, int iErr,
 	}
 
 	int nLen = (strlen((char *)jdtTmp.NetworkInfo.network[0].ip) < MAX_IPADDR_LEN) ? strlen((char *)jdtTmp.NetworkInfo.network[0].ip) : MAX_IPADDR_LEN;
-	memcpy(&ndiInfo.szIp, &jdtTmp.NetworkInfo.network[0].ip, nLen);
+	memcpy(&ndiInfo->szIp, &jdtTmp.NetworkInfo.network[0].ip, nLen);
 
 	nLen = (strlen((char *)jdtTmp.NetworkInfo.network[0].netmask) < MAX_IPADDR_LEN) ? strlen((char *)jdtTmp.NetworkInfo.network[0].netmask) : MAX_IPADDR_LEN;
-	memcpy(&ndiInfo.szSubmask, &jdtTmp.NetworkInfo.network[0].netmask, nLen);
+	memcpy(&ndiInfo->szSubmask, &jdtTmp.NetworkInfo.network[0].netmask, nLen);
 
 	nLen = (strlen((char *)jdtTmp.NetworkInfo.network[0].mac) < MAX_MACADDR_LEN) ? strlen((char *)jdtTmp.NetworkInfo.network[0].mac) : MAX_MACADDR_LEN;
-	memcpy(&ndiInfo.szMac, &jdtTmp.NetworkInfo.network[0].mac, nLen);
-	ndiInfo.nPort = jdtTmp.NetworkInfo.cmd_port;
+	memcpy(&ndiInfo->szMac, &jdtTmp.NetworkInfo.network[0].mac, nLen);
+	ndiInfo->nPort = jdtTmp.NetworkInfo.cmd_port;
 
-	jxjVendor->m_listDeviceInfo.push_back(&ndiInfo);
+	ndiInfo->pVendor = jxjVendor;
+
+	jxjVendor->m_listDeviceInfo.push_back(ndiInfo);
 }
 
 void CJxjVendor::MakeStoreLog(JStoreLog& storeLog, const JRecodeType recordType, const int beginNode, const int endNode, const int ssid, const std::time_t& start, const std::time_t& end)
@@ -764,10 +771,10 @@ void CJxjVendor::WriteFileListToDB()
 {
 	//获取指针
 	QMSqlite *pDb = QMSqlite::getInstance();
-	//删除表
-	pDb->dropTable(DROP_SEARCH_VIDEO_TABLE);
-	//创建记录表
-	pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
+	////删除表
+	//pDb->dropTable(DROP_SEARCH_VIDEO_TABLE);
+	////创建记录表
+	//pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
 	//一次插入所有数据
 	std::vector<writeSearchVideo> RecordList;
 	for (size_t i = 0; i < m_files.size(); i++)
@@ -786,8 +793,11 @@ void CJxjVendor::WriteFileListToDB()
 		RecordList.push_back(sr);
 	}
 
-	string sql(INSERT_SEARCH_VIDEO);
-	pDb->writeDataByVector(sql, RecordList);
+	if (RecordList.size() > 0)
+	{
+		string sql(INSERT_SEARCH_VIDEO);
+		pDb->writeDataByVector(sql, RecordList);
+	}
 }
 
 

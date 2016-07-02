@@ -1,7 +1,5 @@
 
 #include "Device.h"
-#include <cassert>
-#include <iostream>
 
 Device::Device(const AbstractVendor* sdk)
 {
@@ -18,7 +16,6 @@ Device::Device(const AbstractVendor* sdk)
 		std::cout << "sdk point is NULL" << std::endl;
 		return;
 	}
-
 	m_pVendor = const_cast<AbstractVendor*>(sdk);
 
 	assert(m_pVendor);
@@ -50,16 +47,34 @@ Device::~Device()
 	m_vChannelList.clear();
 }
 
+void Device::setSDK(AbstractVendor* sdk)
+{
+	if (!sdk)
+	{
+		std::cout << "sdk point is NULL" << std::endl;
+		return;
+	}
+	m_pVendor = const_cast<AbstractVendor*>(sdk);
+
+	assert(m_pVendor);
+	Init();
+}
+
 void Device::Init()
 {
 	assert(m_pVendor);
-	m_pVendor->Init();	
+	m_pVendor->Init();
+
+	std::string sRoot = "D:\\DOWNLOAD_SRC";
+	m_pVendor->SetDownloadPath(sRoot);
 }
 
 void Device::Login(const std::string& ip, size_t port, const std::string& userName, const std::string& password)
 {
 	assert(m_pVendor);
 	m_lLoginHandle = m_pVendor->Login(ip, port, userName, password);
+
+	m_iMaxChannel = m_pVendor->GetMaxChannel();
 
 	m_eLoginStatus = Login_Status_Yes;
 	m_sIP = ip;
@@ -72,6 +87,8 @@ void Device::Logout()
 {
 	assert(m_pVendor);
 	m_pVendor->Logout(m_lLoginHandle);
+
+	m_eLoginStatus = Login_Status_No;
 }
 
 void Device::StartSearchDevice()
@@ -127,8 +144,7 @@ void Device::SetDownloadPath(const std::string& root)
 	m_pVendor->SetDownloadPath(root);
 }
 
-void Device::setChannel(const size_t maxChannel, const std::vector<size_t>& channelList)
+void Device::setChannel(const std::vector<size_t>& channelList)
 {
-	m_iMaxChannel = maxChannel;
 	m_vChannelList = channelList;
 }

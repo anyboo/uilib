@@ -101,6 +101,7 @@
     <ClInclude Include="inc\stdint.h" />
     <ClInclude Include="JxjVendor\JxjVendor.h" />
     <ClInclude Include="JxjVendor\TestWindows.h" />
+    <ClInclude Include="LoginDevice.h" />
     <ClInclude Include="MyVendor.h" />
     <ClInclude Include="QMSqlite.h" />
     <ClInclude Include="resource.h" />
@@ -115,6 +116,7 @@
     <ClCompile Include="DZPVendor\DZPVendor.cpp" />
     <ClCompile Include="JxjVendor\JxjVendor.cpp" />
     <ClCompile Include="JxjVendor\TestWindows.cpp" />
+    <ClCompile Include="LoginDevice.cpp" />
     <ClCompile Include="MyVendor.cpp" />
     <ClCompile Include="QMSqlite.cpp.cpp" />
     <ClCompile Include="Robot.cpp" />

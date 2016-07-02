@@ -2,21 +2,17 @@
 #include "SearchDevice.h"
 #include <WinSock.h>
 
-
 #pragma comment(lib, "Ws2_32.lib")
-
-long CSearchDevice::m_nRef = 0;
 
 CSearchDevice::CSearchDevice()
 {
 }
 
-
 CSearchDevice::~CSearchDevice()
 {
 }
 
-void AddListToList(std::vector<NET_DEVICE_INFO*>& listDest, const std::vector<NET_DEVICE_INFO*>& listSrc)
+void AddListToList(DEVICE_INFO_LIST& listDest, const DEVICE_INFO_LIST& listSrc)
 {
 	for (auto v : listSrc)
 	{
@@ -24,9 +20,9 @@ void AddListToList(std::vector<NET_DEVICE_INFO*>& listDest, const std::vector<NE
 	}
 }
 
-void CSearchDevice::Init(std::vector<AbstractVendor*> pVendorList)
+void CSearchDevice::Search(std::vector<AbstractVendor*> pVendorList)
 {
-	//m_listDeviceInfo.clear();
+	DeleteDeviceInfoList();
 
 	std::list<Device> listDevice;
 
@@ -36,15 +32,23 @@ void CSearchDevice::Init(std::vector<AbstractVendor*> pVendorList)
 		listDevice.push_back(dev);
 		dev.StartSearchDevice();
 	}
-
-	::Sleep(3000);
-
 	for (auto dev : listDevice)
 	{
 		dev.StopSearchDevice();
 	}
 	for (auto dev : listDevice)
 	{
-		AddListToList(m_listDeviceInfo, dev.GetDeviceList());
+		AddListToList(m_listDeviceInfo, dev.GetDeviceInfoList());
 	}
+}
+
+void CSearchDevice::DeleteDeviceInfoList()
+{
+	for (auto devInfo : m_listDeviceInfo)
+	{
+		delete devInfo;
+		devInfo = nullptr;
+	}
+
+	m_listDeviceInfo.clear();
 }

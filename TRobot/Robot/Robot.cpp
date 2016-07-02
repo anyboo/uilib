@@ -8,6 +8,7 @@
 #include "device.h"
 #include "DeviceManager.h"
 #include "SearchDevice.h"
+#include "LoginDevice.h"
 
 TEST_CASE("This is a demo", "[demo]")
 {
@@ -48,12 +49,24 @@ TEST_CASE("This is a demo", "[demo]")
 		CJxjVendor jxjVendor;
 		CDZPVendor dzpVendor;
 		pVendorList.push_back(&jxjVendor);
-		//pVendorList.push_back(&dzpVendor);
+		pVendorList.push_back(&dzpVendor);
 
 		CSearchDevice searchDev;
-		searchDev.Init(pVendorList);
+		searchDev.Search(pVendorList);
+		DEVICE_INFO_LIST devInfoList = searchDev.GetDeviceInfoList();
 
-		std::vector<NET_DEVICE_INFO*>devList = searchDev.GetDeviceList();
+		if (devInfoList.size() > 0)
+		{
+			NET_DEVICE_INFO* devInfo = devInfoList[1];
+			CLoginDevice loginDev;
+			loginDev.Login(devInfo->szIp, devInfo->nPort, "admin", "admin", devInfo->pVendor);
+
+			time_range timeRangeSearch;
+			time_range timeRangeFile;
+			timeRangeSearch.start = 1467388800;
+			timeRangeSearch.end = 1467475199;
+			CDeviceManager::getInstance().getDevice(devInfo->szIp).Search(0, timeRangeSearch);
+		}
 
 		return;
 	}

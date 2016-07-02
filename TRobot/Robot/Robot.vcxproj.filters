@@ -111,6 +111,9 @@
     <ClInclude Include="SearchDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LoginDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Robot.cpp">
@@ -147,6 +150,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SearchDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

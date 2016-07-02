@@ -4,7 +4,8 @@
 
 #include <string>
 #include <vector>
-
+#include <cassert>
+#include <iostream>
 #include <WinSock.h>
 
 /*
@@ -27,13 +28,14 @@ public:
 	Device();
 	~Device();
 
+	void setSDK(AbstractVendor* sdk);
 	void Init();
 	void Login(const std::string& ip, size_t port, const std::string& userName, const std::string& password);
 	void Logout();
 	void SetDownloadPath(const std::string& root);
 
 	void StartSearchDevice();
-	std::vector<NET_DEVICE_INFO*> GetDeviceList(){ return m_pVendor->GetDeviceList(); }
+	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_pVendor->GetDeviceInfoList(); }
 	void StopSearchDevice();
 
 	void SearchAll();
@@ -43,9 +45,10 @@ public:
 	void Download(const size_t channel, const std::string& fileName);
 	void PlayVideo(const size_t channel, const std::string& fileName);
 
-	void setChannel(const size_t maxChannel, const std::vector<size_t>& channelList); 
+	void setChannel(const std::vector<size_t>& channelList); 
 	size_t getMaxChannel(){ return m_iMaxChannel; }
 	std::vector<size_t> getChannelList(){ return m_vChannelList; }
+
 	std::string getIP(){ return m_sIP; }
 	DeviceLoginStatus getLoginStatus(){ return m_eLoginStatus; }
 	
