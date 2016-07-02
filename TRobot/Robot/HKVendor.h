@@ -32,6 +32,7 @@ private:
 	void timeStdToDH(tm *pTimeStd, NET_DVR_TIME *pTimeDH);
 	void trTOndt(NET_DVR_TIME &ndtStartTime, NET_DVR_TIME &ndtEndTime, const time_range range);
 	std::vector<time_range> MakeTimeRangeList(const time_range& range);
+	void CreatePath(const size_t channel);
 
 
 
