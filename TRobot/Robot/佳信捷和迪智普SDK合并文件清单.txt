@@ -1,0 +1,64 @@
+// 佳信捷SDK
+1、头文件 - $(SolutionDir)TRobot\Robot\inc
+#include "j_sdk.h"
+#include "Jtype.h"
+#include "mb_api.h"
+#include "stdint.h"
+#include "JNetSDK.h"
+#include "AVPlayer.h"
+
+2、静态库 - $(SolutionDir)TRobot\Robot\lib
+JNetSDK.lib
+AVPlayer.lib
+
+3、动态库 - $(SolutionDir)x86
+JNetSDK.dll
+AVPlayer.dll
+avcodec-52.dll
+avcore-0.dll
+avutil-50.dll
+jxjcodec.dll
+swscale-0.dll
+
+
+// 迪智普SDK
+1、头文件 - $(SolutionDir)TRobot\Robot\DZPVendor\sdk
+#include "netsdk.h"
+#include "H264Play.h"
+
+2、静态库 - $(SolutionDir)TRobot\Robot\DZPVendor\sdk
+NetSdk.lib
+H264Play.lib
+
+3、动态库 - $(SolutionDir)TRobot\Robot\DZPVendor\sdk
+DllDeinterlace.dll
+H264Play.dll
+hi_h264dec_v.dll
+NetSdk.dll
+StreamReader.dll
+
+
+// 自定义文件
+1、头文件
+#include "AbstractVendor.h" - $(SolutionDir)TRobot\Robot
+#include "CommonUtrl.h"
+#include "Device.h"
+#include "DeviceManager.h"
+#include "DownloadTest.h"
+#include "QMSqlite.h"
+#include "SearchDevice.h"
+#include "JxjVendor.h" - $(SolutionDir)TRobot\Robot\JxjVendor
+#include "TestWindows.h"
+#include "DZPVendor.h" - $(SolutionDir)TRobot\Robot\DZPVendor
+
+2、源文件
+#include "CommonUtrl.cpp" - $(SolutionDir)TRobot\Robot
+#include "Device.cpp"
+#include "DeviceManager.cpp"
+#include "DownloadTest.cpp"
+#include "QMSqlite.cpp"
+#include "SearchDevice.cpp"
+#include "JxjVendor.cpp" - $(SolutionDir)TRobot\Robot\JxjVendor
+#include "TestWindows.cpp"
+#include "DZPVendor.cpp" - $(SolutionDir)TRobot\Robot\DZPVendor
+
