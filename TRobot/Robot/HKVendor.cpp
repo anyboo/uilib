@@ -24,12 +24,12 @@ void HKVendor::Init()
 
 	if (!bInit)
 	{
-		cout << "初始化错误：" << GetLastErrorString() << endl;
+		std::cout << "初始化错误：" << GetLastErrorString() << std::endl;
 		throw std::exception("Init failed");
 	}
 	else
 	{
-		cout << "初始化SDK成功！" << endl;
+		std::cout << "初始化SDK成功！" << std::endl;
 	}
 
 	BOOL bConnect = NET_DVR_SetConnectTime(1000, 30);
@@ -52,7 +52,7 @@ long HKVendor::Login(const std::string& ip, size_t port, const std::string& user
 	m_lLoginHandle = lLoginID;
 	if (-1 == lLoginID)
 	{
-		cout << "登录失败(Failed)：" << GetLastErrorString().c_str() << endl;
+		std::cout << "登录失败(Failed)：" << GetLastErrorString().c_str() << std::endl;
 		throw std::exception("Login failed");
 	}
 
@@ -65,7 +65,7 @@ void HKVendor::Logout(const long loginHandle)
 {
 	if (m_lLoginHandle > 0 && !NET_DVR_Logout(m_lLoginHandle))
 	{
-		cout << "退出失败：" << GetLastErrorString().c_str() << endl;
+		std::cout << "退出失败：" << GetLastErrorString().c_str() << std::endl;
 		throw std::exception("Logout failed");
 		return;
 	}
@@ -80,19 +80,19 @@ void HKVendor::Search(const long loginHandle, const size_t channel, const time_r
 {
 	if (0 >= m_lLoginHandle)
 	{
-		cout << "请先登录!" << endl;
+		std::cout << "请先登录!" << std::endl;
 		return;
 	}
 
 	if (range.start >= range.end)
 	{
-		cout << "时间范围不对!" << endl;
+		std::cout << "时间范围不对!" << std::endl;
 		return;
 	}
 
-	vector<time_range> trInfor = MakeTimeRangeList(range);
+	std::vector<time_range> trInfor = MakeTimeRangeList(range);
 
-	vector<time_range>::iterator it;
+	std::vector<time_range>::iterator it;
 	for (it = trInfor.begin(); it != trInfor.end(); ++it)
 	{
 		NET_DVR_TIME ndtStartTime;
@@ -126,19 +126,19 @@ void HKVendor::Search(const long loginHandle, const size_t channel, const time_r
 
 				if (NET_DVR_FILE_EXCEPTION == ret)
 				{
-					cout << "查找文件时异常!" << GetLastErrorString() << endl;
+					std::cout << "查找文件时异常!" << GetLastErrorString() << std::endl;
 					throw std::exception("SearchFile unusual failed");
 					break;
 				}
 				else if (NET_DVR_FILE_NOFIND == ret)
 				{
-					cout << "没有录像文件" << endl;
+					std::cout << "没有录像文件" << std::endl;
 					break;
 
 				}
 				else if (NET_DVR_NOMOREFILE == ret)   //查找结束
 				{
-					cout << "查询结束！" << endl;
+					std::cout << "查询结束！" << std::endl;
 					break;
 				}
 				else if (NET_DVR_ISFINDING == ret)  //正在查找
@@ -227,11 +227,11 @@ void HKVendor::timeStdToDH(tm *pTimeStd, NET_DVR_TIME *pTimeDH)
 	pTimeDH->dwSecond = pTimeStd->tm_sec;
 }
 
-vector<time_range> HKVendor::MakeTimeRangeList(const time_range& range)
+std::vector<time_range> HKVendor::MakeTimeRangeList(const time_range& range)
 {
 	time_t timeStart = range.start;
 	time_t timeEnd = range.end;
-	vector<time_range> timeRangeList;
+	std::vector<time_range> timeRangeList;
 
 	tm tmStartTime;
 	tm tmEndTime;
@@ -328,7 +328,7 @@ vector<time_range> HKVendor::MakeTimeRangeList(const time_range& range)
 	return timeRangeList;
 }
 
-string HKVendor::GetLastErrorString()
+std::string HKVendor::GetLastErrorString()
 {
 	DWORD dwError;
 	dwError = NET_DVR_GetLastError();

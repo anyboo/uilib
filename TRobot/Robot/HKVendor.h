@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __HKVENDOR_H__
+#define __HKVENDOR_H__
+
 #include "AbstractVendor.h"
 
 #include "DH_Head.h"
@@ -25,23 +27,25 @@ public:
 	virtual void throwException();
 
 private:
-	string GetLastErrorString();
+	std::string GetLastErrorString();
 	void timeDHToStd(NET_DVR_TIME *pTimeDH, tm *pTimeStd);
 	void timeStdToDH(tm *pTimeStd, NET_DVR_TIME *pTimeDH);
 	void trTOndt(NET_DVR_TIME &ndtStartTime, NET_DVR_TIME &ndtEndTime, const time_range range);
-	vector<time_range> MakeTimeRangeList(const time_range& range);
+	std::vector<time_range> MakeTimeRangeList(const time_range& range);
 
 
 
 protected:
-	string m_strName;
+	std::string m_strName;
 	int m_dwPort;
-	string m_strUser;
-	string m_strPasswords;
-	string m_strIP;
+	std::string m_strUser;
+	std::string m_strPasswords;
+	std::string m_strIP;
 	LONG m_lLoginHandle;
 	int m_nChannels;
 
-	vector<RecordFile> m_files;
+	std::vector<RecordFile> m_files;
 };
+
+#endif
 

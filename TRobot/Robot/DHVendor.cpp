@@ -148,9 +148,9 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 
 	//m_files.clear();
 
-	vector<time_range> trInfor = MakeTimeRangeList(range);
+	std::vector<time_range> trInfor = MakeTimeRangeList(range);
 
-	vector<time_range>::iterator it;
+	std::vector<time_range>::iterator it;
 
 	for (it = trInfor.begin(); it != trInfor.end(); ++it)
 	{
@@ -208,7 +208,10 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 		}
 	}
 
+	//保存到JSON文件
 	SaveSearchFileListToFile();
+	//写入到数据库中
+	WriteFileListToDB();
 	cout << "totals:" << m_files.size() << endl;
 }
 
@@ -295,7 +298,7 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const std:
 
 	cout << szTime << endl;
 
-	vector<RecordFile>::iterator it;
+	std::vector<RecordFile>::iterator it;
 	int nSize = 0;
 	for (it = m_files.begin(); it != m_files.end(); ++it)
 	{
@@ -331,7 +334,7 @@ void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const std
 		return;
 	}
 
-	vector<RecordFile>::iterator it;
+	std::vector<RecordFile>::iterator it;
 	int nSize = 0;
 	for (it = m_files.begin(); it != m_files.end(); ++it)
 	{
@@ -401,6 +404,37 @@ int DHVendor::PBDataCallBack(LLONG lRealHandle, DWORD dwDataType, BYTE *pBuffer,
 	return 1;
 }
 
+void DHVendor::WriteFileListToDB()
+{
+	//获取指针
+	QMSqlite *pDb = QMSqlite::getInstance();
+	//删除表
+	//pDb->dropTable(DROP_SEARCH_VIDEO_TABLE);
+	//创建记录表
+	pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
+	//一次插入所有数据
+	std::vector<writeSearchVideo> RecordList;
+	for (size_t i = 0; i < m_files.size(); i++)
+	{
+		writeSearchVideo sr;
+		RecordFile record = m_files[i];
+		//文件名称
+		sr.set<0>(record.name);
+		//通道号
+		sr.set<1>(record.channel);
+		//开始时间
+		sr.set<2>(record.beginTime);
+		//结束时间
+		sr.set<3>(record.endTime);
+		sr.set<4>(record.size);
+		RecordList.push_back(sr);
+	}
+
+	string sql(INSERT_SEARCH_VIDEO);
+	pDb->writeDataByVector(sql, RecordList);
+}
+
+
 void DHVendor::CreatePath(const size_t channel)
 {
 	string strPath = "D:\\DownLoadVideo\\";
@@ -445,11 +479,11 @@ void DHVendor::trTOnt(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_ran
 	timeStdToDH(&tmEndTime, &ntEndTime);
 }
 
-vector<time_range> DHVendor::MakeTimeRangeList(const time_range& range)
+std::vector<time_range> DHVendor::MakeTimeRangeList(const time_range& range)
 {
 	time_t timeStart = range.start;
 	time_t timeEnd = range.end;
-	vector<time_range> timeRangeList;
+	std::vector<time_range> timeRangeList;
 
 	tm tmStartTime;
 	tm tmEndTime;

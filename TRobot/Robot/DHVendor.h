@@ -1,9 +1,12 @@
-#pragma once
+#ifndef __DHVENDOR_H__
+#define __DHVENDOR_H__
+
 #include "AbstractVendor.h"
 #include "DH_Head.h"
 
 //da hua SDK
 #include "dhnetsdk.h"
+
 
 class DHVendor :
 	public AbstractVendor
@@ -39,9 +42,11 @@ private:
 	string GetLastErrorString();
 	void timeDHToStd(NET_TIME *pTimeDH, tm *pTimeStd);
 	void timeStdToDH(tm *pTimeStd, NET_TIME *pTimeDH);
-	vector<time_range> MakeTimeRangeList(const time_range& range);
+	std::vector<time_range> MakeTimeRangeList(const time_range& range);
 	void trTOnt(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_range range);
 	void CreatePath(const size_t channel);
+	void WriteFileListToDB();
+
 
 protected:
 	HMODULE m_hMod;
@@ -60,6 +65,7 @@ protected:
 	string m_strPath;
 	int m_DHChannels;
 
-	vector<RecordFile> m_files;
+	std::vector<RecordFile> m_files;
 };
 
+#endif

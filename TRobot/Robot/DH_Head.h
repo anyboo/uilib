@@ -1,13 +1,13 @@
-#pragma once
+#ifndef __DH_HEAD_H__
+#define __DH_HEAD_H__
 
 #include <iostream>
 #include <string>
 #include <map>
-#include <vector>
+#include<vector>
+
 #include <assert.h> 
 #include <tchar.h>
-using namespace std;
-
 
 // Json 
 #include "document.h"
@@ -17,6 +17,9 @@ using namespace std;
 #include "istreamwrapper.h"
 
 using namespace rapidjson;
+
+//Database
+#include "QMSqlite.h"
 
 #define MAX_SEARCH_COUNT 1000
 #define ONE_DAY		 (24 * 60 * 60)
@@ -106,3 +109,5 @@ struct RecordFile
 	char* pPrivateData;   //私有数据
 	__int32 PrivateDataDataSize;//私有数据大小
 };
+
+#endif
