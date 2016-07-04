@@ -1,7 +1,8 @@
-
 #include "Device.h"
 #include <cassert>
 #include <iostream>
+
+#pragma comment(lib, "Ws2_32.lib")
 
 
 Device::Device()
@@ -64,7 +65,7 @@ void Device::Login(const std::string& ip, size_t port, const std::string& user, 
 
 void Device::Logout()
 {
-	assert(m_pVendor);
+	//assert(m_pVendor);
 	m_pVendor->Logout(m_lLoginHandle);
 }
 

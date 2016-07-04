@@ -1,11 +1,12 @@
 #ifndef __DHVENDOR_H__
 #define __DHVENDOR_H__
 
-#include "AbstractVendor.h"
-#include "DH_Head.h"
-
-//da hua SDK
+//DH SDK
 #include "dhnetsdk.h"
+
+#include "CommonUtrl.h"
+
+
 
 class DHVendor :
 	public AbstractVendor
@@ -14,17 +15,25 @@ public:
 	DHVendor();
 	~DHVendor();
 
-	virtual void Init();
-	virtual long Login(const std::string& ip, size_t port, const std::string& user, const std::string& password);
-	virtual void Logout(const long loginHandle);
-	virtual void SearchAll(const long loginHandle);
-	virtual void Search(const long loginHandle, const size_t channel, const time_range& range);
-	virtual void Download(const long loginHandle, const size_t channel, const time_range& range);
-	virtual void PlayVideo(const long loginHandle, const size_t channel, const time_range& range);
-	virtual void Download(const long loginHandle, const size_t channel, const std::string& filename);
-	virtual void PlayVideo(const long loginHandle, const size_t channel, const std::string& filename);
-	virtual void SetDownloadPath(const std::string& Root);
-	virtual void throwException();
+	void Init();
+	long Login(const std::string& ip, size_t port, const std::string& user, const std::string& password);
+	void Logout(const long loginHandle);
+
+	void StartSearchDevice();
+	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_listDeviceInfo; }
+	void StopSearchDevice();
+	size_t GetMaxChannel(){ return m_DHChannels; }
+
+	void SearchAll(const long loginHandle);
+	void Search(const long loginHandle, const size_t channel, const time_range& range);
+	void Download(const long loginHandle, const size_t channel, const time_range& range);
+	void PlayVideo(const long loginHandle, const size_t channel, const time_range& range);
+	void Download(const long loginHandle, const size_t channel, const std::string& filename);
+	void PlayVideo(const long loginHandle, const size_t channel, const std::string& filename);
+
+	void SetDownloadPath(const std::string& Root);
+	void throwException();
+
 
 
 private:
@@ -57,6 +66,8 @@ protected:
 	std::string m_strPasswords;
 	std::string m_strIP;
 
+	/* Search Device */
+	DEVICE_INFO_LIST m_listDeviceInfo;
 
 	NET_DEVICEINFO m_deviceInfo;
 	LLONG m_lLoginHandle;

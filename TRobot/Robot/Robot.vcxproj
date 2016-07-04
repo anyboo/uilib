@@ -61,8 +61,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)poco\lib;$(SolutionDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(ProjectDir)Depend\dhnetsdk.lib;$(ProjectDir)HKbin\HCNetSDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)DZPVendor\sdk;$(SolutionDir)poco\lib;$(SolutionDir)\lib;$(SolutionDir)TRobot\Robot\DZPVendor\sdk;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(ProjectDir)Depend\dhnetsdk.lib;$(ProjectDir)HKbin\HCNetSDK.lib;$(ProjectDir)lib\NetSdk.lib;$(ProjectDir)lib\H264Play.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -91,10 +91,8 @@
     <ClInclude Include="Device.h" />
     <ClInclude Include="DeviceManager.h" />
     <ClInclude Include="DHVendor.h" />
-    <ClInclude Include="DH_Head.h" />
     <ClInclude Include="AbstractVendor.h" />
     <ClInclude Include="CommonUtrl.h" />
-    <ClInclude Include="DownloadTest.h" />
     <ClInclude Include="DZPVendor\DZPVendor.h" />
     <ClInclude Include="HKVendor.h" />
     <ClInclude Include="inc\AVPlayer.h" />
@@ -105,7 +103,6 @@
     <ClInclude Include="inc\stdint.h" />
     <ClInclude Include="JxjVendor\JxjVendor.h" />
     <ClInclude Include="JxjVendor\TestWindows.h" />
-    <ClInclude Include="MyVendor.h" />
     <ClInclude Include="RearchFile\SearchHead.h" />
     <ClInclude Include="RearchFile\SearchVideo.h" />
     <ClInclude Include="resource.h" />
@@ -116,12 +113,10 @@
     <ClCompile Include="DeviceManager.cpp" />
     <ClCompile Include="DHVendor.cpp" />
     <ClCompile Include="CommonUtrl.cpp" />
-    <ClCompile Include="DownloadTest.cpp" />
     <ClCompile Include="DZPVendor\DZPVendor.cpp" />
     <ClCompile Include="HKVendor.cpp" />
     <ClCompile Include="JxjVendor\JxjVendor.cpp" />
     <ClCompile Include="JxjVendor\TestWindows.cpp" />
-    <ClCompile Include="MyVendor.cpp" />
     <ClCompile Include="RearchFile\SearchVideo.cpp" />
     <ClCompile Include="Robot.cpp" />
   </ItemGroup>

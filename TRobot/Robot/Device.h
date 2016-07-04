@@ -4,6 +4,7 @@
 #include <cassert>
 #include <string>
 #include <vector>
+#include <WinSock.h>
 
 /*
 Please make sure type of vendor before you create a Device Object
@@ -25,7 +26,7 @@ public:
 	Device();
 	~Device();
 
-	void setSDK(AbstractVendor* sdk){ assert(m_pVendor); m_pVendor = sdk; }
+	void setSDK(AbstractVendor* sdk){ m_pVendor = sdk; }
 	void SearchAll();
 	void Search(const size_t channel, const time_range& range);
 	void Download(const size_t channel, const time_range& range);
@@ -45,8 +46,11 @@ public:
 	void Logout();
 	void SetDownloadPath(const std::string& root);
 	
-private:
+
+public:
 	AbstractVendor* m_pVendor;
+private:
+	
 	
 	std::string m_sIP;
 	size_t m_iPort;

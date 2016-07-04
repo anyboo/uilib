@@ -1,6 +1,6 @@
-#include <fstream>
+#include "HCNetSDK.h"
 #include "HKVendor.h"
-#include "TestWindows.h"
+
 
 HKVendor::HKVendor():
 m_strName(""),
@@ -13,6 +13,9 @@ m_nChannels(0)
 {
 }
 
+static void timeDHToStd(NET_DVR_TIME *pTimeDH, tm *pTimeStd);
+static void timeStdToDH(tm *pTimeStd, NET_DVR_TIME *pTimeDH);
+static void trTOndt(NET_DVR_TIME &ndtStartTime, NET_DVR_TIME &ndtEndTime, const time_range range);
 
 HKVendor::~HKVendor()
 {
@@ -64,7 +67,7 @@ long HKVendor::Login(const std::string& ip, size_t port, const std::string& user
 
 void HKVendor::Logout(const long loginHandle)
 {
-	if (m_lLoginHandle > 0 && !NET_DVR_Logout(m_lLoginHandle))
+	if (m_lLoginHandle < 0  && !NET_DVR_Logout(m_lLoginHandle))
 	{
 		std::cout << "退出失败：" << GetLastErrorString().c_str() << std::endl;
 		throw std::exception("Logout failed");
@@ -91,7 +94,8 @@ void HKVendor::Search(const long loginHandle, const size_t channel, const time_r
 		return;
 	}
 
-	std::vector<time_range> trInfor = MakeTimeRangeList(range);
+	//std::vector<time_range> trInfor = MakeTimeRangeList(range);
+	std::vector<time_range> trInfor = CCommonUtrl::getInstance().MakeTimeRangeList(range);
 
 	std::vector<time_range>::iterator it;
 	for (it = trInfor.begin(); it != trInfor.end(); ++it)
@@ -360,7 +364,7 @@ void HKVendor::throwException()
 
 }
 
-void HKVendor::timeDHToStd(NET_DVR_TIME *pTimeDH, tm *pTimeStd)
+void timeDHToStd(NET_DVR_TIME *pTimeDH, tm *pTimeStd)
 {
 	pTimeStd->tm_year = pTimeDH->dwYear - 1900;
 	pTimeStd->tm_mon = pTimeDH->dwMonth - 1;
@@ -370,7 +374,7 @@ void HKVendor::timeDHToStd(NET_DVR_TIME *pTimeDH, tm *pTimeStd)
 	pTimeStd->tm_sec = pTimeDH->dwSecond;
 }
 
-void HKVendor::trTOndt(NET_DVR_TIME &ndtStartTime, NET_DVR_TIME &ndtEndTime, const time_range range)
+void trTOndt(NET_DVR_TIME &ndtStartTime, NET_DVR_TIME &ndtEndTime, const time_range range)
 {
 	tm tmStartTime;
 	tm tmEndTime;
@@ -382,7 +386,7 @@ void HKVendor::trTOndt(NET_DVR_TIME &ndtStartTime, NET_DVR_TIME &ndtEndTime, con
 	timeStdToDH(&tmEndTime, &ndtEndTime);
 }
 
-void HKVendor::timeStdToDH(tm *pTimeStd, NET_DVR_TIME *pTimeDH)
+void timeStdToDH(tm *pTimeStd, NET_DVR_TIME *pTimeDH)
 {
 	pTimeDH->dwYear = pTimeStd->tm_year + 1900;
 	pTimeDH->dwMonth = pTimeStd->tm_mon + 1;
@@ -454,7 +458,7 @@ void HKVendor::WriteFileListToDB()
 	//删除表
 	//pDb->dropTable(DROP_SEARCH_VIDEO_TABLE);
 	//创建记录表
-	pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
+	//pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
 	//一次插入所有数据
 	std::vector<writeSearchVideo> RecordList;
 	for (size_t i = 0; i < m_files.size(); i++)
@@ -477,106 +481,106 @@ void HKVendor::WriteFileListToDB()
 	pDb->writeDataByVector(sql, RecordList);
 }
 
-std::vector<time_range> HKVendor::MakeTimeRangeList(const time_range& range)
-{
-	time_t timeStart = range.start;
-	time_t timeEnd = range.end;
-	std::vector<time_range> timeRangeList;
-
-	tm tmStartTime;
-	tm tmEndTime;
-	NET_DVR_TIME ntStartTime;
-	NET_DVR_TIME ntEndTime;
-
-	_localtime64_s(&tmStartTime, (const time_t*)&range.start);
-	_localtime64_s(&tmEndTime, (const time_t*)&range.end);
-
-
-	timeStdToDH(&tmStartTime, &ntStartTime);
-	timeStdToDH(&tmEndTime, &ntEndTime);
-
-	if (timeEnd - timeStart <= ONE_DAY)
-	{
-		if (ntStartTime.dwDay == ntEndTime.dwDay)
-		{
-			timeRangeList.push_back(range);
-		}
-		else
-		{
-			time_range rangeItem;
-			rangeItem.start = timeStart;
-			time_t diff = (23 - ntStartTime.dwHour) * ONE_HOUR + (59 - ntStartTime.dwMinute) * ONE_MINUTE + (59 - ntStartTime.dwSecond);
-			rangeItem.end = timeStart + diff;
-			timeRangeList.push_back(rangeItem);
-
-			rangeItem.start = timeStart + diff + 1;
-			rangeItem.end = timeEnd;
-			timeRangeList.push_back(rangeItem);
-		}
-	}
-	else
-	{
-		time_t diff = timeEnd - timeStart;
-		int day = (int)(diff / ONE_DAY + (diff%ONE_DAY > 0 ? 1 : 0));
-
-		if (ntStartTime.dwHour == 0 && ntStartTime.dwMinute == 0 && ntStartTime.dwSecond == 0)
-		{
-			for (size_t i = 0; i < day - 1; i++)
-			{
-				time_range rangeItem;
-				rangeItem.start = timeStart;
-				rangeItem.end = timeStart + ONE_DAY - 1;
-				timeRangeList.push_back(rangeItem);
-
-				timeStart = timeStart + ONE_DAY;
-			}
-
-			time_range rangeItem;
-			rangeItem.start = timeStart;
-			rangeItem.end = timeEnd;
-			timeRangeList.push_back(rangeItem);
-		}
-		else
-		{
-			time_range rangeItem;
-			rangeItem.start = timeStart;
-			time_t diff = (23 - ntStartTime.dwHour) * ONE_HOUR + (59 - ntStartTime.dwMinute) * ONE_MINUTE + (59 - ntStartTime.dwSecond);
-			rangeItem.end = timeStart + diff;
-			timeRangeList.push_back(rangeItem);
-
-			timeStart = timeStart + diff + 1;
-			for (size_t i = 0; i < day - 2; i++)
-			{
-				time_range rangeItem;
-				rangeItem.start = timeStart;
-				rangeItem.end = timeStart + ONE_DAY - 1;
-				timeRangeList.push_back(rangeItem);
-
-				timeStart = timeStart + ONE_DAY;
-			}
-
-			if (timeEnd > timeStart + ONE_DAY - 1)
-			{
-				rangeItem.start = timeStart;
-				rangeItem.end = timeStart + ONE_DAY - 1;;
-				timeRangeList.push_back(rangeItem);
-
-				timeStart = timeStart + ONE_DAY;
-				rangeItem.start = timeStart;
-				rangeItem.end = timeEnd;
-				timeRangeList.push_back(rangeItem);
-			}
-			else
-			{
-				rangeItem.start = timeStart;
-				rangeItem.end = timeEnd;
-				timeRangeList.push_back(rangeItem);
-			}
-		}
-	}
-
-	return timeRangeList;
-}
+// std::vector<time_range> HKVendor::MakeTimeRangeList(const time_range& range)
+// {
+// 	time_t timeStart = range.start;
+// 	time_t timeEnd = range.end;
+// 	std::vector<time_range> timeRangeList;
+// 
+// 	tm tmStartTime;
+// 	tm tmEndTime;
+// 	NET_DVR_TIME ntStartTime;
+// 	NET_DVR_TIME ntEndTime;
+// 
+// 	_localtime64_s(&tmStartTime, (const time_t*)&range.start);
+// 	_localtime64_s(&tmEndTime, (const time_t*)&range.end);
+// 
+// 
+// 	timeStdToDH(&tmStartTime, &ntStartTime);
+// 	timeStdToDH(&tmEndTime, &ntEndTime);
+// 
+// 	if (timeEnd - timeStart <= ONE_DAY)
+// 	{
+// 		if (ntStartTime.dwDay == ntEndTime.dwDay)
+// 		{
+// 			timeRangeList.push_back(range);
+// 		}
+// 		else
+// 		{
+// 			time_range rangeItem;
+// 			rangeItem.start = timeStart;
+// 			time_t diff = (23 - ntStartTime.dwHour) * ONE_HOUR + (59 - ntStartTime.dwMinute) * ONE_MINUTE + (59 - ntStartTime.dwSecond);
+// 			rangeItem.end = timeStart + diff;
+// 			timeRangeList.push_back(rangeItem);
+// 
+// 			rangeItem.start = timeStart + diff + 1;
+// 			rangeItem.end = timeEnd;
+// 			timeRangeList.push_back(rangeItem);
+// 		}
+// 	}
+// 	else
+// 	{
+// 		time_t diff = timeEnd - timeStart;
+// 		int day = (int)(diff / ONE_DAY + (diff%ONE_DAY > 0 ? 1 : 0));
+// 
+// 		if (ntStartTime.dwHour == 0 && ntStartTime.dwMinute == 0 && ntStartTime.dwSecond == 0)
+// 		{
+// 			for (size_t i = 0; i < day - 1; i++)
+// 			{
+// 				time_range rangeItem;
+// 				rangeItem.start = timeStart;
+// 				rangeItem.end = timeStart + ONE_DAY - 1;
+// 				timeRangeList.push_back(rangeItem);
+// 
+// 				timeStart = timeStart + ONE_DAY;
+// 			}
+// 
+// 			time_range rangeItem;
+// 			rangeItem.start = timeStart;
+// 			rangeItem.end = timeEnd;
+// 			timeRangeList.push_back(rangeItem);
+// 		}
+// 		else
+// 		{
+// 			time_range rangeItem;
+// 			rangeItem.start = timeStart;
+// 			time_t diff = (23 - ntStartTime.dwHour) * ONE_HOUR + (59 - ntStartTime.dwMinute) * ONE_MINUTE + (59 - ntStartTime.dwSecond);
+// 			rangeItem.end = timeStart + diff;
+// 			timeRangeList.push_back(rangeItem);
+// 
+// 			timeStart = timeStart + diff + 1;
+// 			for (size_t i = 0; i < day - 2; i++)
+// 			{
+// 				time_range rangeItem;
+// 				rangeItem.start = timeStart;
+// 				rangeItem.end = timeStart + ONE_DAY - 1;
+// 				timeRangeList.push_back(rangeItem);
+// 
+// 				timeStart = timeStart + ONE_DAY;
+// 			}
+// 
+// 			if (timeEnd > timeStart + ONE_DAY - 1)
+// 			{
+// 				rangeItem.start = timeStart;
+// 				rangeItem.end = timeStart + ONE_DAY - 1;;
+// 				timeRangeList.push_back(rangeItem);
+// 
+// 				timeStart = timeStart + ONE_DAY;
+// 				rangeItem.start = timeStart;
+// 				rangeItem.end = timeEnd;
+// 				timeRangeList.push_back(rangeItem);
+// 			}
+// 			else
+// 			{
+// 				rangeItem.start = timeStart;
+// 				rangeItem.end = timeEnd;
+// 				timeRangeList.push_back(rangeItem);
+// 			}
+// 		}
+// 	}
+// 
+// 	return timeRangeList;
+// }
 
 void HKVendor::CreatePath(const size_t channel)
 {
@@ -609,6 +613,27 @@ void HKVendor::CreatePath(const size_t channel)
 		return;
 	}
 }
+
+void HKVendor::StartSearchDevice()
+{
+
+}
+
+DEVICE_INFO_LIST& HKVendor::GetDeviceInfoList()
+{
+	return m_listDeviceInfo;
+}
+
+void HKVendor::StopSearchDevice()
+{
+
+}
+
+size_t HKVendor::GetMaxChannel()
+{
+	return 0;
+}
+
 
 std::string HKVendor::GetLastErrorString()
 {
@@ -729,26 +754,26 @@ std::string HKVendor::GetLastErrorString()
 	}
 }
 
-#include "catch.hpp"
-
-TEST_CASE_METHOD(HKVendor, "Init HK SDK", "[HKVendor]")
-{
-
-	time_range range;
-	range.start = 1467475200;
-	//range.end = 1466524800;
-	range.end = 1467561600;
-	//range.end = 1478833871;
-	REQUIRE_NOTHROW(Init());
- 
- 	REQUIRE_NOTHROW(Login("192.168.0.92", 8000, "admin", "admin123"));
-
- 	REQUIRE_NOTHROW(Search(0, 33, range));
- 	//REQUIRE_NOTHROW(Search(1, range));
-	
- 	//REQUIRE_NOTHROW(Download(0, 33, range));
-	//REQUIRE_NOTHROW(Download(0, 1,"ch0001_00000000137000400"));
-	//REQUIRE_NOTHROW(PlayVideo(0, 0, "ch0003_00000000008000000"));
- 	//REQUIRE_NOTHROW(PlayVideo(0, 35, range));
-	// 	REQUIRE_NOTHROW(Logout());
-}
+// #include "catch.hpp"
+// 
+// TEST_CASE_METHOD(HKVendor, "Init HK SDK", "[HKVendor]")
+// {
+// 
+// 	time_range range;
+// 	range.start = 1467475200;
+// 	//range.end = 1466524800;
+// 	range.end = 1467561600;
+// 	//range.end = 1478833871;
+// 	REQUIRE_NOTHROW(Init());
+//  
+//  	REQUIRE_NOTHROW(Login("192.168.0.92", 8000, "admin", "admin123"));
+// 
+//  	REQUIRE_NOTHROW(Search(0, 33, range));
+//  	//REQUIRE_NOTHROW(Search(1, range));
+// 	
+//  	//REQUIRE_NOTHROW(Download(0, 33, range));
+// 	//REQUIRE_NOTHROW(Download(0, 1,"ch0001_00000000137000400"));
+// 	//REQUIRE_NOTHROW(PlayVideo(0, 0, "ch0003_00000000008000000"));
+//  	//REQUIRE_NOTHROW(PlayVideo(0, 35, range));
+// 	// 	REQUIRE_NOTHROW(Logout());
+// }

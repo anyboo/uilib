@@ -1,8 +1,6 @@
 #include "DHVendor.h"
 
-#include <ctime>
-#include <fstream>
-#include "TestWindows.h"
+#pragma comment(lib, "dhnetsdk")
 
 DHVendor::DHVendor():
 m_strName("大华"),
@@ -105,6 +103,16 @@ void DHVendor::Logout(const long loginHandle)
 		throw std::exception("Logout failed");
 		return;
 	}
+}
+
+void DHVendor::StartSearchDevice()
+{
+
+}
+
+void DHVendor::StopSearchDevice()
+{
+
 }
 
 void DHVendor::SearchAll(const long loginHandle)
@@ -410,7 +418,7 @@ void DHVendor::WriteFileListToDB()
 	//删除表
 	//pDb->dropTable(DROP_SEARCH_VIDEO_TABLE);
 	//创建记录表
-	pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
+	//pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
 	//一次插入所有数据
 	std::vector<writeSearchVideo> RecordList;
 	for (size_t i = 0; i < m_files.size(); i++)
@@ -897,8 +905,8 @@ std::string DHVendor::GetLastErrorString()
 	}
 }
 
-//#include "catch.hpp"
-
+// #include "catch.hpp"
+// 
 // TEST_CASE_METHOD(DHVendor, "Init DH SDK", "[DHVendor]")
 //  {
 // 
@@ -907,18 +915,18 @@ std::string DHVendor::GetLastErrorString()
 // 	//range.end = 1466524800;
 // 	range.end = 1466629200;
 // 	//range.end = 1478833871;
-// // //	REQUIRE_NOTHROW(Init("192.168.0.96", 37777));
-// // 
-// // 	REQUIRE_NOTHROW(Login("admin", ""));
-// // 
-// // 	REQUIRE_NOTHROW(Search(0, range));
-// // 	//REQUIRE_NOTHROW(Search(1, range));
-// // 
-// // 	REQUIRE_NOTHROW(Download(0, range));
-// // 	//Download(0, "channel0-20160621000000-20160621235959-0");
-// // 
-// // 	//REQUIRE_NOTHROW(PlayVideo(0, range));
-// // 	REQUIRE_NOTHROW(PlayVideo(0, "channel0-20160621000000-20160621235959-0"));
-// // 	REQUIRE_NOTHROW(Logout());
+// //	REQUIRE_NOTHROW(Init("192.168.0.96", 37777));
 // 
-// //}
+// 	//REQUIRE_NOTHROW(Login("admin", ""));
+// 
+// 	//REQUIRE_NOTHROW(Search(0, range));
+// 	//REQUIRE_NOTHROW(Search(1, range));
+// 
+// 	//REQUIRE_NOTHROW(Download(0, range));
+// 	//Download(0, "channel0-20160621000000-20160621235959-0");
+// 
+// 	//REQUIRE_NOTHROW(PlayVideo(0, range));
+// 	//REQUIRE_NOTHROW(PlayVideo(0, "channel0-20160621000000-20160621235959-0"));
+// 	//REQUIRE_NOTHROW(Logout());
+// 
+// }

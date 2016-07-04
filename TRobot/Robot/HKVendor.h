@@ -1,11 +1,7 @@
 #ifndef __HKVENDOR_H__
 #define __HKVENDOR_H__
 
-#include "AbstractVendor.h"
-
-#include "DH_Head.h"
-#include "HCNetSDK.h"
-
+#include "CommonUtrl.h"
 
 class HKVendor :
 	public AbstractVendor
@@ -26,12 +22,14 @@ public:
 	virtual void SetDownloadPath(const std::string& Root);
 	virtual void throwException();
 
+	virtual void StartSearchDevice();
+	virtual DEVICE_INFO_LIST& GetDeviceInfoList();
+	virtual void StopSearchDevice();
+	virtual size_t GetMaxChannel();
+
 private:
 	std::string GetLastErrorString();
-	void timeDHToStd(NET_DVR_TIME *pTimeDH, tm *pTimeStd);
-	void timeStdToDH(tm *pTimeStd, NET_DVR_TIME *pTimeDH);
-	void trTOndt(NET_DVR_TIME &ndtStartTime, NET_DVR_TIME &ndtEndTime, const time_range range);
-	std::vector<time_range> MakeTimeRangeList(const time_range& range);
+	//std::vector<time_range> MakeTimeRangeList(const time_range& range);
 	void CreatePath(const size_t channel);
 
 	void SaveSearchFileListToFile();
@@ -50,6 +48,9 @@ protected:
 	int m_nChannels;
 
 	std::vector<RecordFile> m_files;
+
+	/* Search Device */
+	DEVICE_INFO_LIST m_listDeviceInfo;
 };
 
 #endif

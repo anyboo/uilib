@@ -1,11 +1,6 @@
 
-#include "DH_Head.h"
 #include "CommonUtrl.h"
 #include <Poco/SingletonHolder.h>
-
-#define oneDay		(24 * 60 * 60)
-#define oneHour		(60 * 60)
-#define oneMinute	(60)
 
 using namespace rapidjson;
 
@@ -23,27 +18,7 @@ CCommonUtrl& CCommonUtrl::getInstance()
 	return *sh.get();
 }
 
-std::string CCommonUtrl::MakeFileName(int channel, const std::string& startTime, const std::string& endTime)
-{
-	std::string strFileName;
-
-	strFileName += "channel";
-	if (channel < 10)
-	{
-		strFileName += "0";
-	}
-	strFileName += std::to_string(channel);
-	strFileName += "-";
-	strFileName += startTime.data();
-	strFileName += "-";
-	strFileName += endTime.data();
-
-	return strFileName;
-}
-
-std::string CCommonUtrl::MakeDownloadFileFolder(const std::string basePath,
-	const std::string& startTimeZero, const std::string& endTimeZero,
-	const std::string& venderName, int channel, const std::string& fileName, const std::string& fileType)
+std::string CCommonUtrl::MakeDownloadFileFolder(const std::string basePath, const std::string& startTimeZero, const std::string& endTimeZero, const std::string& venderName, int channel)
 {
 	std::string strPath = basePath;
 	strPath.append("\\");
@@ -51,22 +26,42 @@ std::string CCommonUtrl::MakeDownloadFileFolder(const std::string basePath,
 	strPath.append("-");
 	strPath += endTimeZero.data();
 	strPath.append("\\");
-	//CreateDirectory(strPath.c_str(), NULL);
 	strPath += venderName.data();
 	strPath.append("\\");
-	//CreateDirectory(strPath.c_str(), NULL);
 	strPath.append("Í¨µÀ");
+	if (venderName.compare(Vendor_DZP) == 0)
+	{
+		channel += 1;
+	}
 	if (channel < 10)
 	{
 		strPath += "0";
 	}
 	strPath += std::to_string(channel);
 	strPath.append("\\");
-	//CreateDirectory(strPath.c_str(), NULL);
-	strPath.append(fileName);
-	strPath += fileType.data();
+
+	MakeFolder(strPath);
 
 	return strPath;
+}
+
+void CCommonUtrl::MakeFolder(std::string fileName)
+{
+	char *tag;
+	for (tag = (char *)fileName.c_str(); *tag; tag++)
+	{
+		if (*tag == '\\')
+		{
+			char buf[1000], path[1000];
+			strcpy(buf, fileName.c_str());
+			buf[strlen(fileName.c_str()) - strlen(tag) + 1] = NULL;
+			strcpy(path, buf);
+			if (access(path, 6) == -1)
+			{
+				mkdir(path);
+			}
+		}
+	}
 }
 
 std::vector<time_range> CCommonUtrl::MakeTimeRangeList(const time_range& range)
@@ -78,7 +73,7 @@ std::vector<time_range> CCommonUtrl::MakeTimeRangeList(const time_range& range)
 	JTime jStartTime, jStopTime;
 	InitSearchTime(jStartTime, jStopTime, timeStart, timeEnd);
 
-	if (timeEnd - timeStart <= oneDay)
+	if (timeEnd - timeStart <= ONE_DAY)
 	{
 		if (jStartTime.date == jStopTime.date)
 		{
@@ -88,7 +83,7 @@ std::vector<time_range> CCommonUtrl::MakeTimeRangeList(const time_range& range)
 		{
 			time_range rangeItem;
 			rangeItem.start = timeStart;
-			time_t diff = (23 - jStartTime.hour) * oneHour + (59 - jStartTime.minute) * oneMinute + (59 - jStartTime.second);
+			time_t diff = (23 - jStartTime.hour) * ONE_HOUR + (59 - jStartTime.minute) * ONE_MINUTE + (59 - jStartTime.second);
 			rangeItem.end = timeStart + diff;
 			timeRangeList.push_back(rangeItem);
 
@@ -100,7 +95,7 @@ std::vector<time_range> CCommonUtrl::MakeTimeRangeList(const time_range& range)
 	else
 	{
 		time_t diff = timeEnd - timeStart;
-		int day = (diff / oneDay) + (diff % oneDay > 0 ? 1 : 0);
+		int day = (diff / ONE_DAY) + (diff % ONE_DAY > 0 ? 1 : 0);
 
 		if (jStartTime.hour == 0 && jStartTime.minute == 0 && jStartTime.second == 0)
 		{
@@ -108,10 +103,10 @@ std::vector<time_range> CCommonUtrl::MakeTimeRangeList(const time_range& range)
 			{
 				time_range rangeItem;
 				rangeItem.start = timeStart;
-				rangeItem.end = timeStart + oneDay - 1;
+				rangeItem.end = timeStart + ONE_DAY - 1;
 				timeRangeList.push_back(rangeItem);
 
-				timeStart = timeStart + oneDay;
+				timeStart = timeStart + ONE_DAY;
 			}
 
 			time_range rangeItem;
@@ -123,7 +118,7 @@ std::vector<time_range> CCommonUtrl::MakeTimeRangeList(const time_range& range)
 		{
 			time_range rangeItem;
 			rangeItem.start = timeStart;
-			time_t diff = (23 - jStartTime.hour) * oneHour + (59 - jStartTime.minute) * oneMinute + (59 - jStartTime.second);
+			time_t diff = (23 - jStartTime.hour) * ONE_HOUR + (59 - jStartTime.minute) * ONE_MINUTE + (59 - jStartTime.second);
 			rangeItem.end = timeStart + diff;
 			timeRangeList.push_back(rangeItem);
 
@@ -132,19 +127,19 @@ std::vector<time_range> CCommonUtrl::MakeTimeRangeList(const time_range& range)
 			{
 				time_range rangeItem;
 				rangeItem.start = timeStart;
-				rangeItem.end = timeStart + oneDay - 1;
+				rangeItem.end = timeStart + ONE_DAY - 1;
 				timeRangeList.push_back(rangeItem);
 
-				timeStart = timeStart + oneDay;
+				timeStart = timeStart + ONE_DAY;
 			}
 
-			if (timeEnd > timeStart + oneDay - 1)
+			if (timeEnd > timeStart + ONE_DAY - 1)
 			{
 				rangeItem.start = timeStart;
-				rangeItem.end = timeStart + oneDay - 1;
+				rangeItem.end = timeStart + ONE_DAY - 1;
 				timeRangeList.push_back(rangeItem);
 
-				timeStart = timeStart + oneDay;
+				timeStart = timeStart + ONE_DAY;
 				rangeItem.start = timeStart;
 				rangeItem.end = timeEnd;
 				timeRangeList.push_back(rangeItem);
@@ -209,7 +204,7 @@ std::string CCommonUtrl::MakeStrTimeByTimestamp(std::time_t time)
 	return strTime;
 }
 
-void CCommonUtrl::SaveSearchFileListToFile(const std::vector<Record>& files)
+void CCommonUtrl::SaveSearchFileListToFile(const std::vector<RecordFile>& files)
 {
 	Document document;
 	std::string configfile = "SearchFileList.config";
@@ -225,7 +220,7 @@ void CCommonUtrl::SaveSearchFileListToFile(const std::vector<Record>& files)
 		std::string fileKey = "videoFile";
 		Value key(fileKey.c_str(), fileKey.length(), alloc);
 
-		Record file = files[i];
+		RecordFile file = files[i];
 		Value name(file.name.c_str(), file.name.length(), alloc);
 		Value channel(std::to_string(file.channel).c_str(), std::to_string(file.channel).length(), alloc);
 		Value beginTime(CCommonUtrl::getInstance().MakeStrTimeByTimestamp(file.beginTime).c_str(), CCommonUtrl::getInstance().MakeStrTimeByTimestamp(file.beginTime).length(), alloc);
@@ -241,9 +236,9 @@ void CCommonUtrl::SaveSearchFileListToFile(const std::vector<Record>& files)
 	root.Accept(writer);
 }
 
-std::vector<Record> CCommonUtrl::LoadSearchFileListFromFile()
+std::vector<RecordFile> CCommonUtrl::LoadSearchFileListFromFile()
 {
-	std::vector<Record> files;
+	std::vector<RecordFile> files;
 
 	std::string configfile = "SearchFileList.config";
 	std::ifstream ifs(configfile);
