@@ -29,7 +29,7 @@ void CDownloadTest::CallBack()
 	int time = 0;
 }
 
-#include "catch.hpp"
+//#include "catch.hpp"
 
 //TEST_CASE_METHOD(CDownloadTest, "Init SDK", "[Test]")
 //{

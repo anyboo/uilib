@@ -7,7 +7,7 @@ CSearchVideo::CSearchVideo()
 	m_TimeRange.end = 0;
 	m_nNotify = 0;
 	m_bFlag = false;
-	m_Device.setSDK(&m_DHObj);
+	//m_Device.setSDK(&m_DHObj);
 
 }
 
@@ -16,10 +16,12 @@ CSearchVideo::~CSearchVideo()
 {
 }
 
-int CSearchVideo::SearchFile(const std::string &ip, const time_range &range)
+
+
+int CSearchVideo::SearchFile(const std::string &ip, const time_range &range, Device *pDevice)
 {
 	assert(!ip.empty());
-	m_Device = m_DeviceManager.getDevice(ip);
+	//m_Device = m_DeviceManager.getDevice(ip);
 
 	
 	std::vector<size_t> channelList; //init later
@@ -28,7 +30,8 @@ int CSearchVideo::SearchFile(const std::string &ip, const time_range &range)
 	channelList.push_back(ta);
 	channelList.push_back(tb);
 
-	m_Device.setChannel(10, channelList);
+	//m_Device.setChannel(channelList);
+	pDevice->setChannel(channelList);
 	
 	std::vector<size_t> channels = m_Device.getChannelList();//init later
 	for (auto channel : channels)

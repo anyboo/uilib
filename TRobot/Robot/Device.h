@@ -33,7 +33,7 @@ public:
 	void Download(const size_t channel, const std::string& fileName);
 	void PlayVideo(const size_t channel, const std::string& fileName);
 
-	void setChannel(const size_t maxChannel, const std::vector<size_t>& channelList);
+	void setChannel(const std::vector<size_t>& channelList);
 	size_t getMaxChannel(){ return m_iMaxChannel; }
 	std::vector<size_t> getChannelList(){ return m_vChannelList; }
 	std::string getIP(){ return m_sIP; }

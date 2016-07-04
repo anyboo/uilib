@@ -34,7 +34,11 @@ private:
 	std::vector<time_range> MakeTimeRangeList(const time_range& range);
 	void CreatePath(const size_t channel);
 
+	void SaveSearchFileListToFile();
+	std::string MakeStrByInteger(int data);
+	std::string MakeStrTimeByTimestamp(time_t time);
 
+	void WriteFileListToDB();
 
 protected:
 	std::string m_strName;

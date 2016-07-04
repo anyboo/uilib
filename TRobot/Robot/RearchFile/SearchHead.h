@@ -1,10 +1,7 @@
 #ifndef __SEARCHHEND_H__
 #define __SEARCHHEAD_H__
 
-#include <string>
-#include <vector>
-#include <list>
-#include <ctime>
+
 
 // #ifndef _time_range
 // #define _time_range

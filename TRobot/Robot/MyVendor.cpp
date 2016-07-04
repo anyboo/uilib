@@ -68,12 +68,12 @@ void MyVendor::throwException()
 
 }
 
-#include "catch.hpp"
-TEST_CASE_METHOD(MyVendor, "Init SDK","[Init]")
-{
-// 	REQUIRE_NOTHROW(Init("127.0.0.1", 3000));
-// 	REQUIRE(handle != nullptr);
-// 	REQUIRE_NOTHROW(Login("user", "password"));
-// 	REQUIRE_NOTHROW(SearchAll());
-// 	REQUIRE_NOTHROW(Logout());
-}
+//#include "catch.hpp"
+// TEST_CASE_METHOD(MyVendor, "Init SDK","[Init]")
+// {
+// // 	REQUIRE_NOTHROW(Init("127.0.0.1", 3000));
+// // 	REQUIRE(handle != nullptr);
+// // 	REQUIRE_NOTHROW(Login("user", "password"));
+// // 	REQUIRE_NOTHROW(SearchAll());
+// // 	REQUIRE_NOTHROW(Logout());
+// }

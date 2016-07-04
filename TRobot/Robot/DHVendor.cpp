@@ -897,7 +897,7 @@ std::string DHVendor::GetLastErrorString()
 	}
 }
 
-#include "catch.hpp"
+//#include "catch.hpp"
 
 // TEST_CASE_METHOD(DHVendor, "Init DH SDK", "[DHVendor]")
 //  {

@@ -56,7 +56,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)\transation;$(ProjectDir)HK_Head;$(ProjectDir)Depend;$(SolutionDir)poco\Data\include;$(SolutionDir)poco\Foundation\include;$(SolutionDir)poco\Data\SQLite\include;$(SolutionDir)\bin;$(SolutionDir)\dll;$(SolutionDir)\TRobot\Robot\DZPVendor\sdk;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\TRobot\Robot\inc;$(SolutionDir)\TRobot\Robot;$(SolutionDir)\TRobot\Robot\JxjVendor;$(SolutionDir)\Test\single_include;$(SolutionDir)\TRobot\Robot\DZPVendor;$(SolutionDir)\poco\Foundation\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)RearchFile;$(ProjectDir)\transation;$(ProjectDir)HK_Head;$(ProjectDir)Depend;$(SolutionDir)poco\Data\include;$(SolutionDir)poco\Foundation\include;$(SolutionDir)poco\Data\SQLite\include;$(SolutionDir)\bin;$(SolutionDir)\dll;$(SolutionDir)\TRobot\Robot\DZPVendor\sdk;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\TRobot\Robot\inc;$(SolutionDir)\TRobot\Robot;$(SolutionDir)\TRobot\Robot\JxjVendor;$(SolutionDir)\Test\single_include;$(SolutionDir)\TRobot\Robot\DZPVendor;$(SolutionDir)\poco\Foundation\include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -130,6 +130,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

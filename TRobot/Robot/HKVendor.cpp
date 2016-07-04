@@ -1,3 +1,4 @@
+#include <fstream>
 #include "HKVendor.h"
 #include "TestWindows.h"
 
@@ -15,6 +16,7 @@ m_nChannels(0)
 
 HKVendor::~HKVendor()
 {
+	assert(NET_DVR_Cleanup());
 }
 
 void HKVendor::Init()
@@ -175,6 +177,11 @@ void HKVendor::Search(const long loginHandle, const size_t channel, const time_r
 		}
 
 	}
+
+	//保存到JSON文件
+	SaveSearchFileListToFile();
+	//写入到数据库中
+	WriteFileListToDB();
 }
 
 void HKVendor::Download(const long loginHandle, const size_t channel, const time_range& range)
@@ -193,13 +200,6 @@ void HKVendor::Download(const long loginHandle, const size_t channel, const time
  
  	CreatePath(channel);
  
-	NET_DVR_PLAYCOND struDownloadCond = { 0 };
-	memset(&struDownloadCond, 0, sizeof(NET_DVR_PLAYCOND));
-	struDownloadCond.dwChannel = channel;
-	struDownloadCond.byDrawFrame = 1;
-	struDownloadCond.struStartTime = ndtStime;
-	struDownloadCond.struStopTime = ndtEtime;
-
  	char szTime[512];
 	ZeroMemory(szTime, 512);
 	sprintf_s(szTime, "D:\\DownLoadVideo\\海康\\通道%d\\channel%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d.mp4", channel, channel, ndtStime.dwYear, ndtStime.dwMonth, ndtStime.dwDay,
@@ -207,23 +207,20 @@ void HKVendor::Download(const long loginHandle, const size_t channel, const time
 	std::cout << "strName:" << szTime << std::endl;
 
 	LONG lRet = NET_DVR_GetFileByTime(m_lLoginHandle, channel, &ndtStime, &ndtEtime, szTime);
-
+	
 	if (-1 == lRet)
 	{
-		lRet = NET_DVR_GetFileByTime_V40(m_lLoginHandle, szTime, &struDownloadCond);
+		
 		std::cout << "downLoadByRecordFile 下载录像失败，错误原因：" << GetLastErrorString() << std::endl;
 		throw std::exception("Download by Record file failed");
-		//NET_DVR_Logout(m_lLoginHandle);
-		//NET_DVR_Cleanup();
-		//return;
-	}
 
-	if (NET_DVR_PlayBackControl(lRet, NET_DVR_PLAYSTART, 0, NULL))
-	{
-		cout << "开始下载！" << endl;
+		return;
 	}
- 
- 	
+	else
+	{
+		NET_DVR_PlayBackControl(lRet, NET_DVR_PLAYSTART, 0, NULL);
+		std::cout << "downLoadByRecordFile 下载文件成功！" << std::endl;
+	}	
 }
 
 void HKVendor::PlayVideo(const long loginHandle, const size_t channel, const time_range& range)
@@ -287,26 +284,21 @@ void HKVendor::Download(const long loginHandle, const size_t channel, const std:
 	{
 		if (it->name == filename)
 		{	
-			//NET_DVR_FINDDATA_V40& info = *((NET_DVR_FINDDATA_V40*)file.getPrivateData());
 			LONG lRet = NET_DVR_GetFileByName(m_lLoginHandle, (char *)filename.c_str(), szTime);
 
 			if (0 < lRet)
 			{
-
 				std::cout << "downLoadByRecordFile 下载录像失败，错误原因：" << GetLastErrorString() << std::endl;
 				throw std::exception("Download by Record file failed");
 				return;
 			}
 			else
 			{
+				NET_DVR_PlayBackControl(lRet, NET_DVR_PLAYSTART, 0, NULL);
 				std::cout << "downLoadByRecordFile 下载录像成功！" << std::endl;
 			}
-
-			if (!NET_DVR_PlayBackControl_V40(lRet, NET_DVR_PLAYSTART, NULL, 0, NULL, NULL))
-			{
-
-			}
 		}
+
 		if (m_files.size() - 1 == nSize)
 		{
 			std::cout << "下载文件名不存在！" << std::endl;
@@ -398,6 +390,91 @@ void HKVendor::timeStdToDH(tm *pTimeStd, NET_DVR_TIME *pTimeDH)
 	pTimeDH->dwHour = pTimeStd->tm_hour;
 	pTimeDH->dwMinute = pTimeStd->tm_min;
 	pTimeDH->dwSecond = pTimeStd->tm_sec;
+}
+
+void HKVendor::SaveSearchFileListToFile()
+{
+	Document document;
+	string configfile = "SearchFileList.config";
+	document.Parse(configfile.c_str());
+	ofstream ofs(configfile);
+	OStreamWrapper osw(ofs);
+	Document::AllocatorType& alloc = document.GetAllocator();
+
+	Value root(kObjectType);
+
+	for (size_t i = 0; i < m_files.size(); i++)
+	{
+		string fileKey = "videoFile";
+		Value key(fileKey.c_str(), fileKey.length(), alloc);
+
+		RecordFile file = m_files[i];
+		Value name(file.name.c_str(), file.name.length(), alloc);
+		Value channel(MakeStrByInteger(file.channel).c_str(), MakeStrByInteger(file.channel).length(), alloc);
+		Value beginTime(MakeStrTimeByTimestamp(file.beginTime).c_str(), MakeStrTimeByTimestamp(file.beginTime).length(), alloc);
+		Value endTime(MakeStrTimeByTimestamp(file.endTime).c_str(), MakeStrTimeByTimestamp(file.endTime).length(), alloc);
+		Value size(MakeStrByInteger(file.size / 1024 / 1024).c_str(), MakeStrByInteger(file.size / 1024 / 1024).length(), alloc);
+
+		Value a(kArrayType);
+		a.PushBack(name, alloc).PushBack(channel, alloc).PushBack(beginTime, alloc).PushBack(endTime, alloc).PushBack(size, alloc);
+		root.AddMember(key.Move(), a.Move(), alloc);
+	}
+
+	Writer<OStreamWrapper> writer(osw);
+	root.Accept(writer);
+}
+
+std::string HKVendor::MakeStrTimeByTimestamp(time_t time)
+{
+	char cTime[50];
+	struct tm ttime;
+
+	localtime_s(&ttime, &time);
+	strftime(cTime, 50, "%Y%m%d%H%M%S", &ttime);
+
+	string strTime(cTime);
+
+	return strTime;
+}
+std::string HKVendor::MakeStrByInteger(int data)
+{
+	char cData[50];
+
+	sprintf_s(cData, 50, "%d", data);
+
+	string strTime(cData);
+
+	return strTime;
+}
+
+void HKVendor::WriteFileListToDB()
+{
+	//获取指针
+	QMSqlite *pDb = QMSqlite::getInstance();
+	//删除表
+	//pDb->dropTable(DROP_SEARCH_VIDEO_TABLE);
+	//创建记录表
+	pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
+	//一次插入所有数据
+	std::vector<writeSearchVideo> RecordList;
+	for (size_t i = 0; i < m_files.size(); i++)
+	{
+		writeSearchVideo sr;
+		RecordFile record = m_files[i];
+		//文件名称
+		sr.set<0>(record.name);
+		//通道号
+		sr.set<1>(record.channel);
+		//开始时间
+		sr.set<2>(record.beginTime);
+		//结束时间
+		sr.set<3>(record.endTime);
+		sr.set<4>(record.size);
+		RecordList.push_back(sr);
+	}
+
+	std::string sql(INSERT_SEARCH_VIDEO);
+	pDb->writeDataByVector(sql, RecordList);
 }
 
 std::vector<time_range> HKVendor::MakeTimeRangeList(const time_range& range)
@@ -658,20 +735,19 @@ TEST_CASE_METHOD(HKVendor, "Init HK SDK", "[HKVendor]")
 {
 
 	time_range range;
-	range.start = 1467302400;
+	range.start = 1467475200;
 	//range.end = 1466524800;
-	range.end = 1467440460;
+	range.end = 1467561600;
 	//range.end = 1478833871;
 	REQUIRE_NOTHROW(Init());
  
- 	REQUIRE_NOTHROW(Login("192.168.0.93", 8000, "admin", "admin1234"));
+ 	REQUIRE_NOTHROW(Login("192.168.0.92", 8000, "admin", "admin123"));
 
- 	REQUIRE_NOTHROW(Search(0, 1, range));
+ 	REQUIRE_NOTHROW(Search(0, 33, range));
  	//REQUIRE_NOTHROW(Search(1, range));
-	// 
- 	//REQUIRE_NOTHROW(Download(0, 1, range));
-	Download(0, 1, "ch01_00000000051000006");
-	// 
+	
+ 	//REQUIRE_NOTHROW(Download(0, 33, range));
+	//REQUIRE_NOTHROW(Download(0, 1,"ch0001_00000000137000400"));
 	//REQUIRE_NOTHROW(PlayVideo(0, 0, "ch0003_00000000008000000"));
  	//REQUIRE_NOTHROW(PlayVideo(0, 35, range));
 	// 	REQUIRE_NOTHROW(Logout());

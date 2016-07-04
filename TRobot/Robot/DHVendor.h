@@ -7,7 +7,6 @@
 //da hua SDK
 #include "dhnetsdk.h"
 
-
 class DHVendor :
 	public AbstractVendor
 {

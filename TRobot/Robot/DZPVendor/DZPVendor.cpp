@@ -290,7 +290,7 @@ void CDZPVendor::SearchUnit(const long loginHandle, const size_t channel, const 
 }
 
 
-#include "catch.hpp"
+//#include "catch.hpp"
 
 //TEST_CASE_METHOD(CDZPVendor, "Init SDK", "[Init]")
 //{

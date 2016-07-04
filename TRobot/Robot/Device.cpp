@@ -110,8 +110,7 @@ void Device::SetDownloadPath(const std::string& root)
 	m_pVendor->SetDownloadPath(root);
 }
 
-void Device::setChannel(const size_t maxChannel, const std::vector<size_t>& channelList)
+void Device::setChannel(const std::vector<size_t>& channelList)
 {
-	m_iMaxChannel = maxChannel;
 	m_vChannelList = channelList;
 }

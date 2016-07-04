@@ -760,7 +760,7 @@ DWORD CJxjVendor::PlayThreadFun(LPVOID lpThreadParameter)
 }
 
 
-#include "catch.hpp"
+//#include "catch.hpp"
 
 //TEST_CASE_METHOD(CJxjVendor, "Init SDK", "[Init]")
 //{
