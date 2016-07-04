@@ -11,29 +11,133 @@
 #include <iostream>
 #include <algorithm>
 #include <map>
+#include <tchar.h>
+#include <Shellapi.h>
+#include <NetCon.h>  
 
 
 
 #pragma comment(lib,"iphlpapi.lib")
 
-
-
-string GetNICUuidByHumanReadableName(const string& HumanReadableName)
+inline bool caseInsCharCompSingle(char a, char b)
 {
-	//if (HumanReadableName.empty()) return "";
+	return toupper(a) == b;
+}
 
-	string UUID;
-	//string LocalAdpterName(HumanReadableName);
+string::const_iterator caseInsFind(string& s, const string& p)
+{
+	string tmp;	 
+	transform(p.begin(), p.end(), back_inserter(tmp), (int(*)(int))toupper);
+	return (search(s.begin(), s.end(), tmp.begin(), tmp.end(), caseInsCharCompSingle));
+}
 
-	/*foreach(QNetworkInterface nif, QNetworkInterface::allInterfaces()){
+void GetLocalNetCar(std::string& Desc, std::string& AdapterName, std::vector<string>& IPList)
+{
+	PIP_ADAPTER_INFO pIpAdapterInfo = new IP_ADAPTER_INFO();
+	unsigned long stSize = sizeof(IP_ADAPTER_INFO);
+	int nRel = GetAdaptersInfo(pIpAdapterInfo, &stSize);
+	int netCardNum = 0;
+	int IPnumPerNetCard = 0;
+	string::const_iterator it;
+	std::string sNetName;
+	PIP_ADAPTER_INFO pstartIpAdapterInfo;
 
-		if (!nif.isValid() || nif.humanReadableName() != LocalAdpterName) 
-			continue;
+	if (ERROR_BUFFER_OVERFLOW == nRel)
+	{
+		delete pIpAdapterInfo;
+		pIpAdapterInfo = (PIP_ADAPTER_INFO)new BYTE[stSize];
+		pstartIpAdapterInfo = pIpAdapterInfo;
+		nRel = GetAdaptersInfo(pIpAdapterInfo, &stSize);
+		if (ERROR_SUCCESS == nRel)
+		{
+			while (pIpAdapterInfo)
+			{
+				switch (pIpAdapterInfo->Type)
+				{
+				case MIB_IF_TYPE_OTHER:
+					break;
+				case MIB_IF_TYPE_ETHERNET:
+					sNetName = std::string(pIpAdapterInfo->Description);
+					it = caseInsFind(sNetName, string("pci"));
+					if (it != sNetName.end())
+					{
+						Desc = sNetName;
+						AdapterName = pIpAdapterInfo->AdapterName;
+						IP_ADDR_STRING *pIpAddrString = &(pIpAdapterInfo->IpAddressList);
+						do
+						{
+							IPList.push_back(std::string(pIpAddrString->IpAddress.String));
+							cout << "IP address:" << pIpAddrString->IpAddress.String << endl;							
+							pIpAddrString = pIpAddrString->Next;
+						} while (pIpAddrString);
+					}					
+					
+					break;
+				case MIB_IF_TYPE_TOKENRING:
+					break;
+				case MIB_IF_TYPE_FDDI:
+					break;
+				case MIB_IF_TYPE_PPP:
+					break;
+				case MIB_IF_TYPE_LOOPBACK:
+					break;
+				case MIB_IF_TYPE_SLIP:
+					break;
+				default:
 
-		UUID = nif.name();
-	}*/
+					break;
+				}			
+			
+				pIpAdapterInfo = pIpAdapterInfo->Next;				
+			}
+		}
+		if (pstartIpAdapterInfo)
+		{
+			delete[]pstartIpAdapterInfo;
+		}
+	}	
+}
 
-	return UUID;
+
+string GetNetCardName(std::string uuid)
+{
+	string CardName;
+	INetConnectionManager *pManager;
+	INetConnection *pConnection;
+	IEnumNetConnection *pEnum;
+	ULONG           celtFetched;
+
+	CoInitialize(NULL);
+	CoCreateInstance(CLSID_ConnectionManager, NULL, CLSCTX_SERVER, IID_INetConnectionManager, (void**)&pManager);
+	pManager->EnumConnections(NCME_DEFAULT, &pEnum);
+	pManager->Release();
+	while (pEnum->Next(1, &pConnection, &celtFetched) == S_OK)
+	{
+		NETCON_PROPERTIES*   properties;
+		pConnection->GetProperties(&properties);
+		char szGuid[100] = { 0 };
+		sprintf_s(szGuid, "{%08lX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX}",
+			properties->guidId.Data1, properties->guidId.Data2, properties->guidId.Data3,
+			properties->guidId.Data4[0], properties->guidId.Data4[1], properties->guidId.Data4[2], properties->guidId.Data4[3],
+			properties->guidId.Data4[4], properties->guidId.Data4[5], properties->guidId.Data4[6], properties->guidId.Data4[7]);
+		string sGuid(szGuid);		
+		if (sGuid.compare(uuid) == 0)
+		{
+			DWORD dwNum = WideCharToMultiByte(CP_OEMCP, NULL, properties->pszwName, -1, NULL, 0, NULL, FALSE);
+			char *psText;
+			psText = new char[dwNum];
+			if (!psText)
+			{
+				delete[]psText;
+			}
+			WideCharToMultiByte(CP_OEMCP, NULL, properties->pszwName, -1, psText, dwNum, NULL, FALSE);
+			CardName = string(psText);
+			delete[]psText;
+		}		
+	}
+	CoUninitialize();
+	
+	return CardName;
 }
 
 string ConvertNICUUIDtoPcapName(pcap_if_t* devs, const string& uuid)
@@ -57,9 +161,9 @@ WindowUtils::WindowUtils()
 
 bool WindowUtils::isValidNetMacaddress(const string& macaddress)
 {
-    /*return !macaddress.empty() && macaddress != "00:00:00:00:00:00:00:E0"
-            && !macaddress.startsWith("00:50:56:C0");*/
-	return true;
+
+	return !macaddress.empty() && (macaddress.find("00:00:00:00:00:00:00:E0") == string::npos)
+            && (macaddress.find("00:50:56:C0") == string::npos);
 }
 
 void WindowUtils::GetIPfromLocalNIC(std::vector<string> &IPs)
@@ -72,27 +176,9 @@ void WindowUtils::GetIPfromLocalNIC(std::vector<string> &IPs)
 void WindowUtils::getLocalIPs(std::vector<string> &IPs)
 {
     IPs.clear();
-    /*List<QNetworkInterface> list = QNetworkInterface::allInterfaces();
-    foreach(QNetworkInterface i, list) {
-        if (i.isValid() && isValidNetMacaddress(i.hardwareAddress()) &&
-            i.humanReadableName() == WindowUtils::getLoacalNetName())
-        {
-            cout << i.humanReadableName();
-            foreach(QHostAddress address,i.allAddresses())
-            {
-                if (address.protocol() == QAbstractSocket::IPv4Protocol
-                        && !address.isLoopback())
-                {
-                    if (IPs.end() == std::find(IPs.begin(), IPs.end(), address.toString()))
-                    {
-                        IPs.push_back(address.toString());
-                        cout << address.toString();
-                    }
-                }
-            }
-        }
-
-    }*/
+	string sDesc;
+	string uuid;
+	GetLocalNetCar(sDesc, uuid, IPs);
 }
 
 void WindowUtils::getLocalIPs(const string& sHostName, std::vector<string> &IPs){
@@ -119,91 +205,6 @@ void WindowUtils::getLocalIPs(const string& sHostName, std::vector<string> &IPs)
         }
 
     }*/
-}
-
-BOOL FindProcessByName(const char* szFileName, PROCESSENTRY32& pe)
-{
-    // 采用进程快照枚举进程的方法查找指定名称进程
-    HANDLE hProcesses;
-    PROCESSENTRY32 lpe =
-    {
-        sizeof(PROCESSENTRY32)
-    };
-
-    string sFileName(szFileName);
-	std::transform(sFileName.begin(), sFileName.end(), sFileName.begin(), ::tolower);
-
-    // 创建进程快照
-    hProcesses = ::CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    if (hProcesses == INVALID_HANDLE_VALUE)
-        return FALSE;
-    // 获取第一个进程实例
-    BOOL isExist = ::Process32First(hProcesses, &lpe);
-    BOOL isRunning = FALSE;
-    string strName;
-    //while (isExist)
-    //{
-    //    strName = string::fromWCharArray(lpe.szExeFile).toLower();
-    //    if (sFileName.indexOf(strName) >= 0)
-    //    {
-    //        isRunning = TRUE;
-    //        break;
-    //    }
-    //    // 遍历下一个进程实例
-    //    isExist = ::Process32Next(hProcesses, &lpe);
-    //}
-
-    if (isRunning)
-    {
-        memcpy(&pe, &lpe, sizeof(PROCESSENTRY32));
-    }
-
-    CloseHandle(hProcesses);
-
-    return isRunning;
-}
-
-bool WindowUtils::findProcessByName(const char* szFileName){
-    PROCESSENTRY32 pe;
-    return FindProcessByName(szFileName, pe);
-}
-
-void WindowUtils::terminateProcess(const char* szFileName){
-    HANDLE hProcesses;
-    PROCESSENTRY32 lpe =
-    {
-        sizeof(PROCESSENTRY32)
-    };
-
-    string sFileName(szFileName);
-	std::transform(sFileName.begin(), sFileName.end(), sFileName.begin(), ::tolower);
-
-    // 创建进程快照
-    hProcesses = ::CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    if (hProcesses == INVALID_HANDLE_VALUE)
-    {
-        cout << "INVALID_HANDLE_VALUE";
-        return;
-    }
-       
-    // 获取第一个进程实例
-    BOOL isExist = ::Process32First(hProcesses, &lpe);
-    BOOL isRunning = FALSE;    
-    while (isExist)
-    {
-		wstring wsName(lpe.szExeFile);
-		string strName(wsName.begin(), wsName.end());
-		std::transform(sFileName.begin(), sFileName.end(), sFileName.begin(), ::tolower);
-        //if (strName.indexOf(sFileName) >= 0)
-        //{
-        //    HANDLE h = OpenProcess(1, TRUE, lpe.th32ProcessID);   //取进程实例 PROCESS_TERMINATE
-        //    TerminateProcess(h, 0);
-        //}
-        // 遍历下一个进程实例
-        isExist = ::Process32Next(hProcesses, &lpe);
-    }
-
-    CloseHandle(hProcesses);
 }
 
 
@@ -236,10 +237,11 @@ bool WindowUtils::setNetConfig(const string& sName, const string& sIP, const str
     return maxPingTime > 0;
 }
 
-bool WindowUtils::setNetDhcp(const string& sName){
-   /* string name = string("name=\"%1\"").arg(sName);
-    QProcess::execute("netsh", stringList() << "interface" << "ip" << "set" << "address" << name << "source=dhcp");*/
-    
+bool WindowUtils::setNetDhcp(const string& sName){  
+	string sCmd("interface ip set address name=\"");
+	sCmd += sName;
+	sCmd.append("\" source=dhcp");
+	::ShellExecuteA(NULL, (LPCSTR)"open", (LPCSTR)"netsh.exe", (LPCSTR)sCmd.c_str(), NULL, SW_SHOWNORMAL);	
     return true;
 }
 
@@ -453,8 +455,10 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
         return false;
     }
 
-    cout << alldevs->description << alldevs->name;
-	string uuid = GetNICUuidByHumanReadableName(WindowUtils::getLoacalNetName());
+    cout << alldevs->description << alldevs->name;	
+	
+	string uuid = WindowUtils::getLocalUuid();
+	
 	string pcap_name = ConvertNICUUIDtoPcapName(alldevs, uuid);
 
 	if ((adhandle = pcap_open_live(pcap_name.data(), 65536, 1, 1000, errbuf)) == NULL)
@@ -644,7 +648,7 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
 	return true;
 }
 bool WindowUtils::setIPByDHCP(string& ip, string& mask, string& netGate){
-    string sName = WindowUtils::getLoacalNetName();
+	string sName = GetNetCardName(WindowUtils::getLocalUuid());
     cout<<__FILE__<<__FUNCTION__<<__LINE__<<sName;
     WindowUtils::setNetDhcp(sName);
     std::vector<string> ips;
@@ -698,46 +702,30 @@ bool WindowUtils::setIPByDHCP(string& ip, string& mask, string& netGate){
 
     return r;
 }
-const string& WindowUtils::getLoacalNetName(){
-    static string localNetName;
-    if (localNetName.empty())
-    {
-       /* QList<QNetworkInterface> list = QNetworkInterface::allInterfaces();
-        foreach(QNetworkInterface i, list) {
-            if (i.isValid() && isValidNetMacaddress(i.hardwareAddress()))
-            {
-                cout << i.name() << i.humanReadableName();
-                if (i.humanReadableName().contains(string::fromLocal8Bit("本地连接")))
-                {
-                    localNetName = i.humanReadableName();
-                    break;
-                }
-            }
 
-        }*/
-    }
 
-    return localNetName;
+
+const string& WindowUtils::getLoacalNetName()
+{
+	static string localNetName;
+	if (localNetName.empty())
+	{
+		string sUuid;
+		vector<string> IpList;
+		GetLocalNetCar(localNetName, sUuid, IpList);
+	}
+
+	return localNetName;
 }
+
 bool WindowUtils::isOnLine(){
     
-    string localNetName(WindowUtils::getLoacalNetName());
+    string localNetName = WindowUtils::getLoacalNetName();
     
     if (localNetName.empty())
     {
         return false;
-    }
-
-    string name;
-   /* List<QNetworkInterface> list = QNetworkInterface::allInterfaces();
-    foreach(QNetworkInterface i, list) {
-        if (i.humanReadableName() == localNetName)
-        {
-            name = i.name();
-            break;
-        }
-
-    }*/
+    }  
 
     DWORD dwSize = sizeof (MIB_IFTABLE);
     DWORD dwRetVal = 0;
@@ -761,14 +749,13 @@ bool WindowUtils::isOnLine(){
             for (i = 0; i < pTable->dwNumEntries; i++) {
                 IfRow.dwIndex = pTable->table[i].dwIndex;
                 if ((dwRetVal = GetIfEntry(&IfRow)) == NO_ERROR) {
-                   // cout << __FILE__ << __FUNCTION__ << __LINE__ << string::fromStdWString(std::wstring(IfRow.wszName));
-
-                    
-                    if (IfRow.dwType != MIB_IF_TYPE_ETHERNET /*|| !string::(std::wstring(IfRow.wszName)).contains(name)*/)
+					
+					std::string sName((char *)IfRow.bDescr);
+					if (IfRow.dwType != MIB_IF_TYPE_ETHERNET || sName.compare(localNetName) != 0)
                     {
                         continue;
                     }
-                    //cout << __FILE__ << __FUNCTION__ << __LINE__ << string::fromLocal8Bit((char*)IfRow.bDescr) << IfRow.dwType;
+                    
                     switch (IfRow.dwOperStatus) {
                     case IF_OPER_STATUS_NON_OPERATIONAL:
                         cout << __FILE__ << __FUNCTION__ << __LINE__ << "Non Operational";
@@ -810,4 +797,16 @@ bool WindowUtils::isOnLine(){
     }
     delete pIfTable;
     return r;
+}
+
+const string& WindowUtils::getLocalUuid()
+{
+	static string uuid;
+	if (uuid.empty())
+	{
+		string sNetName;
+		vector<string> IpList;
+		GetLocalNetCar(sNetName, uuid, IpList);
+	}
+	return uuid;
 }
