@@ -8,15 +8,16 @@
 #include <vector>
 #include <fstream>
 #include <tchar.h>
+#include <map>
+#include <assert.h> 
+#include <ctime>
 #include "io.h"
 #include "direct.h"
 
-// Jxj SDK
-#include "inc\mb_api.h"
-#include "inc\JNetSDK.h"
-#include "inc\stdint.h"
-#include "inc\Jtype.h"
-#include "inc\AVPlayer.h"
+// Self
+#include "AbstractVendor.h"
+#include "QMSqlite.h"
+#include "TestWindows.h"
 
 // Json
 #include "document.h"
@@ -25,9 +26,7 @@
 #include "ostreamwrapper.h"
 #include "istreamwrapper.h"
 
-#include "AbstractVendor.h"
-#include "TestWindows.h"
-#include "QMSqlite.h"
+using namespace rapidjson;
 
 #define Test_Bug
 #define Test_Filename
@@ -35,6 +34,10 @@
 #define Vendor_JXJ	"º—–≈Ω›"
 #define Vendor_DZP	"µœ÷«∆’"
 
+#define MAX_SEARCH_COUNT 1000
+#define ONE_DAY		 (24 * 60 * 60)
+#define ONE_HOUR	 (60 * 60)
+#define ONE_MINUTE	 (60)
 
 typedef enum
 {
@@ -44,16 +47,16 @@ typedef enum
 	Err_DownloadSuccess, // Download Success
 }eErrCode;
 
-struct Record
+struct RecordFile
 {
-	Record()
+	RecordFile()
 	{
 		channel = 0;
 		size = 0;
 		pPrivateData = nullptr;
 		PrivateDataDataSize = 0;
 	}
-	~Record()
+	~RecordFile()
 	{
 		if (nullptr != pPrivateData)
 		{
@@ -62,7 +65,7 @@ struct Record
 			PrivateDataDataSize = 0;
 		}
 	}
-	Record(const Record& other)
+	RecordFile(const RecordFile& other)
 	{
 		channel = other.channel;
 		size = other.size;
@@ -77,7 +80,7 @@ struct Record
 		setPrivateData(other.pPrivateData, other.PrivateDataDataSize);
 	}
 
-	Record& operator= (const Record& other)
+	RecordFile& operator= (const RecordFile& other)
 	{
 		if (&other == this)
 		{
@@ -129,7 +132,6 @@ struct Record
 	int channel;
 	int size;
 	std::string name;
-	//std::string alias;
 	std::string strTimeSection;
 	std::time_t beginTime;
 	std::time_t endTime;
@@ -137,6 +139,8 @@ struct Record
 	char* pPrivateData;   //Private Data
 	__int32 PrivateDataDataSize;//Private Data Size
 };
+
+#include "j_sdk.h"
 
 class CCommonUtrl
 {
@@ -157,8 +161,8 @@ public:
 	std::string MakeStrTimeByTimestamp(time_t time);
 	
 	// Json File Handle
-	void SaveSearchFileListToFile(const std::vector<Record>& files);
-	std::vector<Record> LoadSearchFileListFromFile();
+	void SaveSearchFileListToFile(const std::vector<RecordFile>& files, const std::string& VenderName);
+	std::vector<RecordFile> LoadSearchFileListFromFile();
 
 };
 

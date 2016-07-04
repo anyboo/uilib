@@ -1,14 +1,9 @@
-#include <Windows.h>
-#include "DZPVendor.h"
 
-#include "netsdk.h"
-#include "H264Play.h"
+#include "DZPVendor.h"
 
 #pragma comment(lib, "DZPVendor\\sdk\\NetSdk")
 #pragma comment(lib, "DZPVendor\\sdk\\H264Play")
 
-//#define Test_Bug
-#define Test_Filename
 
 std::string GZLL_GetLastErrorString(int error)
 {
@@ -140,8 +135,9 @@ long CDZPVendor::Login(const std::string& ip, size_t port, const std::string& us
 	{
 		m_sLastError = GZLL_GetLastErrorString(nError);
 		throw std::exception(m_sLastError.c_str());
-		return loginHandle;
 	}
+
+	m_iMaxChannel = OutDev.byChanNum + OutDev.iDigChannel;
 
 	return loginHandle;
 }
@@ -160,7 +156,7 @@ void CDZPVendor::StartSearchDevice()
 	SDK_CONFIG_NET_COMMON_V2 Device[256] = { 0 };
 	int nRetLength = 0;
 
-	BOOL bRet = H264_DVR_SearchDevice((char*)Device, sizeof(SDK_CONFIG_NET_COMMON_V2) * 256, &nRetLength, 3000);
+	BOOL bRet = H264_DVR_SearchDevice((char*)Device, sizeof(SDK_CONFIG_NET_COMMON_V2)* 256, &nRetLength, 3000);
 	if (bRet)
 	{
 		int i;
@@ -196,11 +192,6 @@ void CDZPVendor::StopSearchDevice()
 {
 }
 
-size_t CDZPVendor::GetMaxChannel()
-{
-	return 0;
-}
-
 void CDZPVendor::SearchAll(const long loginHandle)
 {
 
@@ -220,6 +211,12 @@ void CDZPVendor::Search(const long loginHandle, const size_t channel, const time
 	{
 		SearchUnit(loginHandle, channel, timeRangeList[i]);
 	}
+
+	// Save Search Video List Result to Config File
+	CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files, Vendor_DZP);
+
+	// Write File List to DB
+	WriteFileListToDB();
 
 	return;
 }
@@ -273,7 +270,7 @@ void CDZPVendor::Download(const long loginHandle, const size_t channel, const st
 		return;
 	}
 
-	Record file;
+	RecordFile file;
 	size_t i = 0;
 	for (; i < m_files.size(); i++)
 	{
@@ -356,7 +353,7 @@ void CDZPVendor::PlayVideo(const long loginHandle, const size_t channel, const s
 		return;
 	}
 
-	Record file;
+	RecordFile file;
 	size_t i = 0;
 	for (; i < m_files.size(); i++)
 	{
@@ -449,7 +446,7 @@ void CDZPVendor::SearchUnit(const long loginHandle, const size_t channel, const 
 			{
 				if (nriFileinfo[i].size>0)//视频文件必须大于0(测试中有发现文件大小为0情况,所以必须过滤掉改部分)
 				{
-					Record record;
+					RecordFile record;
 
 					struct tm Tm;
 					NetTimeToTM(nriFileinfo[i].stBeginTime, Tm);
@@ -457,7 +454,7 @@ void CDZPVendor::SearchUnit(const long loginHandle, const size_t channel, const 
 
 					NetTimeToTM(nriFileinfo[i].stEndTime, Tm);
 					record.endTime = _mktime64(&Tm);
- 
+
 					// File Start Time
 					SDK_SYSTEM_TIME h264_time = nriFileinfo[i].stBeginTime;
 					std::string strStartTime;
@@ -483,12 +480,45 @@ void CDZPVendor::SearchUnit(const long loginHandle, const size_t channel, const 
 
 					record.size = nriFileinfo[i].size * 1024;
 					record.setPrivateData(&nriFileinfo[i], sizeof(H264_DVR_FILE_DATA));
-			
+
 					m_files.push_back(record);
 					record.deletePrivateData();
 				}
 			}
 		}
+	}
+}
+
+void CDZPVendor::WriteFileListToDB()
+{
+	//获取指针
+	QMSqlite *pDb = QMSqlite::getInstance();
+	////删除表
+	//pDb->dropTable(DROP_SEARCH_VIDEO_TABLE);
+	////创建记录表
+	//pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
+	//一次插入所有数据
+	std::vector<writeSearchVideo> RecordList;
+	for (size_t i = 0; i < m_files.size(); i++)
+	{
+		writeSearchVideo sr;
+		RecordFile record = m_files[i];
+		//文件名称
+		sr.set<0>(record.name);
+		//通道号
+		sr.set<1>(record.channel);
+		//开始时间
+		sr.set<2>(record.beginTime);
+		//结束时间
+		sr.set<3>(record.endTime);
+		sr.set<4>(record.size);
+		RecordList.push_back(sr);
+	}
+
+	if (RecordList.size() > 0)
+	{
+		string sql(INSERT_SEARCH_VIDEO);
+		pDb->writeDataByVector(sql, RecordList);
 	}
 }
 
@@ -512,7 +542,7 @@ int CDZPVendor::getDownloadPos(const long loginHandle)
 	return pos;
 }
 
-#include "catch.hpp"
+//#include "catch.hpp"
 
 //TEST_CASE_METHOD(CDZPVendor, "Init SDK", "[Init]")
 //{

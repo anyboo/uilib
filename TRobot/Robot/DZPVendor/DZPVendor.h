@@ -1,7 +1,11 @@
 #pragma once
 
-#include "AbstractVendor.h"
 #include "CommonUtrl.h"
+
+
+// JXJ DZP
+#include "netsdk.h"
+#include "H264Play.h"
 
 #define CALL_METHOC  __cdecl
 
@@ -19,7 +23,7 @@ public:
 	void StartSearchDevice();
 	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_listDeviceInfo; }
 	void StopSearchDevice();
-	size_t GetMaxChannel();
+	size_t GetMaxChannel(){ return m_iMaxChannel; }
 
 	void SearchAll(const long loginHandle);
 	void Search(const long loginHandle, const size_t channel, const time_range& range);
@@ -34,6 +38,7 @@ public:
 protected:
 	std::string MakeFileName(int channel, const std::string& startTime);
 	void SearchUnit(const long loginHandle, const size_t channel, const time_range& range);
+	void WriteFileListToDB();
 	static void __stdcall DownLoadPosCallBack(long lPlayHandle, long lTotalSize, long lDownLoadSize, long dwUser);
 	static int __stdcall RealDataCallBack(long lRealHandle, long dwDataType, unsigned char *pBuffer, long lbufsize, long dwUser);
 	int getDownloadPos(const long loginHandle);
@@ -44,13 +49,14 @@ private:
 	std::string m_sRoot;
 
 	/* Login */
+	size_t m_iMaxChannel;
+
 	/* Search Device */
 	long m_lSearchDeviceHandle;
 	DEVICE_INFO_LIST m_listDeviceInfo;
 
 	/* Search */
-	std::vector<Record> m_files;
+	std::vector<RecordFile> m_files;
 
 	void* handle;
 };
-

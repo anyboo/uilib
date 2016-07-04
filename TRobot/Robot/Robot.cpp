@@ -3,12 +3,18 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
-#include "jxjVendor.h"
-#include "DZPVendor.h"
 #include "device.h"
 #include "DeviceManager.h"
 #include "SearchDevice.h"
 #include "LoginDevice.h"
+
+#include "jxjVendor.h"
+#include "DZPVendor.h"
+//#include "DHVendor.h"
+
+#pragma comment(lib, "JXJVendor")
+#pragma comment(lib, "DZPVendor")
+
 
 TEST_CASE("This is a demo", "[demo]")
 {
@@ -48,8 +54,10 @@ TEST_CASE("This is a demo", "[demo]")
 		std::vector<AbstractVendor*> pVendorList;
 		CJxjVendor jxjVendor;
 		CDZPVendor dzpVendor;
+		//DH::DHVendor dhVendor;
 		pVendorList.push_back(&jxjVendor);
 		pVendorList.push_back(&dzpVendor);
+		//pVendorList.push_back(&dhVendor);
 
 		CSearchDevice searchDev;
 		searchDev.Search(pVendorList);
@@ -57,9 +65,9 @@ TEST_CASE("This is a demo", "[demo]")
 
 		if (devInfoList.size() > 0)
 		{
-			NET_DEVICE_INFO* devInfo = devInfoList[1];
+			NET_DEVICE_INFO* devInfo = devInfoList[2];
 			CLoginDevice loginDev;
-			loginDev.Login(devInfo->szIp, devInfo->nPort, "admin", "admin", devInfo->pVendor);
+			loginDev.Login(devInfo->szIp, devInfo->nPort, "admin", "", devInfo->pVendor);
 
 			time_range timeRangeSearch;
 			time_range timeRangeFile;

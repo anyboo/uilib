@@ -1,10 +1,9 @@
 #pragma once
 
-#include "AbstractVendor.h"
-#include "DH_Head.h"
+#include "CommonUtrl.h"
 
-#include <string>
-#include <vector>
+//DH SDK
+#include "dhnetsdk.h"
 
 class DHVendor :
 	public AbstractVendor
@@ -13,17 +12,25 @@ public:
 	DHVendor();
 	~DHVendor();
 
-	void Init(const std::string& ip, size_t port);
-	void Login(const std::string& user, const std::string& password);
-	void Logout();
-	void SearchAll();
-	void Search(const size_t channel, const time_range& range);
-	void Download(const size_t channel, const time_range& range);
-	void Download(const size_t channel, const std::string& filename);
-	void PlayVideo(const size_t channel, const time_range& range);
-	void PlayVideo(const size_t channel, const std::string& filename);
+	void Init();
+	long Login(const std::string& ip, size_t port, const std::string& user, const std::string& password);
+	void Logout(const long loginHandle);
+
+	void StartSearchDevice();
+	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_listDeviceInfo; }
+	void StopSearchDevice();
+	size_t GetMaxChannel(){ return m_DHChannels; }
+
+	void SearchAll(const long loginHandle);
+	void Search(const long loginHandle, const size_t channel, const time_range& range);
+	void Download(const long loginHandle, const size_t channel, const time_range& range);
+	void PlayVideo(const long loginHandle, const size_t channel, const time_range& range);
+	void Download(const long loginHandle, const size_t channel, const std::string& filename);
+	void PlayVideo(const long loginHandle, const size_t channel, const std::string& filename);
+
 	void SetDownloadPath(const std::string& Root);
 	void throwException();
+
 
 
 private:
@@ -43,6 +50,8 @@ private:
 	std::vector<time_range> MakeTimeRangeList(const time_range& range);
 	void trTOnt(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_range range);
 	void CreatePath(const size_t channel);
+	void WriteFileListToDB();
+
 
 protected:
 	HMODULE m_hMod;
@@ -54,6 +63,8 @@ protected:
 	std::string m_strPasswords;
 	std::string m_strIP;
 
+	/* Search Device */
+	DEVICE_INFO_LIST m_listDeviceInfo;
 
 	NET_DEVICEINFO m_deviceInfo;
 	LLONG m_lLoginHandle;
@@ -63,4 +74,3 @@ protected:
 
 	std::vector<RecordFile> m_files;
 };
-

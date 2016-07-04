@@ -1,31 +1,17 @@
+
 #include "DHVendor.h"
 
-#include <ctime>
-#include <fstream>
-#include "TestWindows.h"
+#pragma comment(lib, "dhnetsdk")
 
-#include "document.h"
-#include "prettywriter.h"
-#include "stringbuffer.h"
-#include "ostreamwrapper.h"
-#include "istreamwrapper.h"
 
-#define ONE_DAY (60*60*24)
-#define ONE_HOUR (60*60)
-#define ONE_MINUTE (60)
-#define MAX_SEARCH_COUNT 256
-
-#pragma comment(lib, "lib\\dhnetsdk")
-
-using namespace rapidjson;
-
-DHVendor::DHVendor():
+DHVendor::DHVendor() :
 m_strName("大华"),
 m_dwPort(0),
 m_strUser(""),
 m_strPasswords(""),
 m_strIP(""),
 m_lLoginHandle(0),
+m_hMod(NULL),
 m_strPath(""),
 m_DHChannels(0)
 {
@@ -41,42 +27,40 @@ DHVendor::~DHVendor()
 	}
 }
 
-void DHVendor::Init(const std::string& ip, size_t port)
+void DHVendor::Init()
 {
 	BOOL bInit = CLIENT_Init(0, 0);
-	
-	m_strIP = ip;
-	m_dwPort = port;
-	std::cout << "m_dwPort:" << m_dwPort << std::endl;
-	std::cout << "m_strIP:" << m_strIP << std::endl;
+
 	if (!bInit)
 	{
 		std::cout << "初始化错误：" << CLIENT_GetLastError() << std::endl;
 		throw std::exception("Init failed");
-
 	}
 	else
 	{
-		std::cout << "初始化SDK成功！" << std::endl;
+		cout << "初始化SDK成功！" << endl;
 	}
 }
 
-void DHVendor::Login(const std::string& user, const std::string& password)
+long DHVendor::Login(const std::string& ip, size_t port, const std::string& user, const std::string& password)
 {
 	int nError = 0;
+	m_strIP = ip;
+	m_dwPort = port;
 	m_strUser = user;
 	m_strPasswords = password;
-	m_lLoginHandle = CLIENT_Login((char *)m_strIP.c_str(), m_dwPort, (char *)(m_strUser.c_str()), (char *)(m_strPasswords.c_str()), &m_deviceInfo, &nError);
+	long lLoginHandle = CLIENT_Login((char *)m_strIP.c_str(), m_dwPort, (char *)(m_strUser.c_str()), (char *)(m_strPasswords.c_str()), &m_deviceInfo, &nError);
+	m_lLoginHandle = lLoginHandle;
 
 	if (0 != nError)
 	{
-		std::cout << "登录错误(nError)：" << GetLastErrorString() << std::endl;
+		cout << "登录错误(nError)：" << GetLastErrorString().c_str() << endl;
 		throw std::exception("Login failed");
 	}
 
 	if (0 == m_lLoginHandle)
 	{
-		std::cout << "登录错误(lLogin)：" << GetLastErrorString() << std::endl;
+		cout << "登录错误(lLogin)：" << GetLastErrorString().c_str() << endl;
 	}
 
 	if (m_lLoginHandle > 0)
@@ -94,24 +78,46 @@ void DHVendor::Login(const std::string& user, const std::string& password)
 		}
 		else
 		{
-			std::cout << "Get channel failed" << GetLastErrorString() << std::endl;
+			cout << "Get channel failed" << GetLastErrorString() << endl;
 			throw std::exception("Get channel failed");
-			return;
+			return 0;
 		}
 	}
+
+
+	return lLoginHandle;
+	// 	for (int i = 1; i <= m_DHChannels; i++)
+	// 	{
+	// 		char szName[20];
+	// 		ZeroMemory(szName, sizeof(szName));
+	// 		cout << szName << "通道" << i << endl;
+	// 		string strName = szName;
+	// 		m_channels.insert(std::make_pair(i, strName));
+	// 		m_channelVec.push_back(i);
+	// 	}
 }
 
-void DHVendor::Logout()
+void DHVendor::Logout(const long loginHandle)
 {
 	if (m_lLoginHandle > 0 && !CLIENT_Logout(m_lLoginHandle))
 	{
-		std::cout << "退出错误：" << GetLastErrorString() << std::endl;
+		std::cout << "退出错误：" << GetLastErrorString().c_str() << std::endl;
 		throw std::exception("Logout failed");
 		return;
 	}
 }
 
-void DHVendor::SearchAll()
+void DHVendor::StartSearchDevice()
+{
+
+}
+
+void DHVendor::StopSearchDevice()
+{
+
+}
+
+void DHVendor::SearchAll(const long loginHandle)
 {
 
 }
@@ -136,19 +142,21 @@ void DHVendor::timeStdToDH(tm *pTimeStd, NET_TIME *pTimeDH)
 	pTimeDH->dwSecond = pTimeStd->tm_sec;
 }
 
-void DHVendor::Search(const size_t channel, const time_range& range)
+void DHVendor::Search(const long loginHandle, const size_t channel, const time_range& range)
 {
 	if (0 >= m_lLoginHandle)
 	{
-		std::cout << "请先登录!" << std::endl;
+		cout << "请先登录!" << endl;
 		return;
 	}
 
 	if (range.start >= range.end)
 	{
-		std::cout << "时间范围不对!" << std::endl;
+		cout << "时间范围不对!" << endl;
 		return;
 	}
+
+	//m_files.clear();
 
 	std::vector<time_range> trInfor = MakeTimeRangeList(range);
 
@@ -200,19 +208,23 @@ void DHVendor::Search(const size_t channel, const time_range& range)
 			info.channel = item.ch;
 			info.size = item.size * 1024;
 			info.name = szTime;
+
 			info.beginTime = mktime(&sTm);
 			info.endTime = mktime(&eTm);
 			info.setPrivateData(&ifileinfo[i], sizeof(NET_RECORDFILE_INFO));
 			m_files.push_back(info);
 
+			//cout << "GetRecordFileList 文件名:" << info.name <<endl<< "  " << "文件大小:" << info.size << "  " << "通道:" << info.channel << endl;
 		}
 	}
 
+	//保存到JSON文件
 	SaveSearchFileListToFile();
-	std::cout << "totals:" << m_files.size() << std::endl;
+	//写入到数据库中
+	WriteFileListToDB();
 }
 
-void DHVendor::Download(const size_t channel, const time_range& range)
+void DHVendor::Download(const long loginHandle, const size_t channel, const time_range& range)
 {
 	if (0 >= m_lLoginHandle)
 	{
@@ -247,7 +259,7 @@ void DHVendor::Download(const size_t channel, const time_range& range)
 	}
 }
 
-void DHVendor::PlayVideo(const size_t channel, const time_range& range)
+void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const time_range& range)
 {
 	if (0 >= m_lLoginHandle)
 	{
@@ -275,7 +287,7 @@ void DHVendor::PlayVideo(const size_t channel, const time_range& range)
 	}
 }
 
-void DHVendor::Download(const size_t channel, const std::string& filename)
+void DHVendor::Download(const long loginHandle, const size_t channel, const std::string& filename)
 {
 	if (0 >= m_lLoginHandle)
 	{
@@ -293,7 +305,7 @@ void DHVendor::Download(const size_t channel, const std::string& filename)
 	strcat_s(szTime, (char *)filename.c_str());
 	strcat_s(szTime, szBuf);
 
-	std::cout << szTime << std::endl;
+	cout << szTime << endl;
 
 	std::vector<RecordFile>::iterator it;
 	int nSize = 0;
@@ -323,11 +335,11 @@ void DHVendor::Download(const size_t channel, const std::string& filename)
 	}
 }
 
-void DHVendor::PlayVideo(const size_t channel, const std::string& filename)
+void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const std::string& filename)
 {
 	if (0 >= m_lLoginHandle)
 	{
-		std::cout << "PlayVideo 在线播放失败原因：" << GetLastErrorString() << std::endl;
+		cout << "PlayVideo 在线播放失败原因：" << GetLastErrorString() << endl;
 		return;
 	}
 
@@ -360,7 +372,7 @@ void DHVendor::PlayVideo(const size_t channel, const std::string& filename)
 	}
 
 
-	
+
 }
 
 void DHVendor::SetDownloadPath(const std::string& Root)
@@ -375,7 +387,7 @@ void DHVendor::throwException()
 
 void DHVendor::BTDownLoadPos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, int index, NET_RECORDFILE_INFO recordfileinfo, LDWORD dwUser)
 {
-	
+
 }
 
 void  DHVendor::BTDownLoadFile(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser)
@@ -401,6 +413,37 @@ int DHVendor::PBDataCallBack(LLONG lRealHandle, DWORD dwDataType, BYTE *pBuffer,
 	return 1;
 }
 
+void DHVendor::WriteFileListToDB()
+{
+	//获取指针
+	QMSqlite *pDb = QMSqlite::getInstance();
+	//删除表
+	//pDb->dropTable(DROP_SEARCH_VIDEO_TABLE);
+	//创建记录表
+	pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
+	//一次插入所有数据
+	std::vector<writeSearchVideo> RecordList;
+	for (size_t i = 0; i < m_files.size(); i++)
+	{
+		writeSearchVideo sr;
+		RecordFile record = m_files[i];
+		//文件名称
+		sr.set<0>(record.name);
+		//通道号
+		sr.set<1>(record.channel);
+		//开始时间
+		sr.set<2>(record.beginTime);
+		//结束时间
+		sr.set<3>(record.endTime);
+		sr.set<4>(record.size);
+		RecordList.push_back(sr);
+	}
+
+	std::string sql(INSERT_SEARCH_VIDEO);
+	pDb->writeDataByVector(sql, RecordList);
+}
+
+
 void DHVendor::CreatePath(const size_t channel)
 {
 	std::string strPath = "D:\\DownLoadVideo\\";
@@ -408,7 +451,7 @@ void DHVendor::CreatePath(const size_t channel)
 	BOOL bOne = CreateDirectoryA(strPath.c_str(), NULL);
 	if (!bOne)
 	{
-		std::cout << "Error!" << std::endl;
+		std::cout << "Error or exit!" << std::endl;
 		return;
 	}
 
@@ -416,7 +459,7 @@ void DHVendor::CreatePath(const size_t channel)
 	BOOL bTwo = CreateDirectoryA(strPath.c_str(), NULL);
 	if (!bTwo)
 	{
-		std::cout << "Error!" << std::endl;
+		std::cout << "Error or exit!!" << std::endl;
 		return;
 	}
 	char szChannel[10];
@@ -549,9 +592,9 @@ std::vector<time_range> DHVendor::MakeTimeRangeList(const time_range& range)
 void DHVendor::SaveSearchFileListToFile()
 {
 	Document document;
-	std::string configfile = "SearchFileList.config";
+	string configfile = "SearchFileList.config";
 	document.Parse(configfile.c_str());
-	std::ofstream ofs(configfile);
+	ofstream ofs(configfile);
 	OStreamWrapper osw(ofs);
 	Document::AllocatorType& alloc = document.GetAllocator();
 
@@ -559,7 +602,7 @@ void DHVendor::SaveSearchFileListToFile()
 
 	for (size_t i = 0; i < m_files.size(); i++)
 	{
-		std::string fileKey = "videoFile";
+		string fileKey = "videoFile";
 		Value key(fileKey.c_str(), fileKey.length(), alloc);
 
 		RecordFile file = m_files[i];
@@ -580,8 +623,8 @@ void DHVendor::SaveSearchFileListToFile()
 
 void DHVendor::LoadSearchFileListFromFile()
 {
-	std::string configfile = "SearchFileList.config";
-	std::ifstream ifs(configfile);
+	string configfile = "SearchFileList.config";
+	ifstream ifs(configfile);
 	IStreamWrapper isw(ifs);
 	Document d;
 	d.ParseStream(isw);
@@ -594,18 +637,18 @@ void DHVendor::LoadSearchFileListFromFile()
 	typedef Value::ConstMemberIterator Iter;
 	for (Iter it = d.MemberBegin(); it != d.MemberEnd(); ++it)
 	{
-		std::string keyName = it->name.GetString();
+		string keyName = it->name.GetString();
 		const Value& a = d[keyName.c_str()];
 
 		assert(a.IsArray());
 		if (!a.IsArray() || a.Size() < 5)
 			continue;
 
-		std::string fileName = a[0].GetString();
-		std::string channel = a[1].GetString();
-		std::string beginTime = a[2].GetString();
-		std::string endTime = a[3].GetString();
-		std::string size = a[4].GetString();
+		string fileName = a[0].GetString();
+		string channel = a[1].GetString();
+		string beginTime = a[2].GetString();
+		string endTime = a[3].GetString();
+		string size = a[4].GetString();
 	}
 }
 
@@ -617,7 +660,7 @@ std::string DHVendor::MakeStrTimeByTimestamp(time_t time)
 	localtime_s(&ttime, &time);
 	strftime(cTime, 50, "%Y%m%d%H%M%S", &ttime);
 
-	std::string strTime(cTime);
+	string strTime(cTime);
 
 	return strTime;
 }
@@ -627,7 +670,7 @@ std::string DHVendor::MakeStrByInteger(int data)
 
 	sprintf_s(cData, 50, "%d", data);
 
-	std::string strTime(cData);
+	string strTime(cData);
 
 	return strTime;
 }
@@ -865,21 +908,27 @@ std::string DHVendor::GetLastErrorString()
 }
 
 //#include "catch.hpp"
-//
-//TEST_CASE_METHOD(DHVendor, "Init DH SDK", "[DHVendor]")
-//{
-//
-//	time_range range;
-//	range.start = 1466438400;
-//	range.end = 1466629200;
-//	REQUIRE_NOTHROW(Init("192.168.0.96", 37777));
-//
-//	REQUIRE_NOTHROW(Login("admin", ""));
-//
-//	REQUIRE_NOTHROW(Search(0, range));
-//
-//	REQUIRE_NOTHROW(Download(0, range));
-//	REQUIRE_NOTHROW(PlayVideo(0, "channel0-20160621000000-20160621235959-0"));
-//	REQUIRE_NOTHROW(Logout());
-//
-//}
+
+// TEST_CASE_METHOD(DHVendor, "Init DH SDK", "[DHVendor]")
+//  {
+// 
+// 	time_range range;
+// 	range.start = 1466438400;
+// 	//range.end = 1466524800;
+// 	range.end = 1466629200;
+// 	//range.end = 1478833871;
+// // //	REQUIRE_NOTHROW(Init("192.168.0.96", 37777));
+// // 
+// // 	REQUIRE_NOTHROW(Login("admin", ""));
+// // 
+// // 	REQUIRE_NOTHROW(Search(0, range));
+// // 	//REQUIRE_NOTHROW(Search(1, range));
+// // 
+// // 	REQUIRE_NOTHROW(Download(0, range));
+// // 	//Download(0, "channel0-20160621000000-20160621235959-0");
+// // 
+// // 	//REQUIRE_NOTHROW(PlayVideo(0, range));
+// // 	REQUIRE_NOTHROW(PlayVideo(0, "channel0-20160621000000-20160621235959-0"));
+// // 	REQUIRE_NOTHROW(Logout());
+// 
+// //}

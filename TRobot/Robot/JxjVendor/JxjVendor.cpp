@@ -1,9 +1,9 @@
 
-#include "JxjVendor.h"
-#include "DownloadTest.h"
 
-#pragma comment(lib, "lib\\JNetSDK")
-#pragma comment(lib, "lib\\AVPlayer")
+#include "JxjVendor.h"
+
+#pragma comment(lib, "JNetSDK")
+#pragma comment(lib, "AVPlayer")
 
 eErrCode CJxjVendor::m_errCode = Err_No;
 long CJxjVendor::m_lDownloadHandle = -1;
@@ -81,6 +81,7 @@ CJxjVendor::CJxjVendor()
 	m_iBeginNode = 0;
 	m_iEndNode = J_SDK_MAX_STORE_LOG_SIZE - 1;
 	m_iSsid = -1;
+	m_iMaxChannel = 0;
 }
 
 CJxjVendor::~CJxjVendor()
@@ -90,6 +91,7 @@ CJxjVendor::~CJxjVendor()
 	m_iBeginNode = 0;
 	m_iEndNode = J_SDK_MAX_STORE_LOG_SIZE - 1;
 	m_iSsid = -1;
+	m_iMaxChannel = 0;
 
 	int iRet = JNetCleanup();
 	if (0 != iRet)
@@ -141,6 +143,16 @@ long CJxjVendor::Login(const std::string& ip, size_t port, const std::string& us
 		throw std::exception("登陆失败");
 	}
 
+	iRet = -1;
+	JDeviceInfo deviceinfo;
+	iRet = JNetGetParam(loginHandle, 0, PARAM_DEVICE_INFO, (char *)&deviceinfo, sizeof(deviceinfo), NULL, NULL);
+	if (iRet != 0)
+	{
+		throw std::exception("获取设备信息失败");
+	}
+
+	m_iMaxChannel = deviceinfo.channel_num;
+
 	return loginHandle;
 }
 
@@ -169,14 +181,9 @@ void CJxjVendor::StopSearchDevice()
 	JNetMBClose(m_lSearchDeviceHandle);
 }
 
-size_t CJxjVendor::GetMaxChannel()
-{
-	return 0;
-}
-
 void CJxjVendor::SearchAll(const long loginHandle)
 {
-	
+
 }
 
 void CJxjVendor::Search(const long loginHandle, const size_t channel, const time_range& range)
@@ -196,7 +203,7 @@ void CJxjVendor::Search(const long loginHandle, const size_t channel, const time
 	}
 
 	// Save Search Video List Result to Config File
-	CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files);
+	CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files, Vendor_JXJ);
 
 	// Write File List to DB
 	WriteFileListToDB();
@@ -232,7 +239,7 @@ void CJxjVendor::Download(const long loginHandle, const size_t channel, const ti
 		return;
 	}
 
-	Record file;
+	RecordFile file;
 	size_t i = 0;
 	//string strFileName(cFileName);
 	for (; i < m_files.size(); i++)
@@ -288,7 +295,7 @@ void CJxjVendor::Download(const long loginHandle, const size_t channel, const st
 		return;
 	}
 
-	Record file;
+	RecordFile file;
 	size_t i = 0;
 	for (; i < m_files.size(); i++)
 	{
@@ -377,7 +384,7 @@ void CJxjVendor::PlayVideo(const long loginHandle, const size_t channel, const t
 		return;
 	}
 
-	Record file;
+	RecordFile file;
 	size_t i = 0;
 	for (; i < m_files.size(); i++)
 	{
@@ -446,7 +453,7 @@ void CJxjVendor::PlayVideo(const long loginHandle, const size_t channel, const s
 		return;
 	}
 
-	Record file;
+	RecordFile file;
 	size_t i = 0;
 	for (; i < m_files.size(); i++)
 	{
@@ -707,16 +714,16 @@ void CJxjVendor::AddSearchFileList(int channel)
 {
 	int j = m_iBeginNode;
 
-	for (int i = 0; i< (int)m_storeLog.node_count; i++)
+	for (int i = 0; i < (int)m_storeLog.node_count; i++)
 	{
-		
-		Record recordFile;
-		
+
+		RecordFile recordFile;
+
 		// File Start Time
 		JTime jTime = m_storeLog.store[i].beg_time;
 		recordFile.beginTime = CCommonUtrl::getInstance().MakeTimestampByJTime(jTime);
 		std::string strStartTime;
-		sprintf((char*)strStartTime.c_str(), "%d%02d%02d%02d%02d%02d", jTime.year+1900, jTime.month, jTime.date, jTime.hour, jTime.minute, jTime.second);
+		sprintf((char*)strStartTime.c_str(), "%d%02d%02d%02d%02d%02d", jTime.year + 1900, jTime.month, jTime.date, jTime.hour, jTime.minute, jTime.second);
 
 		// File End Time
 		jTime = m_storeLog.store[i].end_time;
@@ -728,7 +735,7 @@ void CJxjVendor::AddSearchFileList(int channel)
 		recordFile.strTimeSection = strStartTime.data();
 		recordFile.strTimeSection.append("-");
 		recordFile.strTimeSection += strEndTime.data();
-		
+
 		// File Duration
 		recordFile.duration = recordFile.endTime - recordFile.beginTime;
 
@@ -745,16 +752,16 @@ void CJxjVendor::AddSearchFileList(int channel)
 		{
 			m_files.push_back(recordFile);
 		}
-		
+
 		j++;
 	}
 }
 
-bool CJxjVendor::CheckFileExist(const Record& file, const std::vector<Record>& fileList)
+bool CJxjVendor::CheckFileExist(const RecordFile& file, const std::vector<RecordFile>& fileList)
 {
 	for (size_t i = 0; i < fileList.size(); i++)
 	{
-		Record fileItem = fileList[i];
+		RecordFile fileItem = fileList[i];
 		if (file.name.compare(fileItem.name) == 0
 			&& file.size == fileItem.size
 			&& file.beginTime == fileItem.beginTime
@@ -780,7 +787,7 @@ void CJxjVendor::WriteFileListToDB()
 	for (size_t i = 0; i < m_files.size(); i++)
 	{
 		writeSearchVideo sr;
-		Record record = m_files[i];
+		RecordFile record = m_files[i];
 		//文件名称
 		sr.set<0>(record.name);
 		//通道号
@@ -821,18 +828,13 @@ int  CJxjVendor::JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* 
 		{
 			return 0;
 		}
-		
+
 		if (pFrame->timestamp_sec > 0 && m_lDownLoadTotalTime > 0)
 		{
 			g_iDownLoadPos = (pFrame->timestamp_sec - m_lDownLoadStartTime) / (m_lDownLoadTotalTime / 100);
 			char cDownInfo[100];
 			sprintf_s(cDownInfo, 100, "g_idownloadpos = %d , starttime = %ld, curtime = %ld, totaltime = %ld\r\n", g_iDownLoadPos, m_lDownLoadStartTime, pFrame->timestamp_sec, m_lDownLoadTotalTime);
 			std::cout << cDownInfo << std::endl;
-
-			if (index++ >= 10)
-			{
-				CDownloadTest::CallBack();
-			}
 		}
 
 		if ((m_lDownLoadStartTime + m_lDownLoadTotalTime) == pFrame->timestamp_sec)
@@ -881,8 +883,7 @@ DWORD CJxjVendor::PlayThreadFun(LPVOID lpThreadParameter)
 	return 0;
 }
 
-
-#include "catch.hpp"
+//#include "catch.hpp"
 
 //TEST_CASE_METHOD(CJxjVendor, "Init SDK", "[Init]")
 //{

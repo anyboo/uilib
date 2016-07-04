@@ -48,6 +48,7 @@ void CDeviceManager::deleteDevice(const std::string ip)
 		{
 			pDev->Logout();
 			iter = m_listDevice.erase(iter);
+			delete pDev;
 		}
 		else
 		{

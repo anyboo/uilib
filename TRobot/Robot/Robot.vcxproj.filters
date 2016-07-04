@@ -33,40 +33,13 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DH_Head.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AbstractVendor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MyVendor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="JxjVendor\JxjVendor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\stdint.h">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\mb_api.h">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\Jtype.h">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\j_sdk.h">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\AVPlayer.h">
-      <Filter>AVPlayer</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\JNetSDK.h">
-      <Filter>JNetSDK</Filter>
-    </ClInclude>
     <ClInclude Include="JxjVendor\TestWindows.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DZPVendor\DZPVendor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CommonUtrl.h">
@@ -96,9 +69,6 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DownloadTest.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Device.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -122,22 +92,13 @@
     <ClCompile Include="MyVendor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="JxjVendor\JxjVendor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="JxjVendor\TestWindows.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DZPVendor\DZPVendor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CommonUtrl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DHVendor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DownloadTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Device.cpp">

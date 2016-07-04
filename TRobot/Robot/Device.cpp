@@ -1,6 +1,8 @@
 
 #include "Device.h"
 
+#pragma comment(lib, "Ws2_32.lib")
+
 Device::Device(const AbstractVendor* sdk)
 {
 	m_eLoginStatus = Login_Status_No;

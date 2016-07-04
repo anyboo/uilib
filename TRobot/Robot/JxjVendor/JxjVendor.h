@@ -1,7 +1,14 @@
 #pragma once
 
-#include "AbstractVendor.h"
 #include "CommonUtrl.h"
+
+// JXJ SDK
+#include "mb_api.h"
+#include "j_sdk.h"
+#include "stdint.h"
+#include "Jtype.h"
+#include "JNetSDK.h"
+#include "AVPlayer.h"
 
 class CJxjVendor :
 	public AbstractVendor
@@ -17,7 +24,7 @@ public:
 	void StartSearchDevice();
 	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_listDeviceInfo; }
 	void StopSearchDevice();
-	size_t GetMaxChannel();
+	size_t GetMaxChannel(){ return m_iMaxChannel; }
 
 	void SearchAll(const long loginHandle);
 	void Search(const long loginHandle, const size_t channel, const time_range& range);
@@ -31,8 +38,8 @@ public:
 
 protected:
 	// Login Callback
-	static int WINAPI ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, void* pEventData, int iDataLen, void* pUserParam);
-	
+	static int __stdcall ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, void* pEventData, int iDataLen, void* pUserParam);
+
 	// Search Device Callback
 	static int __stdcall fcbJMBNotify(long lHandle, DWORD dwPortocol, int iErr, int iMsgID, LPCTSTR lpszDstID, void* pData, int iDataLen, void* pUserParam);
 
@@ -42,7 +49,7 @@ protected:
 	void SearchUnit(const long loginHandle, const size_t channel, const time_range& range);
 	void ReFreshVideoList(const long loginHandle, int channel, const time_range& range);
 	void AddSearchFileList(int channel);
-	bool CheckFileExist(const Record& file, const std::vector<Record>& fileList);
+	bool CheckFileExist(const RecordFile& file, const std::vector<RecordFile>& fileList);
 	void WriteFileListToDB();
 
 	// Download Callback
@@ -59,6 +66,8 @@ private:
 	std::string m_sRoot;
 
 	/* Login */
+	size_t m_iMaxChannel;
+
 	/* Search Device */
 	long m_lSearchDeviceHandle;
 	DEVICE_INFO_LIST m_listDeviceInfo;
@@ -69,7 +78,7 @@ private:
 	int	m_iBeginNode;
 	int	m_iEndNode;
 	int	m_iSsid;
-	std::vector<Record> m_files;
+	std::vector<RecordFile> m_files;
 
 	/* Download */
 	static long m_lDownloadHandle; // Handle of Download

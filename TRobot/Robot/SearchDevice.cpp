@@ -1,8 +1,5 @@
 
 #include "SearchDevice.h"
-#include <WinSock.h>
-
-#pragma comment(lib, "Ws2_32.lib")
 
 CSearchDevice::CSearchDevice()
 {
