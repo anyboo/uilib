@@ -40,13 +40,13 @@ void GetLocalNetCar(std::string& Desc, std::string& AdapterName, std::vector<str
 	int IPnumPerNetCard = 0;
 	string::const_iterator it;
 	std::string sNetName;
-	PIP_ADAPTER_INFO pstartIpAdapterInfo;
+	PIP_ADAPTER_INFO pfirstIpAdapterInfo;
 
 	if (ERROR_BUFFER_OVERFLOW == nRel)
 	{
 		delete pIpAdapterInfo;
 		pIpAdapterInfo = (PIP_ADAPTER_INFO)new BYTE[stSize];
-		pstartIpAdapterInfo = pIpAdapterInfo;
+		pfirstIpAdapterInfo = pIpAdapterInfo;
 		nRel = GetAdaptersInfo(pIpAdapterInfo, &stSize);
 		if (ERROR_SUCCESS == nRel)
 		{
@@ -91,51 +91,30 @@ void GetLocalNetCar(std::string& Desc, std::string& AdapterName, std::vector<str
 				pIpAdapterInfo = pIpAdapterInfo->Next;				
 			}
 		}
-		if (pstartIpAdapterInfo)
-		{
-			delete[]pstartIpAdapterInfo;
-		}
+		delete[]pfirstIpAdapterInfo;		
 	}	
 }
 
 
+//get connect name 
 string GetNetCardName(std::string uuid)
 {
 	string CardName;
-	INetConnectionManager *pManager;
-	INetConnection *pConnection;
-	IEnumNetConnection *pEnum;
-	ULONG           celtFetched;
+	HKEY hKey;
+	string strKeyName = "SYSTEM\\CurrentControlSet\\Control\\Network\\{4D36E972-E325-11CE-BFC1-08002BE10318}\\";
+	strKeyName += uuid;
+	strKeyName += "\\Connection";
+	LONG lRet = RegOpenKeyExA(HKEY_LOCAL_MACHINE, strKeyName.c_str(), 0, KEY_QUERY_VALUE, &hKey);
+	if (lRet != ERROR_SUCCESS)
+		return CardName;
 
-	CoInitialize(NULL);
-	CoCreateInstance(CLSID_ConnectionManager, NULL, CLSCTX_SERVER, IID_INetConnectionManager, (void**)&pManager);
-	pManager->EnumConnections(NCME_DEFAULT, &pEnum);
-	pManager->Release();
-	while (pEnum->Next(1, &pConnection, &celtFetched) == S_OK)
-	{
-		NETCON_PROPERTIES*   properties;
-		pConnection->GetProperties(&properties);
-		char szGuid[100] = { 0 };
-		sprintf_s(szGuid, "{%08lX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX}",
-			properties->guidId.Data1, properties->guidId.Data2, properties->guidId.Data3,
-			properties->guidId.Data4[0], properties->guidId.Data4[1], properties->guidId.Data4[2], properties->guidId.Data4[3],
-			properties->guidId.Data4[4], properties->guidId.Data4[5], properties->guidId.Data4[6], properties->guidId.Data4[7]);
-		string sGuid(szGuid);		
-		if (sGuid.compare(uuid) == 0)
-		{
-			DWORD dwNum = WideCharToMultiByte(CP_OEMCP, NULL, properties->pszwName, -1, NULL, 0, NULL, FALSE);
-			char *psText;
-			psText = new char[dwNum];
-			if (!psText)
-			{
-				delete[]psText;
-			}
-			WideCharToMultiByte(CP_OEMCP, NULL, properties->pszwName, -1, psText, dwNum, NULL, FALSE);
-			CardName = string(psText);
-			delete[]psText;
-		}		
+	char sz[20] = { 0 };
+	DWORD dwSize = sizeof(sz);
+	if (RegQueryValueExA(hKey, "Name", NULL, NULL, (LPBYTE)sz, &dwSize) == ERROR_SUCCESS)
+	{		
+		CardName = string(sz);
 	}
-	CoUninitialize();
+
 	
 	return CardName;
 }
@@ -146,8 +125,8 @@ string ConvertNICUUIDtoPcapName(pcap_if_t* devs, const string& uuid)
 	
 	for (pcap_if_t *d = devs; d && d->next; d = d->next)
 	{
-		string tmp(d->name);
-		//if (tmp.contains(uuid, Qt::CaseInsensitive))
+		string tmp(d->name);		
+		if (tmp.compare(uuid) == 0)
 			pcap_name = tmp;
 	}
 
@@ -181,52 +160,35 @@ void WindowUtils::getLocalIPs(std::vector<string> &IPs)
 	GetLocalNetCar(sDesc, uuid, IPs);
 }
 
-void WindowUtils::getLocalIPs(const string& sHostName, std::vector<string> &IPs){
-    IPs.clear();
-    /*QList<QNetworkInterface> list = QNetworkInterface::allInterfaces();
-    foreach(QNetworkInterface i, list) {
-        if (i.isValid() && isValidNetMacaddress(i.hardwareAddress()) &&
-            i.humanReadableName() == WindowUtils::getLoacalNetName())
-        {
-            cout << i.name() << i.humanReadableName();
-            
-            foreach(QHostAddress address, i.allAddresses())
-            {
-                if (address.protocol() == QAbstractSocket::IPv4Protocol
-                    && !address.isLoopback() && Utils::isInnerIP(address.toString()))
-                {
-                    if (IPs.end() == std::find(IPs.begin(), IPs.end(), address.toString()))
-                    {
-                        IPs.push_back(address.toString());
-                        cout <<__FILE__ << __FUNCTION__ << __LINE__ << address.toString();
-                    }
-                }
-            }
-        }
-
-    }*/
-}
-
 
 bool WindowUtils::setNetConfig(const string& sName, const string& sIP, const string& sMask, const string& sGate, bool bWait){
-//    return true;
-    /*string mask = string("mask=%1").arg(sMask);
-    string name = string("name=\"%1\"").arg(sName);
-    string addr = string("addr=%1").arg(sIP);
-    stringList argList = stringList() << "interface" << "ip" << "set" << "address" << name << "source=static" << addr << mask;
 
+	string mask(" mask=");
+	mask.append(sMask);
+	string sNetName = GetNetCardName(sName);
+	string name(" name = \"");
+	name += sNetName;
+	name.append("\"");
+	string addr(" addr=");
+	addr += sIP;
+	string argList("interface ip set address");
+	argList += name;
+	argList.append(" source = static "); 
+	argList = argList + addr + mask;
+	
     if (!sGate.empty())
-    {
-        string gateway = string("gateway=%1").arg(sGate);
-        QProcess::execute("netsh", stringList() << "interface" << "ip" << "set" << "address" << name << "source=static" << addr << mask << gateway);
+    {        
+		string gateway(" gateway=");
+		gateway += sGate;
+		argList += gateway;    
+		
     }
-    else{
-        QProcess::execute("netsh", stringList() << "interface" << "ip" << "set" << "address" << name << "source=static" << addr << mask );
-    }
+	::ShellExecuteA(NULL, (LPCSTR)"open", (LPCSTR)"netsh.exe", (LPCSTR)argList.c_str(), NULL, SW_SHOWNORMAL);
+   
     if (!bWait)
     {
         return true;
-    }*/
+    }
     int maxPingTime = 1000 * 3;
     ::Sleep(2000);
     while (maxPingTime > 0 && !CPing::instance().Ping(sIP.c_str(), 20)){
@@ -357,7 +319,10 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
                 continue;
             }
 
-           /* string source = string("%1.%2.%3.%4").arg(arph->sip[0]).arg(arph->sip[1]).arg(arph->sip[2]).arg(arph->sip[3]);
+			char szIP[30] = { 0 };
+			sprintf_s(szIP, "%d.%d.%d.%d", arph->sip[0], arph->sip[1], arph->sip[2], arph->sip[3]);
+
+			string source = string(szIP);
             if (IPs.end() != std::find(IPs.begin(), IPs.end(), source)){
                 continue;
             }
@@ -371,19 +336,25 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
                 start = GetTickCount() - 29 * 1000;
             }
 
-            ip = string("%1.%2.%3.%4").arg(arph->dip[0]).arg(arph->dip[1]).arg(arph->dip[2]).arg(arph->dip[3]);
+			char szdIP[30] = { 0 };
+			sprintf_s(szdIP, "%d.%d.%d.%d", arph->dip[0], arph->dip[1], arph->dip[2], arph->dip[3]);
+			ip = string(szdIP);
             if (arph->dip[0] != arph->sip[0] || arph->dip[1] != arph->sip[1] || arph->dip[2] != arph->sip[2] || ip == netGate)
             {
                 if (arph->sip[3] != 44)
                 {
-                    ip = string("%1.%2.%3.44").arg(arph->sip[0]).arg(arph->sip[1]).arg(arph->sip[2]);
+					char sztmp[30] = { 0 };
+					sprintf_s(sztmp, "%d.%d.%d.44", arph->sip[0], arph->sip[1], arph->sip[2]);
+					ip = string(sztmp);
                 }
                 else{
-                    ip = string("%1.%2.%3.254").arg(arph->sip[0]).arg(arph->sip[1]).arg(arph->sip[2]);
+					char sztmp[30] = { 0 };
+					sprintf_s(sztmp, "%d.%d.%d.254", arph->sip[0], arph->sip[1], arph->sip[2]);
+					ip = string(sztmp);
                 }
-            }*/
+            }
 
-            cout << "arp" << ip << netGate;
+            cout << "arp    " << ip << "  " << netGate << endl;
         }
         else
         {
@@ -396,7 +367,9 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
                 continue;
             }
 
-            /*string source  = string("%1.%2.%3.%4").arg(arph->sip[0]).arg(arph->sip[1]).arg(arph->sip[2]).arg(arph->sip[3]);
+			char szsource[30] = { 0 };
+			sprintf_s(szsource, "%d.%d.%d.%d", arph->sip[0], arph->sip[1], arph->sip[2], arph->sip[3]);
+			string source = string(szsource);
             if (IPs.end() != std::find(IPs.begin(), IPs.end(), source)){
                 continue;
             }
@@ -409,19 +382,22 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
             netGate = source;
             if (arph->sip[3] != 44)
             {
-                ip = string("%1.%2.%3.44").arg(arph->sip[0]).arg(arph->sip[1]).arg(arph->sip[2]);
+				char sztmp[30] = { 0 };
+				sprintf_s(sztmp, "%d.%d.%d.44", arph->sip[0], arph->sip[1], arph->sip[2]);
+				ip = string(sztmp);
             }
             else{
-                ip = string("%1.%2.%3.254").arg(arph->sip[0]).arg(arph->sip[1]).arg(arph->sip[2]);
-            }*/
+				char sztmp[30] = { 0 };
+				sprintf_s(sztmp, "%d.%d.%d.254", arph->sip[0], arph->sip[1], arph->sip[2]);
+				ip = string(sztmp);
+            }
            
             break;
         }
 
     }
 
-    //return !ip.empty();
-	return true;
+    return !ip.empty();	
 }
 
 bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>& otherIPS, int secondsWait){
@@ -520,8 +496,12 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
                 continue;
             }
 
-            string source /*= string("%1.%2.%3.%4").arg(arph->sip[0]).arg(arph->sip[1]).arg(arph->sip[2]).arg(arph->sip[3])*/;
-            string destIP /*= string("%1.%2.%3.%4").arg(arph->dip[0]).arg(arph->dip[1]).arg(arph->dip[2]).arg(arph->dip[3])*/;
+			char szsip[30] = { 0 };
+			sprintf_s(szsip, "%s.%s.%s.%s", arph->sip[0], arph->sip[1], arph->sip[2], arph->sip[3]);
+			string source(szsip);
+			char szdip[30] = { 0 };
+			sprintf_s(szdip, "%s.%s.%s.%s", arph->dip[0], arph->dip[1], arph->dip[2], arph->dip[3]);
+            string destIP(szdip) ;
             if (IPs.end() != std::find(IPs.begin(), IPs.end(), source)){
                 continue;
             }
@@ -535,12 +515,12 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
                 continue;
             }
             
-           /* if (netGate.empty())
+            if (netGate.empty())
             {
                 netGate = source;
-            }*/
+            }
             
-            /*if (ip.empty() && secondsWait * 1000 - GetTickCount() + start > MAX_WAIT_OTHER_IP_SECONDS * 1000)
+            if (ip.empty() && secondsWait * 1000 - GetTickCount() + start > MAX_WAIT_OTHER_IP_SECONDS * 1000)
             {
                 start = GetTickCount() - (secondsWait - MAX_WAIT_OTHER_IP_SECONDS) * 1000;
                 ip = destIP;
@@ -548,21 +528,23 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
                 {
                     if (arph->sip[3] != 1)
                     {
-                        ip = string("%1.%2.%3.1").arg(arph->sip[0]).arg(arph->sip[1]).arg(arph->sip[2]);
+						char sztmp[30] = { 0 };
+						sprintf_s(sztmp, "%s.%s.%s.1", arph->sip[0], arph->sip[1], arph->sip[2]);
+						ip = string(sztmp);
                     }
                     else{
-                        ip = string("%1.%2.%3.254").arg(arph->sip[0]).arg(arph->sip[1]).arg(arph->sip[2]);
+						char sztmp[30] = { 0 };
+						sprintf_s(sztmp, "%s.%s.%s.254", arph->sip[0], arph->sip[1], arph->sip[2]);
+						ip = string(sztmp);
                     }
                 }
-            }*/
-
+            }
             
             otherIPS.insert(source);
             if (Utils::isInnerIP(destIP))
             {
                 mpDestSource[destIP].insert(source);
             }
-            
  
             cout << "arp" << source << destIP;
         }
@@ -577,8 +559,12 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
                 continue;
             }
             
-            string source/* = string("%1.%2.%3.%4").arg(arph->sip[0]).arg(arph->sip[1]).arg(arph->sip[2]).arg(arph->sip[3])*/;
-            string dest/* = string("%1.%2.%3.%4").arg(arph->dip[0]).arg(arph->dip[1]).arg(arph->dip[2]).arg(arph->dip[3])*/;
+			char szsource[30] = { 0 };
+			sprintf_s(szsource, "%s.%s.%s.%s", arph->sip[0], arph->sip[1], arph->sip[2], arph->sip[3]);
+            string source(szsource);
+			char szdest[30] = { 0 };
+			sprintf_s(szdest, "%s.%s.%s.%s", arph->dip[0], arph->dip[1], arph->dip[2], arph->dip[3]);
+			string dest(szdest);
             if (IPs.end() != std::find(IPs.begin(), IPs.end(), source)){
                 continue;
             }
@@ -590,14 +576,14 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
             netGate = source;
             otherIPS.insert(source);
             
-           /* if (ip.empty() && secondsWait * 1000 - GetTickCount() + start > MAX_WAIT_OTHER_IP_SECONDS * 1000)
+            if (ip.empty() && secondsWait * 1000 - GetTickCount() + start > MAX_WAIT_OTHER_IP_SECONDS * 1000)
             {
                 start = GetTickCount() - (secondsWait - MAX_WAIT_OTHER_IP_SECONDS) * 1000;
             }
-
-            ip = string("%1.%2.%3.%4").arg(arph->sip[0]).arg(arph->sip[1]).arg(arph->sip[2]).arg(44);*/
-            cout << "aarp" << source << dest;
-           // break;
+			char sztmp[30] = { 0 };
+			sprintf_s(sztmp, "%s.%s.%s.44", arph->sip[0], arph->sip[1], arph->sip[2]);
+			ip = string(sztmp);
+            cout << "aarp" << source << dest;           
         }
 
     }
@@ -613,8 +599,8 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
     }
     if (itNetgate != mpDestSource.end())
     {
-        netGate = itNetgate->first;
-        string s /*= netGate.left(netGate.lastIndexOf(".") + 1)*/;
+        netGate = itNetgate->first;		
+        string s = netGate.substr(0, netGate.find_last_of(".") + 1);
         for (int i  = 2; i < 255; i++)
         {
             ip = s + std::to_string(i);
@@ -625,27 +611,27 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
         }
     }
     else{
-        /*if (netGate.empty() && !specialIP.empty())
+        if (netGate.empty() && !specialIP.empty())
         {
             netGate = specialIP;
         }
         if (!netGate.empty())
         {
-            netGate = netGate.left(netGate.lastIndexOf(".") + 1) + "1";
+			netGate = netGate.substr(0, netGate.find_last_of(".") + 1) + "1";
             for (int i = 2; i < 255; i++)
             {
-                ip = netGate.left(netGate.lastIndexOf(".") + 1) + string::number(i);
+				ip = netGate.substr(0, netGate.find_last_of(".") + 1) + std::to_string(i);
                 if (ip != specialIP)
                 {
                     break;
                 }
             }
-        }*/
+        }
     }
 
 
-    //return !ip.empty();
-	return true;
+    return !ip.empty();
+	
 }
 bool WindowUtils::setIPByDHCP(string& ip, string& mask, string& netGate){
 	string sName = GetNetCardName(WindowUtils::getLocalUuid());
@@ -660,9 +646,18 @@ bool WindowUtils::setIPByDHCP(string& ip, string& mask, string& netGate){
     }
     
     bool r = false;
+
+	if (ips.size() == 1)
+	{
+		string stmp = ips[0].substr(0, ips[0].find_last_of("."));
+		stmp = stmp.substr(0, stmp.find_last_of("."));
+		if (stmp.compare("169.254") == 0)
+			return r;
+	}
     if (ips.size() > 0)
     {
         _IP_ADAPTER_INFO* pIpAdapterInfo = (PIP_ADAPTER_INFO)malloc(sizeof(PIP_ADAPTER_INFO));
+		_IP_ADAPTER_INFO* pfirstAdapterInfo = pIpAdapterInfo;
         ULONG uOutBufLen = sizeof(PIP_ADAPTER_INFO);//存放网卡信息的缓冲区大小
         //第一次调用GetAdapterInfo获取ulOutBufLen大小
         int errorNo = GetAdaptersInfo(pIpAdapterInfo, &uOutBufLen);
@@ -671,6 +666,7 @@ bool WindowUtils::setIPByDHCP(string& ip, string& mask, string& netGate){
             //获取需要的缓冲区大小
             free(pIpAdapterInfo);
             pIpAdapterInfo = (PIP_ADAPTER_INFO)malloc(uOutBufLen);//分配所需要的内存
+			pfirstAdapterInfo = pIpAdapterInfo;
             errorNo = (GetAdaptersInfo(pIpAdapterInfo, &uOutBufLen));
         }
 
@@ -682,7 +678,7 @@ bool WindowUtils::setIPByDHCP(string& ip, string& mask, string& netGate){
                     pIpAddrString != NULL && (!r); pIpAddrString = pIpAddrString->Next){
                     if (*ips.begin() == pIpAddrString->IpAddress.String)
                     {
-                        if (!WindowUtils::setNetConfig(sName, *ips.begin(), pIpAddrString->IpMask.String, pIpAdapterInfo->GatewayList.IpAddress.String, true))
+						if (!WindowUtils::setNetConfig(pIpAdapterInfo->AdapterName, *ips.begin(), pIpAddrString->IpMask.String, pIpAdapterInfo->GatewayList.IpAddress.String, true))
                         {
                             break;
                         }
@@ -697,7 +693,7 @@ bool WindowUtils::setIPByDHCP(string& ip, string& mask, string& netGate){
                 pIpAdapterInfo = pIpAdapterInfo->Next;
             }
         }
-        free(pIpAdapterInfo);
+		free(pfirstAdapterInfo);
     }
 
     return r;
@@ -730,11 +726,10 @@ bool WindowUtils::isOnLine(){
     DWORD dwSize = sizeof (MIB_IFTABLE);
     DWORD dwRetVal = 0;
 
-    unsigned int i, j;
+    unsigned int i;
 
     /* variables used for GetIfTable and GetIfEntry */
-    char *pIfTable = new char[dwSize];
-    MIB_IFROW *pIfRow;
+    char *pIfTable = new char[dwSize];   
 
     if (GetIfTable((MIB_IFTABLE *)pIfTable, &dwSize, 0) == ERROR_INSUFFICIENT_BUFFER) {
         delete pIfTable;

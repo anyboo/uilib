@@ -140,7 +140,7 @@ void CPing::ScanIPs(vector<string> &vecIPs, const string& netIp, bool bArp, std:
 }
 
 bool CPing::ScanOneIP(string &ip, const string& netIp, bool bArp){
-    string netPre/* = netIp.left(netIp.lastIndexOf(".") + 1)*/;
+	string netPre = netIp.substr(0, netIp.find_last_of(".") + 1);    
     for (int i = 1; i < 255; i++)
     {
         ip = netPre + std::to_string(i);
