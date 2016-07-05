@@ -13,8 +13,8 @@ CCommonUtrl::~CCommonUtrl()
 
 CCommonUtrl& CCommonUtrl::getInstance()
 {
-	static Poco::SingletonHolder<CCommonUtrl> sh;
-	return *sh.get();
+	static Poco::SingletonHolder<CCommonUtrl> shCommonUtrl;
+	return *shCommonUtrl.get();
 }
 
 std::string CCommonUtrl::MakeDownloadFileFolder(const std::string basePath, const std::string& startTimeZero, const std::string& endTimeZero, const std::string& venderName, int channel)

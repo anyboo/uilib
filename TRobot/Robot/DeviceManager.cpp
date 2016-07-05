@@ -14,13 +14,17 @@ CDeviceManager::~CDeviceManager()
 
 CDeviceManager& CDeviceManager::getInstance()
 {
-	static Poco::SingletonHolder<CDeviceManager> sh;
-	return *sh.get();
+	static Poco::SingletonHolder<CDeviceManager> shDeviceManager;
+	return *shDeviceManager.get();
 }
 
 void CDeviceManager::addDevice(Device* pDev)
 {
-	m_listDevice.push_back(pDev);
+	std::vector<Device*>::iterator result = find(m_listDevice.begin(), m_listDevice.end(), pDev); //≤È’“
+	if (result == m_listDevice.end())
+	{
+		m_listDevice.push_back(pDev);
+	}
 }
 
 Device& CDeviceManager::getDevice(const std::string ip)

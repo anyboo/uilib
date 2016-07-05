@@ -38,7 +38,7 @@ Device::Device()
 Device::~Device()
 {
 	assert(m_pVendor);
-	m_pVendor->Logout(m_lLoginHandle);
+	//m_pVendor->Logout(m_lLoginHandle);
 
 	m_eLoginStatus = Login_Status_No;
 	m_sIP = "";
@@ -71,18 +71,33 @@ void Device::Init()
 	m_pVendor->SetDownloadPath(sRoot);
 }
 
-void Device::Login(const std::string& ip, size_t port, const std::string& userName, const std::string& password)
+bool Device::Login(const std::string& ip, size_t port, const std::string& userName, const std::string& password)
 {
 	assert(m_pVendor);
-	m_lLoginHandle = m_pVendor->Login(ip, port, userName, password);
+
+	std::string sUserName = userName;
+	std::string sPassword = password;
+
+	if (sUserName.empty() || sUserName.compare("") == 0)
+	{
+		sUserName = m_pVendor->GetDefUsearName();
+		sPassword = m_pVendor->GetDefPassword();
+	}
+
+	m_lLoginHandle = m_pVendor->Login(ip, port, sUserName, sPassword);
+	if (m_lLoginHandle < 0)
+	{
+		return false;
+	}
 
 	m_iMaxChannel = m_pVendor->GetMaxChannel();
-
 	m_eLoginStatus = Login_Status_Yes;
 	m_sIP = ip;
 	m_iPort = port;
-	m_sUserName = userName;
-	m_sPassword = password;
+	m_sUserName = sUserName;
+	m_sPassword = sPassword;
+
+	return true;
 }
 
 void Device::Logout()

@@ -35,7 +35,15 @@ struct NET_DEVICE_INFO
 	AbstractVendor*		pVendor;
 };
 
+struct NET_DEVICE_INFO_SIMPLE
+{
+	char				szIP[MAX_IPADDR_LEN];
+	int					nPort;
+};
+
 typedef std::vector<NET_DEVICE_INFO*> DEVICE_INFO_LIST;
+typedef std::vector<NET_DEVICE_INFO_SIMPLE*> DEVICE_INFO_SIMPLE_LIST;
+typedef std::vector<AbstractVendor*> VENDOR_LIST;
 
 class AbstractVendor
 {
@@ -43,6 +51,12 @@ public:
 	virtual void Init() = 0;
 	virtual long Login(const std::string& ip, size_t port, const std::string& user, const std::string& password) = 0;
 	virtual void Logout(const long loginHandle) = 0;
+
+	virtual std::string GetDefUsearName() = 0;
+	virtual std::string GetDefPassword() = 0;
+
+	virtual void SetNextVendor(AbstractVendor* pVendor) = 0;
+	virtual AbstractVendor* GetNextVendor() = 0;
 
 	virtual NET_SDK_TYPE GetSDKType() = 0;
 	virtual void StartSearchDevice() = 0;

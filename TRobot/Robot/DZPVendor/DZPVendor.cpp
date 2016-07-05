@@ -98,6 +98,9 @@ void TMToNetTime(const tm& t, H264_DVR_TIME& nt)
 CDZPVendor::CDZPVendor()
 {
 	m_eSDKType = DZP_SDK;
+
+	m_sDefUserName = "admin";
+	m_sDefPassword = "";
 }
 
 CDZPVendor::~CDZPVendor()
@@ -130,11 +133,14 @@ long CDZPVendor::Login(const std::string& ip, size_t port, const std::string& us
 
 	H264_DVR_SetConnectTime(3000, 1);
 
-	int loginHandle = H264_DVR_Login((char *)ip.c_str(), port, (char*)user.c_str(), (char*)password.c_str(), &OutDev, &nError, TCPSOCKET);
+	long loginHandle = -1;
+	loginHandle = H264_DVR_Login((char *)ip.c_str(), port, (char*)user.c_str(), (char*)password.c_str(), &OutDev, &nError, TCPSOCKET);
 	if (loginHandle <= 0)
 	{
 		m_sLastError = GZLL_GetLastErrorString(nError);
-		throw std::exception(m_sLastError.c_str());
+		//throw std::exception(m_sLastError.c_str());
+
+		return -1;
 	}
 
 	m_iMaxChannel = OutDev.byChanNum + OutDev.iDigChannel;

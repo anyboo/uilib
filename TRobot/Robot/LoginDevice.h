@@ -9,7 +9,9 @@ public:
 	CLoginDevice();
 	~CLoginDevice();
 
-	void Login(const std::string& ip, const int port, const std::string& userName, const std::string& password, AbstractVendor* pVendor);
+	static CLoginDevice& getInstance();
+
+	bool Login(AbstractVendor* pVendor, const std::string& ip, const int port, const std::string& userName = "", const std::string& password = "");
 	void Logout(AbstractVendor* pVendor);
 };
 

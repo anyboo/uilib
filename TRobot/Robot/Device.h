@@ -30,9 +30,12 @@ public:
 
 	void setSDK(AbstractVendor* sdk);
 	void Init();
-	void Login(const std::string& ip, size_t port, const std::string& userName, const std::string& password);
+	bool Login(const std::string& ip, size_t port, const std::string& userName = "", const std::string& password = "");
 	void Logout();
 	void SetDownloadPath(const std::string& root);
+
+	void SetNextVendor(AbstractVendor* pVendor) { m_pVendor->SetNextVendor(pVendor); }
+	AbstractVendor* GetNextVendor() { return m_pVendor->GetNextVendor(); }
 
 	void StartSearchDevice();
 	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_pVendor->GetDeviceInfoList(); }

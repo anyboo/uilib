@@ -21,6 +21,12 @@ public:
 	long Login(const std::string& ip, size_t port, const std::string& user, const std::string& password);
 	void Logout(const long loginHandle);
 
+	std::string GetDefUsearName(){ return m_sDefUserName; }
+	std::string GetDefPassword(){ return m_sDefPassword; }
+
+	void SetNextVendor(AbstractVendor* pVendor) { m_pNextVendor = pVendor; }
+	AbstractVendor* GetNextVendor() { return m_pNextVendor; }
+
 	NET_SDK_TYPE GetSDKType(){ return m_eSDKType; }
 	void StartSearchDevice();
 	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_listDeviceInfo; }
@@ -62,6 +68,8 @@ protected:
 	static  DWORD PlayThreadFun(LPVOID lpThreadParameter);
 
 private:
+	AbstractVendor* m_pNextVendor;
+
 	/* Init */
 	std::string m_sLastError;
 	std::string m_sRoot;
@@ -69,6 +77,8 @@ private:
 
 	/* Login */
 	size_t m_iMaxChannel;
+	std::string m_sDefUserName;
+	std::string m_sDefPassword;
 
 	/* Search Device */
 	long m_lSearchDeviceHandle;

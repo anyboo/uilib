@@ -83,6 +83,9 @@ CJxjVendor::CJxjVendor()
 	m_iEndNode = J_SDK_MAX_STORE_LOG_SIZE - 1;
 	m_iSsid = -1;
 	m_iMaxChannel = 0;
+
+	m_sDefUserName = "admin";
+	m_sDefPassword = "admin";
 }
 
 CJxjVendor::~CJxjVendor()
@@ -131,7 +134,8 @@ long CJxjVendor::Login(const std::string& ip, size_t port, const std::string& us
 	if (iRet < 0)
 	{
 		m_sLastError = GetErrorString(iRet);
-		throw std::exception(m_sLastError.c_str());
+		//throw std::exception(m_sLastError.c_str());
+		return -1;
 	}
 
 	while (m_errCode == Err_No)
