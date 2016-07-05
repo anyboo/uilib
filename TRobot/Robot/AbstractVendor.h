@@ -44,6 +44,7 @@ public:
 	virtual long Login(const std::string& ip, size_t port, const std::string& user, const std::string& password) = 0;
 	virtual void Logout(const long loginHandle) = 0;
 
+	virtual NET_SDK_TYPE GetSDKType() = 0;
 	virtual void StartSearchDevice() = 0;
 	virtual DEVICE_INFO_LIST& GetDeviceInfoList() = 0;
 	virtual void StopSearchDevice() = 0;

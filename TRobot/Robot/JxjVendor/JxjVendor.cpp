@@ -76,6 +76,7 @@ const char* GetErrorString(int error)
 CJxjVendor::CJxjVendor()
 {
 	// Init Param
+	m_eSDKType = JXJ_SDK;
 	m_lSearchDeviceHandle = 0;
 	m_recordType = ALL_RECODE;
 	m_iBeginNode = 0;
@@ -140,7 +141,8 @@ long CJxjVendor::Login(const std::string& ip, size_t port, const std::string& us
 
 	if (m_errCode == Err_LoginFail)
 	{
-		throw std::exception("µÇÂ½Ê§°Ü");
+		//throw std::exception("µÇÂ½Ê§°Ü");
+		return -1;
 	}
 
 	iRet = -1;
@@ -203,7 +205,7 @@ void CJxjVendor::Search(const long loginHandle, const size_t channel, const time
 	}
 
 	// Save Search Video List Result to Config File
-	CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files, Vendor_JXJ);
+	CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files, Vendor_JXJ_Abbr);
 
 	// Write File List to DB
 	WriteFileListToDB();
@@ -214,8 +216,6 @@ void CJxjVendor::Search(const long loginHandle, const size_t channel, const time
 //void CJxjVendor::DownloadByTime(const std::time_t& start, const std::time_t& end)
 void CJxjVendor::Download(const long loginHandle, const size_t channel, const time_range& range)
 {
-	m_errCode = Err_No;
-
 	// Init File Starttime and Endtime
 	std::string strTimeStart;
 	std::string strTimeEnd;
@@ -241,7 +241,6 @@ void CJxjVendor::Download(const long loginHandle, const size_t channel, const ti
 
 	RecordFile file;
 	size_t i = 0;
-	//string strFileName(cFileName);
 	for (; i < m_files.size(); i++)
 	{
 		file = m_files[i];
@@ -273,11 +272,6 @@ void CJxjVendor::Download(const long loginHandle, const size_t channel, const ti
 		if (m_lDownloadFileHandle == -1)
 		{
 			throw std::exception("Create File Error!");
-		}
-
-		while (m_errCode == Err_No)
-		{
-			::Sleep(100);
 		}
 	}
 	else
@@ -312,8 +306,6 @@ void CJxjVendor::Download(const long loginHandle, const size_t channel, const st
 		return;
 	}
 
-	m_errCode = Err_No;
-
 	// Init File Starttime and Endtime
 	std::string strTimeStart;
 	std::string strTimeEnd;
@@ -348,11 +340,6 @@ void CJxjVendor::Download(const long loginHandle, const size_t channel, const st
 		{
 			throw std::exception("Create File Error!");
 		}
-
-		while (m_errCode == Err_No)
-		{
-			::Sleep(100);
-		}
 	}
 	else
 	{
@@ -363,8 +350,6 @@ void CJxjVendor::Download(const long loginHandle, const size_t channel, const st
 //void CJxjVendor::PlayVideo(const std::string& filename)
 void CJxjVendor::PlayVideo(const long loginHandle, const size_t channel, const time_range& range)
 {
-	m_errCode = Err_No;
-
 	// Init File Starttime and Endtime
 	std::string strTimeStart;
 	std::string strTimeEnd;
@@ -432,18 +417,6 @@ void CJxjVendor::PlayVideo(const long loginHandle, const size_t channel, const t
 
 	// ¿ªÆô½âÂë
 	AVP_Play(m_iPlayVideoChannel);
-
-	int index = 0;
-	while (m_errCode == Err_No)
-	{
-		::Sleep(100);
-
-		if (index++ >= 100)
-		{
-			JNetRecClose(m_lRecHandle);
-			m_lRecHandle = -1;
-		}
-	}
 }
 void CJxjVendor::PlayVideo(const long loginHandle, const size_t channel, const std::string& filename)
 {
@@ -469,8 +442,6 @@ void CJxjVendor::PlayVideo(const long loginHandle, const size_t channel, const s
 		throw std::exception("Search File List Not Contain the Filename!");
 		return;
 	}
-
-	m_errCode = Err_No;
 
 	// Init File Starttime and Endtime
 	std::string strTimeStart;
@@ -514,18 +485,6 @@ void CJxjVendor::PlayVideo(const long loginHandle, const size_t channel, const s
 
 	// ¿ªÆô½âÂë
 	AVP_Play(m_iPlayVideoChannel);
-
-	int index = 0;
-	while (m_errCode == Err_No)
-	{
-		::Sleep(100);
-		if (index++ >= 100)
-		{
-			JNetRecClose(m_lRecHandle);
-			m_lRecHandle = -1;
-			break;
-		}
-	}
 
 	return;
 }

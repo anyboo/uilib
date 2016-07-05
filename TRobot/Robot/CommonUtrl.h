@@ -34,6 +34,9 @@ using namespace rapidjson;
 #define Vendor_JXJ	"º—–≈Ω›"
 #define Vendor_DZP	"µœ÷«∆’"
 
+#define Vendor_JXJ_Abbr		"JXJ"
+#define Vendor_DZP_Abbr		"DZP"
+
 #define MAX_SEARCH_COUNT 1000
 #define ONE_DAY		 (24 * 60 * 60)
 #define ONE_HOUR	 (60 * 60)
@@ -70,7 +73,6 @@ struct RecordFile
 		channel = other.channel;
 		size = other.size;
 		name = other.name;
-		//alias = other.alias;
 		strTimeSection = other.strTimeSection;
 		beginTime = other.beginTime;
 		endTime = other.endTime;
@@ -89,7 +91,6 @@ struct RecordFile
 		channel = other.channel;
 		size = other.size;
 		name = other.name;
-		//alias = other.alias;
 		strTimeSection = other.strTimeSection;
 		beginTime = other.beginTime;
 		endTime = other.endTime;

@@ -20,6 +20,7 @@ public:
 	long Login(const std::string& ip, size_t port, const std::string& user, const std::string& password);
 	void Logout(const long loginHandle);
 
+	NET_SDK_TYPE GetSDKType(){ return m_eSDKType; }
 	void StartSearchDevice();
 	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_listDeviceInfo; }
 	void StopSearchDevice();
@@ -47,6 +48,7 @@ private:
 	/* Init */
 	std::string  m_sLastError;
 	std::string m_sRoot;
+	NET_SDK_TYPE m_eSDKType;
 
 	/* Login */
 	size_t m_iMaxChannel;

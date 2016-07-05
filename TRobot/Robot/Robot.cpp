@@ -65,15 +65,27 @@ TEST_CASE("This is a demo", "[demo]")
 
 		if (devInfoList.size() > 0)
 		{
-			NET_DEVICE_INFO* devInfo = devInfoList[2];
+			NET_DEVICE_INFO* devInfo = devInfoList[0];
 			CLoginDevice loginDev;
-			loginDev.Login(devInfo->szIp, devInfo->nPort, "admin", "", devInfo->pVendor);
+			loginDev.Login("", devInfo->nPort, "admin", "", devInfo->pVendor);
 
 			time_range timeRangeSearch;
-			time_range timeRangeFile;
 			timeRangeSearch.start = 1467388800;
 			timeRangeSearch.end = 1467475199;
 			CDeviceManager::getInstance().getDevice(devInfo->szIp).Search(0, timeRangeSearch);
+
+			//time_range timeRangeFile;
+			//timeRangeFile.start = 1467383367; // jxj - 1467383367  dzp - 1467388800
+			//timeRangeFile.end = 1467393447; // jxj - 1467393447  dzp - 1467390600
+			//CDeviceManager::getInstance().getDevice(devInfo->szIp).Download(0, timeRangeFile);
+			//timeRangeFile.start = 1467393447; // jxj - 1467393447  dzp - 1467390600
+			//timeRangeFile.end = 1467402167; // jxj - 1467402167  dzp - 1467392400
+			//CDeviceManager::getInstance().getDevice(devInfo->szIp).Download(0, timeRangeFile);
+		}
+
+		while (1)
+		{
+			::Sleep(100);
 		}
 
 		return;

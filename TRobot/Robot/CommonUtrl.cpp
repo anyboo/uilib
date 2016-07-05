@@ -194,11 +194,11 @@ time_t CCommonUtrl::MakeTimestampByJTime(JTime jTime)
 
 std::string CCommonUtrl::MakeStrTimeByTimestamp(std::time_t time)
 {
-	std::string strTime;
+	std::string strTime = "20160101000000";
 	struct tm ttime;
 
 	localtime_s(&ttime, &time);
-	strftime((char *)strTime.c_str(), 50, "%Y%m%d%H%M%S", &ttime);
+	strftime((char *)strTime.data(), strTime.length()+1, "%Y%m%d%H%M%S", &ttime);
 
 	return strTime;
 }
@@ -224,7 +224,7 @@ void CCommonUtrl::SaveSearchFileListToFile(const std::vector<RecordFile>& files,
 		Value channel(std::to_string(file.channel).c_str(), std::to_string(file.channel).length(), alloc);
 		Value beginTime(CCommonUtrl::getInstance().MakeStrTimeByTimestamp(file.beginTime).c_str(), CCommonUtrl::getInstance().MakeStrTimeByTimestamp(file.beginTime).length(), alloc);
 		Value endTime(CCommonUtrl::getInstance().MakeStrTimeByTimestamp(file.endTime).c_str(), CCommonUtrl::getInstance().MakeStrTimeByTimestamp(file.endTime).length(), alloc);
-		Value size(std::to_string(file.size / 1024 / 1024).c_str(), std::to_string(file.size / 1024 / 1024).length(), alloc);
+		Value size(std::to_string(file.size).c_str(), std::to_string(file.size).length(), alloc);
 
 		Value a(kArrayType);
 		a.PushBack(name, alloc).PushBack(channel, alloc).PushBack(beginTime, alloc).PushBack(endTime, alloc).PushBack(size, alloc);

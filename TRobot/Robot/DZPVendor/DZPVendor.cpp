@@ -97,7 +97,7 @@ void TMToNetTime(const tm& t, H264_DVR_TIME& nt)
 }
 CDZPVendor::CDZPVendor()
 {
-
+	m_eSDKType = DZP_SDK;
 }
 
 CDZPVendor::~CDZPVendor()
@@ -213,7 +213,7 @@ void CDZPVendor::Search(const long loginHandle, const size_t channel, const time
 	}
 
 	// Save Search Video List Result to Config File
-	CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files, Vendor_DZP);
+	CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files, Vendor_DZP_Abbr);
 
 	// Write File List to DB
 	WriteFileListToDB();
