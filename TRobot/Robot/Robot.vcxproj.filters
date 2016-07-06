@@ -108,6 +108,12 @@
     <ClInclude Include="HKVendor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DH_Head.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HK_Head.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Robot.cpp">

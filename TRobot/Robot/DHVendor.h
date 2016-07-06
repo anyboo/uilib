@@ -1,12 +1,8 @@
 #ifndef __DHVENDOR_H__
 #define __DHVENDOR_H__
 
-
-
-#include "CommonUtrl.h"
-
-//DH SDK
-#include "dhnetsdk.h"
+//#include "CommonUtrl.h"
+#include "DH_Head.h"
 
 
 class DHVendor :
@@ -20,11 +16,6 @@ public:
 	long Login(const std::string& ip, size_t port, const std::string& user, const std::string& password);
 	void Logout(const long loginHandle);
 
-	void StartSearchDevice();
-	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_listDeviceInfo; }
-	void StopSearchDevice();
-	size_t GetMaxChannel(){ return m_DHChannels; }
-
 	void SearchAll(const long loginHandle);
 	void Search(const long loginHandle, const size_t channel, const time_range& range);
 	void Download(const long loginHandle, const size_t channel, const time_range& range);
@@ -35,6 +26,15 @@ public:
 	void SetDownloadPath(const std::string& Root);
 	void throwException();
 
+	
+	void StartSearchDevice();
+	void StopSearchDevice();
+	size_t GetMaxChannel(){ return m_DHChannels; }
+	RECORD_FILE_LIST GetRecordFileList(){ return m_files; }
+	std::string GetDefUsearName(){ return m_strUser; }
+	std::string GetDefPassword(){ return m_strPasswords; }
+	NET_SDK_TYPE GetSDKType(){ return m_eSDKType; }
+	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_listDeviceInfo; }
 
 
 private:
@@ -59,6 +59,8 @@ private:
 
 protected:
 	HMODULE m_hMod;
+
+	NET_SDK_TYPE m_eSDKType;
 
 	//login & Init
 	std::string m_strName;

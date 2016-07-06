@@ -1,8 +1,10 @@
 #ifndef __HKVENDOR_H__
 #define __HKVENDOR_H__
 
+
+#include "HK_Head.h"
 #include "HCNetSDK.h"
-#include "CommonUtrl.h"
+//#include "CommonUtrl.h"
 
 class HKVendor :
 	public AbstractVendor
@@ -24,9 +26,13 @@ public:
 	virtual void throwException();
 
 	virtual void StartSearchDevice();
-	virtual DEVICE_INFO_LIST& GetDeviceInfoList();
 	virtual void StopSearchDevice();
-	virtual size_t GetMaxChannel();
+	std::string GetDefUsearName(){ return m_strUser; }
+	std::string GetDefPassword(){ return m_strPasswords; }
+	NET_SDK_TYPE GetSDKType(){ return m_eSDKType; }
+	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_listDeviceInfo; }
+	size_t GetMaxChannel(){ return m_HKChannels; }
+	RECORD_FILE_LIST GetRecordFileList(){ return m_files; }
 
 private:
 	void timeDHToStd(NET_DVR_TIME *pTimeDH, tm *pTimeStd);
@@ -52,7 +58,9 @@ protected:
 	std::string m_strPasswords;
 	std::string m_strIP;
 	LONG m_lLoginHandle;
-	int m_nChannels;
+	int m_HKChannels;
+
+	NET_SDK_TYPE m_eSDKType;
 
 	std::vector<RecordFile> m_files;
 

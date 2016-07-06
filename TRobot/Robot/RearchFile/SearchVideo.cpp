@@ -17,21 +17,17 @@ CSearchVideo::~CSearchVideo()
 
 
 
-int CSearchVideo::SearchFile(const std::string &ip, const time_range &range, Device *pDevice)
+int CSearchVideo::SearchFile(const std::string &ip, const time_range &range, Device *pDevice, std::vector<size_t> channelList)
 {
 	assert(!ip.empty());
-	//m_Device = m_DeviceManager.getDevice(ip);
-
 	
-	std::vector<size_t> channelList; //init later
-	size_t ta =33;
-	size_t tb = 1;
-	channelList.push_back(ta);
-	//channelList.push_back(tb);
+	//std::vector<size_t> channelList; //init later
 
-	//m_Device.setChannel(channelList);
-	pDevice->setChannel(channelList);
-	assert(pDevice->m_pVendor);
+	if (!channelList.empty())
+	{
+		pDevice->setChannel(channelList);
+		assert(pDevice->m_pVendor);
+	}
 	
 	std::vector<size_t> channels = pDevice->getChannelList();//init later
 	assert(pDevice->m_pVendor);

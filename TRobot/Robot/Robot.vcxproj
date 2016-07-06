@@ -93,8 +93,10 @@
     <ClInclude Include="DHVendor.h" />
     <ClInclude Include="AbstractVendor.h" />
     <ClInclude Include="CommonUtrl.h" />
+    <ClInclude Include="DH_Head.h" />
     <ClInclude Include="DZPVendor\DZPVendor.h" />
     <ClInclude Include="HKVendor.h" />
+    <ClInclude Include="HK_Head.h" />
     <ClInclude Include="inc\AVPlayer.h" />
     <ClInclude Include="inc\JNetSDK.h" />
     <ClInclude Include="inc\Jtype.h" />

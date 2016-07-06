@@ -1,0 +1,30 @@
+Demo 
+需要包含的头文件：
+#include "SearchVideo.h"
+#include "Device.h"
+#include "DHVendor.h"
+
+//以海康的SDK测试为例子
+
+int main()
+{
+
+	time_range range;
+	range.start = 1467475200;
+	range.end = 1467561600;
+
+	//通过设备类来调用海康的SDK
+	HKVendor hkObj;
+	//初始化设备类
+	Device dObj(&hkObj);
+	//海康的登录
+	dObj.Login("192.168.0.92", 8000, "admin", "admin123");
+
+	//视频文件查询类
+	CSearchVideo svObj;
+	svObj.SearchFile("192.168.0.92", range, &dObj);
+
+	保存文件查询的信息
+	std::vector<readSearchVideo> RSVObj;
+	svObj.ReadDataFromTable(RSVObj);
+}

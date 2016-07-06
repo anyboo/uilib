@@ -3,14 +3,15 @@
 
 
 HKVendor::HKVendor():
-m_strName(""),
-m_dwPort(0),
-m_strUser(""),
-m_strPasswords(""),
+m_strName("º£¿µ"),
+m_dwPort(8000),
+m_strUser("admin"),
+m_strPasswords("12345"),
 m_strIP(""),
 m_lLoginHandle(0),
-m_nChannels(0)
+m_HKChannels(0)
 {
+	m_eSDKType = HK_SDK;
 }
 
 HKVendor::~HKVendor()
@@ -56,8 +57,8 @@ long HKVendor::Login(const std::string& ip, size_t port, const std::string& user
 		throw std::exception("Login failed");
 	}
 
-// 	m_nChannels = DeviceInfoTmp.byIPChanNum;
-// 
+	m_HKChannels = DeviceInfoTmp.byIPChanNum;
+ 
 // 	m_struDeviceInfo.lLoginID = lLoginID;
 // 	m_struDeviceInfo.iDeviceChanNum = DeviceInfoTmp.byChanNum;
 // 	m_struDeviceInfo.iIPChanNum = DeviceInfoTmp.byIPChanNum;
@@ -298,7 +299,7 @@ void HKVendor::Download(const long loginHandle, const size_t channel, const std:
 	strcat_s(szTime, (char *)filename.c_str());
 	strcat_s(szTime, szBuf);
 
-	cout << szTime << endl;
+	std::cout << szTime << std::endl;
 
 	std::vector<RecordFile>::iterator it;
 	int nSize = 0;
@@ -668,19 +669,9 @@ void HKVendor::StartSearchDevice()
 
 }
 
-DEVICE_INFO_LIST& HKVendor::GetDeviceInfoList()
-{
-	return m_listDeviceInfo;
-}
-
 void HKVendor::StopSearchDevice()
 {
 
-}
-
-size_t HKVendor::GetMaxChannel()
-{
-	return m_nChannels;
 }
 
 

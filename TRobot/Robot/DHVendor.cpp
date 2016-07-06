@@ -4,15 +4,17 @@
 
 DHVendor::DHVendor():
 m_strName("大华"),
-m_dwPort(0),
-m_strUser(""),
-m_strPasswords(""),
+m_dwPort(3777),
+m_strUser("admin"),
+m_strPasswords("admin"),
 m_strIP(""),
 m_lLoginHandle(0),
 m_hMod(NULL),
 m_strPath(""),
 m_DHChannels(0)
 {
+	m_eSDKType = DH_SDK;
+
 	memset(&m_deviceInfo, 0, sizeof(m_deviceInfo));
 }
 
@@ -36,7 +38,7 @@ void DHVendor::Init()
 	}
 	else
 	{
-		cout << "初始化SDK成功！" << endl;
+		std::cout << "初始化SDK成功！" << std::endl;
 	}
 }
 
@@ -52,13 +54,13 @@ long DHVendor::Login(const std::string& ip, size_t port, const std::string& user
 
 	if (0 != nError)
 	{
-		cout << "登录错误(nError)：" << GetLastErrorString().c_str() << endl;
+		std::cout << "登录错误(nError)：" << GetLastErrorString().c_str() << std::endl;
 		throw std::exception("Login failed");
 	}
 
 	if (0 == m_lLoginHandle)
 	{
-		cout << "登录错误(lLogin)：" << GetLastErrorString().c_str() << endl;
+		std::cout << "登录错误(lLogin)：" << GetLastErrorString().c_str() << std::endl;
 	}
 
 	if (m_lLoginHandle > 0)
@@ -76,7 +78,7 @@ long DHVendor::Login(const std::string& ip, size_t port, const std::string& user
 		}
 		else
 		{
-			cout << "Get channel failed" << GetLastErrorString() << endl;
+			std::cout << "Get channel failed" << GetLastErrorString() << std::endl;
 			throw std::exception("Get channel failed");
 			return 0;
 		}
@@ -172,13 +174,13 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 {
 	if (0 >= m_lLoginHandle)
 	{
-		cout << "请先登录!" << endl;
+		std::cout << "请先登录!" << std::endl;
 		return;
 	}
 
 	if (range.start >= range.end)
 	{
-		cout << "时间范围不对!" << endl;
+		std::cout << "时间范围不对!" << std::endl;
 		return;
 	}
 
@@ -240,7 +242,7 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 			info.setPrivateData(&ifileinfo[i], sizeof(NET_RECORDFILE_INFO));
 			m_files.push_back(info);
 
-			cout << "GetRecordFileList 文件名:" << info.name <<endl<< "  " << "文件大小:" << info.size << "  " << "通道:" << info.channel << endl;
+			std::cout << "GetRecordFileList 文件名:" << info.name <<endl<< "  " << "文件大小:" << info.size << "  " << "通道:" << info.channel << std::endl;
 		}
 	}
 
@@ -340,7 +342,7 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const std:
 	strcat_s(szTime, (char *)filename.c_str());
 	strcat_s(szTime, szBuf);
 
-	cout << szTime << endl;
+	std::cout << szTime << std::endl;
 
 	std::vector<RecordFile>::iterator it;
 	int nSize = 0;
@@ -951,30 +953,30 @@ std::string DHVendor::GetLastErrorString()
 	}
 }
 
-#include "catch.hpp"
-
-TEST_CASE_METHOD(DHVendor, "Init DH SDK", "[DHVendor]")
- {
-
-	time_range range;
-	range.start = 1467302400;
-	//range.end = 1466524800;
-	range.end = 1467648000;
-	//range.end = 1478833871;
-	REQUIRE_NOTHROW(Init());
-	REQUIRE_NOTHROW(StartSearchDevice());
-	
-	REQUIRE_NOTHROW(Login("192.168.0.96", 37777, "admin", ""));
-
-	REQUIRE_NOTHROW(Search(0, 0, range));
-	//REQUIRE_NOTHROW(Search(1, range));
-
-	//REQUIRE_NOTHROW(Download(0, 0, range));
-	REQUIRE_NOTHROW(Download(0, 0, "channel0-20160701000000-20160701235959-0"));
-	//REQUIRE_NOTHROW(Download(0, 0, "channel0-20160701000000-20160701235959-1"));
-
-	//REQUIRE_NOTHROW(PlayVideo(0, range));
-	//REQUIRE_NOTHROW(PlayVideo(0, "channel0-20160621000000-20160621235959-0"));
-	//REQUIRE_NOTHROW(Logout());
-
-}
+// #include "catch.hpp"
+// 
+// TEST_CASE_METHOD(DHVendor, "Init DH SDK", "[DHVendor]")
+//  {
+// 
+// 	time_range range;
+// 	range.start = 1467302400;
+// 	//range.end = 1466524800;
+// 	range.end = 1467648000;
+// 	//range.end = 1478833871;
+// 	REQUIRE_NOTHROW(Init());
+// 	REQUIRE_NOTHROW(StartSearchDevice());
+// 	
+// 	REQUIRE_NOTHROW(Login("192.168.0.96", 37777, "admin", ""));
+// 
+// 	REQUIRE_NOTHROW(Search(0, 0, range));
+// 	//REQUIRE_NOTHROW(Search(1, range));
+// 
+// 	//REQUIRE_NOTHROW(Download(0, 0, range));
+// 	REQUIRE_NOTHROW(Download(0, 0, "channel0-20160701000000-20160701235959-0"));
+// 	//REQUIRE_NOTHROW(Download(0, 0, "channel0-20160701000000-20160701235959-1"));
+// 
+// 	//REQUIRE_NOTHROW(PlayVideo(0, range));
+// 	//REQUIRE_NOTHROW(PlayVideo(0, "channel0-20160621000000-20160621235959-0"));
+// 	//REQUIRE_NOTHROW(Logout());
+// 
+// }
