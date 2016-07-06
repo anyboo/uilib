@@ -1,6 +1,7 @@
 #ifndef __HKVENDOR_H__
 #define __HKVENDOR_H__
 
+#include "HCNetSDK.h"
 #include "CommonUtrl.h"
 
 class HKVendor :
@@ -28,8 +29,12 @@ public:
 	virtual size_t GetMaxChannel();
 
 private:
+	void timeDHToStd(NET_DVR_TIME *pTimeDH, tm *pTimeStd);
+	void timeStdToDH(tm *pTimeStd, NET_DVR_TIME *pTimeDH);
+	void trTOndt(NET_DVR_TIME &ndtStartTime, NET_DVR_TIME &ndtEndTime, const time_range range);
+
 	std::string GetLastErrorString();
-	//std::vector<time_range> MakeTimeRangeList(const time_range& range);
+	std::vector<time_range> MakeTimeRangeList(const time_range& range);
 	void CreatePath(const size_t channel);
 
 	void SaveSearchFileListToFile();
@@ -37,6 +42,8 @@ private:
 	std::string MakeStrTimeByTimestamp(time_t time);
 
 	void WriteFileListToDB();
+	bool isGetDVRConfig();
+	size_t getChannel(size_t channel);
 
 protected:
 	std::string m_strName;
@@ -51,6 +58,8 @@ protected:
 
 	/* Search Device */
 	DEVICE_INFO_LIST m_listDeviceInfo;
+
+	LOCAL_DEVICE_INFO m_struDeviceInfo;
 };
 
 #endif

@@ -82,7 +82,6 @@ long DHVendor::Login(const std::string& ip, size_t port, const std::string& user
 		}
 	}
 
-
 	return lLoginHandle;
 // 	for (int i = 1; i <= m_DHChannels; i++)
 // 	{
@@ -107,7 +106,36 @@ void DHVendor::Logout(const long loginHandle)
 
 void DHVendor::StartSearchDevice()
 {
+ 	DEVICE_NET_INFO Device[256] = { 0 };
+ 	int nLength = 0;
+ 
+ 	BOOL bRet = CLIENT_SearchDevices((char *)Device, sizeof(DEVICE_NET_INFO) * 256, &nLength, 3000);
+ 
+	if (bRet)
+	{
+		int i;
+		for (i = 0; i < nLength / sizeof(DEVICE_NET_INFO); i++)
+		{
+			NET_DEVICE_INFO* ndiInfo = new NET_DEVICE_INFO();
+			int nLen = 0;
+			ndiInfo->nSDKType = DH_SDK;
 
+			nLen = ((strlen(Device[i].szIP)) < MAX_IPADDR_LEN) ? strlen(Device[i].szIP) : MAX_IPADDR_LEN;
+			memcpy(&ndiInfo->szIp, Device[i].szIP, nLen);
+
+			ndiInfo->nPort = Device[i].nPort;
+
+			nLen = ((strlen(Device[i].szSubmask)) < MAX_IPADDR_LEN) ? strlen(Device[i].szSubmask) : MAX_IPADDR_LEN;
+			memcpy(&ndiInfo->szSubmask, Device[i].szSubmask, nLen);
+
+			nLen = (strlen(Device[i].szMac) < MAX_MACADDR_LEN) ? strlen(Device[i].szMac) : MAX_MACADDR_LEN;
+			memcpy(&ndiInfo->szMac, &Device[i].szMac, nLen);
+
+			ndiInfo->pVendor = this;
+
+			m_listDeviceInfo.push_back(ndiInfo);
+		}
+	}
 }
 
 void DHVendor::StopSearchDevice()
@@ -212,14 +240,14 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 			info.setPrivateData(&ifileinfo[i], sizeof(NET_RECORDFILE_INFO));
 			m_files.push_back(info);
 
-			//cout << "GetRecordFileList 文件名:" << info.name <<endl<< "  " << "文件大小:" << info.size << "  " << "通道:" << info.channel << endl;
+			cout << "GetRecordFileList 文件名:" << info.name <<endl<< "  " << "文件大小:" << info.size << "  " << "通道:" << info.channel << endl;
 		}
 	}
 
 	//保存到JSON文件
-	SaveSearchFileListToFile();
+//	SaveSearchFileListToFile();
 	//写入到数据库中
-	WriteFileListToDB();
+//	WriteFileListToDB();
 }
 
 void DHVendor::Download(const long loginHandle, const size_t channel, const time_range& range)
@@ -239,11 +267,20 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const time
 
 	char szTime[512];
 	ZeroMemory(szTime, 512);
-	sprintf_s(szTime, "D:\\DownLoadVideo\\DaHua\\通道%d\\channel%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d.dav", channel, channel, ntStime.dwYear, ntStime.dwMonth, ntStime.dwDay,
+	sprintf_s(szTime, "D:\\DownLoadVideo\\大华\\通道%d\\channel%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d.dav", channel, channel, ntStime.dwYear, ntStime.dwMonth, ntStime.dwDay,
 		ntStime.dwHour, ntStime.dwMinute, ntStime.dwSecond, ntEtime.dwYear, ntEtime.dwMonth, ntEtime.dwDay, ntEtime.dwHour, ntEtime.dwMinute, ntEtime.dwSecond);
 
 	BOOL bRet = CLIENT_DownloadByTime(m_lLoginHandle, channel, 0, &ntStime, &ntEtime, szTime, BTDownLoadPos, (DWORD)this);
 	std::cout << "strName:" << szTime << std::endl;
+
+	int total, cur;
+	total = 0;
+	cur = 0;
+	BOOL bret = CLIENT_GetDownloadPos(bRet, &total, &cur);
+	while ((cur / total) != 1)
+	{
+		std::cout << "进度：" << (double)(cur / total) << std::endl;
+	}
 
 	if (0 == bRet)
 	{
@@ -297,7 +334,7 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const std:
 
 	char szTime[512];
 	ZeroMemory(szTime, 512);
-	sprintf_s(szTime, "D:\\DownLoadVideo\\DaHua\\channel%d\\", channel);
+	sprintf_s(szTime, "D:\\DownLoadVideo\\大华\\通道%d\\", channel);
 
 	char szBuf[] = ".dav";
 	strcat_s(szTime, (char *)filename.c_str());
@@ -313,6 +350,15 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const std:
 		{
 			NET_RECORDFILE_INFO* pData = (NET_RECORDFILE_INFO*)it->getPrivateData();
 			BOOL bRet = CLIENT_DownloadByRecordFile(m_lLoginHandle, pData, szTime, BTDownLoadFile, (DWORD)this);
+
+			int total, cur;
+			total = 0;
+			cur = 0;
+			BOOL bret = CLIENT_GetDownloadPos(bRet, &total, &cur);
+			while ((cur / total) != 1)
+			{
+				std::cout << "进度：" << (double)(cur / total) << std::endl;
+			}
 
 			if (0 == bRet)
 			{
@@ -453,7 +499,7 @@ void DHVendor::CreatePath(const size_t channel)
 		return;
 	}
 
-	strPath.append("DaHua\\");
+	strPath.append("大华\\");
 	BOOL bTwo = CreateDirectoryA(strPath.c_str(), NULL);
 	if (!bTwo)
 	{
@@ -905,28 +951,30 @@ std::string DHVendor::GetLastErrorString()
 	}
 }
 
-// #include "catch.hpp"
-// 
-// TEST_CASE_METHOD(DHVendor, "Init DH SDK", "[DHVendor]")
-//  {
-// 
-// 	time_range range;
-// 	range.start = 1466438400;
-// 	//range.end = 1466524800;
-// 	range.end = 1466629200;
-// 	//range.end = 1478833871;
-// //	REQUIRE_NOTHROW(Init("192.168.0.96", 37777));
-// 
-// 	//REQUIRE_NOTHROW(Login("admin", ""));
-// 
-// 	//REQUIRE_NOTHROW(Search(0, range));
-// 	//REQUIRE_NOTHROW(Search(1, range));
-// 
-// 	//REQUIRE_NOTHROW(Download(0, range));
-// 	//Download(0, "channel0-20160621000000-20160621235959-0");
-// 
-// 	//REQUIRE_NOTHROW(PlayVideo(0, range));
-// 	//REQUIRE_NOTHROW(PlayVideo(0, "channel0-20160621000000-20160621235959-0"));
-// 	//REQUIRE_NOTHROW(Logout());
-// 
-// }
+#include "catch.hpp"
+
+TEST_CASE_METHOD(DHVendor, "Init DH SDK", "[DHVendor]")
+ {
+
+	time_range range;
+	range.start = 1467302400;
+	//range.end = 1466524800;
+	range.end = 1467648000;
+	//range.end = 1478833871;
+	REQUIRE_NOTHROW(Init());
+	REQUIRE_NOTHROW(StartSearchDevice());
+	
+	REQUIRE_NOTHROW(Login("192.168.0.96", 37777, "admin", ""));
+
+	REQUIRE_NOTHROW(Search(0, 0, range));
+	//REQUIRE_NOTHROW(Search(1, range));
+
+	//REQUIRE_NOTHROW(Download(0, 0, range));
+	REQUIRE_NOTHROW(Download(0, 0, "channel0-20160701000000-20160701235959-0"));
+	//REQUIRE_NOTHROW(Download(0, 0, "channel0-20160701000000-20160701235959-1"));
+
+	//REQUIRE_NOTHROW(PlayVideo(0, range));
+	//REQUIRE_NOTHROW(PlayVideo(0, "channel0-20160621000000-20160621235959-0"));
+	//REQUIRE_NOTHROW(Logout());
+
+}

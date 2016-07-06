@@ -1,5 +1,5 @@
-#include "HCNetSDK.h"
 #include "HKVendor.h"
+
 
 
 HKVendor::HKVendor():
@@ -12,10 +12,6 @@ m_lLoginHandle(0),
 m_nChannels(0)
 {
 }
-
-static void timeDHToStd(NET_DVR_TIME *pTimeDH, tm *pTimeStd);
-static void timeStdToDH(tm *pTimeStd, NET_DVR_TIME *pTimeDH);
-static void trTOndt(NET_DVR_TIME &ndtStartTime, NET_DVR_TIME &ndtEndTime, const time_range range);
 
 HKVendor::~HKVendor()
 {
@@ -60,8 +56,16 @@ long HKVendor::Login(const std::string& ip, size_t port, const std::string& user
 		throw std::exception("Login failed");
 	}
 
-	m_nChannels = DeviceInfoTmp.byIPChanNum;
+// 	m_nChannels = DeviceInfoTmp.byIPChanNum;
+// 
+// 	m_struDeviceInfo.lLoginID = lLoginID;
+// 	m_struDeviceInfo.iDeviceChanNum = DeviceInfoTmp.byChanNum;
+// 	m_struDeviceInfo.iIPChanNum = DeviceInfoTmp.byIPChanNum;
+// 	m_struDeviceInfo.iStartChan = DeviceInfoTmp.byStartChan;
 
+// 	cout << m_struDeviceInfo.struChanInfo[32].iChanIndex << endl;
+// 	DoGetDeviceResoureCfg();  //获取设备资源信息	
+// 	cout << m_struDeviceInfo.struChanInfo[32].iChanIndex << endl;
 	return lLoginID;
 }
 
@@ -73,6 +77,8 @@ void HKVendor::Logout(const long loginHandle)
 		throw std::exception("Logout failed");
 		return;
 	}
+
+	m_struDeviceInfo.lLoginID = -1;
 }
 
 void HKVendor::SearchAll(const long loginHandle)
@@ -93,9 +99,10 @@ void HKVendor::Search(const long loginHandle, const size_t channel, const time_r
 		std::cout << "时间范围不对!" << std::endl;
 		return;
 	}
+	size_t sChannel = getChannel(channel);
 
-	//std::vector<time_range> trInfor = MakeTimeRangeList(range);
-	std::vector<time_range> trInfor = CCommonUtrl::getInstance().MakeTimeRangeList(range);
+	std::vector<time_range> trInfor = MakeTimeRangeList(range);
+	//std::vector<time_range> trInfor = CCommonUtrl::getInstance().MakeTimeRangeList(range);
 
 	std::vector<time_range>::iterator it;
 	for (it = trInfor.begin(); it != trInfor.end(); ++it)
@@ -106,7 +113,7 @@ void HKVendor::Search(const long loginHandle, const size_t channel, const time_r
 		trTOndt(ndtStartTime, ndtEndTime, *it);
 
 		NET_DVR_FILECOND FileCond;
-		FileCond.lChannel = channel;
+		FileCond.lChannel = sChannel;
 		FileCond.dwFileType = 0xff;
 		FileCond.dwIsLocked = 0xff;
 		FileCond.dwUseCardNo = 0;
@@ -210,7 +217,8 @@ void HKVendor::Download(const long loginHandle, const size_t channel, const time
 		ndtStime.dwHour, ndtStime.dwMinute, ndtStime.dwSecond, ndtEtime.dwYear, ndtEtime.dwMonth, ndtEtime.dwDay, ndtEtime.dwHour, ndtEtime.dwMinute, ndtEtime.dwSecond);
 	std::cout << "strName:" << szTime << std::endl;
 
-	LONG lRet = NET_DVR_GetFileByTime(m_lLoginHandle, channel, &ndtStime, &ndtEtime, szTime);
+	size_t sChannel = getChannel(channel);
+	LONG lRet = NET_DVR_GetFileByTime(m_lLoginHandle, sChannel, &ndtStime, &ndtEtime, szTime);
 	
 	if (-1 == lRet)
 	{
@@ -224,6 +232,15 @@ void HKVendor::Download(const long loginHandle, const size_t channel, const time
 	{
 		NET_DVR_PlayBackControl(lRet, NET_DVR_PLAYSTART, 0, NULL);
 		std::cout << "downLoadByRecordFile 下载文件成功！" << std::endl;
+
+// 		DWORD pos;
+// 		pos = NET_DVR_GetDownloadPos(lRet);
+// 
+// 		while (pos < 100)
+// 		{
+// 			pos = NET_DVR_GetDownloadPos(lRet);
+// 			std::cout << "Pos:" <<pos<< std::endl;
+// 		}
 	}	
 }
 
@@ -244,8 +261,9 @@ void HKVendor::PlayVideo(const long loginHandle, const size_t channel, const tim
 	TestWindows Test;
 	Test.Init();
 
+	size_t sChannel = getChannel(channel);
 	//BOOL lPlayID = CLIENT_PlayBackByTimeEx(m_lLoginHandle, channel, &ntStime, &ntEtime, g_hWnd, PlayCallBack, (DWORD)this, PBDataCallBack, (DWORD)this);
-	LONG hPlayHandle = NET_DVR_PlayBackByTime(m_lLoginHandle, channel, &ndtStime, &ndtEtime, g_hWnd);
+	LONG hPlayHandle = NET_DVR_PlayBackByTime(m_lLoginHandle, sChannel, &ndtStime, &ndtEtime, g_hWnd);
 
 	if (hPlayHandle < 0)
 	{
@@ -300,14 +318,23 @@ void HKVendor::Download(const long loginHandle, const size_t channel, const std:
 			{
 				NET_DVR_PlayBackControl(lRet, NET_DVR_PLAYSTART, 0, NULL);
 				std::cout << "downLoadByRecordFile 下载录像成功！" << std::endl;
+
+				DWORD pos;
+				pos = NET_DVR_GetDownloadPos(lRet);
+				
+				while (pos < 100)
+				{
+					pos = NET_DVR_GetDownloadPos(lRet);
+					std::cout << "Pos:" <<pos<< std::endl;
+				}
 			}
 		}
 
-		if (m_files.size() - 1 == nSize)
-		{
-			std::cout << "下载文件名不存在！" << std::endl;
-		}
-		nSize++;
+// 		if (m_files.size() - 1 == nSize)
+// 		{
+// 			std::cout << "下载文件名不存在！" << std::endl;
+// 		}
+// 		nSize++;
 	}
 }
 
@@ -364,7 +391,7 @@ void HKVendor::throwException()
 
 }
 
-void timeDHToStd(NET_DVR_TIME *pTimeDH, tm *pTimeStd)
+void HKVendor::timeDHToStd(NET_DVR_TIME *pTimeDH, tm *pTimeStd)
 {
 	pTimeStd->tm_year = pTimeDH->dwYear - 1900;
 	pTimeStd->tm_mon = pTimeDH->dwMonth - 1;
@@ -374,7 +401,7 @@ void timeDHToStd(NET_DVR_TIME *pTimeDH, tm *pTimeStd)
 	pTimeStd->tm_sec = pTimeDH->dwSecond;
 }
 
-void trTOndt(NET_DVR_TIME &ndtStartTime, NET_DVR_TIME &ndtEndTime, const time_range range)
+void HKVendor::trTOndt(NET_DVR_TIME &ndtStartTime, NET_DVR_TIME &ndtEndTime, const time_range range)
 {
 	tm tmStartTime;
 	tm tmEndTime;
@@ -386,7 +413,7 @@ void trTOndt(NET_DVR_TIME &ndtStartTime, NET_DVR_TIME &ndtEndTime, const time_ra
 	timeStdToDH(&tmEndTime, &ndtEndTime);
 }
 
-void timeStdToDH(tm *pTimeStd, NET_DVR_TIME *pTimeDH)
+void HKVendor::timeStdToDH(tm *pTimeStd, NET_DVR_TIME *pTimeDH)
 {
 	pTimeDH->dwYear = pTimeStd->tm_year + 1900;
 	pTimeDH->dwMonth = pTimeStd->tm_mon + 1;
@@ -481,106 +508,128 @@ void HKVendor::WriteFileListToDB()
 	pDb->writeDataByVector(sql, RecordList);
 }
 
-// std::vector<time_range> HKVendor::MakeTimeRangeList(const time_range& range)
-// {
-// 	time_t timeStart = range.start;
-// 	time_t timeEnd = range.end;
-// 	std::vector<time_range> timeRangeList;
-// 
-// 	tm tmStartTime;
-// 	tm tmEndTime;
-// 	NET_DVR_TIME ntStartTime;
-// 	NET_DVR_TIME ntEndTime;
-// 
-// 	_localtime64_s(&tmStartTime, (const time_t*)&range.start);
-// 	_localtime64_s(&tmEndTime, (const time_t*)&range.end);
-// 
-// 
-// 	timeStdToDH(&tmStartTime, &ntStartTime);
-// 	timeStdToDH(&tmEndTime, &ntEndTime);
-// 
-// 	if (timeEnd - timeStart <= ONE_DAY)
-// 	{
-// 		if (ntStartTime.dwDay == ntEndTime.dwDay)
-// 		{
-// 			timeRangeList.push_back(range);
-// 		}
-// 		else
-// 		{
-// 			time_range rangeItem;
-// 			rangeItem.start = timeStart;
-// 			time_t diff = (23 - ntStartTime.dwHour) * ONE_HOUR + (59 - ntStartTime.dwMinute) * ONE_MINUTE + (59 - ntStartTime.dwSecond);
-// 			rangeItem.end = timeStart + diff;
-// 			timeRangeList.push_back(rangeItem);
-// 
-// 			rangeItem.start = timeStart + diff + 1;
-// 			rangeItem.end = timeEnd;
-// 			timeRangeList.push_back(rangeItem);
-// 		}
-// 	}
-// 	else
-// 	{
-// 		time_t diff = timeEnd - timeStart;
-// 		int day = (int)(diff / ONE_DAY + (diff%ONE_DAY > 0 ? 1 : 0));
-// 
-// 		if (ntStartTime.dwHour == 0 && ntStartTime.dwMinute == 0 && ntStartTime.dwSecond == 0)
-// 		{
-// 			for (size_t i = 0; i < day - 1; i++)
-// 			{
-// 				time_range rangeItem;
-// 				rangeItem.start = timeStart;
-// 				rangeItem.end = timeStart + ONE_DAY - 1;
-// 				timeRangeList.push_back(rangeItem);
-// 
-// 				timeStart = timeStart + ONE_DAY;
-// 			}
-// 
-// 			time_range rangeItem;
-// 			rangeItem.start = timeStart;
-// 			rangeItem.end = timeEnd;
-// 			timeRangeList.push_back(rangeItem);
-// 		}
-// 		else
-// 		{
-// 			time_range rangeItem;
-// 			rangeItem.start = timeStart;
-// 			time_t diff = (23 - ntStartTime.dwHour) * ONE_HOUR + (59 - ntStartTime.dwMinute) * ONE_MINUTE + (59 - ntStartTime.dwSecond);
-// 			rangeItem.end = timeStart + diff;
-// 			timeRangeList.push_back(rangeItem);
-// 
-// 			timeStart = timeStart + diff + 1;
-// 			for (size_t i = 0; i < day - 2; i++)
-// 			{
-// 				time_range rangeItem;
-// 				rangeItem.start = timeStart;
-// 				rangeItem.end = timeStart + ONE_DAY - 1;
-// 				timeRangeList.push_back(rangeItem);
-// 
-// 				timeStart = timeStart + ONE_DAY;
-// 			}
-// 
-// 			if (timeEnd > timeStart + ONE_DAY - 1)
-// 			{
-// 				rangeItem.start = timeStart;
-// 				rangeItem.end = timeStart + ONE_DAY - 1;;
-// 				timeRangeList.push_back(rangeItem);
-// 
-// 				timeStart = timeStart + ONE_DAY;
-// 				rangeItem.start = timeStart;
-// 				rangeItem.end = timeEnd;
-// 				timeRangeList.push_back(rangeItem);
-// 			}
-// 			else
-// 			{
-// 				rangeItem.start = timeStart;
-// 				rangeItem.end = timeEnd;
-// 				timeRangeList.push_back(rangeItem);
-// 			}
-// 		}
-// 	}
-// 
-// 	return timeRangeList;
-// }
+bool HKVendor::isGetDVRConfig()
+{
+	NET_DVR_IPPARACFG_V40 IpAccessCfg;
+	memset(&IpAccessCfg, 0, sizeof(IpAccessCfg));
+	DWORD  dwReturned;
+
+	return  NET_DVR_GetDVRConfig(m_lLoginHandle, NET_DVR_GET_IPPARACFG_V40, 0, &IpAccessCfg, sizeof(NET_DVR_IPPARACFG_V40), &dwReturned);
+}
+
+size_t HKVendor::getChannel(size_t channel)
+{
+	//获取设备的配置信息成功就启用模拟通道
+	if (isGetDVRConfig())
+	{
+		return channel += 32;
+	}
+	else
+	{
+		return channel;
+	}
+}
+
+std::vector<time_range> HKVendor::MakeTimeRangeList(const time_range& range)
+{
+	time_t timeStart = range.start;
+	time_t timeEnd = range.end;
+	std::vector<time_range> timeRangeList;
+
+	tm tmStartTime;
+	tm tmEndTime;
+	NET_DVR_TIME ntStartTime;
+	NET_DVR_TIME ntEndTime;
+
+	_localtime64_s(&tmStartTime, (const time_t*)&range.start);
+	_localtime64_s(&tmEndTime, (const time_t*)&range.end);
+
+
+	timeStdToDH(&tmStartTime, &ntStartTime);
+	timeStdToDH(&tmEndTime, &ntEndTime);
+
+	if (timeEnd - timeStart <= ONE_DAY)
+	{
+		if (ntStartTime.dwDay == ntEndTime.dwDay)
+		{
+			timeRangeList.push_back(range);
+		}
+		else
+		{
+			time_range rangeItem;
+			rangeItem.start = timeStart;
+			time_t diff = (23 - ntStartTime.dwHour) * ONE_HOUR + (59 - ntStartTime.dwMinute) * ONE_MINUTE + (59 - ntStartTime.dwSecond);
+			rangeItem.end = timeStart + diff;
+			timeRangeList.push_back(rangeItem);
+
+			rangeItem.start = timeStart + diff + 1;
+			rangeItem.end = timeEnd;
+			timeRangeList.push_back(rangeItem);
+		}
+	}
+	else
+	{
+		time_t diff = timeEnd - timeStart;
+		int day = (int)(diff / ONE_DAY + (diff%ONE_DAY > 0 ? 1 : 0));
+
+		if (ntStartTime.dwHour == 0 && ntStartTime.dwMinute == 0 && ntStartTime.dwSecond == 0)
+		{
+			for (size_t i = 0; i < day - 1; i++)
+			{
+				time_range rangeItem;
+				rangeItem.start = timeStart;
+				rangeItem.end = timeStart + ONE_DAY - 1;
+				timeRangeList.push_back(rangeItem);
+
+				timeStart = timeStart + ONE_DAY;
+			}
+
+			time_range rangeItem;
+			rangeItem.start = timeStart;
+			rangeItem.end = timeEnd;
+			timeRangeList.push_back(rangeItem);
+		}
+		else
+		{
+			time_range rangeItem;
+			rangeItem.start = timeStart;
+			time_t diff = (23 - ntStartTime.dwHour) * ONE_HOUR + (59 - ntStartTime.dwMinute) * ONE_MINUTE + (59 - ntStartTime.dwSecond);
+			rangeItem.end = timeStart + diff;
+			timeRangeList.push_back(rangeItem);
+
+			timeStart = timeStart + diff + 1;
+			for (size_t i = 0; i < day - 2; i++)
+			{
+				time_range rangeItem;
+				rangeItem.start = timeStart;
+				rangeItem.end = timeStart + ONE_DAY - 1;
+				timeRangeList.push_back(rangeItem);
+
+				timeStart = timeStart + ONE_DAY;
+			}
+
+			if (timeEnd > timeStart + ONE_DAY - 1)
+			{
+				rangeItem.start = timeStart;
+				rangeItem.end = timeStart + ONE_DAY - 1;;
+				timeRangeList.push_back(rangeItem);
+
+				timeStart = timeStart + ONE_DAY;
+				rangeItem.start = timeStart;
+				rangeItem.end = timeEnd;
+				timeRangeList.push_back(rangeItem);
+			}
+			else
+			{
+				rangeItem.start = timeStart;
+				rangeItem.end = timeEnd;
+				timeRangeList.push_back(rangeItem);
+			}
+		}
+	}
+
+	return timeRangeList;
+}
 
 void HKVendor::CreatePath(const size_t channel)
 {
@@ -631,7 +680,7 @@ void HKVendor::StopSearchDevice()
 
 size_t HKVendor::GetMaxChannel()
 {
-	return 0;
+	return m_nChannels;
 }
 
 
@@ -768,12 +817,14 @@ std::string HKVendor::GetLastErrorString()
 //  
 //  	REQUIRE_NOTHROW(Login("192.168.0.92", 8000, "admin", "admin123"));
 // 
-//  	REQUIRE_NOTHROW(Search(0, 33, range));
+//  	REQUIRE_NOTHROW(Search(0, 1, range));
 //  	//REQUIRE_NOTHROW(Search(1, range));
 // 	
-//  	//REQUIRE_NOTHROW(Download(0, 33, range));
-// 	//REQUIRE_NOTHROW(Download(0, 1,"ch0001_00000000137000400"));
+//  //	REQUIRE_NOTHROW(Download(0, 33, range));
+// 	//REQUIRE_NOTHROW(Download(0, 1, "ch0001_00000000137000400"));
+// 	REQUIRE_NOTHROW(Download(0, 1, "ch0001_00000000032000000"));
+// 
 // 	//REQUIRE_NOTHROW(PlayVideo(0, 0, "ch0003_00000000008000000"));
 //  	//REQUIRE_NOTHROW(PlayVideo(0, 35, range));
-// 	// 	REQUIRE_NOTHROW(Logout());
+//  	REQUIRE_NOTHROW(Logout(0));
 // }

@@ -5,7 +5,7 @@
 
 //#include "DeviceManager.h"
 #include "Device.h"
-#include "DHVendor.h"
+//#include "DHVendor.h"
 #include "QMSqlite.h"
 
 #include <string>
@@ -33,7 +33,7 @@ private:
 	time_range m_TimeRange;
 	//CDeviceManager m_DeviceManager;
 	//Device m_Device;
-	DHVendor m_DHObj;
+	//DHVendor m_DHObj;
 	int m_nNotify;
 	bool m_bFlag;
 

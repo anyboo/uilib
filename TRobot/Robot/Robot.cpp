@@ -4,11 +4,12 @@
 #include "catch.hpp"
 
 #include "SearchVideo.h"
+
 // #include "jxjVendor.h"
 //#include "DZPVendor.h"
 #include "DHVendor.h"
-#include "HKVendor.h"
-#include "SearchVideo.h"
+//#include "HKVendor.h"
+
 #include "Device.h"
 
 TEST_CASE("This is a demo", "[demo]")
@@ -27,15 +28,15 @@ TEST_CASE("This is a demo", "[demo]")
 // 		Obj.Search(0, 33, range);
 // 		Obj.Download(0, 33, range);
 
-		HKVendor hkObj;
-		Device dObj(&hkObj);
-		dObj.Login("192.168.0.92", 8000, "admin", "admin123");
-
-		CSearchVideo svObj;
-		svObj.SearchFile("192.168.0.92", range, &dObj);
-
-		std::vector<readSearchVideo> RSVObj;
-		svObj.ReadDataFromTable(RSVObj);
+// 		HKVendor hkObj;
+// 		Device dObj(&hkObj);
+// 		dObj.Login("192.168.0.92", 8000, "admin", "admin123");
+// 
+// 		CSearchVideo svObj;
+// 		svObj.SearchFile("192.168.0.92", range, &dObj);
+// 
+// 		std::vector<readSearchVideo> RSVObj;
+// 		svObj.ReadDataFromTable(RSVObj);
 		
 
 		return;

@@ -1,11 +1,12 @@
 #ifndef __DHVENDOR_H__
 #define __DHVENDOR_H__
 
-//DH SDK
-#include "dhnetsdk.h"
+
 
 #include "CommonUtrl.h"
 
+//DH SDK
+#include "dhnetsdk.h"
 
 
 class DHVendor :
