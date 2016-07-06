@@ -1,3 +1,8 @@
+ #include "utils.h"
+#include "windowutils.h"
+#include "PING.h"
+ 
+ 
  //判断网卡状态
     if (!WindowUtils::isOnLine())
     {       
