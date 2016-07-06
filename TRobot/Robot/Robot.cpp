@@ -33,9 +33,9 @@ TEST_CASE("This is a demo", "[demo]")
 		DHVendor dhVendor;
 		HKVendor hkVendor;
 		pVendorList.push_back(&jxjVendor);
-		//pVendorList.push_back(&dzpVendor);
-		//pVendorList.push_back(&dhVendor);
-		//pVendorList.push_back(&hkVendor);
+		pVendorList.push_back(&dzpVendor);
+		pVendorList.push_back(&dhVendor);
+		pVendorList.push_back(&hkVendor);
 
 		CSearchDevice::getInstance().Search(pVendorList, devInfoSimpleList);
 		DEVICE_INFO_LIST devInfoList = CSearchDevice::getInstance().GetDeviceInfoList();
