@@ -174,6 +174,7 @@ long CJxjVendor::Login(const std::string& ip, size_t port, const std::string& us
 
 	if (m_errCode == Err_LoginFail)
 	{
+		std::cout << "JXJ µÇÂ½ Ê§°Ü£¡" << std::endl;
 		//throw std::exception("µÇÂ½Ê§°Ü");
 		return -1;
 	}
@@ -204,6 +205,8 @@ void CJxjVendor::Logout(const long loginHandle)
 			throw std::exception(m_sLastError.c_str());
 		}
 	}
+
+	std::cout << "JXJ ÍË³öµÇÂ½ ³É¹¦£¡" << std::endl;
 }
 
 void CJxjVendor::StartSearchDevice()

@@ -21,8 +21,11 @@ TEST_CASE("This is a demo", "[demo]")
 	{
 		DEVICE_INFO_SIMPLE_LIST devInfoSimpleList;
 		NET_DEVICE_INFO_SIMPLE* devInfoSimple = new NET_DEVICE_INFO_SIMPLE;
-		std::string strIP = "192.168.0.89";
-		int nPort = 3321;
+		memset(devInfoSimple, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
+		//std::string strIP = "192.168.0.89";
+		//int nPort = 3321;
+		std::string strIP = "192.168.0.39";
+		int nPort = 34567;
 		memcpy(devInfoSimple->szIP, strIP.c_str(), strIP.length());
 		devInfoSimple->nPort = nPort;
 		devInfoSimpleList.push_back(devInfoSimple);
@@ -32,12 +35,16 @@ TEST_CASE("This is a demo", "[demo]")
 		CDZPVendor dzpVendor;
 		DHVendor dhVendor;
 		HKVendor hkVendor;
-		pVendorList.push_back(&jxjVendor);
+		
+		//pVendorList.push_back(&jxjVendor);
 		pVendorList.push_back(&dzpVendor);
-		pVendorList.push_back(&dhVendor);
-		pVendorList.push_back(&hkVendor);
+		//pVendorList.push_back(&dhVendor);
+		//pVendorList.push_back(&hkVendor);
+		pVendorList.push_back(&jxjVendor);
+		
 
-		CSearchDevice::getInstance().Search(pVendorList, devInfoSimpleList);
+		CSearchDevice::getInstance().Init(pVendorList);
+		CSearchDevice::getInstance().Search(devInfoSimpleList);
 		DEVICE_INFO_LIST devInfoList = CSearchDevice::getInstance().GetDeviceInfoList();
 
 		if (devInfoList.size() > 0)

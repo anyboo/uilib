@@ -71,6 +71,24 @@ void Device::Init()
 	m_pVendor->SetDownloadPath(sRoot);
 }
 
+bool Device::LoginChain(const NET_DEVICE_INFO_SIMPLE* pDevInfoSimple, int& indexVendor)
+{
+	if (Login(pDevInfoSimple->szIP, pDevInfoSimple->nPort))
+	{
+		return true;
+	}
+	else
+	{
+		if (GetNextDevice() != NULL)
+		{
+			indexVendor++;
+			GetNextDevice()->LoginChain(pDevInfoSimple, indexVendor);
+		}
+	}
+
+	return false;
+}
+
 bool Device::Login(const std::string& ip, size_t port, const std::string& userName, const std::string& password)
 {
 	assert(m_pVendor);
@@ -87,6 +105,7 @@ bool Device::Login(const std::string& ip, size_t port, const std::string& userNa
 	m_lLoginHandle = m_pVendor->Login(ip, port, sUserName, sPassword);
 	if (m_lLoginHandle < 0)
 	{
+		//std::cout << "Device Class µÇÂ½ Ê§°Ü£¡" << std::endl;
 		return false;
 	}
 

@@ -26,86 +26,99 @@ CSearchDevice& CSearchDevice::getInstance()
 	return *shSearchDevice.get();
 }
 
-//void CSearchDevice::Init(VENDOR_LIST& pVendorList)
-//{
-//	for (size_t i = 0; i < pVendorList.size()-1; i++)
-//	{
-//		AbstractVendor* pVendor = pVendorList[i];
-//		AbstractVendor* pNextVendor = pVendorList[i + 1];
-//		pVendor->SetNextVendor(pNextVendor);
-//	}
-//	pVendorList[pVendorList.size() - 1]->SetNextVendor(NULL);
-//}
+void CSearchDevice::Init(VENDOR_LIST& pVendorList)
+{
+	DeleteDeviceList();
 
-void CSearchDevice::Search(VENDOR_LIST& pVendorList, const DEVICE_INFO_SIMPLE_LIST& devInfoSimpleList)
+	if (pVendorList.size() <= 0)
+	{
+		throw std::exception("Vendor List is NULL!");
+		return;
+	}
+
+	for (auto pVendor : pVendorList)
+	{
+		Device* pDev = new Device;
+		pDev->setSDK(pVendor);
+		m_listDevice.push_back(pDev);
+	}
+	for (size_t i = 0; i < m_listDevice.size() - 1; i++)
+	{
+		Device* pDev = m_listDevice[i];
+		Device* pNextDev = m_listDevice[i + 1];
+		pDev->SetNextDevice(pNextDev);
+	}
+	m_listDevice[m_listDevice.size() - 1]->SetNextDevice(NULL);
+}
+
+void CSearchDevice::Search(const DEVICE_INFO_SIMPLE_LIST& devInfoSimpleList)
 {
 	DeleteDeviceInfoList();
 
 	// Known Situation: SDK Search Function Exist
-	//std::list<Device> listDevice;
-	//for (auto pVendor : pVendorList)
+	//for (auto pDev : m_listDevice)
 	//{
-	//	Device dev(pVendor);
-	//	listDevice.push_back(dev);
-	//	dev.StartSearchDevice();
+	//	pDev->StartSearchDevice();
 	//}
 	//::Sleep(3000);
-	//for (auto dev : listDevice)
+	//for (auto pDev : m_listDevice)
 	//{
-	//	dev.StopSearchDevice();
+	//	pDev->StopSearchDevice();
 	//}
-	//for (auto dev : listDevice)
+	//for (auto pDev : m_listDevice)
 	//{
-	//	AddListToList(m_listDeviceInfo, dev.GetDeviceInfoList());
+	//	AddListToList(m_listDeviceInfo, pDev->GetDeviceInfoList());
 	//}
 
 	// Unknown Situation£ºSDK Search Function not Exist
-	std::vector<Device*> listDevice;
-	for (size_t i = 0; i < pVendorList.size() - 1; i++)
+	int i = 0;
+	int indexVendor = 0;
+	for (; i < devInfoSimpleList.size(); i++)
 	{
-		Device* pDev = new Device;
-		Device* pNextDev = new Device;
+		NET_DEVICE_INFO_SIMPLE* pDevInfoSimple = devInfoSimpleList[i];
 
-		AbstractVendor* pVendor = pVendorList[i];
-		AbstractVendor* pNextVendor = pVendorList[i + 1];
-
-	}
-
-}
-
-void CSearchDevice::LoginCheck(AbstractVendor* pVendor, const DEVICE_INFO_SIMPLE_LIST& devInfoSimpleList)
-{
-	Device* dev = new Device;
-	dev->setSDK(pVendor);
-
-	for (auto devInfoSim : devInfoSimpleList)
-	{
-		//if (dev->GetNextVendor()->Login(devInfoSim->szIP, devInfoSim->nPort))
-		//{
-
-		//}
-		/*while (dev->GetNextVendor() != NULL)
+		indexVendor = 0;
+		if (m_listDevice[0]->LoginChain(pDevInfoSimple, indexVendor))
 		{
-
-		}*/
-
-		//if (dev.Login(devInfoSimple->szIP, devInfoSimple->nPort))
-		//{
-		//}
-		//else
-		//{
-		//	dev.GetNextVendor.Login(devInfoSimple->szIP, devInfoSimple->nPort);
-		//}
+			break;
+		}
 	}
-	
+	if (i < devInfoSimpleList.size())
+	{
+		Device* pDev = m_listDevice[indexVendor];
+		NET_DEVICE_INFO* pDevInfo = new NET_DEVICE_INFO;
+		memset(pDevInfo, 0, sizeof(NET_DEVICE_INFO));
+
+		memcpy(pDevInfo->szIp, devInfoSimpleList[i]->szIP, MAX_IPADDR_LEN);
+		pDevInfo->nPort = devInfoSimpleList[i]->nPort;
+		pDevInfo->nSDKType = pDev->GetSDKType();
+		pDevInfo->pVendor = pDev->GetSDK();
+
+		m_listDeviceInfo.push_back(pDevInfo);
+
+	}
+	else
+	{
+		return;
+	}
 }
 
+void CSearchDevice::DeleteDeviceList()
+{
+	for (auto pDev : m_listDevice)
+	{
+		delete pDev;
+		pDev = nullptr;
+	}
+
+	m_listDevice.clear();
+}
 void CSearchDevice::DeleteDeviceInfoList()
 {
-	for (auto devInfo : m_listDeviceInfo)
+	for (auto pDevInfo : m_listDeviceInfo)
 	{
-		delete devInfo;
-		devInfo = nullptr;
+		delete pDevInfo;
+		pDevInfo = nullptr;
 	}
 
 	m_listDeviceInfo.clear();

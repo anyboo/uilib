@@ -132,6 +132,8 @@ void CDZPVendor::Init()
 	}
 
 	H264_DVR_SetConnectTime(5000, 3);
+
+	std::cout << "DZP 初始化SDK 成功！" << std::endl;
 }
 
 long CDZPVendor::Login(const std::string& ip, size_t port, const std::string& user, const std::string& password)
@@ -148,10 +150,13 @@ long CDZPVendor::Login(const std::string& ip, size_t port, const std::string& us
 	{
 		std::string m_sLastError = GZLL_GetLastErrorString(nError);
 		//throw std::exception(m_sLastError.c_str());
+		std::cout << "DZP 登陆 失败！" << std::endl;
 		return -1;
 	}
 
 	m_iMaxChannel = OutDev.byChanNum + OutDev.iDigChannel;
+
+	std::cout << "DZP 登陆 成功！" << std::endl;
 
 	return loginHandle;
 }
@@ -163,10 +168,14 @@ void CDZPVendor::Logout(const long loginHandle)
 		throw std::exception(m_sLastError.c_str());
 		return;
 	}
+
+	std::cout << "DZP 退出登陆 成功！" << std::endl;
 }
 
 void CDZPVendor::StartSearchDevice()
 {
+	std::cout << "DZP 搜索设备 开始！" << std::endl;
+
 	SDK_CONFIG_NET_COMMON_V2 Device[256] = { 0 };
 	int nRetLength = 0;
 
@@ -204,6 +213,7 @@ void CDZPVendor::StartSearchDevice()
 }
 void CDZPVendor::StopSearchDevice()
 {
+	std::cout << "DZP 搜索设备 结束！" << std::endl;
 }
 
 void CDZPVendor::SearchAll(const long loginHandle)
@@ -212,6 +222,8 @@ void CDZPVendor::SearchAll(const long loginHandle)
 }
 void CDZPVendor::Search(const long loginHandle, const size_t channel, const time_range& range)
 {
+	std::cout << "DZP 搜索文件 开始！" << std::endl;
+
 	m_files.clear();
 
 	if (range.start > range.end)
@@ -226,11 +238,17 @@ void CDZPVendor::Search(const long loginHandle, const size_t channel, const time
 		DZP_SearchUnit(loginHandle, channel, timeRangeList[i], m_files);
 	}
 
+	std::cout << "DZP 搜索文件 结束！" << std::endl;
+
 	// Save Search Video List Result to Config File
-	CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files, Vendor_DZP_Abbr);
+	std::cout << "DZP 写Json数据到文件 开始！" << std::endl;
+	CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files, Vendor_JXJ_Abbr);
+	std::cout << "DZP 写Json数据到文件 结束！" << std::endl;
 
 	// Write File List to DB
+	std::cout << "DZP 写文件数据到数据库 开始！" << std::endl;
 	CCommonUtrl::getInstance().WriteFileListToDB(m_files);
+	std::cout << "DZP 写文件数据到数据库 结束！" << std::endl;
 
 	return;
 }

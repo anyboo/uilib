@@ -30,6 +30,7 @@ public:
 
 	void setSDK(AbstractVendor* sdk);
 	void Init();
+	bool LoginChain(const NET_DEVICE_INFO_SIMPLE* pDevInfoSimple, int& indexVendor);
 	bool Login(const std::string& ip, size_t port, const std::string& userName = "", const std::string& password = "");
 	void Logout();
 	void SetDownloadPath(const std::string& root);
@@ -52,14 +53,17 @@ public:
 	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_pVendor->GetDeviceInfoList(); }
 	void StopSearchDevice();
 
-	void SetNextVendor(AbstractVendor* pVendor) { m_pNextVendor = pVendor; }
-	AbstractVendor* GetNextVendor() { return m_pNextVendor; }
+	void SetNextDevice(Device* pDev) { m_pNextDev = pDev; }
+	Device* GetNextDevice() { return m_pNextDev; }
 	
 	RECORD_FILE_LIST GetRecordFileList(){ return m_pVendor->GetRecordFileList(); }
+
+	NET_SDK_TYPE GetSDKType(){ return m_pVendor->GetSDKType(); }
+	AbstractVendor* GetSDK(){ return m_pVendor; }
 	
 private:
 	AbstractVendor* m_pVendor;
-	AbstractVendor* m_pNextVendor;
+	Device* m_pNextDev;
 	
 	std::string m_sIP;
 	size_t m_iPort;
