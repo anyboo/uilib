@@ -5,10 +5,6 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Robot", "TRobot\Robot\Robot.vcxproj", "{4E49BAF9-0149-424E-8911-B8B96D8537A0}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JXJVendor", "TRobot\Robot\JxjVendor\JXJVendor\JXJVendor.vcxproj", "{92DDD404-348B-445B-B911-4316E0B91444}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DZPVendor", "TRobot\Robot\DZPVendor\DZPVendor\DZPVendor.vcxproj", "{B38854C2-D670-4749-BA70-CA38210BFCD9}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,14 +15,6 @@ Global
 		{4E49BAF9-0149-424E-8911-B8B96D8537A0}.Debug|Win32.Build.0 = Debug|Win32
 		{4E49BAF9-0149-424E-8911-B8B96D8537A0}.Release|Win32.ActiveCfg = Release|Win32
 		{4E49BAF9-0149-424E-8911-B8B96D8537A0}.Release|Win32.Build.0 = Release|Win32
-		{92DDD404-348B-445B-B911-4316E0B91444}.Debug|Win32.ActiveCfg = Debug|Win32
-		{92DDD404-348B-445B-B911-4316E0B91444}.Debug|Win32.Build.0 = Debug|Win32
-		{92DDD404-348B-445B-B911-4316E0B91444}.Release|Win32.ActiveCfg = Release|Win32
-		{92DDD404-348B-445B-B911-4316E0B91444}.Release|Win32.Build.0 = Release|Win32
-		{B38854C2-D670-4749-BA70-CA38210BFCD9}.Debug|Win32.ActiveCfg = Debug|Win32
-		{B38854C2-D670-4749-BA70-CA38210BFCD9}.Debug|Win32.Build.0 = Debug|Win32
-		{B38854C2-D670-4749-BA70-CA38210BFCD9}.Release|Win32.ActiveCfg = Release|Win32
-		{B38854C2-D670-4749-BA70-CA38210BFCD9}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

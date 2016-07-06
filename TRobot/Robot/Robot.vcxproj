@@ -55,12 +55,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)poco\Data\include;$(SolutionDir)poco\Foundation\include;$(SolutionDir)poco\Data\SQLite\include;$(SolutionDir)\bin\poco_bin;$(SolutionDir)\bin;$(SolutionDir)\dll;$(SolutionDir)\TRobot\Robot\DZPVendor\sdk;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\TRobot\Robot\inc;$(SolutionDir)\TRobot\Robot;$(SolutionDir)\TRobot\Robot\JxjVendor;$(SolutionDir)\Test\single_include;$(SolutionDir)\TRobot\Robot\DZPVendor;$(SolutionDir)\poco\Foundation\include\;$(SolutionDir)\TRobot\Robot\Depend;$(SolutionDir)\TRobot\Robot\JxjVendor\sdk</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)poco\Data\include;$(SolutionDir)poco\Foundation\include;$(SolutionDir)poco\Data\SQLite\include;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\bin;$(SolutionDir)\bin\poco_bin;$(SolutionDir)\dll;$(SolutionDir)\Test\single_include;$(SolutionDir)\TRobot\Robot;$(SolutionDir)\TRobot\Robot\inc;$(SolutionDir)\TRobot\Robot\Depend;$(SolutionDir)\TRobot\Robot\JxjVendor;$(SolutionDir)\TRobot\Robot\JxjVendor\sdk;$(SolutionDir)\TRobot\Robot\DHVendor;$(SolutionDir)\TRobot\Robot\DHVendor\sdk;$(SolutionDir)\TRobot\Robot\DZPVendor;$(SolutionDir)\TRobot\Robot\DZPVendor\sdk;$(SolutionDir)\TRobot\Robot\HKVendor;$(SolutionDir)\TRobot\Robot\HKVendor\sdk</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)poco\lib;$(SolutionDir)\lib\poco_lib;$(SolutionDir)\lib;$(SolutionDir)\TRobot\Robot\JxjVendor\sdk;$(SolutionDir)\TRobot\Robot\DZPVendor\sdk;$(SolutionDir)\TRobot\Robot\Depend;$(SolutionDir)\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)poco\lib;$(SolutionDir)\lib;$(SolutionDir)\lib\poco_lib;$(SolutionDir)\TRobot\Robot\DHVendor\sdk;$(SolutionDir)\TRobot\Robot\JxjVendor\sdk;$(SolutionDir)\TRobot\Robot\DZPVendor\sdk;$(SolutionDir)\TRobot\Robot\HKVendor\sdk;$(SolutionDir)\TRobot\Robot\HKVendor\sdk\HCNetSDKCom;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -87,27 +87,31 @@
   <ItemGroup>
     <ClInclude Include="Device.h" />
     <ClInclude Include="DeviceManager.h" />
-    <ClInclude Include="DHVendor.h" />
     <ClInclude Include="AbstractVendor.h" />
     <ClInclude Include="CommonUtrl.h" />
-    <ClInclude Include="JxjVendor\TestWindows.h" />
+    <ClInclude Include="DHVendor\DHVendor.h" />
+    <ClInclude Include="DZPVendor\DZPVendor.h" />
+    <ClInclude Include="HKVendor\HKVendor.h" />
+    <ClInclude Include="JxjVendor\JxjVendor.h" />
     <ClInclude Include="LoginDevice.h" />
-    <ClInclude Include="MyVendor.h" />
     <ClInclude Include="QMSqlite.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SearchDevice.h" />
+    <ClInclude Include="TestWindows.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="DeviceManager.cpp" />
-    <ClCompile Include="DHVendor.cpp" />
     <ClCompile Include="CommonUtrl.cpp" />
-    <ClCompile Include="JxjVendor\TestWindows.cpp" />
+    <ClCompile Include="DHVendor\DHVendor.cpp" />
+    <ClCompile Include="DZPVendor\DZPVendor.cpp" />
+    <ClCompile Include="HKVendor\HKVendor.cpp" />
+    <ClCompile Include="JxjVendor\JxjVendor.cpp" />
     <ClCompile Include="LoginDevice.cpp" />
-    <ClCompile Include="MyVendor.cpp" />
     <ClCompile Include="QMSqlite.cpp.cpp" />
     <ClCompile Include="Robot.cpp" />
     <ClCompile Include="SearchDevice.cpp" />
+    <ClCompile Include="TestWindows.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Robot.rc" />

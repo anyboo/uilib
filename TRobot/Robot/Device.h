@@ -34,13 +34,6 @@ public:
 	void Logout();
 	void SetDownloadPath(const std::string& root);
 
-	void SetNextVendor(AbstractVendor* pVendor) { m_pVendor->SetNextVendor(pVendor); }
-	AbstractVendor* GetNextVendor() { return m_pVendor->GetNextVendor(); }
-
-	void StartSearchDevice();
-	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_pVendor->GetDeviceInfoList(); }
-	void StopSearchDevice();
-
 	void SearchAll();
 	void Search(const size_t channel, const time_range& range);
 	void Download(const size_t channel, const time_range& range);
@@ -54,9 +47,19 @@ public:
 
 	std::string getIP(){ return m_sIP; }
 	DeviceLoginStatus getLoginStatus(){ return m_eLoginStatus; }
+
+	void StartSearchDevice();
+	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_pVendor->GetDeviceInfoList(); }
+	void StopSearchDevice();
+
+	void SetNextVendor(AbstractVendor* pVendor) { m_pNextVendor = pVendor; }
+	AbstractVendor* GetNextVendor() { return m_pNextVendor; }
+	
+	RECORD_FILE_LIST GetRecordFileList(){ return m_pVendor->GetRecordFileList(); }
 	
 private:
 	AbstractVendor* m_pVendor;
+	AbstractVendor* m_pNextVendor;
 	
 	std::string m_sIP;
 	size_t m_iPort;
