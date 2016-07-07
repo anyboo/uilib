@@ -3,7 +3,7 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
-//#include <pthread.h>
+#include "TestWindows.h"
 
 #include "Device.h"
 #include "SearchDevice.h"
@@ -19,6 +19,9 @@ TEST_CASE("This is a demo", "[demo]")
 {
 	SECTION("Test login the device")
 	{
+		/************************* 初始化播放窗帘句柄 **********************/
+		TestWindows::getInstance().Init();
+
 		/************************* 初始化数据库 **********************/
 		//获取指针
 		QMSqlite *pDb = QMSqlite::getInstance();
@@ -35,8 +38,8 @@ TEST_CASE("This is a demo", "[demo]")
 		HKVendor hkVendor;
 
 		//pVendorList.push_back(&jxjVendor);
-		//pVendorList.push_back(&dzpVendor);
-		pVendorList.push_back(&dhVendor);
+		pVendorList.push_back(&dzpVendor);
+		//pVendorList.push_back(&dhVendor);
 		//pVendorList.push_back(&hkVendor);
 
 		/************************* 初始化IP列表 **********************/
@@ -45,7 +48,7 @@ TEST_CASE("This is a demo", "[demo]")
 		int nPort = 0;
 
 		// DZP
-#if 0
+#if 1
 		NET_DEVICE_INFO_SIMPLE* devInfoSimple1 = new NET_DEVICE_INFO_SIMPLE;
 		memset(devInfoSimple1, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
 		strIP = "192.168.0.66";
@@ -78,7 +81,7 @@ TEST_CASE("This is a demo", "[demo]")
 #endif
 
 		// DH
-#if 1
+#if 0
 		NET_DEVICE_INFO_SIMPLE* devInfoSimple4 = new NET_DEVICE_INFO_SIMPLE;
 		memset(devInfoSimple4, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
 		strIP = "192.168.0.96";
@@ -110,16 +113,34 @@ TEST_CASE("This is a demo", "[demo]")
 			NET_DEVICE_INFO* devInfo = devInfoList[0];
 			if (CLoginDevice::getInstance().Login(devInfo->pVendor, devInfo->szIp, devInfo->nPort))
 			{
-				time_range timeRangeSearch;
-				timeRangeSearch.start = 1467734400;
-				timeRangeSearch.end = 1467905003;
-				std::vector<size_t> channelList;
-				channelList.push_back(1);
 				Device* pDev = CLoginDevice::getInstance().GetDevice(devInfo->szIp);
+				int channel = 1;
+
+				time_range timeRangeSearch;
+				timeRangeSearch.start = 1467820800; // 1466265600 - jxj  // 1467734400 - dh  // 1467820800 - dzp
+				timeRangeSearch.end = 1467907199; // 1466697599 - jxj  // 1467905003 - dh  // 1467907199 - dzp
+				std::vector<size_t> channelList;
+				channelList.push_back(channel);
 				CSearchVideo::getInstance().SearchFile(pDev, timeRangeSearch, channelList);
 
 				std::vector<readSearchVideo> fileList;
 				CSearchVideo::getInstance().ReadDataFromTable(fileList);
+
+				if (fileList.size() > 0)
+				{
+					readSearchVideo sr = fileList[2];
+					std::string fileName = sr.get<0>();
+					time_range timeRangePlay;
+					timeRangePlay.start = sr.get<2>();
+					timeRangePlay.end = sr.get<3>();
+					pDev->PlayVideo(TestWindows::getInstance().GetHWnd(), channel, timeRangePlay);
+					//pDev->PlayVideo(TestWindows::getInstance().GetHWnd(), channel, fileName);
+
+					while (true)
+					{
+						::Sleep(100);
+					}
+				}
 			}
 		}
 

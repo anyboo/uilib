@@ -33,7 +33,7 @@ bool CSearchVideo::ReadDataFromTable(std::vector<readSearchVideo>& RSVObj)
 	RSVObj.clear();
 
 	QMSqlite *pDb = QMSqlite::getInstance();
-	string strSql = SELECT_ALL_SEARCH_VIDEO;
+	std::string strSql = SELECT_ALL_SEARCH_VIDEO;
 
 	return pDb->GetData(strSql, RSVObj);
 }

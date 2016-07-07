@@ -142,7 +142,7 @@ void HKVendor::Search(const long loginHandle, const size_t channel, const time_r
 		LONG hFindHandle = NET_DVR_FindFile_V30(loginHandle, &FileCond);
 		if (-1 == hFindHandle)
 		{
-			std::cout << "Error:" << HK_GetLastErrorString() << endl;
+			std::cout << "Error:" << HK_GetLastErrorString() << std::endl;
 			return;
 		}
 		else
@@ -198,7 +198,7 @@ void HKVendor::Search(const long loginHandle, const size_t channel, const time_r
 
 					ret = NET_DVR_FindNextFile_V30(hFindHandle, &FindData);
 
-					std::cout << "GetRecordFileList 文件名:" << rf.name <<endl<< "  " << "文件大小:" << rf.size << "  " << "通道:" << rf.channel << endl;
+					std::cout << "GetRecordFileList 文件名:" << rf.name << std::endl<< "  " << "文件大小:" << rf.size << "  " << "通道:" << rf.channel << std::endl;
 
 				}
 			}
@@ -278,12 +278,9 @@ void HKVendor::PlayVideo(const long loginHandle, const size_t channel, const tim
 
 	HK_trTOndt(ndtStime, ndtEtime, range);
 
-	TestWindows Test;
-	Test.Init();
-
 	size_t sChannel = HK_getChannel(loginHandle, channel);
 	//BOOL lPlayID = CLIENT_PlayBackByTimeEx(loginHandle, channel, &ntStime, &ntEtime, g_hWnd, PlayCallBack, (DWORD)this, PBDataCallBack, (DWORD)this);
-	LONG hPlayHandle = NET_DVR_PlayBackByTime(loginHandle, sChannel, &ndtStime, &ndtEtime, g_hWnd);
+	LONG hPlayHandle = NET_DVR_PlayBackByTime(loginHandle, sChannel, &ndtStime, &ndtEtime, m_hWnd);
 
 	if (hPlayHandle < 0)
 	{
@@ -362,7 +359,7 @@ void HKVendor::PlayVideo(const long loginHandle, const size_t channel, const std
 {
 	if (-1 == loginHandle)
 	{
-		cout << "PlayVideo 在线播放失败原因：" << HK_GetLastErrorString() << endl;
+		std::cout << "PlayVideo 在线播放失败原因：" << HK_GetLastErrorString() << std::endl;
 		return;
 	}
 
@@ -372,10 +369,7 @@ void HKVendor::PlayVideo(const long loginHandle, const size_t channel, const std
 	{
 		if (it->name == filename)
 		{
-			TestWindows Test;
-			Test.Init();
-
-			LONG hPlayHandle = NET_DVR_PlayBackByName(loginHandle, (char *)filename.c_str(), g_hWnd);
+			LONG hPlayHandle = NET_DVR_PlayBackByName(loginHandle, (char *)filename.c_str(), m_hWnd);
 
 			if (hPlayHandle < 0)
 			{
@@ -451,7 +445,7 @@ std::string HK_MakeStrTimeByTimestamp(time_t time)
 	localtime_s(&ttime, &time);
 	strftime(cTime, 50, "%Y%m%d%H%M%S", &ttime);
 
-	string strTime(cTime);
+	std::string strTime(cTime);
 
 	return strTime;
 }
@@ -461,7 +455,7 @@ std::string HK_MakeStrByInteger(int data)
 
 	sprintf_s(cData, 50, "%d", data);
 
-	string strTime(cData);
+	std::string strTime(cData);
 
 	return strTime;
 }

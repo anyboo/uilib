@@ -1,9 +1,8 @@
 #include "TestWindows.h"
+#include <Poco/SingletonHolder.h>
 
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-
-HWND g_hWnd = NULL;
 
 TestWindows::TestWindows()
 {
@@ -15,12 +14,17 @@ TestWindows::~TestWindows()
 {
 }
 
-int TestWindows::Init()
+TestWindows& TestWindows::getInstance()
 {
-	this->MyRegisterClass();
-	this->InitInstance();
+	static Poco::SingletonHolder<TestWindows> shTestWindows;
+	return *shTestWindows.get();
+}
 
-	return 0;
+
+void TestWindows::Init()
+{
+	MyRegisterClass();
+	InitInstance();
 }
 
 ATOM TestWindows::MyRegisterClass()
@@ -43,14 +47,14 @@ ATOM TestWindows::MyRegisterClass()
 
 BOOL TestWindows::InitInstance()
 {
-	g_hWnd = CreateWindow(TEXT("Test"), TEXT("Test"), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, m_hInst, NULL);
+	m_hWnd = CreateWindow(TEXT("Test"), TEXT("Test"), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, m_hInst, NULL);
 
-	if (!g_hWnd)
+	if (!m_hWnd)
 	{
 		return FALSE;
 	}
 
-	ShowWindow(g_hWnd, SW_SHOW);
+	/*ShowWindow(m_hWnd, SW_SHOW);*/
 
 	return TRUE;
 }

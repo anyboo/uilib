@@ -7,12 +7,7 @@ QMSqlite::Garbo QMSqlite::garbo;  // 一定要初始化，不然程序结束时不会析构garbo
 
 QMSqlite* QMSqlite::m_instance = NULL;
 
-using namespace Poco::Data::Keywords;
-using namespace Poco::Data;
-using Poco::Data::Session;
-using Poco::Data::Statement;
-using Poco::Data::Statement;
-
+using namespace std;
 
 QMSqlite::QMSqlite() :m_pool(NULL)
 {

@@ -9,7 +9,6 @@
 #include <iostream>
 #include <vector>
 
-using namespace std;
 using namespace Poco::Data::Keywords;
 using namespace Poco::Data;
 using Poco::Data::Session;
@@ -86,14 +85,14 @@ private:
 	static Garbo garbo;
 public:
 	template<typename T>
-	bool GetData(string sql, std::vector<T>& Record)
+	bool GetData(std::string sql, std::vector<T>& Record)
 	{
-		Session sess = connectDb();
+		Poco::Data::Session sess = connectDb();
 		if (!checkConnect(sess))
 			return false;
 		try
 		{
-			Statement select(sess);
+			Poco::Data::Statement select(sess);
 			select << sql, into(Record), now;
 			closeConnect(sess);
 		}
@@ -107,7 +106,7 @@ public:
 		return true;
 	}
 	template<typename T>
-	bool writeData(string sql, T searchrecode)
+	bool writeData(std::string sql, T searchrecode)
 	{
 		Session sess = connectDb();
 		if (!checkConnect(sess))
@@ -128,7 +127,7 @@ public:
 	}
 
 	template<typename T>
-	bool writeDataByVector(string sql, std::vector<T>& Record)
+	bool writeDataByVector(std::string sql, std::vector<T>& Record)
 	{
 		Session sess = connectDb();
 		if (!checkConnect(sess))
@@ -147,20 +146,20 @@ public:
 		}
 		return true;
 	}
-	bool cleanData(string sql);
-	bool dropTable(string sql);
-	bool createTable(string sql);
-	bool searchFactoryName(string sx, std::vector<string>& Record);
+	bool cleanData(std::string sql);
+	bool dropTable(std::string sql);
+	bool createTable(std::string sql);
+	bool searchFactoryName(std::string sx, std::vector<std::string>& Record);
 private:
 	bool Initialize();
 	bool creatSessionPool();
-	void closeConnect(Session sess);
-	bool checkConnect(Session sess);
+	void closeConnect(Poco::Data::Session sess);
+	bool checkConnect(Poco::Data::Session sess);
 	bool unInitialize();
 	void closeSessionPool();
-	bool execSql(string sql);
-	Session connectDb();
-	SessionPool *m_pool;
+	bool execSql(std::string sql);
+	Poco::Data::Session connectDb();
+	Poco::Data::SessionPool *m_pool;
 
 };
 

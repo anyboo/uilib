@@ -253,7 +253,7 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 			info.setPrivateData(&ifileinfo[i], sizeof(NET_RECORDFILE_INFO));
 			m_files.push_back(info);
 
-			std::cout << "GetRecordFileList 文件名:" << info.name <<endl<< "  " << "文件大小:" << info.size << "  " << "通道:" << info.channel << std::endl;
+			//std::cout << "GetRecordFileList 文件名:" << info.name << std::endl<< "  " << "文件大小:" << info.size << "  " << "通道:" << info.channel << std::endl;
 		}
 	}
 
@@ -322,12 +322,7 @@ void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const tim
 
 	DH_trTOnt(ntStime, ntEtime, range);
 
-	TestWindows Test;
-	Test.Init();
-
-	BOOL lPlayID = CLIENT_PlayBackByTimeEx(loginHandle, channel, &ntStime, &ntEtime, g_hWnd, DH_PlayCallBack, (DWORD)this, DH_PBDataCallBack, (DWORD)this);
-
-	system("PAUSE");
+	BOOL lPlayID = CLIENT_PlayBackByTimeEx(loginHandle, channel, &ntStime, &ntEtime, m_hWnd, DH_PlayCallBack, (DWORD)this, DH_PBDataCallBack, (DWORD)this);
 
 	if (!lPlayID)
 	{
@@ -397,7 +392,7 @@ void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const std
 {
 	if (0 >= loginHandle)
 	{
-		cout << "PlayVideo 在线播放失败原因：" << DH_GetLastErrorString() << endl;
+		std::cout << "PlayVideo 在线播放失败原因：" << DH_GetLastErrorString() << std::endl;
 		return;
 	}
 
@@ -407,11 +402,8 @@ void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const std
 	{
 		if (it->name == filename)
 		{
-			TestWindows Test;
-			Test.Init();
-
 			NET_RECORDFILE_INFO* pData = (NET_RECORDFILE_INFO*)it->getPrivateData();
-			BOOL lPlayID = CLIENT_PlayBackByRecordFile(loginHandle, pData, g_hWnd, DH_PlayCallBack, (DWORD)this);
+			BOOL lPlayID = CLIENT_PlayBackByRecordFile(loginHandle, pData, m_hWnd, DH_PlayCallBack, (DWORD)this);
 
 			system("PAUSE");
 
@@ -524,7 +516,7 @@ std::string DH_MakeStrTimeByTimestamp(time_t time)
 	localtime_s(&ttime, &time);
 	strftime(cTime, 50, "%Y%m%d%H%M%S", &ttime);
 
-	string strTime(cTime);
+	std::string strTime(cTime);
 
 	return strTime;
 }
@@ -534,7 +526,7 @@ std::string DH_MakeStrByInteger(int data)
 
 	sprintf_s(cData, 50, "%d", data);
 
-	string strTime(cData);
+	std::string strTime(cData);
 
 	return strTime;
 }

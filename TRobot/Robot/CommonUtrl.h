@@ -26,8 +26,6 @@
 #include "ostreamwrapper.h"
 #include "istreamwrapper.h"
 
-using namespace rapidjson;
-
 #define Test_Bug
 #define Test_Filename
 

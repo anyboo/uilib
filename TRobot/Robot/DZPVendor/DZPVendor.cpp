@@ -358,8 +358,8 @@ void CDZPVendor::PlayVideo(const long loginHandle, const size_t channel, const t
 {
 	H264_DVR_FINDINFO info;
 
-	info.nChannelN0 = channel;
 	info.nFileType = SDK_RECORD_ALL;
+	info.nChannelN0 = channel;
 
 	struct tm Tm;
 	_localtime64_s(&Tm, (const time_t*)&range.start);
@@ -368,15 +368,12 @@ void CDZPVendor::PlayVideo(const long loginHandle, const size_t channel, const t
 	_localtime64_s(&Tm, (const time_t*)&range.end);
 	TMToNetTime(Tm, info.endTime);
 
-	// 设置显示窗口
-#ifdef Test_Bug
-	TestWindows testWindows;
-	testWindows.Init();
-#endif
-	info.hWnd = g_hWnd;
-	int hdl = H264_DVR_PlayBackByTime(loginHandle, &info, DZP_DownLoadPosCallBack, DZP_RealDataCallBack, 0);
-	if (0 == hdl)
+	info.hWnd = m_hWnd;
+
+	int playbackHandle = H264_DVR_PlayBackByTime(loginHandle, &info, DZP_DownLoadPosCallBack, DZP_RealDataCallBack, 0);
+	if (0 == playbackHandle)
 	{
+		H264_DVR_StopPlayBack(playbackHandle);
 		std::string m_sLastError = GZLL_GetLastErrorString();
 		throw std::exception(m_sLastError.c_str());
 		return;
@@ -409,12 +406,7 @@ void CDZPVendor::PlayVideo(const long loginHandle, const size_t channel, const s
 	}
 
 	H264_DVR_FILE_DATA* fileData = (H264_DVR_FILE_DATA*)file.getPrivateData();
-	// 设置显示窗口
-#ifdef Test_Bug
-	TestWindows testWindows;
-	testWindows.Init();
-#endif
-	fileData->hWnd = g_hWnd;
+	fileData->hWnd = m_hWnd;
 	int playbackHandle = H264_DVR_PlayBackByName(loginHandle, fileData, nullptr, NULL, 0);
 	if (playbackHandle == 0)
 	{

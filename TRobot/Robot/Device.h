@@ -38,9 +38,9 @@ public:
 	void SearchAll();
 	void Search(const size_t channel, const time_range& range);
 	void Download(const size_t channel, const time_range& range);
-	void PlayVideo(const size_t channel, const time_range& range);
+	void PlayVideo(const HWND hWnd, const size_t channel, const time_range& range);
 	void Download(const size_t channel, const std::string& fileName);
-	void PlayVideo(const size_t channel, const std::string& fileName);
+	void PlayVideo(const HWND hWnd, const size_t channel, const std::string& fileName);
 
 	// Device Search Model
 	void StartSearchDevice();

@@ -459,12 +459,7 @@ void CJxjVendor::PlayVideo(const long loginHandle, const size_t channel, const t
 		return;
 	}
 
-	// 设置显示窗口
-#ifdef Test_Bug
-	TestWindows testWindows;
-	testWindows.Init();
-#endif
-	AVP_AddPlayWnd(m_iPlayVideoChannel, NULL, g_hWnd, NULL, NULL);
+	AVP_AddPlayWnd(m_iPlayVideoChannel, NULL, NULL, NULL, NULL);
 
 	// 开启解码
 	AVP_Play(m_iPlayVideoChannel);
@@ -527,12 +522,7 @@ void CJxjVendor::PlayVideo(const long loginHandle, const size_t channel, const s
 		return;
 	}
 
-	// 设置显示窗口
-#ifdef Test_Bug
-	TestWindows testWindows;
-	testWindows.Init();
-#endif
-	AVP_AddPlayWnd(m_iPlayVideoChannel, NULL, g_hWnd, NULL, NULL);
+	AVP_AddPlayWnd(m_iPlayVideoChannel, NULL, NULL, NULL, NULL);
 
 	// 开启解码
 	AVP_Play(m_iPlayVideoChannel);

@@ -20,6 +20,7 @@ public:
 	void Download(const long loginHandle, const size_t channel, const std::string& filename);
 	void PlayVideo(const long loginHandle, const size_t channel, const std::string& filename);
 
+	void SetHWnd(const HWND& hWnd){ m_hWnd = hWnd; }
 	void SetDownloadPath(const std::string& Root);
 	void throwException();
 
@@ -36,6 +37,7 @@ public:
 
 private:
 	/* Init */
+	HWND m_hWnd;
 	std::string m_sRoot;
 	NET_SDK_TYPE m_eSDKType;
 

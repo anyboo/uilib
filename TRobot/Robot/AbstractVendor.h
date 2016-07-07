@@ -3,6 +3,7 @@
 #include <ctime>
 #include <list>
 #include <vector>
+#include <Windows.h>
 
 
 typedef struct _time_range
@@ -154,6 +155,7 @@ public:
 	virtual void Download(const long loginHandle, const size_t channel, const std::string& filename) = 0;
 	virtual void PlayVideo(const long loginHandle, const size_t channel, const std::string& filename) = 0;
 
+	virtual void SetHWnd(const HWND& hWnd) = 0;
 	virtual void SetDownloadPath(const std::string& Root) = 0;
 	virtual void throwException() = 0;
 

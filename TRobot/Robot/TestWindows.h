@@ -2,7 +2,6 @@
 
 #include <Windows.h>
 
-extern HWND g_hWnd;
 
 class TestWindows
 {
@@ -10,13 +9,16 @@ public:
 	TestWindows();
 	~TestWindows();
 
-	int Init();
+	static TestWindows& getInstance();
+	void Init();
 
-private:
 	ATOM MyRegisterClass();
 	BOOL InitInstance();
 
+	HWND GetHWnd(){ return m_hWnd; }
+
 private:
+	HWND m_hWnd;
 	HINSTANCE m_hInst;
 };
 
