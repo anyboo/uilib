@@ -2,7 +2,6 @@
 #include "CommonUtrl.h"
 #include <Poco/SingletonHolder.h>
 
-using namespace rapidjson;
 
 CCommonUtrl::CCommonUtrl()
 {
@@ -14,8 +13,8 @@ CCommonUtrl::~CCommonUtrl()
 
 CCommonUtrl& CCommonUtrl::getInstance()
 {
-	static Poco::SingletonHolder<CCommonUtrl> sh;
-	return *sh.get();
+	static Poco::SingletonHolder<CCommonUtrl> shCommonUtrl;
+	return *shCommonUtrl.get();
 }
 
 std::string CCommonUtrl::MakeDownloadFileFolder(const std::string basePath, const std::string& startTimeZero, const std::string& endTimeZero, const std::string& venderName, int channel)
@@ -70,8 +69,27 @@ std::vector<time_range> CCommonUtrl::MakeTimeRangeList(const time_range& range)
 	time_t timeEnd = range.end;
 	std::vector<time_range> timeRangeList;
 
-	JTime jStartTime, jStopTime;
-	InitSearchTime(jStartTime, jStopTime, timeStart, timeEnd);
+	ComTime jStartTime, jStopTime;
+
+	struct tm Tm;
+
+	localtime_s(&Tm, (const time_t*)&timeStart);
+	jStartTime.year = Tm.tm_year;
+	jStartTime.month = Tm.tm_mon;
+	jStartTime.date = Tm.tm_mday;
+	jStartTime.hour = Tm.tm_hour;
+	jStartTime.minute = Tm.tm_min;
+	jStartTime.second = Tm.tm_sec;
+	jStartTime.weekday = Tm.tm_wday;
+
+	localtime_s(&Tm, (const time_t*)&timeEnd);
+	jStopTime.year = Tm.tm_year;
+	jStopTime.month = Tm.tm_mon;
+	jStopTime.date = Tm.tm_mday;
+	jStopTime.hour = Tm.tm_hour;
+	jStopTime.minute = Tm.tm_min;
+	jStopTime.second = Tm.tm_sec;
+	jStopTime.weekday = Tm.tm_wday;
 
 	if (timeEnd - timeStart <= ONE_DAY)
 	{
@@ -156,55 +174,55 @@ std::vector<time_range> CCommonUtrl::MakeTimeRangeList(const time_range& range)
 	return timeRangeList;
 }
 
-void CCommonUtrl::InitSearchTime(JTime& jStartTime, JTime& jStopTime, const __time64_t& timeStart, const __time64_t& timeEnd)
-{
-	struct tm Tm;
+//void CCommonUtrl::InitSearchTime(JTime& jStartTime, JTime& jStopTime, const __time64_t& timeStart, const __time64_t& timeEnd)
+//{
+//	struct tm Tm;
+//
+//	localtime_s(&Tm, (const time_t*)&timeStart);
+//	jStartTime.year = Tm.tm_year;
+//	jStartTime.month = Tm.tm_mon;
+//	jStartTime.date = Tm.tm_mday;
+//	jStartTime.hour = Tm.tm_hour;
+//	jStartTime.minute = Tm.tm_min;
+//	jStartTime.second = Tm.tm_sec;
+//	jStartTime.weekday = Tm.tm_wday;
+//
+//	localtime_s(&Tm, (const time_t*)&timeEnd);
+//	jStopTime.year = Tm.tm_year;
+//	jStopTime.month = Tm.tm_mon;
+//	jStopTime.date = Tm.tm_mday;
+//	jStopTime.hour = Tm.tm_hour;
+//	jStopTime.minute = Tm.tm_min;
+//	jStopTime.second = Tm.tm_sec;
+//	jStopTime.weekday = Tm.tm_wday;
+//}
 
-	localtime_s(&Tm, (const time_t*)&timeStart);
-	jStartTime.year = Tm.tm_year;
-	jStartTime.month = Tm.tm_mon;
-	jStartTime.date = Tm.tm_mday;
-	jStartTime.hour = Tm.tm_hour;
-	jStartTime.minute = Tm.tm_min;
-	jStartTime.second = Tm.tm_sec;
-	jStartTime.weekday = Tm.tm_wday;
-
-	localtime_s(&Tm, (const time_t*)&timeEnd);
-	jStopTime.year = Tm.tm_year;
-	jStopTime.month = Tm.tm_mon;
-	jStopTime.date = Tm.tm_mday;
-	jStopTime.hour = Tm.tm_hour;
-	jStopTime.minute = Tm.tm_min;
-	jStopTime.second = Tm.tm_sec;
-	jStopTime.weekday = Tm.tm_wday;
-}
-
-time_t CCommonUtrl::MakeTimestampByJTime(JTime jTime)
-{
-	struct tm ttime;
-	ttime.tm_year = jTime.year;
-	ttime.tm_mon = jTime.month - 1;
-	ttime.tm_mday = jTime.date;
-	ttime.tm_hour = jTime.hour;
-	ttime.tm_min = jTime.minute;
-	ttime.tm_sec = jTime.second;
-	time_t time = mktime(&ttime);
-
-	return time;
-}
+//time_t CCommonUtrl::MakeTimestampByJTime(JTime jTime)
+//{
+//	struct tm ttime;
+//	ttime.tm_year = jTime.year;
+//	ttime.tm_mon = jTime.month - 1;
+//	ttime.tm_mday = jTime.date;
+//	ttime.tm_hour = jTime.hour;
+//	ttime.tm_min = jTime.minute;
+//	ttime.tm_sec = jTime.second;
+//	time_t time = mktime(&ttime);
+//
+//	return time;
+//}
 
 std::string CCommonUtrl::MakeStrTimeByTimestamp(std::time_t time)
 {
-	std::string strTime;
+	std::string strTime = "20160101000000";
 	struct tm ttime;
 
 	localtime_s(&ttime, &time);
-	strftime((char *)strTime.c_str(), 50, "%Y%m%d%H%M%S", &ttime);
+	strftime((char *)strTime.data(), strTime.length()+1, "%Y%m%d%H%M%S", &ttime);
 
 	return strTime;
 }
 
-void CCommonUtrl::SaveSearchFileListToFile(const std::vector<RecordFile>& files)
+void CCommonUtrl::SaveSearchFileListToFile(const std::vector<RecordFile>& files, const std::string& VenderName)
 {
 	Document document;
 	std::string configfile = "SearchFileList.config";
@@ -217,7 +235,7 @@ void CCommonUtrl::SaveSearchFileListToFile(const std::vector<RecordFile>& files)
 
 	for (size_t i = 0; i < files.size(); i++)
 	{
-		std::string fileKey = "videoFile";
+		std::string fileKey = VenderName;
 		Value key(fileKey.c_str(), fileKey.length(), alloc);
 
 		RecordFile file = files[i];
@@ -225,7 +243,7 @@ void CCommonUtrl::SaveSearchFileListToFile(const std::vector<RecordFile>& files)
 		Value channel(std::to_string(file.channel).c_str(), std::to_string(file.channel).length(), alloc);
 		Value beginTime(CCommonUtrl::getInstance().MakeStrTimeByTimestamp(file.beginTime).c_str(), CCommonUtrl::getInstance().MakeStrTimeByTimestamp(file.beginTime).length(), alloc);
 		Value endTime(CCommonUtrl::getInstance().MakeStrTimeByTimestamp(file.endTime).c_str(), CCommonUtrl::getInstance().MakeStrTimeByTimestamp(file.endTime).length(), alloc);
-		Value size(std::to_string(file.size / 1024 / 1024).c_str(), std::to_string(file.size / 1024 / 1024).length(), alloc);
+		Value size(std::to_string(file.size).c_str(), std::to_string(file.size).length(), alloc);
 
 		Value a(kArrayType);
 		a.PushBack(name, alloc).PushBack(channel, alloc).PushBack(beginTime, alloc).PushBack(endTime, alloc).PushBack(size, alloc);
@@ -269,4 +287,37 @@ std::vector<RecordFile> CCommonUtrl::LoadSearchFileListFromFile()
 	}
 
 	return files;
+}
+
+void CCommonUtrl::WriteFileListToDB(RECORD_FILE_LIST& recordFiles)
+{
+	//获取指针
+	QMSqlite *pDb = QMSqlite::getInstance();
+	////删除表
+	//pDb->dropTable(DROP_SEARCH_VIDEO_TABLE);
+	////创建记录表
+	//pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
+	//一次插入所有数据
+	std::vector<writeSearchVideo> RecordList;
+	for (size_t i = 0; i < recordFiles.size(); i++)
+	{
+		writeSearchVideo sr;
+		RecordFile record = recordFiles[i];
+		//文件名称
+		sr.set<0>(record.name);
+		//通道号
+		sr.set<1>(record.channel);
+		//开始时间
+		sr.set<2>(record.beginTime);
+		//结束时间
+		sr.set<3>(record.endTime);
+		sr.set<4>(record.size);
+		RecordList.push_back(sr);
+	}
+
+	if (RecordList.size() > 0)
+	{
+		string sql(INSERT_SEARCH_VIDEO);
+		pDb->writeDataByVector(sql, RecordList);
+	}
 }

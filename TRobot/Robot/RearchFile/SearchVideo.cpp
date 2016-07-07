@@ -54,6 +54,6 @@ void CSearchVideo::ReadDataFromTable(std::vector<readSearchVideo> &RSVObj)
 
 	bool bFlag = pDb->GetData(strSql, RSVObj);
 	//pDb->GetData(strSql, RSVObj);
-	std::cout << "" << bFlag << std::endl;
+	//std::cout << "" << bFlag << std::endl;
 	//assert(bFlag);
 }

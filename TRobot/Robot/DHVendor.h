@@ -1,9 +1,6 @@
-#ifndef __DHVENDOR_H__
-#define __DHVENDOR_H__
+#pragma once
 
-//#include "CommonUtrl.h"
-#include "DH_Head.h"
-
+#include "CommonUtrl.h"
 
 class DHVendor :
 	public AbstractVendor
@@ -26,59 +23,31 @@ public:
 	void SetDownloadPath(const std::string& Root);
 	void throwException();
 
+	std::string GetDefUsearName(){ return m_sDefUserName; }
+	std::string GetDefPassword(){ return m_sDefPassword; }
 	
-	void StartSearchDevice();
-	void StopSearchDevice();
-	size_t GetMaxChannel(){ return m_DHChannels; }
-	RECORD_FILE_LIST GetRecordFileList(){ return m_files; }
-	std::string GetDefUsearName(){ return m_strUser; }
-	std::string GetDefPassword(){ return m_strPasswords; }
 	NET_SDK_TYPE GetSDKType(){ return m_eSDKType; }
+	void StartSearchDevice();
 	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_listDeviceInfo; }
+	void StopSearchDevice();
+	size_t GetMaxChannel(){ return m_iMaxChannel; }
 
+	RECORD_FILE_LIST GetRecordFileList(){ return m_files; }
 
 private:
-	static void CALLBACK BTDownLoadPos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, int index, NET_RECORDFILE_INFO recordfileinfo, LDWORD dwUser);
-	static void CALLBACK BTDownLoadFile(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser);
-	static void CALLBACK PlayCallBack(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser);
-	static int CALLBACK PBDataCallBack(LLONG lRealHandle, DWORD dwDataType, BYTE *pBuffer, DWORD dwBufSize, LDWORD dwUser);
-
-	void SaveSearchFileListToFile();
-	void LoadSearchFileListFromFile();
-	std::string MakeStrByInteger(int data);
-	std::string MakeStrTimeByTimestamp(time_t time);
-
-	std::string GetLastErrorString();
-	void timeDHToStd(NET_TIME *pTimeDH, tm *pTimeStd);
-	void timeStdToDH(tm *pTimeStd, NET_TIME *pTimeDH);
-	std::vector<time_range> MakeTimeRangeList(const time_range& range);
-	void trTOnt(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_range range);
-	void CreatePath(const size_t channel);
-	void WriteFileListToDB();
-
-
-protected:
-	HMODULE m_hMod;
-
+	/* Init */
+	std::string m_sRoot;
 	NET_SDK_TYPE m_eSDKType;
 
-	//login & Init
-	std::string m_strName;
-	int m_dwPort;
-	std::string m_strUser;
-	std::string m_strPasswords;
-	std::string m_strIP;
+	/* Login */
+	size_t m_iMaxChannel;
+	std::string m_sDefUserName;
+	std::string m_sDefPassword;
 
 	/* Search Device */
+	long m_lSearchDeviceHandle;
 	DEVICE_INFO_LIST m_listDeviceInfo;
 
-	NET_DEVICEINFO m_deviceInfo;
-	LLONG m_lLoginHandle;
-	LONG m_pdownloadfile;
-	std::string m_strPath;
-	int m_DHChannels;
-
-	std::vector<RecordFile> m_files;
+	/* Search */
+	RECORD_FILE_LIST m_files;
 };
-
-#endif

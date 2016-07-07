@@ -1,26 +1,43 @@
 #include "DHVendor.h"
 
+//DH SDK
+#include "dhnetsdk.h"
+
 #pragma comment(lib, "dhnetsdk")
 
-DHVendor::DHVendor():
-m_strName("大华"),
-m_dwPort(3777),
-m_strUser("admin"),
-m_strPasswords("admin"),
-m_strIP(""),
-m_lLoginHandle(0),
-m_hMod(NULL),
-m_strPath(""),
-m_DHChannels(0)
+NET_DEVICEINFO m_deviceInfo;
+
+void CALLBACK DH_BTDownLoadPos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, int index, NET_RECORDFILE_INFO recordfileinfo, LDWORD dwUser);
+void CALLBACK DH_BTDownLoadFile(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser);
+void CALLBACK DH_PlayCallBack(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser);
+int CALLBACK DH_PBDataCallBack(LLONG lRealHandle, DWORD dwDataType, BYTE *pBuffer, DWORD dwBufSize, LDWORD dwUser);
+
+std::string DH_MakeStrByInteger(int data);
+std::string DH_MakeStrTimeByTimestamp(time_t time);
+
+std::string DH_GetLastErrorString();
+void DH_timeDHToStd(NET_TIME *pTimeDH, tm *pTimeStd);
+void DH_timeStdToDH(tm *pTimeStd, NET_TIME *pTimeDH);
+void DH_trTOnt(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_range range);
+void DH_CreatePath(const size_t channel);
+
+
+
+DHVendor::DHVendor()
 {
 	m_eSDKType = DH_SDK;
+	m_sDefUserName = "admin";
+	m_sDefPassword = "";
+	m_iMaxChannel = 0;
 
-	memset(&m_deviceInfo, 0, sizeof(m_deviceInfo));
+	m_lSearchDeviceHandle = -1;
 }
-
 
 DHVendor::~DHVendor()
 {
+	m_iMaxChannel = 0;
+	m_lSearchDeviceHandle = -1;
+
 	if (!m_files.empty())
 	{
 		m_files.clear();
@@ -45,42 +62,40 @@ void DHVendor::Init()
 long DHVendor::Login(const std::string& ip, size_t port, const std::string& user, const std::string& password)
 {
 	int nError = 0;
-	m_strIP = ip;
-	m_dwPort = port;
-	m_strUser = user;
-	m_strPasswords = password;
-	long lLoginHandle = CLIENT_Login((char *)m_strIP.c_str(), m_dwPort, (char *)(m_strUser.c_str()), (char *)(m_strPasswords.c_str()), &m_deviceInfo, &nError);
-	m_lLoginHandle = lLoginHandle;
+	long lLoginHandle = -1;
+	lLoginHandle = CLIENT_Login((char *)ip.c_str(), port, (char *)(user.c_str()), (char *)(password.c_str()), &m_deviceInfo, &nError);
 
 	if (0 != nError)
 	{
-		std::cout << "登录错误(nError)：" << GetLastErrorString().c_str() << std::endl;
-		throw std::exception("Login failed");
+		std::cout << "登录错误(nError)：" << DH_GetLastErrorString().c_str() << std::endl;
+		//throw std::exception("Login failed");
+		return -1;
 	}
 
-	if (0 == m_lLoginHandle)
+	if (0 == lLoginHandle)
 	{
-		std::cout << "登录错误(lLogin)：" << GetLastErrorString().c_str() << std::endl;
+		std::cout << "登录错误(lLogin)：" << DH_GetLastErrorString().c_str() << std::endl;
+		return -1;
 	}
 
-	if (m_lLoginHandle > 0)
+	if (lLoginHandle > 0)
 	{
 		int nRetLen = 0;
 		NET_DEV_CHN_COUNT_INFO stuChn = { sizeof(NET_DEV_CHN_COUNT_INFO) };
 		stuChn.stuVideoIn.dwSize = sizeof(stuChn.stuVideoIn);
 		stuChn.stuVideoOut.dwSize = sizeof(stuChn.stuVideoOut);
 
-		BOOL bDevState = CLIENT_QueryDevState(m_lLoginHandle, DH_DEVSTATE_DEV_CHN_COUNT, (char*)&stuChn, stuChn.dwSize, &nRetLen, 1000);
+		BOOL bDevState = CLIENT_QueryDevState(lLoginHandle, DH_DEVSTATE_DEV_CHN_COUNT, (char*)&stuChn, stuChn.dwSize, &nRetLen, 1000);
 
 		if (bDevState)
 		{
-			m_DHChannels = stuChn.stuVideoIn.nMaxTotal;
+			m_iMaxChannel = stuChn.stuVideoIn.nMaxTotal;
 		}
 		else
 		{
-			std::cout << "Get channel failed" << GetLastErrorString() << std::endl;
+			std::cout << "Get channel failed" << DH_GetLastErrorString() << std::endl;
 			throw std::exception("Get channel failed");
-			return 0;
+			return -1;
 		}
 	}
 
@@ -98,9 +113,9 @@ long DHVendor::Login(const std::string& ip, size_t port, const std::string& user
 
 void DHVendor::Logout(const long loginHandle)
 {
-	if (m_lLoginHandle > 0 && !CLIENT_Logout(m_lLoginHandle))
+	if (loginHandle > 0 && !CLIENT_Logout(loginHandle))
 	{
-		std::cout << "退出错误：" << GetLastErrorString().c_str() << std::endl;
+		std::cout << "退出错误：" << DH_GetLastErrorString().c_str() << std::endl;
 		throw std::exception("Logout failed");
 		return;
 	}
@@ -150,7 +165,7 @@ void DHVendor::SearchAll(const long loginHandle)
 
 }
 
-void DHVendor::timeDHToStd(NET_TIME *pTimeDH, tm *pTimeStd)
+void timeDHToStd(NET_TIME *pTimeDH, tm *pTimeStd)
 {
 	pTimeStd->tm_year = pTimeDH->dwYear - 1900;
 	pTimeStd->tm_mon = pTimeDH->dwMonth - 1;
@@ -160,7 +175,7 @@ void DHVendor::timeDHToStd(NET_TIME *pTimeDH, tm *pTimeStd)
 	pTimeStd->tm_sec = pTimeDH->dwSecond;
 }
 
-void DHVendor::timeStdToDH(tm *pTimeStd, NET_TIME *pTimeDH)
+void timeStdToDH(tm *pTimeStd, NET_TIME *pTimeDH)
 {
 	pTimeDH->dwYear = pTimeStd->tm_year + 1900;
 	pTimeDH->dwMonth = pTimeStd->tm_mon + 1;
@@ -172,7 +187,7 @@ void DHVendor::timeStdToDH(tm *pTimeStd, NET_TIME *pTimeDH)
 
 void DHVendor::Search(const long loginHandle, const size_t channel, const time_range& range)
 {
-	if (0 >= m_lLoginHandle)
+	if (0 >= loginHandle)
 	{
 		std::cout << "请先登录!" << std::endl;
 		return;
@@ -186,7 +201,7 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 
 	//m_files.clear();
 
-	std::vector<time_range> trInfor = MakeTimeRangeList(range);
+	std::vector<time_range> trInfor = CCommonUtrl::getInstance().MakeTimeRangeList(range);
 
 	std::vector<time_range>::iterator it;
 
@@ -195,17 +210,17 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 		NET_TIME ntStime;
 		NET_TIME ntEtime;
 
-		trTOnt(ntStime, ntEtime, *it);
+		DH_trTOnt(ntStime, ntEtime, *it);
 
 		NET_RECORDFILE_INFO ifileinfo[MAX_SEARCH_COUNT];
 		ZeroMemory(ifileinfo, sizeof(ifileinfo));
 		int iMaxNum = 0;
 
-		BOOL bRet = CLIENT_QueryRecordFile(m_lLoginHandle, channel, 0, &ntStime, &ntEtime, 0, ifileinfo, sizeof(ifileinfo), &iMaxNum, 5000, true);
+		BOOL bRet = CLIENT_QueryRecordFile(loginHandle, channel, 0, &ntStime, &ntEtime, 0, ifileinfo, sizeof(ifileinfo), &iMaxNum, 5000, true);
 
 		if (!bRet)
 		{
-			std::cout << "GetRecordFileList 查询录像失败，错误原因：" << GetLastErrorString() << std::endl;
+			std::cout << "GetRecordFileList 查询录像失败，错误原因：" << DH_GetLastErrorString() << std::endl;
 			throw std::exception("Search file by time failed");
 		}
 		if (iMaxNum <= 0)
@@ -246,15 +261,16 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 		}
 	}
 
-	//保存到JSON文件
-//	SaveSearchFileListToFile();
-	//写入到数据库中
-//	WriteFileListToDB();
+	// Save Search Video List Result to Config File
+	//CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files, Vendor_DH_Abbr);
+
+	// Write File List to DB
+	//CCommonUtrl::getInstance().WriteFileListToDB(m_files);
 }
 
 void DHVendor::Download(const long loginHandle, const size_t channel, const time_range& range)
 {
-	if (0 >= m_lLoginHandle)
+	if (0 >= loginHandle)
 	{
 		std::cout << "请先登录!" << std::endl;
 		return;
@@ -263,16 +279,16 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const time
 	NET_TIME ntStime;
 	NET_TIME ntEtime;
 
-	trTOnt(ntStime, ntEtime, range);
+	DH_trTOnt(ntStime, ntEtime, range);
 
-	CreatePath(channel);
+	DH_CreatePath(channel);
 
 	char szTime[512];
 	ZeroMemory(szTime, 512);
 	sprintf_s(szTime, "D:\\DownLoadVideo\\大华\\通道%d\\channel%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d.dav", channel, channel, ntStime.dwYear, ntStime.dwMonth, ntStime.dwDay,
 		ntStime.dwHour, ntStime.dwMinute, ntStime.dwSecond, ntEtime.dwYear, ntEtime.dwMonth, ntEtime.dwDay, ntEtime.dwHour, ntEtime.dwMinute, ntEtime.dwSecond);
 
-	BOOL bRet = CLIENT_DownloadByTime(m_lLoginHandle, channel, 0, &ntStime, &ntEtime, szTime, BTDownLoadPos, (DWORD)this);
+	BOOL bRet = CLIENT_DownloadByTime(loginHandle, channel, 0, &ntStime, &ntEtime, szTime, DH_BTDownLoadPos, (DWORD)this);
 	std::cout << "strName:" << szTime << std::endl;
 
 	int total, cur;
@@ -286,7 +302,7 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const time
 
 	if (0 == bRet)
 	{
-		std::cout << "downLoadByRecordFile 下载录像失败，错误原因：" << GetLastErrorString() << std::endl;
+		std::cout << "downLoadByRecordFile 下载录像失败，错误原因：" << DH_GetLastErrorString() << std::endl;
 		throw std::exception("Download by Record file failed");
 		return;
 	}
@@ -298,9 +314,9 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const time
 
 void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const time_range& range)
 {
-	if (0 >= m_lLoginHandle)
+	if (0 >= loginHandle)
 	{
-		std::cout << "PlayVideo 在线播放失败原因：" << GetLastErrorString() << std::endl;
+		std::cout << "PlayVideo 在线播放失败原因：" << DH_GetLastErrorString() << std::endl;
 		throw std::exception("Login handle by Record file failed");
 		return;
 	}
@@ -308,31 +324,31 @@ void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const tim
 	NET_TIME ntStime;
 	NET_TIME ntEtime;
 
-	trTOnt(ntStime, ntEtime, range);
+	DH_trTOnt(ntStime, ntEtime, range);
 
 	TestWindows Test;
 	Test.Init();
 
-	BOOL lPlayID = CLIENT_PlayBackByTimeEx(m_lLoginHandle, channel, &ntStime, &ntEtime, g_hWnd, PlayCallBack, (DWORD)this, PBDataCallBack, (DWORD)this);
+	BOOL lPlayID = CLIENT_PlayBackByTimeEx(loginHandle, channel, &ntStime, &ntEtime, g_hWnd, DH_PlayCallBack, (DWORD)this, DH_PBDataCallBack, (DWORD)this);
 
 	system("PAUSE");
 
 	if (!lPlayID)
 	{
-		std::cout << "播放失败原因：" << GetLastErrorString() << std::endl;
+		std::cout << "播放失败原因：" << DH_GetLastErrorString() << std::endl;
 		throw std::exception("Play back by time failed");
 	}
 }
 
 void DHVendor::Download(const long loginHandle, const size_t channel, const std::string& filename)
 {
-	if (0 >= m_lLoginHandle)
+	if (0 >= loginHandle)
 	{
 		std::cout << "请先登录!" << std::endl;
 		return;
 	}
 
-	CreatePath(channel);
+	DH_CreatePath(channel);
 
 	char szTime[512];
 	ZeroMemory(szTime, 512);
@@ -351,20 +367,30 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const std:
 		if (it->name == filename)
 		{
 			NET_RECORDFILE_INFO* pData = (NET_RECORDFILE_INFO*)it->getPrivateData();
-			BOOL bRet = CLIENT_DownloadByRecordFile(m_lLoginHandle, pData, szTime, BTDownLoadFile, (DWORD)this);
+			BOOL bRet = CLIENT_DownloadByRecordFile(loginHandle, pData, szTime, DH_BTDownLoadFile, (DWORD)this);
 
 			int total, cur;
 			total = 0;
 			cur = 0;
+			int n = 0;
 			BOOL bret = CLIENT_GetDownloadPos(bRet, &total, &cur);
 			while ((cur / total) != 1)
 			{
 				std::cout << "进度：" << (double)(cur / total) << std::endl;
+				std::cout << "cur:" << cur<< std::endl;
+				std::cout << "total:" << total << std::endl;
+				bret = CLIENT_GetDownloadPos(bRet, &total, &cur);
+// 				if (10 == n)
+// 				{
+// 					BOOL b =  CLIENT_StopDownload(bRet);
+// 					std::cout << b << std::endl;	
+// 				}
+// 				n++;
 			}
 
 			if (0 == bRet)
 			{
-				std::cout << "downLoadByRecordFile 下载录像失败，错误原因：" << GetLastErrorString() << std::endl;
+				std::cout << "downLoadByRecordFile 下载录像失败，错误原因：" << DH_GetLastErrorString() << std::endl;
 				throw std::exception("Download by Record file failed");
 				return;
 			}
@@ -373,19 +399,15 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const std:
 				std::cout << "downLoadByRecordFile 下载录像成功！" << std::endl;
 			}
 		}
-		if (m_files.size() - 1 == nSize)
-		{
-			std::cout << "下载文件名不存在！" << std::endl;
-		}
-		nSize++;
+
 	}
 }
 
 void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const std::string& filename)
 {
-	if (0 >= m_lLoginHandle)
+	if (0 >= loginHandle)
 	{
-		cout << "PlayVideo 在线播放失败原因：" << GetLastErrorString() << endl;
+		cout << "PlayVideo 在线播放失败原因：" << DH_GetLastErrorString() << endl;
 		return;
 	}
 
@@ -399,13 +421,13 @@ void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const std
 			Test.Init();
 
 			NET_RECORDFILE_INFO* pData = (NET_RECORDFILE_INFO*)it->getPrivateData();
-			BOOL lPlayID = CLIENT_PlayBackByRecordFile(m_lLoginHandle, pData, g_hWnd, PlayCallBack, (DWORD)this);
+			BOOL lPlayID = CLIENT_PlayBackByRecordFile(loginHandle, pData, g_hWnd, DH_PlayCallBack, (DWORD)this);
 
 			system("PAUSE");
 
 			if (!lPlayID)
 			{
-				std::cout << "播放失败原因：" << GetLastErrorString() << std::endl;
+				std::cout << "播放失败原因：" << DH_GetLastErrorString() << std::endl;
 				throw std::exception("Play back by time failed");
 			}
 		}
@@ -423,7 +445,7 @@ void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const std
 
 void DHVendor::SetDownloadPath(const std::string& Root)
 {
-
+	m_sRoot = Root;
 }
 
 void DHVendor::throwException()
@@ -431,17 +453,17 @@ void DHVendor::throwException()
 
 }
 
-void DHVendor::BTDownLoadPos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, int index, NET_RECORDFILE_INFO recordfileinfo, LDWORD dwUser)
+void CALLBACK DH_BTDownLoadPos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, int index, NET_RECORDFILE_INFO recordfileinfo, LDWORD dwUser)
 {
 	
 }
 
-void  DHVendor::BTDownLoadFile(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser)
+void CALLBACK DH_BTDownLoadFile(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser)
 {
 
 }
 
-void DHVendor::PlayCallBack(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser)
+void CALLBACK DH_PlayCallBack(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser)
 {
 	if (dwUser == 0)
 	{
@@ -449,7 +471,7 @@ void DHVendor::PlayCallBack(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLo
 	}
 }
 
-int DHVendor::PBDataCallBack(LLONG lRealHandle, DWORD dwDataType, BYTE *pBuffer, DWORD dwBufSize, LDWORD dwUser)
+int CALLBACK DH_PBDataCallBack(LLONG lRealHandle, DWORD dwDataType, BYTE *pBuffer, DWORD dwBufSize, LDWORD dwUser)
 {
 	if (dwUser == 0)
 	{
@@ -459,38 +481,8 @@ int DHVendor::PBDataCallBack(LLONG lRealHandle, DWORD dwDataType, BYTE *pBuffer,
 	return 1;
 }
 
-void DHVendor::WriteFileListToDB()
-{
-	//获取指针
-	QMSqlite *pDb = QMSqlite::getInstance();
-	//删除表
-	//pDb->dropTable(DROP_SEARCH_VIDEO_TABLE);
-	//创建记录表
-	//pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
-	//一次插入所有数据
-	std::vector<writeSearchVideo> RecordList;
-	for (size_t i = 0; i < m_files.size(); i++)
-	{
-		writeSearchVideo sr;
-		RecordFile record = m_files[i];
-		//文件名称
-		sr.set<0>(record.name);
-		//通道号
-		sr.set<1>(record.channel);
-		//开始时间
-		sr.set<2>(record.beginTime);
-		//结束时间
-		sr.set<3>(record.endTime);
-		sr.set<4>(record.size);
-		RecordList.push_back(sr);
-	}
 
-	std::string sql(INSERT_SEARCH_VIDEO);
-	pDb->writeDataByVector(sql, RecordList);
-}
-
-
-void DHVendor::CreatePath(const size_t channel)
+void DH_CreatePath(const size_t channel)
 {
 	std::string strPath = "D:\\DownLoadVideo\\";
 
@@ -522,7 +514,7 @@ void DHVendor::CreatePath(const size_t channel)
 	}
 }
 
-void DHVendor::trTOnt(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_range range)
+void DH_trTOnt(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_range range)
 {
 	tm tmStartTime;
 	tm tmEndTime;
@@ -534,171 +526,7 @@ void DHVendor::trTOnt(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_ran
 	timeStdToDH(&tmEndTime, &ntEndTime);
 }
 
-std::vector<time_range> DHVendor::MakeTimeRangeList(const time_range& range)
-{
-	time_t timeStart = range.start;
-	time_t timeEnd = range.end;
-	std::vector<time_range> timeRangeList;
-
-	tm tmStartTime;
-	tm tmEndTime;
-	NET_TIME ntStartTime;
-	NET_TIME ntEndTime;
-
-	_localtime64_s(&tmStartTime, (const time_t*)&range.start);
-	_localtime64_s(&tmEndTime, (const time_t*)&range.end);
-
-
-	timeStdToDH(&tmStartTime, &ntStartTime);
-	timeStdToDH(&tmEndTime, &ntEndTime);
-
-	if (timeEnd - timeStart <= ONE_DAY)
-	{
-		if (ntStartTime.dwDay == ntEndTime.dwDay)
-		{
-			timeRangeList.push_back(range);
-		}
-		else
-		{
-			time_range rangeItem;
-			rangeItem.start = timeStart;
-			time_t diff = (23 - ntStartTime.dwHour) * ONE_HOUR + (59 - ntStartTime.dwMinute) * ONE_MINUTE + (59 - ntStartTime.dwSecond);
-			rangeItem.end = timeStart + diff;
-			timeRangeList.push_back(rangeItem);
-
-			rangeItem.start = timeStart + diff + 1;
-			rangeItem.end = timeEnd;
-			timeRangeList.push_back(rangeItem);
-		}
-	}
-	else
-	{
-		time_t diff = timeEnd - timeStart;
-		int day = (int)(diff / ONE_DAY + (diff%ONE_DAY > 0 ? 1 : 0));
-
-		if (ntStartTime.dwHour == 0 && ntStartTime.dwMinute == 0 && ntStartTime.dwSecond == 0)
-		{
-			for (size_t i = 0; i < day - 1; i++)
-			{
-				time_range rangeItem;
-				rangeItem.start = timeStart;
-				rangeItem.end = timeStart + ONE_DAY - 1;
-				timeRangeList.push_back(rangeItem);
-
-				timeStart = timeStart + ONE_DAY;
-			}
-
-			time_range rangeItem;
-			rangeItem.start = timeStart;
-			rangeItem.end = timeEnd;
-			timeRangeList.push_back(rangeItem);
-		}
-		else
-		{
-			time_range rangeItem;
-			rangeItem.start = timeStart;
-			time_t diff = (23 - ntStartTime.dwHour) * ONE_HOUR + (59 - ntStartTime.dwMinute) * ONE_MINUTE + (59 - ntStartTime.dwSecond);
-			rangeItem.end = timeStart + diff;
-			timeRangeList.push_back(rangeItem);
-
-			timeStart = timeStart + diff + 1;
-			for (size_t i = 0; i < day - 2; i++)
-			{
-				time_range rangeItem;
-				rangeItem.start = timeStart;
-				rangeItem.end = timeStart + ONE_DAY - 1;
-				timeRangeList.push_back(rangeItem);
-
-				timeStart = timeStart + ONE_DAY;
-			}
-
-			if (timeEnd > timeStart + ONE_DAY - 1)
-			{
-				rangeItem.start = timeStart;
-				rangeItem.end = timeStart + ONE_DAY - 1;;
-				timeRangeList.push_back(rangeItem);
-
-				timeStart = timeStart + ONE_DAY;
-				rangeItem.start = timeStart;
-				rangeItem.end = timeEnd;
-				timeRangeList.push_back(rangeItem);
-			}
-			else
-			{
-				rangeItem.start = timeStart;
-				rangeItem.end = timeEnd;
-				timeRangeList.push_back(rangeItem);
-			}
-		}
-	}
-
-	return timeRangeList;
-}
-
-void DHVendor::SaveSearchFileListToFile()
-{
-	Document document;
-	string configfile = "SearchFileList.config";
-	document.Parse(configfile.c_str());
-	ofstream ofs(configfile);
-	OStreamWrapper osw(ofs);
-	Document::AllocatorType& alloc = document.GetAllocator();
-
-	Value root(kObjectType);
-
-	for (size_t i = 0; i < m_files.size(); i++)
-	{
-		string fileKey = "videoFile";
-		Value key(fileKey.c_str(), fileKey.length(), alloc);
-
-		RecordFile file = m_files[i];
-		Value name(file.name.c_str(), file.name.length(), alloc);
-		Value channel(MakeStrByInteger(file.channel).c_str(), MakeStrByInteger(file.channel).length(), alloc);
-		Value beginTime(MakeStrTimeByTimestamp(file.beginTime).c_str(), MakeStrTimeByTimestamp(file.beginTime).length(), alloc);
-		Value endTime(MakeStrTimeByTimestamp(file.endTime).c_str(), MakeStrTimeByTimestamp(file.endTime).length(), alloc);
-		Value size(MakeStrByInteger(file.size / 1024 / 1024).c_str(), MakeStrByInteger(file.size / 1024 / 1024).length(), alloc);
-
-		Value a(kArrayType);
-		a.PushBack(name, alloc).PushBack(channel, alloc).PushBack(beginTime, alloc).PushBack(endTime, alloc).PushBack(size, alloc);
-		root.AddMember(key.Move(), a.Move(), alloc);
-	}
-
-	Writer<OStreamWrapper> writer(osw);
-	root.Accept(writer);
-}
-
-void DHVendor::LoadSearchFileListFromFile()
-{
-	string configfile = "SearchFileList.config";
-	ifstream ifs(configfile);
-	IStreamWrapper isw(ifs);
-	Document d;
-	d.ParseStream(isw);
-	size_t file_size = isw.Tell();
-	if (isw.Tell() == 0)
-	{
-		return;
-	}
-
-	typedef Value::ConstMemberIterator Iter;
-	for (Iter it = d.MemberBegin(); it != d.MemberEnd(); ++it)
-	{
-		string keyName = it->name.GetString();
-		const Value& a = d[keyName.c_str()];
-
-		assert(a.IsArray());
-		if (!a.IsArray() || a.Size() < 5)
-			continue;
-
-		string fileName = a[0].GetString();
-		string channel = a[1].GetString();
-		string beginTime = a[2].GetString();
-		string endTime = a[3].GetString();
-		string size = a[4].GetString();
-	}
-}
-
-std::string DHVendor::MakeStrTimeByTimestamp(time_t time)
+std::string DH_MakeStrTimeByTimestamp(time_t time)
 {
 	char cTime[50];
 	struct tm ttime;
@@ -710,7 +538,7 @@ std::string DHVendor::MakeStrTimeByTimestamp(time_t time)
 
 	return strTime;
 }
-std::string DHVendor::MakeStrByInteger(int data)
+std::string DH_MakeStrByInteger(int data)
 {
 	char cData[50];
 
@@ -721,7 +549,7 @@ std::string DHVendor::MakeStrByInteger(int data)
 	return strTime;
 }
 
-std::string DHVendor::GetLastErrorString()
+std::string DH_GetLastErrorString()
 {
 	DWORD dwError;
 	dwError = CLIENT_GetLastError();

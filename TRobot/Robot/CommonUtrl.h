@@ -14,6 +14,11 @@
 #include "io.h"
 #include "direct.h"
 
+// Self
+#include "AbstractVendor.h"
+#include "QMSqlite.h"
+#include "TestWindows.h"
+
 // Json
 #include "document.h"
 #include "prettywriter.h"
@@ -21,18 +26,20 @@
 #include "ostreamwrapper.h"
 #include "istreamwrapper.h"
 
-// Self
-#include "AbstractVendor.h"
-#include "QMSqlite.h"
-#include "TestWindows.h"
-
 using namespace rapidjson;
 
 #define Test_Bug
 #define Test_Filename
 
+#define Vendor_DH	"大华"
 #define Vendor_JXJ	"佳信捷"
 #define Vendor_DZP	"迪智普"
+#define Vendor_HK	"海康"
+
+#define Vendor_DH_Abbr		"DH"
+#define Vendor_JXJ_Abbr		"JXJ"
+#define Vendor_DZP_Abbr		"DZP"
+#define Vendor_HK_Abbr		"HK"
 
 #define MAX_SEARCH_COUNT 1000
 #define ONE_DAY		 (24 * 60 * 60)
@@ -47,8 +54,16 @@ typedef enum
 	Err_DownloadSuccess, // Download Success
 }eErrCode;
 
-
-#include "j_sdk.h"
+typedef struct __ComTime
+{
+	uint8_t year;					//从1900开始, J_SDK_DEF_BASE_YEAR
+	uint8_t month;
+	uint8_t date;
+	uint8_t hour;
+	uint8_t minute;
+	uint8_t second;
+	uint16_t weekday;				//详情见JWeekDay
+}ComTime;
 
 class CCommonUtrl
 {
@@ -64,14 +79,14 @@ public:
 
 	// Video Time Range(JTime - JxjVendor)
 	std::vector<time_range> MakeTimeRangeList(const time_range& range);
-	void InitSearchTime(JTime& jStartTime, JTime& jStopTime, const __time64_t& timeStart, const __time64_t& timeEnd);
-	time_t MakeTimestampByJTime(JTime jTime);
 	std::string MakeStrTimeByTimestamp(time_t time);
 	
 	// Json File Handle
-	void SaveSearchFileListToFile(const std::vector<RecordFile>& files);
+	void SaveSearchFileListToFile(const std::vector<RecordFile>& files, const std::string& VenderName);
 	std::vector<RecordFile> LoadSearchFileListFromFile();
 
-};
+	// DB Operation
+	void WriteFileListToDB(RECORD_FILE_LIST& recordFiles);
 
+};
 

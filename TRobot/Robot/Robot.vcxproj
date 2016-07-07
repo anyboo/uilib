@@ -62,7 +62,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)DZPVendor\sdk;$(SolutionDir)poco\lib;$(SolutionDir)\lib;$(SolutionDir)TRobot\Robot\DZPVendor\sdk;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(ProjectDir)Depend\dhnetsdk.lib;$(ProjectDir)HKbin\HCNetSDK.lib;$(ProjectDir)lib\NetSdk.lib;$(ProjectDir)lib\H264Play.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)Depend\dhnetsdk.lib;$(ProjectDir)HKbin\HCNetSDK.lib;$(ProjectDir)lib\NetSdk.lib;$(ProjectDir)lib\H264Play.lib;$(ProjectDir)lib\JNetSDK.lib;$(ProjectDir)lib\AVPlayer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -93,10 +93,9 @@
     <ClInclude Include="DHVendor.h" />
     <ClInclude Include="AbstractVendor.h" />
     <ClInclude Include="CommonUtrl.h" />
-    <ClInclude Include="DH_Head.h" />
+    <ClInclude Include="DownloadVideo.h" />
     <ClInclude Include="DZPVendor\DZPVendor.h" />
     <ClInclude Include="HKVendor.h" />
-    <ClInclude Include="HK_Head.h" />
     <ClInclude Include="inc\AVPlayer.h" />
     <ClInclude Include="inc\JNetSDK.h" />
     <ClInclude Include="inc\Jtype.h" />
@@ -105,6 +104,7 @@
     <ClInclude Include="inc\stdint.h" />
     <ClInclude Include="JxjVendor\JxjVendor.h" />
     <ClInclude Include="JxjVendor\TestWindows.h" />
+    <ClInclude Include="PlayVideo.h" />
     <ClInclude Include="RearchFile\SearchHead.h" />
     <ClInclude Include="RearchFile\SearchVideo.h" />
     <ClInclude Include="resource.h" />
@@ -115,10 +115,12 @@
     <ClCompile Include="DeviceManager.cpp" />
     <ClCompile Include="DHVendor.cpp" />
     <ClCompile Include="CommonUtrl.cpp" />
+    <ClCompile Include="DownloadVideo.cpp" />
     <ClCompile Include="DZPVendor\DZPVendor.cpp" />
     <ClCompile Include="HKVendor.cpp" />
     <ClCompile Include="JxjVendor\JxjVendor.cpp" />
     <ClCompile Include="JxjVendor\TestWindows.cpp" />
+    <ClCompile Include="PlayVideo.cpp" />
     <ClCompile Include="RearchFile\SearchVideo.cpp" />
     <ClCompile Include="Robot.cpp" />
   </ItemGroup>
