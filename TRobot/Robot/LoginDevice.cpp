@@ -69,7 +69,7 @@ void CLoginDevice::Logout(const std::string& ip)
 	}
 }
 
-Device& CLoginDevice::GetDevice(const std::string ip)
+Device* CLoginDevice::GetDevice(const std::string ip)
 {
 	assert(&ip || ip.empty());
 
@@ -78,7 +78,9 @@ Device& CLoginDevice::GetDevice(const std::string ip)
 		Device* pDev = *iter;
 		if (ip == pDev->getIP())
 		{
-			return *pDev;
+			return pDev;
 		}
 	}
+
+	return NULL;
 }

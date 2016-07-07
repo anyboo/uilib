@@ -1,9 +1,9 @@
 
 #include "SearchDevice.h"
 #include <Poco/SingletonHolder.h>
-#include <cassert>
 
-NET_SDK_TYPE g_SDKTypeLimit = DH_SDK;
+
+NET_SDK_TYPE g_SDKTypeLimit = NONE_SDK;
 
 bool CheckDeviceInfo(const NET_DEVICE_INFO* devInfo, const DEVICE_INFO_LIST& list)
 {

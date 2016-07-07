@@ -249,7 +249,7 @@ void CDZPVendor::Search(const long loginHandle, const size_t channel, const time
 
 	// Save Search Video List Result to Config File
 	std::cout << "DZP 写Json数据到文件 开始！" << std::endl;
-	CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files, Vendor_JXJ_Abbr);
+	CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files, Vendor_DZP_Abbr);
 	std::cout << "DZP 写Json数据到文件 结束！" << std::endl;
 
 	// Write File List to DB

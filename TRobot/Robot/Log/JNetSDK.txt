@@ -1884,3 +1884,152 @@
 2016-07-07 15:51:47	CJConnSock::FindWaitTask iSeq:4 success
 2016-07-07 15:51:47	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:0000043C
 2016-07-07 15:51:47	CJConnSock::RemoveWaitTask iSeq:4 success, TaskSize:0
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-07 16:49:39 --------
+2016-07-07 16:49:39	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-07-07 16:50:02	Success new lpConn:02424510 lpszIP:192.168.0.67 iDevPort:3321 m_iID:1
+2016-07-07 16:50:02	CJConnSock::Login 192.168.0.67,3321,admin,admin begin
+2016-07-07 16:50:02	CJConnSock::Login end success
+2016-07-07 16:50:02	CJAddrParse::AddTask devAddr:192.168.0.67 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-07-07 16:50:02	CJConnJPF(192.168.0.67)::OnSendLogin():192.168.0.67,3321
+2016-07-07 16:50:02	CJConnJPF(192.168.0.67)::OnSendGetParam:ip:192.168.0.67,chn:0,cmd:5,len=212
+2016-07-07 16:50:02	CJConnSock::AddWaitTask iSeq:2 lpWaitData:0071D0A8 iwaitDataLen:212 hWaitEvent:00000438 TaskSize:0
+2016-07-07 16:50:02	CJConnSock::FindWaitTask iSeq:2 success
+2016-07-07 16:50:02	CJConnJPF(192.168.0.67)::OnRetGetParam, Result:0 len:0 hWaitEvent:00000438
+2016-07-07 16:50:02	CJConnSock::RemoveWaitTask iSeq:2 success, TaskSize:0
+2016-07-07 16:50:02	Success new lpConn:02467180 lpszIP:192.168.0.89 iDevPort:3321 m_iID:2
+2016-07-07 16:50:02	CJConnSock::Login 192.168.0.89,3321,admin,admin begin
+2016-07-07 16:50:02	CJConnSock::Login end success
+2016-07-07 16:50:02	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-07-07 16:50:02	CJConnJPF(192.168.0.89)::OnSendLogin():192.168.0.89,3321
+2016-07-07 16:50:03	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:5,len=212
+2016-07-07 16:50:03	CJConnSock::AddWaitTask iSeq:4 lpWaitData:0071D0A8 iwaitDataLen:212 hWaitEvent:00000468 TaskSize:0
+2016-07-07 16:50:03	CJConnSock::FindWaitTask iSeq:4 success
+2016-07-07 16:50:03	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:00000468
+2016-07-07 16:50:03	CJConnSock::RemoveWaitTask iSeq:4 success, TaskSize:0
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-07 17:23:42 --------
+2016-07-07 17:23:42	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-07 17:25:51 --------
+2016-07-07 17:25:51	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-07-07 17:25:54	Success new lpConn:00ABCE78 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-07-07 17:25:54	CJConnSock::Login 192.168.0.89,3321,admin,admin begin
+2016-07-07 17:25:54	CJConnSock::Login end success
+2016-07-07 17:25:54	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-07-07 17:25:55	CJConnJPF(192.168.0.89)::OnSendLogin():192.168.0.89,3321
+2016-07-07 17:25:55	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:5,len=212
+2016-07-07 17:25:55	CJConnSock::AddWaitTask iSeq:2 lpWaitData:0069D080 iwaitDataLen:212 hWaitEvent:000002E8 TaskSize:0
+2016-07-07 17:25:55	CJConnSock::FindWaitTask iSeq:2 success
+2016-07-07 17:25:55	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:000002E8
+2016-07-07 17:25:55	CJConnSock::RemoveWaitTask iSeq:2 success, TaskSize:0
+2016-07-07 17:26:03	Success new lpConn:02381520 lpszIP:192.168.0.89 iDevPort:3321 m_iID:2
+2016-07-07 17:26:03	CJConnSock::Login 192.168.0.89,3321,admin,admin begin
+2016-07-07 17:26:03	CJConnSock::Login end success
+2016-07-07 17:26:03	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-07-07 17:26:03	CJConnJPF(192.168.0.89)::OnSendLogin():192.168.0.89,3321
+2016-07-07 17:26:03	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:5,len=212
+2016-07-07 17:26:03	CJConnSock::AddWaitTask iSeq:5 lpWaitData:0069D1C8 iwaitDataLen:212 hWaitEvent:0000031C TaskSize:0
+2016-07-07 17:26:03	CJConnSock::FindWaitTask iSeq:5 success
+2016-07-07 17:26:03	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:0000031C
+2016-07-07 17:26:03	CJConnSock::RemoveWaitTask iSeq:5 success, TaskSize:0
+2016-07-07 17:26:21	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:31,len=2152
+2016-07-07 17:26:21	CJConnSock::AddWaitTask iSeq:10 lpWaitData:0069CACC iwaitDataLen:2152 hWaitEvent:0000031C TaskSize:0
+2016-07-07 17:26:21	CJConnSock::FindWaitTask iSeq:10 success
+2016-07-07 17:26:21	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:0000031C
+2016-07-07 17:26:21	CJConnSock::RemoveWaitTask iSeq:10 success, TaskSize:0
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-07 17:28:03 --------
+2016-07-07 17:28:03	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-07-07 17:28:06	Success new lpConn:025FCE78 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-07-07 17:28:06	CJConnSock::Login 192.168.0.89,3321,admin,admin begin
+2016-07-07 17:28:06	CJConnSock::Login end success
+2016-07-07 17:28:06	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-07-07 17:28:06	CJConnJPF(192.168.0.89)::OnSendLogin():192.168.0.89,3321
+2016-07-07 17:28:06	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:5,len=212
+2016-07-07 17:28:06	CJConnSock::AddWaitTask iSeq:2 lpWaitData:001ED4DC iwaitDataLen:212 hWaitEvent:000002E8 TaskSize:0
+2016-07-07 17:28:06	CJConnSock::FindWaitTask iSeq:2 success
+2016-07-07 17:28:06	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:000002E8
+2016-07-07 17:28:06	CJConnSock::RemoveWaitTask iSeq:2 success, TaskSize:0
+2016-07-07 17:28:06	Success new lpConn:02391520 lpszIP:192.168.0.89 iDevPort:3321 m_iID:2
+2016-07-07 17:28:06	CJConnSock::Login 192.168.0.89,3321,admin,admin begin
+2016-07-07 17:28:06	CJConnSock::Login end success
+2016-07-07 17:28:06	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-07-07 17:28:06	CJConnJPF(192.168.0.89)::OnSendLogin():192.168.0.89,3321
+2016-07-07 17:28:06	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:5,len=212
+2016-07-07 17:28:06	CJConnSock::AddWaitTask iSeq:4 lpWaitData:001ED624 iwaitDataLen:212 hWaitEvent:0000031C TaskSize:0
+2016-07-07 17:28:06	CJConnSock::FindWaitTask iSeq:4 success
+2016-07-07 17:28:06	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:0000031C
+2016-07-07 17:28:06	CJConnSock::RemoveWaitTask iSeq:4 success, TaskSize:0
+2016-07-07 17:28:22	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:31,len=2152
+2016-07-07 17:28:22	CJConnSock::AddWaitTask iSeq:7 lpWaitData:001ECF28 iwaitDataLen:2152 hWaitEvent:0000031C TaskSize:0
+2016-07-07 17:28:22	CJConnSock::FindWaitTask iSeq:7 success
+2016-07-07 17:28:22	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:0000031C
+2016-07-07 17:28:22	CJConnSock::RemoveWaitTask iSeq:7 success, TaskSize:0
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-07 17:29:39 --------
+2016-07-07 17:29:39	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-07-07 17:29:42	Success new lpConn:024FCE78 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-07-07 17:29:42	CJConnSock::Login 192.168.0.89,3321,admin,admin begin
+2016-07-07 17:29:42	CJConnSock::Login end success
+2016-07-07 17:29:42	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-07-07 17:29:42	CJConnJPF(192.168.0.89)::OnSendLogin():192.168.0.89,3321
+2016-07-07 17:29:42	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:5,len=212
+2016-07-07 17:29:42	CJConnSock::AddWaitTask iSeq:2 lpWaitData:0020D314 iwaitDataLen:212 hWaitEvent:000002E8 TaskSize:0
+2016-07-07 17:29:42	CJConnSock::FindWaitTask iSeq:2 success
+2016-07-07 17:29:42	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:000002E8
+2016-07-07 17:29:42	CJConnSock::RemoveWaitTask iSeq:2 success, TaskSize:0
+2016-07-07 17:29:42	Success new lpConn:02611520 lpszIP:192.168.0.89 iDevPort:3321 m_iID:2
+2016-07-07 17:29:42	CJConnSock::Login 192.168.0.89,3321,admin,admin begin
+2016-07-07 17:29:42	CJConnSock::Login end success
+2016-07-07 17:29:42	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-07-07 17:29:42	CJConnJPF(192.168.0.89)::OnSendLogin():192.168.0.89,3321
+2016-07-07 17:29:42	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:5,len=212
+2016-07-07 17:29:42	CJConnSock::AddWaitTask iSeq:4 lpWaitData:0020D45C iwaitDataLen:212 hWaitEvent:0000031C TaskSize:0
+2016-07-07 17:29:42	CJConnSock::FindWaitTask iSeq:4 success
+2016-07-07 17:29:42	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:0000031C
+2016-07-07 17:29:42	CJConnSock::RemoveWaitTask iSeq:4 success, TaskSize:0
+2016-07-07 17:29:45	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:31,len=2152
+2016-07-07 17:29:45	CJConnSock::AddWaitTask iSeq:5 lpWaitData:0020CD60 iwaitDataLen:2152 hWaitEvent:0000031C TaskSize:0
+2016-07-07 17:29:45	CJConnSock::FindWaitTask iSeq:5 success
+2016-07-07 17:29:45	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:0000031C
+2016-07-07 17:29:45	CJConnSock::RemoveWaitTask iSeq:5 success, TaskSize:0
+2016-07-07 17:29:45	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:31,len=2152
+2016-07-07 17:29:45	CJConnSock::AddWaitTask iSeq:6 lpWaitData:0020CD60 iwaitDataLen:2152 hWaitEvent:0000031C TaskSize:0
+2016-07-07 17:29:45	CJConnSock::FindWaitTask iSeq:6 success
+2016-07-07 17:29:45	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:0000031C
+2016-07-07 17:29:45	CJConnSock::RemoveWaitTask iSeq:6 success, TaskSize:0
+2016-07-07 17:29:45	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:31,len=2152
+2016-07-07 17:29:45	CJConnSock::AddWaitTask iSeq:7 lpWaitData:0020CD60 iwaitDataLen:2152 hWaitEvent:0000031C TaskSize:0
+2016-07-07 17:29:46	CJConnSock::FindWaitTask iSeq:7 success
+2016-07-07 17:29:46	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:0000031C
+2016-07-07 17:29:46	CJConnSock::RemoveWaitTask iSeq:7 success, TaskSize:0
+2016-07-07 17:29:46	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:31,len=2152
+2016-07-07 17:29:46	CJConnSock::AddWaitTask iSeq:8 lpWaitData:0020CD60 iwaitDataLen:2152 hWaitEvent:0000031C TaskSize:0
+2016-07-07 17:29:46	CJConnSock::FindWaitTask iSeq:8 success
+2016-07-07 17:29:46	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:0000031C
+2016-07-07 17:29:46	CJConnSock::RemoveWaitTask iSeq:8 success, TaskSize:0
+2016-07-07 17:29:46	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:31,len=2152
+2016-07-07 17:29:46	CJConnSock::AddWaitTask iSeq:9 lpWaitData:0020CD60 iwaitDataLen:2152 hWaitEvent:0000031C TaskSize:0
+2016-07-07 17:29:46	CJConnSock::FindWaitTask iSeq:9 success
+2016-07-07 17:29:46	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:0000031C
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-07 17:45:50 --------
+2016-07-07 17:45:50	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-07-07 17:45:53	Success new lpConn:024CCE78 lpszIP:192.168.0.96 iDevPort:37777 m_iID:1
+2016-07-07 17:45:53	CJConnSock::Login 192.168.0.96,37777,admin,admin begin
+2016-07-07 17:45:53	CJConnSock::Login end success
+2016-07-07 17:45:53	CJAddrParse::AddTask devAddr:192.168.0.96 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-07-07 17:45:53	CJConnJPF(192.168.0.96)::OnSendLogin():192.168.0.96,37777

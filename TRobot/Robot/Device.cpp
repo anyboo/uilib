@@ -11,7 +11,6 @@ Device::Device(const AbstractVendor* sdk)
 	m_sUserName = "";
 	m_sPassword = "";
 	m_iMaxChannel = 0;
-	m_vChannelList.clear();
 
 	if (!sdk)
 	{
@@ -32,7 +31,6 @@ Device::Device()
 	m_sUserName = "";
 	m_sPassword = "";
 	m_iMaxChannel = 0;
-	m_vChannelList.clear();
 }
 
 Device::~Device()
@@ -46,7 +44,6 @@ Device::~Device()
 	m_sUserName = "";
 	m_sPassword = "";
 	m_iMaxChannel = 0;
-	m_vChannelList.clear();
 }
 
 void Device::setSDK(AbstractVendor* sdk)
@@ -104,7 +101,6 @@ bool Device::Login(const std::string& ip, size_t port, const std::string& userNa
 	m_lLoginHandle = m_pVendor->Login(ip, port, sUserName, sPassword);
 	if (m_lLoginHandle < 0)
 	{
-		//std::cout << "Device Class µÇÂ½ Ê§°Ü£¡" << std::endl;
 		return false;
 	}
 
@@ -177,9 +173,4 @@ void Device::SetDownloadPath(const std::string& root)
 {
 	assert(m_pVendor);
 	m_pVendor->SetDownloadPath(root);
-}
-
-void Device::setChannel(const std::vector<size_t>& channelList)
-{
-	m_vChannelList = channelList;
 }

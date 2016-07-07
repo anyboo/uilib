@@ -96,6 +96,7 @@
     <ClInclude Include="QMSqlite.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SearchDevice.h" />
+    <ClInclude Include="SearchVideo.h" />
     <ClInclude Include="TestWindows.h" />
   </ItemGroup>
   <ItemGroup>
@@ -109,6 +110,7 @@
     <ClCompile Include="QMSqlite.cpp.cpp" />
     <ClCompile Include="Robot.cpp" />
     <ClCompile Include="SearchDevice.cpp" />
+    <ClCompile Include="SearchVideo.cpp" />
     <ClCompile Include="TestWindows.cpp" />
   </ItemGroup>
   <ItemGroup>

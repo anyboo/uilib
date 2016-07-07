@@ -42,24 +42,27 @@ public:
 	void Download(const size_t channel, const std::string& fileName);
 	void PlayVideo(const size_t channel, const std::string& fileName);
 
-	void setChannel(const std::vector<size_t>& channelList); 
-	size_t getMaxChannel(){ return m_iMaxChannel; }
-	std::vector<size_t> getChannelList(){ return m_vChannelList; }
-
-	std::string getIP(){ return m_sIP; }
-	DeviceLoginStatus getLoginStatus(){ return m_eLoginStatus; }
-
+	// Device Search Model
 	void StartSearchDevice();
-	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_pVendor->GetDeviceInfoList(); }
 	void StopSearchDevice();
+	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_pVendor->GetDeviceInfoList(); }
 
+	// Get Max Channel
+	size_t getMaxChannel(){ return m_iMaxChannel; }
+	// Get IP
+	std::string getIP(){ return m_sIP; } 
+	// Get Login Status (Unused)
+	DeviceLoginStatus getLoginStatus(){ return m_eLoginStatus; } 
+
+	// Chain of Responsibility Pattern
 	void SetNextDevice(Device* pDev) { m_pNextDev = pDev; }
 	Device* GetNextDevice() { return m_pNextDev; }
 	
-	RECORD_FILE_LIST GetRecordFileList(){ return m_pVendor->GetRecordFileList(); }
-
 	NET_SDK_TYPE GetSDKType(){ return m_pVendor->GetSDKType(); }
 	AbstractVendor* GetSDK(){ return m_pVendor; }
+
+protected:
+	RECORD_FILE_LIST GetRecordFileList(){ return m_pVendor->GetRecordFileList(); }
 	
 private:
 	AbstractVendor* m_pVendor;
@@ -71,7 +74,6 @@ private:
 	std::string m_sPassword;
 
 	size_t m_iMaxChannel;
-	std::vector<size_t> m_vChannelList;
 
 	long m_lLoginHandle;
 	DeviceLoginStatus m_eLoginStatus;
