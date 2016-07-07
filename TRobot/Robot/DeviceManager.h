@@ -11,9 +11,9 @@ public:
 
 	static CDeviceManager& getInstance();
 
-	void addDevice(Device* pDev);
-	Device& getDevice(const std::string ip);
-	void deleteDevice(const std::string ip);
+	void AddDevice(Device* pDev);
+	Device& GetDevice(const std::string ip);
+	void DeleteDevice(const std::string ip);
 
 private:
 	std::vector<Device*> m_listDevice;

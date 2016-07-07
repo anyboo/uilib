@@ -18,11 +18,14 @@ std::string HK_MakeStrTimeByTimestamp(time_t time);
 bool HK_isGetDVRConfig(const long loginHandle);
 size_t HK_getChannel(const long loginHandle, size_t channel);
 
+
+static bool HK_Init_Flag = false;
+
 HKVendor::HKVendor()
 {
 	m_eSDKType = HK_SDK;
 	m_sDefUserName = "admin";
-	m_sDefPassword = "12345";
+	m_sDefPassword = "admin123";
 	m_iMaxChannel = 0;
 
 	m_lSearchDeviceHandle = -1;
@@ -30,10 +33,10 @@ HKVendor::HKVendor()
 
 HKVendor::~HKVendor()
 {
-	m_iMaxChannel = 0;
-	m_lSearchDeviceHandle = -1;
-
-	assert(NET_DVR_Cleanup());
+	if (HK_Init_Flag)
+	{
+		assert(NET_DVR_Cleanup());
+	}
 }
 
 void HKVendor::Init()
@@ -47,13 +50,15 @@ void HKVendor::Init()
 	}
 	else
 	{
-		std::cout << "初始化SDK成功！" << std::endl;
+		std::cout << "HK 初始化SDK 成功！" << std::endl;
 	}
 
 	BOOL bConnect = NET_DVR_SetConnectTime(1000, 30);
 	BOOL bReConnect = NET_DVR_SetReconnect(3000);
 	assert(bConnect);
 	assert(bReConnect);
+
+	HK_Init_Flag = true;
 }
 
 long HKVendor::Login(const std::string& ip, size_t port, const std::string& user, const std::string& password)
@@ -66,32 +71,33 @@ long HKVendor::Login(const std::string& ip, size_t port, const std::string& user
 	/*m_lLoginHandle = lLoginID;*/
 	if (-1 == lLoginID)
 	{
-		std::cout << "登录失败(Failed)：" << HK_GetLastErrorString().c_str() << std::endl;
+		//std::cout << "登录失败(Failed)：" << HK_GetLastErrorString().c_str() << std::endl;
 		//throw std::exception("Login failed");
+		std::cout << "HK 登陆 失败！" << std::endl;
 		return -1;
 	}
 
 	m_iMaxChannel = DeviceInfoTmp.byIPChanNum;
- 
-// 	m_struDeviceInfo.lLoginID = lLoginID;
-// 	m_struDeviceInfo.iDeviceChanNum = DeviceInfoTmp.byChanNum;
-// 	m_struDeviceInfo.iIPChanNum = DeviceInfoTmp.byIPChanNum;
-// 	m_struDeviceInfo.iStartChan = DeviceInfoTmp.byStartChan;
 
-// 	cout << m_struDeviceInfo.struChanInfo[32].iChanIndex << endl;
-// 	DoGetDeviceResoureCfg();  //获取设备资源信息	
-// 	cout << m_struDeviceInfo.struChanInfo[32].iChanIndex << endl;
+	std::cout << "HK 登陆 成功！" << std::endl;
 
 	return lLoginID;
 }
 
 void HKVendor::Logout(const long loginHandle)
 {
-	if (loginHandle < 0 && !NET_DVR_Logout(loginHandle))
+	if (loginHandle >= 0)
 	{
-		std::cout << "退出失败：" << HK_GetLastErrorString().c_str() << std::endl;
-		throw std::exception("Logout failed");
-		return;
+		if (!NET_DVR_Logout(loginHandle))
+		{
+			//std::cout << "退出失败：" << HK_GetLastErrorString().c_str() << std::endl;
+			std::cout << "HK 退出登陆 失败！" << std::endl;
+			throw std::exception("Logout failed");
+		}
+		else
+		{
+			std::cout << "HK 退出登陆 成功！" << std::endl;
+		}
 	}
 }
 
@@ -137,7 +143,7 @@ void HKVendor::Search(const long loginHandle, const size_t channel, const time_r
 		if (-1 == hFindHandle)
 		{
 			std::cout << "Error:" << HK_GetLastErrorString() << endl;
-				return;
+			return;
 		}
 		else
 		{
@@ -516,12 +522,12 @@ void HK_CreatePath(const size_t channel)
 
 void HKVendor::StartSearchDevice()
 {
-
+	std::cout << "DH 搜索设备 开始！" << std::endl;
 }
 
 void HKVendor::StopSearchDevice()
 {
-
+	std::cout << "DH 搜索设备 结束！" << std::endl;
 }
 
 

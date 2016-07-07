@@ -18,7 +18,7 @@ CDeviceManager& CDeviceManager::getInstance()
 	return *shDeviceManager.get();
 }
 
-void CDeviceManager::addDevice(Device* pDev)
+void CDeviceManager::AddDevice(Device* pDev)
 {
 	std::vector<Device*>::iterator result = find(m_listDevice.begin(), m_listDevice.end(), pDev); //≤È’“
 	if (result == m_listDevice.end())
@@ -27,7 +27,7 @@ void CDeviceManager::addDevice(Device* pDev)
 	}
 }
 
-Device& CDeviceManager::getDevice(const std::string ip)
+Device& CDeviceManager::GetDevice(const std::string ip)
 {
 	assert(&ip || ip.empty());
 	
@@ -41,7 +41,7 @@ Device& CDeviceManager::getDevice(const std::string ip)
 	}
 }
 
-void CDeviceManager::deleteDevice(const std::string ip)
+void CDeviceManager::DeleteDevice(const std::string ip)
 {
 	assert(&ip || ip.empty());
 

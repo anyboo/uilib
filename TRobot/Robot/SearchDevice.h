@@ -12,16 +12,17 @@ public:
 	~CSearchDevice();
 
 	static CSearchDevice& getInstance();
-
-	void Init(VENDOR_LIST& pVendorList);
-	void Search(const DEVICE_INFO_SIMPLE_LIST& devInfoSimpleList);
-	void DeleteDeviceList();
-	void DeleteDeviceInfoList();
-
+	void Search(const VENDOR_LIST& pVendorList, const DEVICE_INFO_SIMPLE_LIST& listDeviceSimpleInfo);
 	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_listDeviceInfo; }
 
 protected:
+	void InitDeviceList(const VENDOR_LIST& pVendorList);
+	void DeleteDeviceList();
+	void DeleteDeviceInfoList();
+
+private:
 	DEVICE_INFO_LIST m_listDeviceInfo;
-	DEVICE_LIST m_listDevice;
+	DEVICE_LIST m_listDeviceKnown;
+	DEVICE_LIST m_listDeviceUnknown;
 };
 

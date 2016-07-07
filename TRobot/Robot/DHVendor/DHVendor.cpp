@@ -35,13 +35,6 @@ DHVendor::DHVendor()
 
 DHVendor::~DHVendor()
 {
-	m_iMaxChannel = 0;
-	m_lSearchDeviceHandle = -1;
-
-	if (!m_files.empty())
-	{
-		m_files.clear();
-	}
 }
 
 void DHVendor::Init()
@@ -55,7 +48,7 @@ void DHVendor::Init()
 	}
 	else
 	{
-		std::cout << "³õÊ¼»¯SDK³É¹¦£¡" << std::endl;
+		std::cout << "DH ³õÊ¼»¯SDK ³É¹¦£¡" << std::endl;
 	}
 }
 
@@ -67,14 +60,15 @@ long DHVendor::Login(const std::string& ip, size_t port, const std::string& user
 
 	if (0 != nError)
 	{
-		std::cout << "µÇÂ¼´íÎó(nError)£º" << DH_GetLastErrorString().c_str() << std::endl;
-		//throw std::exception("Login failed");
+		//std::cout << "µÇÂ¼´íÎó(nError)£º" << DH_GetLastErrorString().c_str() << std::endl;
+		std::cout << "DH µÇÂ½ Ê§°Ü£¡" << std::endl;
 		return -1;
 	}
 
 	if (0 == lLoginHandle)
 	{
-		std::cout << "µÇÂ¼´íÎó(lLogin)£º" << DH_GetLastErrorString().c_str() << std::endl;
+		//std::cout << "µÇÂ¼´íÎó(lLogin)£º" << DH_GetLastErrorString().c_str() << std::endl;
+		std::cout << "DH µÇÂ½ Ê§°Ü£¡" << std::endl;
 		return -1;
 	}
 
@@ -99,21 +93,32 @@ long DHVendor::Login(const std::string& ip, size_t port, const std::string& user
 		}
 	}
 
+	std::cout << "DH µÇÂ½ ³É¹¦£¡" << std::endl;
+
 	return lLoginHandle;
 }
 
 void DHVendor::Logout(const long loginHandle)
 {
-	if (loginHandle > 0 && !CLIENT_Logout(loginHandle))
+	if (loginHandle > 0)
 	{
-		std::cout << "ÍË³ö´íÎó£º" << DH_GetLastErrorString().c_str() << std::endl;
-		throw std::exception("Logout failed");
-		return;
+		if (!CLIENT_Logout(loginHandle))
+		{
+			//std::cout << "ÍË³öÊ§°Ü£º" << DH_GetLastErrorString().c_str() << std::endl;
+			std::cout << "DH ÍË³öµÇÂ½ Ê§°Ü£¡" << std::endl;
+			throw std::exception("Logout failed");
+		}
+		else
+		{
+			std::cout << "DH ÍË³öµÇÂ½ ³É¹¦£¡" << std::endl;
+		}
 	}
 }
 
 void DHVendor::StartSearchDevice()
 {
+	std::cout << "DH ËÑË÷Éè±¸ ¿ªÊ¼£¡" << std::endl;
+
  	DEVICE_NET_INFO Device[256] = { 0 };
  	int nLength = 0;
  
@@ -148,7 +153,7 @@ void DHVendor::StartSearchDevice()
 
 void DHVendor::StopSearchDevice()
 {
-
+	std::cout << "DH ËÑË÷Éè±¸ ½áÊø£¡" << std::endl;
 }
 
 void DHVendor::SearchAll(const long loginHandle)

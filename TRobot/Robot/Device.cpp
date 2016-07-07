@@ -75,6 +75,7 @@ bool Device::LoginChain(const NET_DEVICE_INFO_SIMPLE* pDevInfoSimple, int& index
 {
 	if (Login(pDevInfoSimple->szIP, pDevInfoSimple->nPort))
 	{
+		Logout();
 		return true;
 	}
 	else
@@ -85,8 +86,6 @@ bool Device::LoginChain(const NET_DEVICE_INFO_SIMPLE* pDevInfoSimple, int& index
 			GetNextDevice()->LoginChain(pDevInfoSimple, indexVendor);
 		}
 	}
-
-	return false;
 }
 
 bool Device::Login(const std::string& ip, size_t port, const std::string& userName, const std::string& password)

@@ -14,6 +14,8 @@ void __stdcall DZP_DownLoadPosCallBack(long lPlayHandle, long lTotalSize, long l
 int __stdcall DZP_RealDataCallBack(long lRealHandle, long dwDataType, unsigned char *pBuffer, long lbufsize, long dwUser);
 int DZP_GetDownloadPos(const long loginHandle);
 
+static bool DZP_Init_Flag = false;
+
 std::string GZLL_GetLastErrorString(int error)
 {
 	switch (error)
@@ -114,11 +116,9 @@ CDZPVendor::CDZPVendor()
 
 CDZPVendor::~CDZPVendor()
 {
-	int iRet = H264_DVR_Cleanup();
-	if (0 != iRet)
+	if (DZP_Init_Flag)
 	{
-		std::string m_sLastError = GZLL_GetLastErrorString();
-		throw std::exception(m_sLastError.c_str());
+		H264_DVR_Cleanup();
 	}
 }
 
@@ -132,6 +132,8 @@ void CDZPVendor::Init()
 	}
 
 	H264_DVR_SetConnectTime(5000, 3);
+
+	DZP_Init_Flag = true;
 
 	std::cout << "DZP 初始化SDK 成功！" << std::endl;
 }
@@ -162,14 +164,19 @@ long CDZPVendor::Login(const std::string& ip, size_t port, const std::string& us
 }
 void CDZPVendor::Logout(const long loginHandle)
 {
-	if (loginHandle != 0 && !H264_DVR_Logout(loginHandle))
+	if (loginHandle > 0)
 	{
-		std::string m_sLastError = GZLL_GetLastErrorString();
-		throw std::exception(m_sLastError.c_str());
-		return;
+		if (H264_DVR_Logout(loginHandle))
+		{
+			std::cout << "DZP 退出登陆 成功！" << std::endl;
+		}
+		else
+		{
+			std::string m_sLastError = GZLL_GetLastErrorString();
+			std::cout << "DZP 退出登陆 失败！" << std::endl;
+			throw std::exception(m_sLastError.c_str());
+		}
 	}
-
-	std::cout << "DZP 退出登陆 成功！" << std::endl;
 }
 
 void CDZPVendor::StartSearchDevice()

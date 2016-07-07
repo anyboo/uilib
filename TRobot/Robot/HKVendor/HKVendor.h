@@ -35,23 +35,6 @@ public:
 	RECORD_FILE_LIST GetRecordFileList(){ return m_files; }
 
 private:
-	/*void timeDHToStd(NET_DVR_TIME *pTimeDH, tm *pTimeStd);
-	void timeStdToDH(tm *pTimeStd, NET_DVR_TIME *pTimeDH);
-	void trTOndt(NET_DVR_TIME &ndtStartTime, NET_DVR_TIME &ndtEndTime, const time_range range);
-
-	std::string GetLastErrorString();
-	std::vector<time_range> MakeTimeRangeList(const time_range& range);
-	void CreatePath(const size_t channel);
-
-	void SaveSearchFileListToFile();
-	std::string MakeStrByInteger(int data);
-	std::string MakeStrTimeByTimestamp(time_t time);
-
-	void WriteFileListToDB();
-	bool isGetDVRConfig();
-	size_t getChannel(size_t channel);*/
-
-private:
 	/* Init */
 	std::string m_sRoot;
 	NET_SDK_TYPE m_eSDKType;
@@ -67,16 +50,6 @@ private:
 
 	/* Search */
 	RECORD_FILE_LIST m_files;
-
-	//std::string m_strName;
-	//int m_dwPort;
-	//std::string m_strUser;
-	//std::string m_strPasswords;
-	//std::string m_strIP;
-	//LONG m_lLoginHandle;
-
-
-	
 };
 
 

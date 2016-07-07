@@ -27,6 +27,8 @@ long m_lDownLoadTotalTime = -1;
 int m_iDownLoadPos = 0;
 int m_iPlayVideoChannel = -1;
 
+static bool JXJ_Init_Flag = false;
+
 
 // Login Callback
 int __stdcall JXJ_ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, void* pEventData, int iDataLen, void* pUserParam);
@@ -121,14 +123,9 @@ CJxjVendor::CJxjVendor()
 
 CJxjVendor::~CJxjVendor()
 {
-	m_iMaxChannel = 0;
-	m_lSearchDeviceHandle = -1;
-
-	int iRet = JNetCleanup();
-	if (0 != iRet)
+	if (JXJ_Init_Flag)
 	{
-		std::string m_sLastError = GetErrorString(iRet);
-		throw std::exception(m_sLastError.c_str());
+		assert(!JNetCleanup());
 	}
 }
 
@@ -150,6 +147,8 @@ void CJxjVendor::Init()
 	}
 
 	AVP_InitRecMng(128, 8);
+
+	JXJ_Init_Flag = true;
 
 	std::cout << "JXJ ³õÊ¼»¯SDK ³É¹¦£¡" << std::endl;
 }
@@ -175,7 +174,6 @@ long CJxjVendor::Login(const std::string& ip, size_t port, const std::string& us
 	if (m_errCode == Err_LoginFail)
 	{
 		std::cout << "JXJ µÇÂ½ Ê§°Ü£¡" << std::endl;
-		//throw std::exception("µÇÂ½Ê§°Ü");
 		return -1;
 	}
 
@@ -196,17 +194,20 @@ long CJxjVendor::Login(const std::string& ip, size_t port, const std::string& us
 
 void CJxjVendor::Logout(const long loginHandle)
 {
-	if (loginHandle)
+	if (loginHandle > 0)
 	{
 		int iRet = JNetMBClose(loginHandle);
 		if (JNETErrSuccess != iRet)
 		{
 			std::string m_sLastError = GetErrorString(iRet);
+			std::cout << "JXJ ÍË³öµÇÂ½ Ê§°Ü£¡" << std::endl;
 			throw std::exception(m_sLastError.c_str());
 		}
+		else
+		{
+			std::cout << "JXJ ÍË³öµÇÂ½ ³É¹¦£¡" << std::endl;
+		}
 	}
-
-	std::cout << "JXJ ÍË³öµÇÂ½ ³É¹¦£¡" << std::endl;
 }
 
 void CJxjVendor::StartSearchDevice()

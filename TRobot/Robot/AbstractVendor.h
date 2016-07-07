@@ -17,9 +17,10 @@ typedef struct _time_range
 
 typedef enum tagSDK_TYPE
 {
-	DH_SDK = 1,
+	NONE_SDK = 0,
 	JXJ_SDK,
 	DZP_SDK,
+	DH_SDK,
 	HK_SDK,
 }NET_SDK_TYPE;
 
