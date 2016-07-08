@@ -37,8 +37,8 @@ TEST_CASE("This is a demo", "[demo]")
 		DHVendor dhVendor;
 		HKVendor hkVendor;
 
-		//pVendorList.push_back(&jxjVendor);
-		pVendorList.push_back(&dzpVendor);
+		pVendorList.push_back(&jxjVendor);
+		//pVendorList.push_back(&dzpVendor);
 		//pVendorList.push_back(&dhVendor);
 		//pVendorList.push_back(&hkVendor);
 
@@ -48,7 +48,7 @@ TEST_CASE("This is a demo", "[demo]")
 		int nPort = 0;
 
 		// DZP
-#if 1
+#if 0
 		NET_DEVICE_INFO_SIMPLE* devInfoSimple1 = new NET_DEVICE_INFO_SIMPLE;
 		memset(devInfoSimple1, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
 		strIP = "192.168.0.66";
@@ -59,7 +59,7 @@ TEST_CASE("This is a demo", "[demo]")
 #endif
 
 		// JXJ
-#if 0
+#if 1
 		NET_DEVICE_INFO_SIMPLE* devInfoSimple2 = new NET_DEVICE_INFO_SIMPLE;
 		memset(devInfoSimple2, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
 		strIP = "192.168.0.89";
@@ -114,11 +114,11 @@ TEST_CASE("This is a demo", "[demo]")
 			if (CLoginDevice::getInstance().Login(devInfo->pVendor, devInfo->szIp, devInfo->nPort))
 			{
 				Device* pDev = CLoginDevice::getInstance().GetDevice(devInfo->szIp);
-				int channel = 1;
+				int channel = 0;
 
 				time_range timeRangeSearch;
-				timeRangeSearch.start = 1467820800; // 1466265600 - jxj  // 1467734400 - dh  // 1467820800 - dzp
-				timeRangeSearch.end = 1467907199; // 1466697599 - jxj  // 1467905003 - dh  // 1467907199 - dzp
+				timeRangeSearch.start = 1467820800; // 1467820800 - jxj  // 1467734400 - dh  // 1467820800 - dzp
+				timeRangeSearch.end = 1467993599; // 1467993599 - jxj  // 1467905003 - dh  // 1467907199 - dzp
 				std::vector<size_t> channelList;
 				channelList.push_back(channel);
 				CSearchVideo::getInstance().SearchFile(pDev, timeRangeSearch, channelList);

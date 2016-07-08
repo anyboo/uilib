@@ -13,15 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\sdk">
-      <UniqueIdentifier>{90c7e9b0-d068-4e58-8a5c-0c285925c057}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\sdk">
-      <UniqueIdentifier>{e1574f80-21ee-495c-9dad-142b7709b50e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AVPlayer">
-      <UniqueIdentifier>{4de47ce6-157c-4774-b8ca-bc73238d8fc7}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
