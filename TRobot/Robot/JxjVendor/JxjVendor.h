@@ -2,12 +2,12 @@
 
 #include "CommonUtrl.h"
 
-class CJxjVendor :
+class CJXJVendor :
 	public AbstractVendor
 {
 public:
-	CJxjVendor();
-	~CJxjVendor();
+	CJXJVendor();
+	~CJXJVendor();
 
 	void Init();
 	long Login(const std::string& ip, size_t port, const std::string& user, const std::string& password);

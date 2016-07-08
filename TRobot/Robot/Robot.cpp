@@ -10,7 +10,7 @@
 #include "LoginDevice.h"
 #include "SearchVideo.h"
 
-#include "JxjVendor.h"
+#include "JXJVendor.h"
 #include "DZPVendor.h"
 #include "DHVendor.h"
 #include "HKVendor.h"
@@ -32,7 +32,7 @@ TEST_CASE("This is a demo", "[demo]")
 
 		/************************* 初始化SDK厂商 **********************/
 		VENDOR_LIST pVendorList;
-		CJxjVendor jxjVendor;
+		CJXJVendor jxjVendor;
 		CDZPVendor dzpVendor;
 		DHVendor dhVendor;
 		HKVendor hkVendor;

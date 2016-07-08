@@ -2582,3 +2582,87 @@
 2016-07-08 09:28:56	CJConnJPF(192.168.0.89)::OnSendGetParam Send Err:-1,iChn:0,iParamID:31
 2016-07-08 09:28:56	CJConnJPF(192.168.0.89)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
 2016-07-08 09:29:00	CJLogWriter::Close at 2016-07-08 09:29:00
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-08 11:08:39 --------
+2016-07-08 11:08:39	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-07-08 11:08:42	Success new lpConn:02E1CE78 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-07-08 11:08:42	CJConnSock::Login 192.168.0.89,3321,admin,admin begin
+2016-07-08 11:08:42	CJConnSock::Login end success
+2016-07-08 11:08:42	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-07-08 11:08:57	CJConnJPF(192.168.0.89)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-07-08 11:09:50	CJLogWriter::Close at 2016-07-08 11:09:50
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-08 11:09:56 --------
+2016-07-08 11:09:56	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-07-08 11:10:05	Success new lpConn:02C6CED8 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-07-08 11:10:05	CJConnSock::Login 192.168.0.89,3321,admin,admin begin
+2016-07-08 11:10:05	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-07-08 11:10:05	CJConnSock::Login end success
+2016-07-08 11:10:05	CJConnJPF(192.168.0.89)::OnSendLogin():192.168.0.89,3321
+2016-07-08 11:10:05	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:5,len=212
+2016-07-08 11:10:05	CJConnSock::AddWaitTask iSeq:2 lpWaitData:0034D534 iwaitDataLen:212 hWaitEvent:000003A8 TaskSize:0
+2016-07-08 11:10:05	CJConnSock::FindWaitTask iSeq:2 success
+2016-07-08 11:10:05	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:000003A8
+2016-07-08 11:10:05	CJConnSock::RemoveWaitTask iSeq:2 success, TaskSize:0
+2016-07-08 11:10:07	Success new lpConn:029C1750 lpszIP:192.168.0.89 iDevPort:3321 m_iID:2
+2016-07-08 11:10:07	CJConnSock::Login 192.168.0.89,3321,admin,admin begin
+2016-07-08 11:10:07	CJConnSock::Login end success
+2016-07-08 11:10:07	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-07-08 11:10:07	CJConnJPF(192.168.0.89)::OnSendLogin():192.168.0.89,3321
+2016-07-08 11:10:08	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:5,len=212
+2016-07-08 11:10:08	CJConnSock::AddWaitTask iSeq:4 lpWaitData:0034D67C iwaitDataLen:212 hWaitEvent:000003D4 TaskSize:0
+2016-07-08 11:10:08	CJConnSock::FindWaitTask iSeq:4 success
+2016-07-08 11:10:08	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:000003D4
+2016-07-08 11:10:08	CJConnSock::RemoveWaitTask iSeq:4 success, TaskSize:0
+2016-07-08 11:10:09	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:31,len=2152
+2016-07-08 11:10:09	CJConnSock::AddWaitTask iSeq:5 lpWaitData:0034CF80 iwaitDataLen:2152 hWaitEvent:000003D4 TaskSize:0
+2016-07-08 11:10:10	CJLSocket::Recv err:0
+2016-07-08 11:10:10	CJLSocket::Recv err:10054
+2016-07-08 11:10:17	CJConnJPF::OnSendGetParam Err 192.168.0.89,31
+2016-07-08 11:10:17	CJConnSock::RemoveWaitTask iSeq:5 success, TaskSize:0
+2016-07-08 11:10:18	CJLogWriter::Close at 2016-07-08 11:10:18
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-08 11:10:36 --------
+2016-07-08 11:10:36	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-07-08 11:10:42	Success new lpConn:0092CED8 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-07-08 11:10:42	CJConnSock::Login 192.168.0.89,3321,admin,admin begin
+2016-07-08 11:10:42	CJConnSock::Login end success
+2016-07-08 11:10:42	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-07-08 11:10:45	CJConnJPF(192.168.0.89)::OnCheckState LastRecv OverTime, Reconnct will happen after 1s later
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-08 11:10:55 --------
+2016-07-08 11:10:55	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-07-08 11:10:58	Success new lpConn:0336CED8 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-07-08 11:10:58	CJConnSock::Login 192.168.0.89,3321,admin,admin begin
+2016-07-08 11:10:58	CJConnSock::Login end success
+2016-07-08 11:10:58	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-07-08 11:10:58	CJConnJPF(192.168.0.89)::OnSendLogin():192.168.0.89,3321
+2016-07-08 11:10:58	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:5,len=212
+2016-07-08 11:10:58	CJConnSock::AddWaitTask iSeq:2 lpWaitData:0028CE1C iwaitDataLen:212 hWaitEvent:000003AC TaskSize:0
+2016-07-08 11:10:58	CJConnSock::FindWaitTask iSeq:2 success
+2016-07-08 11:10:58	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:000003AC
+2016-07-08 11:10:58	CJConnSock::RemoveWaitTask iSeq:2 success, TaskSize:0
+2016-07-08 11:10:58	Success new lpConn:03301750 lpszIP:192.168.0.89 iDevPort:3321 m_iID:2
+2016-07-08 11:10:58	CJConnSock::Login 192.168.0.89,3321,admin,admin begin
+2016-07-08 11:10:58	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-07-08 11:10:58	CJConnSock::Login end success
+2016-07-08 11:10:58	CJConnJPF(192.168.0.89)::OnSendLogin():192.168.0.89,3321
+2016-07-08 11:10:58	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:5,len=212
+2016-07-08 11:10:58	CJConnSock::AddWaitTask iSeq:4 lpWaitData:0028CF64 iwaitDataLen:212 hWaitEvent:000003E0 TaskSize:0
+2016-07-08 11:10:58	CJConnSock::FindWaitTask iSeq:4 success
+2016-07-08 11:10:58	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:000003E0
+2016-07-08 11:10:58	CJConnSock::RemoveWaitTask iSeq:4 success, TaskSize:0
+2016-07-08 11:11:19	CJConnJPF(192.168.0.89)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-07-08 11:11:19	CJConnJPF(192.168.0.89)::OnCheckState LastRecv OverTime, Reconnct will happen after 5s later
+2016-07-08 11:11:19	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:31,len=2152
+2016-07-08 11:11:19	CJConnSock::AddWaitTask iSeq:5 lpWaitData:0028C868 iwaitDataLen:2152 hWaitEvent:00000398 TaskSize:0
+2016-07-08 11:11:19	CJConnJPF(192.168.0.89)::OnSendGetParam Send Err:-1,iChn:0,iParamID:31
+2016-07-08 11:11:19	CJLogWriter::Close at 2016-07-08 11:11:19

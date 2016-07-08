@@ -91,7 +91,7 @@
     <ClInclude Include="DHVendor\DHVendor.h" />
     <ClInclude Include="DZPVendor\DZPVendor.h" />
     <ClInclude Include="HKVendor\HKVendor.h" />
-    <ClInclude Include="JxjVendor\JxjVendor.h" />
+    <ClInclude Include="JxjVendor\JXJVendor.h" />
     <ClInclude Include="LoginDevice.h" />
     <ClInclude Include="QMSqlite.h" />
     <ClInclude Include="resource.h" />
@@ -105,7 +105,7 @@
     <ClCompile Include="DHVendor\DHVendor.cpp" />
     <ClCompile Include="DZPVendor\DZPVendor.cpp" />
     <ClCompile Include="HKVendor\HKVendor.cpp" />
-    <ClCompile Include="JxjVendor\JxjVendor.cpp" />
+    <ClCompile Include="JxjVendor\JXJVendor.cpp" />
     <ClCompile Include="LoginDevice.cpp" />
     <ClCompile Include="QMSqlite.cpp.cpp" />
     <ClCompile Include="Robot.cpp" />

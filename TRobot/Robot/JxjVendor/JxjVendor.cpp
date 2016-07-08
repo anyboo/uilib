@@ -1,5 +1,5 @@
 
-#include "JxjVendor.h"
+#include "JXJVendor.h"
 
 // JXJ SDK
 #include "mb_api.h"
@@ -110,7 +110,7 @@ const char* GetErrorString(int error)
 	return "未定义";
 }
 
-CJxjVendor::CJxjVendor()
+CJXJVendor::CJXJVendor()
 {
 	// Init Param
 	m_eSDKType = JXJ_SDK;
@@ -121,7 +121,7 @@ CJxjVendor::CJxjVendor()
 	m_lSearchDeviceHandle = -1;
 }
 
-CJxjVendor::~CJxjVendor()
+CJXJVendor::~CJXJVendor()
 {
 	if (JXJ_Init_Flag)
 	{
@@ -129,7 +129,7 @@ CJxjVendor::~CJxjVendor()
 	}
 }
 
-void CJxjVendor::Init()
+void CJXJVendor::Init()
 {
 	// Init JNetSdk
 	int iRet = JNetInit(NULL);
@@ -153,7 +153,7 @@ void CJxjVendor::Init()
 	std::cout << "JXJ 初始化SDK 成功！" << std::endl;
 }
 
-long CJxjVendor::Login(const std::string& ip, size_t port, const std::string& user, const std::string& password)
+long CJXJVendor::Login(const std::string& ip, size_t port, const std::string& user, const std::string& password)
 {
 	m_errCode = Err_No;
 
@@ -192,7 +192,7 @@ long CJxjVendor::Login(const std::string& ip, size_t port, const std::string& us
 	return loginHandle;
 }
 
-void CJxjVendor::Logout(const long loginHandle)
+void CJXJVendor::Logout(const long loginHandle)
 {
 	if (loginHandle > 0)
 	{
@@ -210,7 +210,7 @@ void CJxjVendor::Logout(const long loginHandle)
 	}
 }
 
-void CJxjVendor::StartSearchDevice()
+void CJXJVendor::StartSearchDevice()
 {
 	char szIp[11] = "224.0.0.99";
 	int nPort = 40086;
@@ -219,19 +219,19 @@ void CJxjVendor::StartSearchDevice()
 
 	std::cout << "JXJ 搜索设备 开始！" << std::endl;
 }
-void CJxjVendor::StopSearchDevice()
+void CJXJVendor::StopSearchDevice()
 {
 	JNetMBClose(m_lSearchDeviceHandle);
 
 	std::cout << "JXJ 搜索设备 结束！" << std::endl;
 }
 
-void CJxjVendor::SearchAll(const long loginHandle)
+void CJXJVendor::SearchAll(const long loginHandle)
 {
 
 }
 
-void CJxjVendor::Search(const long loginHandle, const size_t channel, const time_range& range)
+void CJXJVendor::Search(const long loginHandle, const size_t channel, const time_range& range)
 {
 	std::cout << "JXJ 搜索文件 开始！" << std::endl;
 
@@ -265,7 +265,7 @@ void CJxjVendor::Search(const long loginHandle, const size_t channel, const time
 }
 
 //void CJxjVendor::DownloadByTime(const std::time_t& start, const std::time_t& end)
-void CJxjVendor::Download(const long loginHandle, const size_t channel, const time_range& range)
+void CJXJVendor::Download(const long loginHandle, const size_t channel, const time_range& range)
 {
 	// Init File Starttime and Endtime
 	std::string strTimeStart;
@@ -332,7 +332,7 @@ void CJxjVendor::Download(const long loginHandle, const size_t channel, const ti
 }
 
 //void CJxjVendor::DownloadByName(const std::string& filename)
-void CJxjVendor::Download(const long loginHandle, const size_t channel, const std::string& filename)
+void CJXJVendor::Download(const long loginHandle, const size_t channel, const std::string& filename)
 {
 	if (m_files.size() == 0)
 	{
@@ -399,7 +399,7 @@ void CJxjVendor::Download(const long loginHandle, const size_t channel, const st
 }
 
 //void CJxjVendor::PlayVideo(const std::string& filename)
-void CJxjVendor::PlayVideo(const long loginHandle, const size_t channel, const time_range& range)
+void CJXJVendor::PlayVideo(const long loginHandle, const size_t channel, const time_range& range)
 {
 	// Init File Starttime and Endtime
 	std::string strTimeStart;
@@ -464,7 +464,7 @@ void CJxjVendor::PlayVideo(const long loginHandle, const size_t channel, const t
 	// 开启解码
 	AVP_Play(m_iPlayVideoChannel);
 }
-void CJxjVendor::PlayVideo(const long loginHandle, const size_t channel, const std::string& filename)
+void CJXJVendor::PlayVideo(const long loginHandle, const size_t channel, const std::string& filename)
 {
 	if (m_files.size() == 0)
 	{
@@ -529,12 +529,12 @@ void CJxjVendor::PlayVideo(const long loginHandle, const size_t channel, const s
 
 	return;
 }
-void CJxjVendor::SetDownloadPath(const std::string& Root)
+void CJXJVendor::SetDownloadPath(const std::string& Root)
 {
 	m_sRoot = Root;
 }
 
-void CJxjVendor::throwException()
+void CJXJVendor::throwException()
 {
 }
 
@@ -564,7 +564,7 @@ int __stdcall JXJ_ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, voi
 
 int __stdcall JXJ_JMBNotify(long lHandle, DWORD dwPortocol, int iErr, int iMsgID, LPCTSTR lpszDstID, void* pData, int iDataLen, void* pUserParam)
 {
-	CJxjVendor* jxjVendor = (CJxjVendor *)pUserParam;
+	CJXJVendor* jxjVendor = (CJXJVendor *)pUserParam;
 
 	NET_DEVICE_INFO* ndiInfo = new NET_DEVICE_INFO();
 
