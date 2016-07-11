@@ -1,31 +1,42 @@
 #include "DownloadVideo.h"
 
 
-DownloadVideo::DownloadVideo()
+DownloadVideo::DownloadVideo():
+m_AcquireDataRunable(DownloadFileNotificationQueue::GetInstance().GetQueue())
 {
+	// start worker threads
+	ThreadPool::defaultPool().start(m_AcquireDataRunable);
 }
 
 
 DownloadVideo::~DownloadVideo()
 {
+	//SendDataNotification::.wakeUpAll();
+	DownloadFileNotificationQueue::GetInstance().GetQueue().wakeUpAll();
+	ThreadPool::defaultPool().joinAll();
 }
 
 
-void DownloadVideo::GetDownLoadInfo(Device *dObj, std::vector<SDK_DOWNLOAD_INFO> SDIObj)
+void DownloadVideo::SetDownloadInfo(Device *dObj, std::vector<SDK_DOWNLOAD_INFO> SDIObj)
 {
-	if (NULL != dObj)
+	if ((NULL != dObj) && (0 != SDIObj.size()))
 	{
-		std::vector<SDK_DOWNLOAD_INFO>::iterator itSDI;
-		for (itSDI != SDIObj.begin(); itSDI != SDIObj.end(); ++itSDI)
+		std::vector<SDK_DOWNLOAD_INFO>::iterator itSDI = SDIObj.begin();
+		for (; itSDI != SDIObj.end(); ++itSDI)
 		{
-			std::vector<std::string>::iterator itStr;
-			for (itStr != itSDI->strVector.begin(); itStr != itSDI->strVector.end(); ++itStr)
+			std::vector<DOWNLOADID>::iterator itStr;
+			for (itStr = itSDI->vecInfo.begin(); itStr != itSDI->vecInfo.end(); ++itStr)
 			{
 				//创建多线程，当下载到达100的时候关闭创建的线程
-				dObj->Download(itSDI->tChannel, *itStr);
+				dObj->Download(itSDI->tChannel, itStr->strFileName);
 			}
 		}
 	}// if
+}
+
+void DownloadVideo::GetDownloadInfo()
+{
+
 }
 
 bool DownloadVideo::StopDownLoad(Device *dObj)
@@ -33,14 +44,15 @@ bool DownloadVideo::StopDownLoad(Device *dObj)
 	return dObj->StopDownload();
 }
 
-//获得已下载文件大小和总文件大小
-int DownloadVideo::getDownloadPos(Device *dObj, int dDownLoadSize, int nTotalSize)
+void DownloadVideo::getFlieSizeTest(DWORD &dwDownLoadSize, DWORD &dwTotalSize)
 {
-	if (NULL != dObj)
-	{
+	dwDownLoadSize = m_AcquireDataRunable.GetDownloadFileInfo().dwDownLoadSize;
+	dwTotalSize = m_AcquireDataRunable.GetDownloadFileInfo().dwTotalSize;
+}
 
-	}
-
+//获得已下载文件大小和总文件大小
+int DownloadVideo::getDownloadPos(Device *dObj, DWORD dwDownLoadSize, DWORD dwTotalSize)
+{
 	return 0;
 }
 

@@ -56,7 +56,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)RearchFile;$(ProjectDir)\transation;$(ProjectDir)HK_Head;$(ProjectDir)Depend;$(SolutionDir)poco\Data\include;$(SolutionDir)poco\Foundation\include;$(SolutionDir)poco\Data\SQLite\include;$(SolutionDir)\bin;$(SolutionDir)\dll;$(SolutionDir)\TRobot\Robot\DZPVendor\sdk;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\TRobot\Robot\inc;$(SolutionDir)\TRobot\Robot;$(SolutionDir)\TRobot\Robot\JxjVendor;$(SolutionDir)\Test\single_include;$(SolutionDir)\TRobot\Robot\DZPVendor;$(SolutionDir)\poco\Foundation\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Projects\uilib2\poco\Foundation\include;$(ProjectDir);$(ProjectDir)RearchFile;$(ProjectDir)\transation;$(ProjectDir)HK_Head;$(ProjectDir)Depend;$(SolutionDir)poco\Data\include;$(SolutionDir)poco\Foundation\include;$(SolutionDir)poco\Data\SQLite\include;$(SolutionDir)\bin;$(SolutionDir)\dll;$(SolutionDir)\TRobot\Robot\DZPVendor\sdk;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\TRobot\Robot\inc;$(SolutionDir)\TRobot\Robot;$(SolutionDir)\TRobot\Robot\JxjVendor;$(SolutionDir)\Test\single_include;$(SolutionDir)\TRobot\Robot\DZPVendor;$(SolutionDir)\poco\Foundation\include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -88,11 +88,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\transation\QMSqlite.h" />
+    <ClInclude Include="AcquireDataRunable.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="DeviceManager.h" />
     <ClInclude Include="DHVendor.h" />
     <ClInclude Include="AbstractVendor.h" />
     <ClInclude Include="CommonUtrl.h" />
+    <ClInclude Include="DownloadFileNotificationQueue.h" />
     <ClInclude Include="DownloadVideo.h" />
     <ClInclude Include="DZPVendor\DZPVendor.h" />
     <ClInclude Include="HKVendor.h" />
@@ -107,13 +109,16 @@
     <ClInclude Include="RearchFile\SearchHead.h" />
     <ClInclude Include="RearchFile\SearchVideo.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SendDataNotification.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\transation\QMSqlite.cpp" />
+    <ClCompile Include="AcquireDataRunable.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="DeviceManager.cpp" />
     <ClCompile Include="DHVendor.cpp" />
     <ClCompile Include="CommonUtrl.cpp" />
+    <ClCompile Include="DownloadFileNotificationQueue.cpp" />
     <ClCompile Include="DownloadVideo.cpp" />
     <ClCompile Include="DZPVendor\DZPVendor.cpp" />
     <ClCompile Include="HKVendor.cpp" />
@@ -121,13 +126,10 @@
     <ClCompile Include="JxjVendor\TestWindows.cpp" />
     <ClCompile Include="RearchFile\SearchVideo.cpp" />
     <ClCompile Include="Robot.cpp" />
+    <ClCompile Include="SendDataNotification.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Robot.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

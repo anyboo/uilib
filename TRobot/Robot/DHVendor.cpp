@@ -485,16 +485,16 @@ void CALLBACK DH_BTDownLoadPos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDow
 
 void CALLBACK DH_BTDownLoadFile(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser)
 {
-	std::cout << "dwTotalSize:" << dwTotalSize << std::endl;
-	std::cout << "dwDownLoadSize:" << dwDownLoadSize << std::endl;
+	DOWNLOADFILEINFO DownloadFileInfo;
+	DownloadFileInfo.dwDownLoadSize = dwDownLoadSize;
+	DownloadFileInfo.dwTotalSize = dwTotalSize;
+
+	DownloadFileNotificationQueue::GetInstance().GetQueue().enqueueNotification(new SendDataNotification(DownloadFileInfo));
 }
 
 void CALLBACK DH_PlayCallBack(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser)
 {
-	if (dwUser == 0)
-	{
-		return;
-	}
+	
 }
 
 int CALLBACK DH_PBDataCallBack(LLONG lRealHandle, DWORD dwDataType, BYTE *pBuffer, DWORD dwBufSize, LDWORD dwUser)

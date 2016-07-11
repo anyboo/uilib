@@ -111,6 +111,15 @@
     <ClInclude Include="DownloadVideo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SendDataNotification.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DownloadFileNotificationQueue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AcquireDataRunable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Robot.cpp">
@@ -149,14 +158,19 @@
     <ClCompile Include="DownloadVideo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SendDataNotification.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DownloadFileNotificationQueue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AcquireDataRunable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Robot.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
 </Project>

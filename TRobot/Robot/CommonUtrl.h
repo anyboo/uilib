@@ -28,6 +28,12 @@
 
 using namespace rapidjson;
 
+//Poco
+#include "Poco/NotificationQueue.h"
+
+using Poco::NotificationQueue;
+
+
 #define Test_Bug
 #define Test_Filename
 

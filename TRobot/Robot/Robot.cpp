@@ -13,6 +13,8 @@
 
 #include "Device.h"
 
+#include "DownloadVideo.h"
+
 TEST_CASE("This is a demo", "[demo]")
 {
 	SECTION("Test login the device")
@@ -54,22 +56,22 @@ TEST_CASE("This is a demo", "[demo]")
 // 		std::vector<readSearchVideo> RSVObj;
 // 		svObj.ReadDataFromTable(RSVObj);
 
-		//大华
-		DHVendor Obj;
-	 	time_range range;
-	 	range.start = 1467302400;
-	 	//range.end = 1466524800;
-	 	range.end = 1467648000;
-	 	//range.end = 1478833871;
-		Obj.Init();
-		Obj.StartSearchDevice();
-		long lLogin = Obj.Login("192.168.0.96", 37777, "admin", "");
-		Obj.Search(lLogin, 0, range);
-	//	Obj.Download(lLogin, 0, range);
-		Obj.Download(lLogin, 0, "channel0-20160701000000-20160701235959-1");
-		//Obj.PlayVideo(lLogin, range);
-		//Obj.PlayVideo(lLogin, "channel0-20160621000000-20160621235959-0");
-		Obj.Logout(lLogin);
+// 		//大华
+// 		DHVendor Obj;
+// 	 	time_range range;
+// 	 	range.start = 1467302400;
+// 	 	//range.end = 1466524800;
+// 	 	range.end = 1467648000;
+// 	 	//range.end = 1478833871;
+// 		Obj.Init();
+// 		Obj.StartSearchDevice();
+// 		long lLogin = Obj.Login("192.168.0.55", 37777, "admin", "112233");
+// 		Obj.Search(lLogin, 0, range);
+// 	//	Obj.Download(lLogin, 0, range);
+// 		Obj.Download(lLogin, 0, "channel0-20160701000000-20160701235959-1");
+// 		//Obj.PlayVideo(lLogin, range);
+// 		//Obj.PlayVideo(lLogin, "channel0-20160621000000-20160621235959-0");
+// 		Obj.Logout(lLogin);
 	 
 // 		//海康
 // 		HKVendor HKObj;
@@ -88,6 +90,53 @@ TEST_CASE("This is a demo", "[demo]")
 // 		//HKObj.PlayVideo(lLogin, 1, "ch0003_00000000008000000");
 // 		HKObj.Logout(lLogin);
 // 	
+
+		//大华
+		DHVendor DHObj;
+		time_range range;
+		range.start = 1467302400;
+		range.end = 1467648000;
+		//初始化设备类
+		Device dObj(&DHObj);
+		//大华的登录
+		dObj.Login("192.168.0.55", 37777, "admin", "112233");
+		dObj.Search(0, range);
+		
+
+		SDK_DOWNLOAD_INFO sdi;
+		sdi.tChannel = 0;
+
+		DOWNLOADID DownloadID;
+		DownloadID.nID = 0;
+		DownloadID.strFileName.append("channel0-20160702000000-20160702235959-3");
+
+		sdi.vecInfo.push_back(DownloadID);
+		/*sdi.strVector.push_back("channel0-20160702000000-20160702235959-3");*/
+
+		std::vector<SDK_DOWNLOAD_INFO> SDIVector;
+		SDIVector.push_back(sdi);
+		std::cout << "1111:"<<SDIVector.size() << std::endl;
+		//视频文件下载类
+		DownloadVideo dvObj;
+		dvObj.SetDownloadInfo(&dObj, SDIVector);
+
+		DWORD dwDownLoadSize = 0;
+		DWORD dwTotalSize = 0;
+
+		dvObj.getFlieSizeTest(dwDownLoadSize, dwTotalSize);
+		std::cout << "dwDownLoadSize:" << dwDownLoadSize/1024/1024<< std::endl;
+		std::cout << "dwTotalSize:" << dwTotalSize/1024 / 1024 << std::endl;
+
+// 		std::vector<DOWNLOADFILEINFO> Obj;
+// 		dvObj.GetVec(Obj);
+// 		std::cout << "大小："<<Obj.size() << std::endl;
+		
+
+		while (true)
+		{
+			::Sleep(100);
+		}
+
 		return;
 	}
 

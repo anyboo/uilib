@@ -2,6 +2,10 @@
 
 #include "CommonUtrl.h"
 
+
+#include "DownloadFileNotificationQueue.h"
+#include "SendDataNotification.h"
+
 class DHVendor :
 	public AbstractVendor
 {
