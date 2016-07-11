@@ -71,7 +71,7 @@ long HKVendor::Login(const std::string& ip, size_t port, const std::string& user
 	/*m_lLoginHandle = lLoginID;*/
 	if (-1 == lLoginID)
 	{
-		//std::cout << "µÇÂ¼Ê§°Ü(Failed)£º" << HK_GetLastErrorString().c_str() << std::endl;
+		std::cout << "µÇÂ¼Ê§°Ü(Failed)£º" << HK_GetLastErrorString().c_str() << std::endl;
 		//throw std::exception("Login failed");
 		std::cout << "HK µÇÂ½ Ê§°Ü£¡" << std::endl;
 		return -1;

@@ -45,6 +45,24 @@ struct NET_DEVICE_INFO_SIMPLE
 	int					nPort;
 };
 
+struct DownloadInfo
+{
+	DownloadInfo()
+	{
+		curTime = 0;
+		totalTime = 0;
+		curSize = 0;
+		totalSize = 0;
+		pos = 0;
+	}
+
+	long curTime;
+	long totalTime;
+	long curSize;
+	long totalSize;
+	int pos;
+};
+
 struct RecordFile
 {
 	RecordFile()

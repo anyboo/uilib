@@ -60,14 +60,14 @@ long DHVendor::Login(const std::string& ip, size_t port, const std::string& user
 
 	if (0 != nError)
 	{
-		//std::cout << "µÇÂ¼´íÎó(nError)£º" << DH_GetLastErrorString().c_str() << std::endl;
+		std::cout << "µÇÂ¼´íÎó(nError)£º" << DH_GetLastErrorString().c_str() << std::endl;
 		std::cout << "DH µÇÂ½ Ê§°Ü£¡" << std::endl;
 		return -1;
 	}
 
 	if (0 == lLoginHandle)
 	{
-		//std::cout << "µÇÂ¼´íÎó(lLogin)£º" << DH_GetLastErrorString().c_str() << std::endl;
+		std::cout << "µÇÂ¼´íÎó(lLogin)£º" << DH_GetLastErrorString().c_str() << std::endl;
 		std::cout << "DH µÇÂ½ Ê§°Ü£¡" << std::endl;
 		return -1;
 	}

@@ -9,11 +9,13 @@
 #include "SearchDevice.h"
 #include "LoginDevice.h"
 #include "SearchVideo.h"
+#include "DownloadFile.h"
 
 #include "JXJVendor.h"
 #include "DZPVendor.h"
 #include "DHVendor.h"
 #include "HKVendor.h"
+
 
 TEST_CASE("This is a demo", "[demo]")
 {
@@ -37,8 +39,8 @@ TEST_CASE("This is a demo", "[demo]")
 		DHVendor dhVendor;
 		HKVendor hkVendor;
 
-		pVendorList.push_back(&jxjVendor);
-		//pVendorList.push_back(&dzpVendor);
+		//pVendorList.push_back(&jxjVendor);
+		pVendorList.push_back(&dzpVendor);
 		//pVendorList.push_back(&dhVendor);
 		//pVendorList.push_back(&hkVendor);
 
@@ -48,7 +50,7 @@ TEST_CASE("This is a demo", "[demo]")
 		int nPort = 0;
 
 		// DZP
-#if 0
+#if 1
 		NET_DEVICE_INFO_SIMPLE* devInfoSimple1 = new NET_DEVICE_INFO_SIMPLE;
 		memset(devInfoSimple1, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
 		strIP = "192.168.0.66";
@@ -59,7 +61,7 @@ TEST_CASE("This is a demo", "[demo]")
 #endif
 
 		// JXJ
-#if 1
+#if 0
 		NET_DEVICE_INFO_SIMPLE* devInfoSimple2 = new NET_DEVICE_INFO_SIMPLE;
 		memset(devInfoSimple2, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
 		strIP = "192.168.0.89";
@@ -91,6 +93,7 @@ TEST_CASE("This is a demo", "[demo]")
 		listDeviceSimpleInfo.push_back(devInfoSimple4);
 #endif
 
+		
 		/************************* 设备发现 **********************/
 		CSearchDevice::getInstance().Search(pVendorList, listDeviceSimpleInfo);
 		DEVICE_INFO_LIST devInfoList = CSearchDevice::getInstance().GetDeviceInfoList();
@@ -107,71 +110,75 @@ TEST_CASE("This is a demo", "[demo]")
 		}
 #endif
 
-		/************************* 文件搜索测试 **********************/
+		/************************* 文件搜索、下载、播放测试 **********************/
+#if 1
 		if (devInfoList.size() > 0)
 		{
+			// 获取设备信息
 			NET_DEVICE_INFO* devInfo = devInfoList[0];
+			// 登陆设备
 			if (CLoginDevice::getInstance().Login(devInfo->pVendor, devInfo->szIp, devInfo->nPort))
 			{
+				// 获取登陆成功后的设备对象
 				Device* pDev = CLoginDevice::getInstance().GetDevice(devInfo->szIp);
+				// 搜索视频文件
 				int channel = 0;
-
 				time_range timeRangeSearch;
 				timeRangeSearch.start = 1467820800; // 1467820800 - jxj  // 1467734400 - dh  // 1467820800 - dzp
-				timeRangeSearch.end = 1467993599; // 1467993599 - jxj  // 1467905003 - dh  // 1467907199 - dzp
+				timeRangeSearch.end = 1467907199; // 1467993599 - jxj  // 1467905003 - dh  // 1467907199 - dzp
 				std::vector<size_t> channelList;
 				channelList.push_back(channel);
 				CSearchVideo::getInstance().SearchFile(pDev, timeRangeSearch, channelList);
-
+				// 获取搜索视频文件列表
 				std::vector<readSearchVideo> fileList;
 				CSearchVideo::getInstance().ReadDataFromTable(fileList);
-
+				// 获取某一文件信息
+				readSearchVideo sr;
+				std::string fileName;
+				time_range timeRangeItem;
 				if (fileList.size() > 0)
 				{
-					readSearchVideo sr = fileList[2];
-					std::string fileName = sr.get<0>();
-					time_range timeRangePlay;
-					timeRangePlay.start = sr.get<2>();
-					timeRangePlay.end = sr.get<3>();
-					pDev->PlayVideo(TestWindows::getInstance().GetHWnd(), channel, timeRangePlay);
-					//pDev->PlayVideo(TestWindows::getInstance().GetHWnd(), channel, fileName);
+					sr = fileList[1];
+					fileName = sr.get<0>();
+					timeRangeItem.start = sr.get<2>();
+					timeRangeItem.end = sr.get<3>();
+					//CDownloadFile dlFile1(pDev, channel, timeRangeItem);
+					CDownloadFile dlFile1(pDev, channel, timeRangeItem, fileName);
+
+					sr = fileList[2];
+					fileName = sr.get<0>();
+					timeRangeItem.start = sr.get<2>();
+					timeRangeItem.end = sr.get<3>();
+					//CDownloadFile dlFile2(pDev, channel, timeRangeItem);
+					CDownloadFile dlFile2(pDev, channel+1, timeRangeItem, fileName);
+
+					ThreadPool pool;
+					pool.start(dlFile1);
+					pool.start(dlFile2);
+
+					// wait until queue is empty and all threads are 
+					// waiting for new work.
+					NotificationQueue& queue = CNotificationQueue::getInstance().GetQueue();
+					while (!queue.empty())
+					{
+						Thread::sleep(200);
+					}
+					Thread::sleep(500);
+
+					// stop all worker threads
+					queue.wakeUpAll();
+					pool.joinAll();
 
 					while (true)
 					{
 						::Sleep(100);
 					}
+
+					
 				}
 			}
 		}
-
-		if (devInfoList.size() > 0)
-		{
-			//NET_DEVICE_INFO* devInfo = devInfoList[2];
-			//bool isLogin = CLoginDevice::getInstance().Login(devInfo->pVendor, devInfo->szIp, devInfo->nPort);
-			//if (!isLogin)
-			//{
-			//	return;
-			//}
-
-	/*		time_range timeRangeSearch;
-			timeRangeSearch.start = 1467388800;
-			timeRangeSearch.end = 1467475199;
-			CLoginDevice::getInstance().GetDevice(devInfo->szIp).Search(1, timeRangeSearch);
-			RECORD_FILE_LIST listRecordFile = CLoginDevice::getInstance().GetDevice(devInfo->szIp).GetRecordFileList();
-
-			time_range timeRangeFile;
-			for (auto recordFile : listRecordFile)
-			{
-				timeRangeFile.start = recordFile.beginTime; 
-				timeRangeFile.end = recordFile.endTime;
-				CLoginDevice::getInstance().GetDevice(devInfo->szIp).Download(1, timeRangeFile);
-			}
-
-			while (listRecordFile.size() > 0)
-			{
-				::Sleep(100);
-			}*/
-		}
+#endif
 	}
 
 	SECTION("Test Search videos from the device")

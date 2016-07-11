@@ -519,12 +519,36 @@ void DZP_SearchUnit(const long loginHandle, const size_t channel, const time_ran
 	}
 }
 
+#include "Notification.h"
+#include "NotificationQueue.h"
+
 void __stdcall DZP_DownLoadPosCallBack(long lPlayHandle, long lTotalSize, long lDownLoadSize, long dwUser)
 {
-	std::cout << lDownLoadSize << "/" << lTotalSize << std::endl;
+	static int prePos = 0;
+	int curPos = 0;
 
+	std::cout << lDownLoadSize << "/" << lTotalSize << std::endl;
+	curPos = (int)(lDownLoadSize * 100 / lTotalSize);
+
+	DownloadInfo dlInfo;
+	if (curPos != prePos)
+	{
+		prePos = curPos;
+
+		dlInfo.pos = curPos;
+		NotificationQueue& queue = CNotificationQueue::getInstance().GetQueue();
+		queue.enqueueNotification(new CNotification(dlInfo));
+	}
+	
 	if (lDownLoadSize == -1)
 	{
+		dlInfo.pos = curPos;
+
+		NotificationQueue& queue = CNotificationQueue::getInstance().GetQueue();
+		queue.enqueueNotification(new CNotification(dlInfo));
+		
+		prePos = 0;
+
 		std::cout << "Finish Download File" << std::endl;
 	}
 }
