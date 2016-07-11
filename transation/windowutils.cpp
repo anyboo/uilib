@@ -31,7 +31,7 @@ string::const_iterator caseInsFind(string& s, const string& p)
 	return (search(s.begin(), s.end(), tmp.begin(), tmp.end(), caseInsCharCompSingle));
 }
 
-void GetLocalNetCar(std::string& Desc, std::string& AdapterName, std::vector<string>& IPList)
+void GetLocalNetCar(std::string& Desc, std::string& AdapterName, std::vector<string>& IPList, u_char *Macaddr)
 {
 	PIP_ADAPTER_INFO pIpAdapterInfo = new IP_ADAPTER_INFO();
 	unsigned long stSize = sizeof(IP_ADAPTER_INFO);
@@ -70,6 +70,12 @@ void GetLocalNetCar(std::string& Desc, std::string& AdapterName, std::vector<str
 							cout << "IP address:" << pIpAddrString->IpAddress.String << endl;							
 							pIpAddrString = pIpAddrString->Next;
 						} while (pIpAddrString);
+
+						//copy mac
+						for (int i = 0; i < 6; i++)
+						{
+							Macaddr[i] = pIpAdapterInfo->Address[i];
+						}						
 					}					
 					
 					break;
@@ -157,7 +163,8 @@ void WindowUtils::getLocalIPs(std::vector<string> &IPs)
     IPs.clear();
 	string sDesc;
 	string uuid;
-	GetLocalNetCar(sDesc, uuid, IPs);
+	u_char mac[6] = { 0 };
+	GetLocalNetCar(sDesc, uuid, IPs, mac);
 }
 
 
@@ -477,6 +484,7 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
         if (GetTickCount() - start > secondsWait * 1000)
         {
             cout << "arp time out";
+			pcap_close(adhandle);
             break;
         }
         //循环解析ARP数据包
@@ -708,7 +716,8 @@ const string& WindowUtils::getLoacalNetName()
 	{
 		string sUuid;
 		vector<string> IpList;
-		GetLocalNetCar(localNetName, sUuid, IpList);
+		u_char mac[6] = { 0 };
+		GetLocalNetCar(localNetName, sUuid, IpList, mac);
 	}
 
 	return localNetName;
@@ -801,7 +810,8 @@ const string& WindowUtils::getLocalUuid()
 	{
 		string sNetName;
 		vector<string> IpList;
-		GetLocalNetCar(sNetName, uuid, IpList);
+		u_char mac[6] = { 0 };
+		GetLocalNetCar(sNetName, uuid, IpList, mac);
 	}
 	return uuid;
 }
@@ -858,4 +868,12 @@ void WindowUtils::getMacByArpTable(vector<string>Ips, vector<IPMAC>& IpMacs)
 		}
 	}
 
+}
+
+void WindowUtils::getLocalIPsMac(std::vector<string> &IPs, u_char *mac)
+{
+	IPs.clear();
+	string sDesc;
+	string uuid;	
+	GetLocalNetCar(sDesc, uuid, IPs, mac);
 }
