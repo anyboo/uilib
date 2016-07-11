@@ -115,3 +115,9 @@ void Device::setChannel(const std::vector<size_t>& channelList)
 {
 	m_vChannelList = channelList;
 }
+
+bool Device::StopDownload()
+{
+	assert(m_pVendor);
+	return m_pVendor->StopDownload();
+}

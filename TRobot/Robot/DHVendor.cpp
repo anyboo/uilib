@@ -20,6 +20,7 @@ void DH_timeDHToStd(NET_TIME *pTimeDH, tm *pTimeStd);
 void DH_timeStdToDH(tm *pTimeStd, NET_TIME *pTimeDH);
 void DH_trTOnt(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_range range);
 void DH_CreatePath(const size_t channel);
+std::string HK_MakeFileName(size_t channel, const std::string& startTime, const std::string& endTime);
 
 
 
@@ -29,6 +30,7 @@ DHVendor::DHVendor()
 	m_sDefUserName = "admin";
 	m_sDefPassword = "";
 	m_iMaxChannel = 0;
+	m_lDownloadHandle = 0;
 
 	m_lSearchDeviceHandle = -1;
 }
@@ -288,17 +290,21 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const time
 	sprintf_s(szTime, "D:\\DownLoadVideo\\大华\\通道%d\\channel%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d.dav", channel, channel, ntStime.dwYear, ntStime.dwMonth, ntStime.dwDay,
 		ntStime.dwHour, ntStime.dwMinute, ntStime.dwSecond, ntEtime.dwYear, ntEtime.dwMonth, ntEtime.dwDay, ntEtime.dwHour, ntEtime.dwMinute, ntEtime.dwSecond);
 
-	BOOL bRet = CLIENT_DownloadByTime(loginHandle, channel, 0, &ntStime, &ntEtime, szTime, DH_BTDownLoadPos, (DWORD)this);
+	long bRet = CLIENT_DownloadByTime(loginHandle, channel, 0, &ntStime, &ntEtime, szTime, DH_BTDownLoadPos, (DWORD)this);
+	m_lDownloadHandle = bRet;
+
 	std::cout << "strName:" << szTime << std::endl;
 
-	int total, cur;
-	total = 0;
-	cur = 0;
-	BOOL bret = CLIENT_GetDownloadPos(bRet, &total, &cur);
-	while ((cur / total) != 1)
-	{
-		std::cout << "进度：" << (double)(cur / total) << std::endl;
-	}
+// 	int total, cur;
+// 	total = 0;
+// 	cur = 0;
+// 	BOOL bret = CLIENT_GetDownloadPos(bRet, &total, &cur);
+// 	while ((cur / total) != 1)
+// 	{
+// 		std::cout << "进度：" << (double)(cur / total) << std::endl;
+// 	}
+
+	//bool c = CLIENT_PauseLoadPic(bRet, true);
 
 	if (0 == bRet)
 	{
@@ -331,7 +337,7 @@ void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const tim
 
 	BOOL lPlayID = CLIENT_PlayBackByTimeEx(loginHandle, channel, &ntStime, &ntEtime, g_hWnd, DH_PlayCallBack, (DWORD)this, DH_PBDataCallBack, (DWORD)this);
 
-	system("PAUSE");
+	//system("PAUSE");
 
 	if (!lPlayID)
 	{
@@ -367,28 +373,33 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const std:
 		if (it->name == filename)
 		{
 			NET_RECORDFILE_INFO* pData = (NET_RECORDFILE_INFO*)it->getPrivateData();
-			BOOL bRet = CLIENT_DownloadByRecordFile(loginHandle, pData, szTime, DH_BTDownLoadFile, (DWORD)this);
+			long lRet = CLIENT_DownloadByRecordFile(loginHandle, pData, szTime, DH_BTDownLoadFile, (DWORD)this);
+			m_lDownloadHandle = lRet;
 
-			int total, cur;
-			total = 0;
-			cur = 0;
-			int n = 0;
-			BOOL bret = CLIENT_GetDownloadPos(bRet, &total, &cur);
-			while ((cur / total) != 1)
-			{
-				std::cout << "进度：" << (double)(cur / total) << std::endl;
-				std::cout << "cur:" << cur<< std::endl;
-				std::cout << "total:" << total << std::endl;
-				bret = CLIENT_GetDownloadPos(bRet, &total, &cur);
-// 				if (10 == n)
-// 				{
-// 					BOOL b =  CLIENT_StopDownload(bRet);
-// 					std::cout << b << std::endl;	
-// 				}
-// 				n++;
-			}
+// 			int total, cur;
+// 			total = 0;
+// 			cur = 0;
+// 			int n = 0;
+// 			BOOL bret = CLIENT_GetDownloadPos(bRet, &total, &cur);
+// 			while ((cur / total) != 1)
+// 			{
+// 				std::cout << "进度：" << (double)(cur / total) << std::endl;
+// 				std::cout << "cur:" << cur<< std::endl;
+// 				std::cout << "total:" << total << std::endl;
+// 				bret = CLIENT_GetDownloadPos(bRet, &total, &cur);
+// // 				if (10 == n)
+// // 				{
+// // 					BOOL b =  CLIENT_StopDownload(bRet);
+// // 					std::cout << b << std::endl;	
+// // 				}
+// // 				n++;
+// 			}
 
-			if (0 == bRet)
+
+// 			bool c = CLIENT_PauseLoadPic(bRet, true);
+// 			std::cout<<"暂停失败："<<DH_GetLastErrorString() << std::endl;
+
+			if (0 == lRet)
 			{
 				std::cout << "downLoadByRecordFile 下载录像失败，错误原因：" << DH_GetLastErrorString() << std::endl;
 				throw std::exception("Download by Record file failed");
@@ -400,6 +411,20 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const std:
 			}
 		}
 
+	}
+}
+
+bool DHVendor::StopDownload()
+{
+	assert(m_lDownloadHandle);
+
+	if (CLIENT_StopDownload(m_lDownloadHandle))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 
@@ -460,7 +485,8 @@ void CALLBACK DH_BTDownLoadPos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDow
 
 void CALLBACK DH_BTDownLoadFile(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser)
 {
-
+	std::cout << "dwTotalSize:" << dwTotalSize << std::endl;
+	std::cout << "dwDownLoadSize:" << dwDownLoadSize << std::endl;
 }
 
 void CALLBACK DH_PlayCallBack(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser)
@@ -512,6 +538,25 @@ void DH_CreatePath(const size_t channel)
 		std::cout << "Error!" << std::endl;
 		return;
 	}
+}
+
+std::string DH_MakeFileName(int channel, const std::string& startTime, const std::string& endTime)
+{
+	std::string strFileName;
+
+	strFileName += "channel";
+	if (channel < 10)
+	{
+		strFileName += "0";
+	}
+	strFileName += std::to_string(channel);
+	strFileName += "-";
+	strFileName += startTime.data();
+	strFileName += "-";
+	strFileName += endTime.data();
+	strFileName.append(".dav");
+
+	return strFileName;
 }
 
 void DH_trTOnt(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_range range)

@@ -33,6 +33,7 @@ public:
 	void PlayVideo(const size_t channel, const time_range& range);
 	void Download(const size_t channel, const std::string& fileName);
 	void PlayVideo(const size_t channel, const std::string& fileName);
+	bool StopDownload();
 
 	void setChannel(const std::vector<size_t>& channelList);
 	size_t getMaxChannel(){ return m_iMaxChannel; }

@@ -19,6 +19,7 @@ public:
 	void PlayVideo(const long loginHandle, const size_t channel, const time_range& range);
 	void Download(const long loginHandle, const size_t channel, const std::string& filename);
 	void PlayVideo(const long loginHandle, const size_t channel, const std::string& filename);
+	bool StopDownload();
 
 	void SetDownloadPath(const std::string& Root);
 	void throwException();
@@ -50,4 +51,7 @@ private:
 
 	/* Search */
 	RECORD_FILE_LIST m_files;
+
+	/*Download*/
+	long m_lDownloadHandle;
 };
