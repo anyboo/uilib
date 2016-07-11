@@ -1,13 +1,22 @@
 #ifndef WINDOWUTILS_H
 #define WINDOWUTILS_H
 
-
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 
 #include <set>
 #include <iostream>
 #include <vector>
 
+#include <pcap.h>
+
 using namespace std;
+
+typedef struct ip_mac
+{
+	long ip;
+	short port;
+	unsigned char mac[6];
+}IPMAC, *PIPMAC;
 
 class WindowUtils
 {
@@ -24,6 +33,8 @@ public:
     static const string& getLoacalNetName();
 	static const string& WindowUtils::getLocalUuid();
     static bool isOnLine();
+	static void getMacByArpTable(vector<string> Ips, vector<IPMAC>& IpMacs);
+	static string ConvertNICUUIDtoPcapName(pcap_if_t* devs, const string& uuid);
 private:
     WindowUtils();
 };

@@ -1,4 +1,5 @@
 // #include "stdafx.h"
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include "ping.h"
 #include <winsock2.h>
 #include <iphlpapi.h>
@@ -69,6 +70,8 @@ bool CPing::init(std::shared_ptr<OnePingInfo> pingInfo){
     pingInfo->m_sockRaw = WSASocket(AF_INET, SOCK_RAW, IPPROTO_ICMP, NULL, 0, 0);
     if (SOCKET_ERROR == pingInfo->m_sockRaw)
     {
+		int err = WSAGetLastError();
+		wprintf(L"WSASocket function failed with error = %d\n", WSAGetLastError());
         return false;
     }
 
@@ -92,11 +95,11 @@ bool GetLocalIp(vector<string> &vecIp)
 		struct hostent * pHost; 
 		int i;  
 		pHost = gethostbyname(szHostName);
+		
 		for( i = 0; pHost!= NULL && pHost->h_addr_list[i]!= NULL; i++ )  
 		{
 			char* psz=inet_ntoa (*(struct in_addr *)pHost->h_addr_list[i]);
-			vecIp.push_back(string(psz));
-			return true;
+			vecIp.push_back(string(psz));			
 		}  
 	}
 	return true;

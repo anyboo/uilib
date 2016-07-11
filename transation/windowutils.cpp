@@ -119,7 +119,7 @@ string GetNetCardName(std::string uuid)
 	return CardName;
 }
 
-string ConvertNICUUIDtoPcapName(pcap_if_t* devs, const string& uuid)
+string WindowUtils::ConvertNICUUIDtoPcapName(pcap_if_t* devs, const string& uuid)
 {
 	string pcap_name;
 	
@@ -804,4 +804,58 @@ const string& WindowUtils::getLocalUuid()
 		GetLocalNetCar(sNetName, uuid, IpList);
 	}
 	return uuid;
+}
+
+void WindowUtils::getMacByArpTable(vector<string>Ips, vector<IPMAC>& IpMacs)
+{
+	MIB_IPNETTABLE *ipNetTable = NULL;
+	ULONG size = 0;
+	ULONG result = 0;
+	int i, j;
+	in_addr inaddr;
+	
+	result = GetIpNetTable(ipNetTable, &size, TRUE);
+	if (result == ERROR_INSUFFICIENT_BUFFER)
+	{
+		ipNetTable = (MIB_IPNETTABLE *)malloc(size);
+		result = GetIpNetTable(ipNetTable, &size, TRUE);
+		if (result == ERROR_SUCCESS) {
+			for (i = 0; i < ipNetTable->dwNumEntries; i++)
+			{							
+				for (j = 0; j < Ips.size(); j++)
+				{										
+					if (inet_addr(Ips[j].c_str()) == ipNetTable->table[i].dwAddr) 					
+					{						
+						IPMAC ipmac = { 0 };
+						ipmac.ip = ipNetTable->table[i].dwAddr;
+						char sztmp[80] = { 0 };
+						sprintf_s(sztmp, "i: %d, ip: %02x, mac:%02x-%02x-%02x-%02x-%02x-%02x\n", i, ipNetTable->table[i].dwAddr
+							, ipNetTable->table[i].bPhysAddr[0], ipNetTable->table[i].bPhysAddr[1]
+							, ipNetTable->table[i].bPhysAddr[2], ipNetTable->table[i].bPhysAddr[3]
+							, ipNetTable->table[i].bPhysAddr[4], ipNetTable->table[i].bPhysAddr[5]);
+						printf(sztmp);
+						if (ipNetTable->table[i].bPhysAddr[0] == 0
+							&& ipNetTable->table[i].bPhysAddr[1] == 0
+							&& ipNetTable->table[i].bPhysAddr[2] == 0
+							&& ipNetTable->table[i].bPhysAddr[3] == 0)
+						{
+							
+						}
+						else
+						{
+							for (j = 0; j < 6; j++)
+							{
+								ipmac.mac[j] = ipNetTable->table[i].bPhysAddr[j];
+							}
+							IpMacs.push_back(ipmac);
+						}
+						
+						break;
+					}
+				}
+			}
+			
+		}
+	}
+
 }
