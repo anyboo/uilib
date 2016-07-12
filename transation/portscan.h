@@ -12,6 +12,7 @@
 #include "Poco/Mutex.h"
 #include "Poco/Random.h"
 #include "Poco/AutoPtr.h"
+#include "Poco/BasicEvent.h"
 
 #include "windowutils.h"
 
@@ -29,7 +30,7 @@ using Poco::AutoPtr;
 typedef struct ScanResult
 {
 	char ip[22];
-	short port;
+	u_short port;
 }SCANRESULT, *PSCANRESULT;
 
 
@@ -113,7 +114,7 @@ struct SendPacket
 class SendData : public Poco::Runnable
 {
 public:
-	SendData(const IPMAC srcIp, const IPMAC dstIp, const std::vector<short> ports, Poco::NotificationQueue& queue, pcap_t *adhandle) :		
+	SendData(const IPMAC srcIp, const IPMAC dstIp, const std::vector<u_short> ports, Poco::NotificationQueue& queue, pcap_t *adhandle) :		
 		_ports(ports),
 		_queue(queue),
 		_adhandle(adhandle)
@@ -130,8 +131,8 @@ public:
 
 private:
 	void initHeader(struct iphdr *ip, struct tcphdr *tcp, struct pseudohdr *pseudoheader, long dst_ip, USHORT dst_port);
-	void buildTcpPacket(IPMAC srcip, IPMAC dstip, vector<short> ports, vector<SendPacket>& packets);
-	void sendData(pcap_t * adhandle, vector<SendPacket> packets);
+	void buildTcpPacket(IPMAC srcip, IPMAC dstip, vector<u_short> ports, vector<SendPacket>& packets);
+	void send(pcap_t * adhandle, vector<SendPacket> packets);
 
 	unsigned short inline checksum(unsigned short *buffer, unsigned short size)
 	{
@@ -157,7 +158,7 @@ private:
 	pcap_t*			   _adhandle;
 	IPMAC			   _srcIp;
 	IPMAC			   _dstIp;
-	vector<short>      _ports;
+	vector<u_short>      _ports;
 	Poco::NotificationQueue& _queue;
 	static Poco::FastMutex   _mutex;
 	std::string        _name;
@@ -167,23 +168,25 @@ private:
 class ReceiveData : public Poco::Runnable
 {
 public:
-	ReceiveData(const std::vector<long> ips, const std::vector<short> ports, pcap_t *adhandle) :
+	ReceiveData(const std::vector<long> ips, const std::vector<u_short> ports, pcap_t *adhandle) :
 		_adhandle(adhandle),
 		_ips(ips),
 		_ports(ports)
 	{
 		
-	}
-
+	};
+	void onEvent(const void* pSender, bool& arg);
+	
 	void run();
 	vector<SCANRESULT> getScanResult();
 private:
-	void analyzePacket(const u_char *pkt_data, u_short size, vector<long> ips, vector<short> ports, vector<SCANRESULT>& outIps);
+	void analyzePacket(const u_char *pkt_data, u_short size, vector<long> ips, vector<u_short> ports, vector<SCANRESULT>& outIps);
 private:
 	 pcap_t*			   _adhandle;
 	 vector<long>     _ips;
-	 vector<short>      _ports;	
+	 vector<u_short>      _ports;	
 	 vector<SCANRESULT> _outIps;
+	 bool              _break;
 };
 
 
@@ -208,22 +211,37 @@ private:
 };
 
 
-class PortScan
+class PortScan 
 {
 public:
 	PortScan::PortScan();
 
 	~PortScan();
 
-	bool searchFactory(vector<short> ports, vector<SCANRESULT>& outIps);
+	bool searchFactory(vector<u_short> ports, vector<SCANRESULT>& outIps);
+	
+	void fireEvent(bool n)
+	{
+		_theEvent(this, n);
+	}
+
+	//void run();
+
+	//vector<SCANRESULT> getScanResult();
+	
 private:
 		
 	bool initPcapDev();
+	static bool sortByIp(SCANRESULT srFirst, SCANRESULT srSecond);
+	static bool UniqueByIp(SCANRESULT srFirst, SCANRESULT srSecond);
 
 private:
 	pcap_t * _adhandle;
 	vector<string> _localIps;
 	u_char   _localMac[6];
+	Poco::BasicEvent<bool> _theEvent;
+	vector<SCANRESULT> _outReuslts;
+	//vector<u_short> _scanPorts;
 };
 
 #endif

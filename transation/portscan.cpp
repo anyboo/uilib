@@ -15,6 +15,7 @@
 #include "Poco/Mutex.h"
 #include "Poco/Random.h"
 #include "Poco/AutoPtr.h"
+#include "Poco/Delegate.h"
 #include "PING.h"
 
 using Poco::Notification;
@@ -27,10 +28,12 @@ using Poco::AutoPtr;
 
 FastMutex SendData::_mutex;
 
+
 PortScan::PortScan()
 {
 	_adhandle = NULL;
 	initPcapDev();
+	//_scanPorts = scanPorts;
 	WindowUtils::getLocalIPsMac(_localIps, _localMac);
 };
 
@@ -43,7 +46,7 @@ PortScan::~PortScan()
 
 
 
-void ReceiveData::analyzePacket(const u_char *pkt_data, u_short size, vector<long> ips, vector<short> ports, vector<SCANRESULT>& outIps)
+void ReceiveData::analyzePacket(const u_char *pkt_data, u_short size, vector<long> ips, vector<u_short> ports, vector<SCANRESULT>& outIps)
 {
 	struct iphdr *ip = (struct iphdr *)(pkt_data + sizeof(struct ethhdr));
 	struct tcphdr *tcp = (struct tcphdr *)(pkt_data + sizeof(struct ethhdr) + sizeof(struct iphdr));
@@ -56,7 +59,7 @@ void ReceiveData::analyzePacket(const u_char *pkt_data, u_short size, vector<lon
 		string srcip(inet_ntoa(srcaddr));
 		cout << "src ip:" << srcip << endl;
 
-		int i, j;
+		/*int i, j;
 		for (i = 0; i < ips.size(); i++)
 		{
 			if (ip->sourceIP == ips[i])
@@ -77,11 +80,14 @@ void ReceiveData::analyzePacket(const u_char *pkt_data, u_short size, vector<lon
 						out.port = htons(tcp->sport);
 						outIps.push_back(out);
 					}
-				}
-				
-			}
-		}		
-
+				}				
+			}		
+		}		*/
+		SCANRESULT out = { 0 };
+		char *sip = inet_ntoa(srcaddr);
+		memcpy(out.ip, sip, strlen(sip));
+		out.port = htons(tcp->sport);
+		outIps.push_back(out);
 		
 	}
 
@@ -150,7 +156,7 @@ bool PortScan::initPcapDev()
 	return true;
 }
 
-bool PortScan::searchFactory( vector<short> ports, vector<SCANRESULT>& outIps)
+bool PortScan::searchFactory( vector<u_short> ports, vector<SCANRESULT>& outIps)
 {
 	
 	int i, j;
@@ -192,11 +198,9 @@ bool PortScan::searchFactory( vector<short> ports, vector<SCANRESULT>& outIps)
 	{
 		IPMAC localIpMac = { 0 };
 		localIpMac.ip = inet_addr(_localIps[i].c_str());
-		memcpy(localIpMac.mac, _localMac, 6);
-
-		vector<SendData> sendThreads;
-		for (j = 0; j < IpMacs.size(); i++)
-		{
+		memcpy(localIpMac.mac, _localMac, 6);			
+		for (j = 0; j < IpMacs.size(); j++)
+		{			
 			IPMAC dstMac = { 0 };
 			dstMac.ip = IpMacs[j].ip;
 			memcpy(dstMac.mac, IpMacs[j].mac, 6);
@@ -205,9 +209,13 @@ bool PortScan::searchFactory( vector<short> ports, vector<SCANRESULT>& outIps)
 		}
 	}
 	
+	Poco::ThreadPool scanPool;
+	scanPool.addCapacity(sendThreads.size());
+
 	for (i = 0; i < sendThreads.size(); i++)
 	{
-		ThreadPool::defaultPool().start(sendThreads[i]);
+		//cout << "i: " << i << endl;
+		scanPool.start(sendThreads[i]);
 	}
 
 	vector<long> destIps;
@@ -217,7 +225,7 @@ bool PortScan::searchFactory( vector<short> ports, vector<SCANRESULT>& outIps)
 	}
 	//start listen thread
 	ReceiveData receiveThread(destIps, ports, _adhandle);
-	ThreadPool::defaultPool().start(receiveThread);
+	scanPool.start(receiveThread);
 
 	//send 
 	for (int i = 0; i < sendThreads.size(); ++i)
@@ -230,10 +238,17 @@ bool PortScan::searchFactory( vector<short> ports, vector<SCANRESULT>& outIps)
 	Thread::sleep(1000*10);
 
 	queue.wakeUpAll();
-	ThreadPool::defaultPool().joinAll();
+	_theEvent += Poco::delegate(&receiveThread, &ReceiveData::onEvent);
+	fireEvent(true);
+	_theEvent -= Poco::delegate(&receiveThread, &ReceiveData::onEvent);
+	scanPool.joinAll();
+
+	
 
 	outIps = receiveThread.getScanResult();
-	
+
+	std::sort(outIps.begin(), outIps.end(), sortByIp);
+	std::unique(outIps.begin(), outIps.end(), UniqueByIp);
 
 	return true;
 }
@@ -275,7 +290,7 @@ void SendData::initHeader(struct iphdr *ip, struct tcphdr *tcp, struct pseudohdr
 }
 
 //create send packet
-void SendData::buildTcpPacket(IPMAC srcip, IPMAC dstip, vector<short> ports, vector<SendPacket>& packets)
+void SendData::buildTcpPacket(IPMAC srcip, IPMAC dstip, vector<u_short> ports, vector<SendPacket>& packets)
 {
 	int  i;
 	struct iphdr ip;		//IP头部
@@ -314,7 +329,7 @@ void SendData::buildTcpPacket(IPMAC srcip, IPMAC dstip, vector<short> ports, vec
 
 }
 
-void SendData::sendData(pcap_t * adhandle, vector<SendPacket> packets)
+void SendData::send(pcap_t * adhandle, vector<SendPacket> packets)
 {
 	int i;
 
@@ -340,13 +355,13 @@ void SendData::run()
 			{
 				{
 					FastMutex::ScopedLock lock(_mutex);
-					std::cout << _name << " got work notification " << pWorkNf->data() << std::endl;
+					//std::cout << _name << " got work notification " << pWorkNf->data() << std::endl;
 					vector<SendPacket> packets;
 					buildTcpPacket(_srcIp, _dstIp, _ports, packets);
-					sendData(_adhandle, packets);
+					send(_adhandle, packets);
 				}
 				Thread::sleep(rnd.next(200));
-				std::cout << _name << " worker " << std::endl;
+				//std::cout << _name << " worker " << std::endl;
 			}
 		}
 		else
@@ -359,19 +374,18 @@ void SendData::run()
 
 void ReceiveData::run()
 {
-	int start = GetTickCount();
+	
 	struct pcap_pkthdr * header;
-	const u_char * pkt_data;
-	int secondsWait = 10;
+	const u_char * pkt_data;	
 
 	while (true)
 	{
-		if (GetTickCount() - start > secondsWait * 1000)
+		
+		if (_break)
 		{
-			cout << "listen time out";
+			cout << "listen is break" << endl;
 			break;
 		}
-
 
 		//循环解析数据包
 		if (pcap_next_ex(_adhandle, &header, &pkt_data) == 0){
@@ -385,5 +399,47 @@ void ReceiveData::run()
 
 vector<SCANRESULT> ReceiveData::getScanResult()
 {
+	
 	return _outIps;
 }
+
+void ReceiveData::onEvent(const void* pSender, bool& arg)
+{
+	std::cout << "onEvent: " << arg << std::endl;
+	_break = arg;
+}
+
+bool PortScan::sortByIp(SCANRESULT srFirst, SCANRESULT srSecond)
+{
+	unsigned long lIp1 = inet_addr(srFirst.ip);
+	unsigned long lIp2 = inet_addr(srSecond.ip);
+	if (lIp1 == lIp2)
+	{
+		return srFirst.port < srSecond.port;
+	}
+	else
+	{
+		return (lIp1 < lIp2);
+	}
+	
+}
+
+bool PortScan::UniqueByIp(SCANRESULT srFirst, SCANRESULT srSecond)
+{
+	unsigned long lIp1 = inet_addr(srFirst.ip);
+	unsigned long lIp2 = inet_addr(srSecond.ip);
+
+	return (lIp1 == lIp2) && (srFirst.port == srSecond.port);
+}
+
+//void PortScan::run()
+//{
+//	searchFactory(_scanPorts, _outReuslts);
+//}
+
+//vector<SCANRESULT> PortScan::getScanResult()
+//{
+//	std::sort(_outReuslts.begin(), _outReuslts.end(), sortByIp);
+//	std::unique(_outReuslts.begin(), _outReuslts.end(), UniqueByIp);
+//	return _outReuslts;
+//}

@@ -1,0 +1,51 @@
+    端口扫描demo
+    #include "portscan.h"
+
+    int i = 0;
+    vector<u_short> scanports;
+    //大华
+    scanports.push_back(37777);
+    //迪智浦
+    scanports.push_back(34567);
+    //佳信捷
+    scanports.push_back(3321);
+    //宝欣盛，海康，沃仕达,
+    scanports.push_back(8000);
+    //蓝色星际
+    scanports.push_back(3721);
+    //波粒
+    scanports.push_back(9000);
+    //大立科技
+    scanports.push_back(9998);
+    //东阳国际
+    scanports.push_back(6001);
+    //汉邦
+    scanports.push_back(8101);
+    //航景科技
+    scanports.push_back(7777);
+    //九安光电
+    scanports.push_back(80);
+    //俊明视
+    scanports.push_back(8670);
+    //天地伟业(有问题)
+    //scanports.push_back(3000);
+    //同为
+    scanports.push_back(6036);
+    //星网锐捷
+    scanports.push_back(8081);
+    //宇视科技(有问题)
+    //scanports.push_back(54321);
+    //中维
+    scanports.push_back(9101);
+    
+    //
+    vector<SCANRESULT> outReuslts;    
+    PortScan portScan;
+    //开始扫描
+    portScan.searchFactory(scanports, outReuslts);  
+
+    //打印结果
+    for (i = 0; i < outReuslts.size(); i++)
+    {
+        cout <<"i:" << i << "  ip:  " << outReuslts[i].ip << "   port:  " << to_string(outReuslts[i].port) << endl;
+    }

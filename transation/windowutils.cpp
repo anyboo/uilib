@@ -132,8 +132,12 @@ string WindowUtils::ConvertNICUUIDtoPcapName(pcap_if_t* devs, const string& uuid
 	for (pcap_if_t *d = devs; d && d->next; d = d->next)
 	{
 		string tmp(d->name);		
-		if (tmp.compare(uuid) == 0)
+		if (/*tmp.compare(uuid) == 0*/tmp.find(uuid) != string::npos)
+		{
 			pcap_name = tmp;
+			break;
+		}
+			
 	}
 
 	return pcap_name;
@@ -446,7 +450,7 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
 
 	if ((adhandle = pcap_open_live(pcap_name.data(), 65536, 1, 1000, errbuf)) == NULL)
     {
-       //cout << string("kevin : pcap_open_live failed!  not surpport by WinPcap ? alldev->name : %1").arg(alldevs->name);
+       cout << string("kevin : pcap_open_live failed!  not surpport by WinPcap ? alldev->name : ");
         pcap_freealldevs(alldevs);
         return false;
     }
