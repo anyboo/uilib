@@ -1,7 +1,6 @@
 #ifndef __DOWNLOADVIDEO_H__
 #define __DOWNLOADVIDEO_H__
 
-
 #include <vector>
 #include <string>
 
@@ -13,19 +12,40 @@
 #include "Poco/ThreadPool.h"
 using Poco::ThreadPool;
 
+#define DOWNLOAD_FILESIZE 1024
+#define MINUTE_DOWNLOAD 60
+#define SECOND_DOWNLOAD 60
 
-typedef struct _DOWNLOADID
+// typedef struct _DOWNLOADID
+// {
+// 	int nID;
+// 	std::string strFileName;
+// }DOWNLOADID, *LPDOWNLOADID;
+
+
+// typedef struct _SDK_DOWNLOAD_INFO
+// {
+// 	std::vector<DOWNLOADID> vecInfo;
+// 	size_t tChannel;
+// }SDK_DOWNLOAD_INFO, *LPSDK_DOWNLOAD_INFO;
+
+typedef struct _SDK_DOWNLOAD_INFO
 {
 	int nID;
 	std::string strFileName;
-}DOWNLOADID, *LPDOWNLOADID;
-
-
-typedef struct  
-{
-	std::vector<DOWNLOADID> vecInfo;
 	size_t tChannel;
 }SDK_DOWNLOAD_INFO, *LPSDK_DOWNLOAD_INFO;
+
+
+typedef struct _DOWNLOAD_OUTPUT_INFO
+{
+	int nID;
+	std::string strFileName;
+	std::string strFileSize;
+	int nDownloadPos;
+	std::string strSpeed;
+	int strRemainingTime;
+}DOWNLOAD_OUTPUT_INFO, *LPDOWNLOAD_OUTPUT_INFO;
 
 class DownloadVideo
 {
@@ -35,21 +55,17 @@ public:
 	//输入
 	void SetDownloadInfo(Device *dObj, std::vector<SDK_DOWNLOAD_INFO> SDIObj);
 	//输出
-	void GetDownloadInfo();
+	bool GetDownloadInfo(DOWNLOAD_OUTPUT_INFO &DownloadInfo);
 	//停止下载
 	bool StopDownLoad(Device *dObj);
 
-	void getFlieSizeTest(DWORD &dwDownLoadSize, DWORD &dwTotalSize);
+	/*void getFlieSizeTest(DWORD &dwDownLoadSize, DWORD &dwTotalSize);*/
 
 private:
-	//获得已下载文件大小和总文件大小
-	int getDownloadPos(Device *dObj, DWORD dwDownLoadSize, DWORD dwTotalSize);
-	//计算下载速度
-	int CalDownLoadSpeed();
-	//已下载时间
-	time_t DownloadTime();
-	//剩余时间
-	time_t RemianTime();
+
+	std::string FileSizeToString(int nFileSize);
+	std::string DownloadSpeedToString(int nSpeed);
+	//std::string RemainingTimeToString(int nRemainingTime);
 
 private:
 	AcquireDataRunable m_AcquireDataRunable;

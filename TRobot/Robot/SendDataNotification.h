@@ -24,7 +24,6 @@ public:
 	DOWNLOADFILEINFO GetData() const;
 private:
 	DOWNLOADFILEINFO m_DownloadFileInfo;
-
 };
 
 

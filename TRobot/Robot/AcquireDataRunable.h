@@ -4,7 +4,7 @@
 #include "Poco/Runnable.h"
 #include "Poco/Mutex.h"
 #include "Poco/Random.h"
-#include "Poco/Thread.h"
+//#include "Poco/Thread.h"
 
 
 #include "SendDataNotification.h"
@@ -12,10 +12,13 @@
 using Poco::NotificationQueue;
 using Poco::Runnable;
 using Poco::FastMutex;
-using Poco::Thread;
+//using Poco::Thread;
 
 #include <vector>
 #include <ctime>
+
+
+#define  DOWNLOAD_PROGRESS 100
 
 class AcquireDataRunable :public Runnable
 {
@@ -27,6 +30,8 @@ public:
 
 	DOWNLOADFILEINFO GetDownloadFileInfo() const;
 	int GetDownloadSpeed() const;
+	int GetRemainingTime() const;
+	int GetDownloadPos() const;
 private:
 	DOWNLOADFILEINFO m_DownloadFileInfo;
 	//std::vector<DOWNLOADFILEINFO> m_VecList;
@@ -36,6 +41,8 @@ private:
 	clock_t m_tStart;
 	clock_t m_tEnd;
 	int m_nSpeed;
-	int m_RemainingTime;
+	int m_nRemainingTime;
+	int m_nDownloadPos;
+	
 };
 

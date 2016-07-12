@@ -106,11 +106,11 @@ TEST_CASE("This is a demo", "[demo]")
 		SDK_DOWNLOAD_INFO sdi;
 		sdi.tChannel = 0;
 
-		DOWNLOADID DownloadID;
-		DownloadID.nID = 0;
-		DownloadID.strFileName.append("channel0-20160702000000-20160702235959-3");
-
-		sdi.vecInfo.push_back(DownloadID);
+// 		DOWNLOADID DownloadID;
+// 		DownloadID.nID = 0;
+// 		DownloadID.strFileName.append("channel0-20160702000000-20160702235959-3");
+// 
+// 		sdi.vecInfo.push_back(DownloadID);
 		/*sdi.strVector.push_back("channel0-20160702000000-20160702235959-3");*/
 
 		std::vector<SDK_DOWNLOAD_INFO> SDIVector;
@@ -123,9 +123,9 @@ TEST_CASE("This is a demo", "[demo]")
 		DWORD dwDownLoadSize = 0;
 		DWORD dwTotalSize = 0;
 
-		dvObj.getFlieSizeTest(dwDownLoadSize, dwTotalSize);
-		std::cout << "dwDownLoadSize:" << dwDownLoadSize/1024/1024<< std::endl;
-		std::cout << "dwTotalSize:" << dwTotalSize/1024 / 1024 << std::endl;
+//		dvObj.getFlieSizeTest(dwDownLoadSize, dwTotalSize);
+//		std::cout << "dwDownLoadSize:" << dwDownLoadSize/1024/1024<< std::endl;
+//		std::cout << "dwTotalSize:" << dwTotalSize/1024 / 1024 << std::endl;
 
 // 		std::vector<DOWNLOADFILEINFO> Obj;
 // 		dvObj.GetVec(Obj);
