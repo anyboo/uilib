@@ -21,31 +21,33 @@ void DownloadVideo::SetDownloadInfo(Device *dObj, std::vector<SDK_DOWNLOAD_INFO>
 {
 	if ((NULL != dObj) && (0 != SDIObj.size()))
 	{
+		m_VecDownloadInputInfo = SDIObj;
+
 		std::vector<SDK_DOWNLOAD_INFO>::iterator itSDI = SDIObj.begin();
 		for (; itSDI != SDIObj.end(); ++itSDI)
 		{
-			dObj->Download(itSDI->tChannel, itSDI->strFileName);
+			dObj->Download(itSDI->tChannel, itSDI->strFileName, itSDI->nID);
 		}
-// 		for (; itSDI != SDIObj.end(); ++itSDI)
-// 		{
-// 			std::vector<DOWNLOADID>::iterator itStr;
-// 			for (itStr = itSDI->vecInfo.begin(); itStr != itSDI->vecInfo.end(); ++itStr)
-// 			{
-// 				//创建多线程，当下载到达100的时候关闭创建的线程
-// 				dObj->Download(itSDI->tChannel, itStr->strFileName);
-// 			}
-// 		}
 	}// if
 }
 
 bool DownloadVideo::GetDownloadInfo(DOWNLOAD_OUTPUT_INFO &DownloadInfo)
 {
 	DownloadInfo.nDownloadPos = m_AcquireDataRunable.GetDownloadPos();
-	DownloadInfo.nID = 0;
-	DownloadInfo.strFileName = "";
+	DownloadInfo.nID = m_AcquireDataRunable.GetID();
 	DownloadInfo.strFileSize = this->FileSizeToString(m_AcquireDataRunable.GetDownloadFileInfo().dwTotalSize);
 	DownloadInfo.strRemainingTime = m_AcquireDataRunable.GetRemainingTime();
 	DownloadInfo.strSpeed = this->DownloadSpeedToString(m_AcquireDataRunable.GetDownloadSpeed());
+
+	std::vector<SDK_DOWNLOAD_INFO>::iterator it = m_VecDownloadInputInfo.begin();
+
+	for (; it != m_VecDownloadInputInfo.end(); ++it)
+	{
+		if (it->nID == DownloadInfo.nID)
+		{
+			DownloadInfo.strFileName = it->strFileName;
+		}
+	}
 
 	if (100 == DownloadInfo.nDownloadPos)
 	{

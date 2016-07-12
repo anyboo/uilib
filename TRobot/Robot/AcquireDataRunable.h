@@ -4,7 +4,7 @@
 #include "Poco/Runnable.h"
 #include "Poco/Mutex.h"
 #include "Poco/Random.h"
-//#include "Poco/Thread.h"
+#include "Poco/Thread.h"
 
 
 #include "SendDataNotification.h"
@@ -12,7 +12,7 @@
 using Poco::NotificationQueue;
 using Poco::Runnable;
 using Poco::FastMutex;
-//using Poco::Thread;
+using Poco::Thread;
 
 #include <vector>
 #include <ctime>
@@ -32,6 +32,7 @@ public:
 	int GetDownloadSpeed() const;
 	int GetRemainingTime() const;
 	int GetDownloadPos() const;
+	int GetID() const;
 private:
 	DOWNLOADFILEINFO m_DownloadFileInfo;
 	//std::vector<DOWNLOADFILEINFO> m_VecList;
@@ -43,6 +44,7 @@ private:
 	int m_nSpeed;
 	int m_nRemainingTime;
 	int m_nDownloadPos;
+	int m_nID;
 	
 };
 

@@ -40,34 +40,36 @@ void AcquireDataRunable::run()
 				{
 					m_tEnd = clock();
 					duration = (double)(m_tEnd - m_tStart) / CLOCKS_PER_SEC;
-					std::cout << "duration:" << duration << std::endl;
+					//std::cout << "时间差:" << duration << std::endl;
 					m_nSpeed = m_DownloadFileInfo.dwDownLoadSize / duration; //kb/s
-					std::cout << "m_nSpeed:" << m_nSpeed << std::endl;
+					//std::cout << "下载速度:" << m_nSpeed << std::endl;
 					m_nRemainingTime = (m_DownloadFileInfo.dwTotalSize - m_DownloadFileInfo.dwDownLoadSize) / m_nSpeed; //秒*S
-					std::cout << "剩余时间：" << m_nRemainingTime << std::endl;
+					//std::cout << "剩余时间：" << m_nRemainingTime << std::endl;
+					m_nID = m_DownloadFileInfo.nID;
 
 					if (m_DownloadFileInfo.dwDownLoadSize >= m_DownloadFileInfo.dwTotalSize)
 					{
 						m_nDownloadPos = DOWNLOAD_PROGRESS;
 						m_nSpeed = 0;
-						std::cout << "下载进度：" << m_nDownloadPos << std::endl;
-						std::cout << "m_nSpeed:" << m_nSpeed << std::endl;
+					//	std::cout << "下载进度：" << m_nDownloadPos << std::endl;
+					//	std::cout << "下载速度:" << m_nSpeed << std::endl;
 						break;
 					}
 					else
 					{
 						m_nDownloadPos = DOWNLOAD_PROGRESS * m_DownloadFileInfo.dwDownLoadSize / m_DownloadFileInfo.dwTotalSize;
-						std::cout << "下载进度：" << m_nDownloadPos << std::endl;
+						//std::cout << "下载进度：" << m_nDownloadPos << std::endl;
 					}
 
 				}
-					std::cout << "dwDownLoadSize:" <<m_DownloadFileInfo.dwDownLoadSize<< std::endl;
-					std::cout << "dwTotalSize:" << m_DownloadFileInfo.dwTotalSize << std::endl;
+					//std::cout << "文件大小:" <<m_DownloadFileInfo.dwDownLoadSize<< std::endl;
+					//std::cout << "总文件大小:" << m_DownloadFileInfo.dwTotalSize << std::endl;
+
+					//std::cout << "-----------------------------------" << std::endl;
 
 				//Thread::sleep(rnd.next(200));
 			}
 		}
-		else break;
 	}
 }
 
@@ -89,4 +91,9 @@ int AcquireDataRunable::GetRemainingTime() const
 int AcquireDataRunable::GetDownloadPos() const
 {
 	return m_nDownloadPos;
+}
+
+int AcquireDataRunable::GetID() const
+{
+	return m_nID;
 }

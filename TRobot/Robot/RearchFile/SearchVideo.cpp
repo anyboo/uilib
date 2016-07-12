@@ -1,59 +1,45 @@
+
 #include "SearchVideo.h"
-#include <cassert>
+#include <Poco/SingletonHolder.h>
+
 
 CSearchVideo::CSearchVideo()
 {
-	m_TimeRange.start = 0;
-	m_TimeRange.end = 0;
-	m_nNotify = 0;
-	m_bFlag = false;
-
 }
-
 
 CSearchVideo::~CSearchVideo()
 {
 }
 
-
-
-int CSearchVideo::SearchFile(const std::string &ip, const time_range &range, Device *pDevice, std::vector<size_t> channelList)
+CSearchVideo& CSearchVideo::getInstance()
 {
-	assert(!ip.empty());
-	
-	//std::vector<size_t> channelList; //init later
-
-	if (!channelList.empty())
-	{
-		pDevice->setChannel(channelList);
-		assert(pDevice->m_pVendor);
-	}
-	
-	std::vector<size_t> channels = pDevice->getChannelList();//init later
-	assert(pDevice->m_pVendor);
-
-	//std::vector<size_t>::iterator it;
-// 	for (it != channels.begin(); it != channels.end(); ++it)
-// 	{
-// 		m_Device.Search(*it, range);
-// 	}
-
-	for (auto channel : channels)
-	{
-		pDevice->Search(channel, range);
-		assert(pDevice->m_pVendor);
-	}
-
-	return SUCCES_REARCH_FILE;
+	static Poco::SingletonHolder<CSearchVideo> shSearchVideo;
+	return *shSearchVideo.get();
 }
 
-void CSearchVideo::ReadDataFromTable(std::vector<readSearchVideo> &RSVObj)
+void CSearchVideo::SearchFile(Device* pDevice, const time_range& range, const std::vector<size_t> channelList)
 {
-	QMSqlite *pDb = QMSqlite::getInstance();
-	string strSql = SELECT_ALL_SEARCH_VIDEO;
+	ClearData();
 
-	bool bFlag = pDb->GetData(strSql, RSVObj);
-	//pDb->GetData(strSql, RSVObj);
-	//std::cout << "" << bFlag << std::endl;
-	//assert(bFlag);
+	for (auto channel : channelList)
+	{
+		pDevice->Search(channel, range);
+	}
+}
+
+bool CSearchVideo::ReadDataFromTable(std::vector<readSearchVideo>& RSVObj)
+{
+	RSVObj.clear();
+
+	QMSqlite *pDb = QMSqlite::getInstance();
+	std::string strSql = SELECT_ALL_SEARCH_VIDEO;
+
+	return pDb->GetData(strSql, RSVObj);
+}
+
+void CSearchVideo::ClearData()
+{
+	// Delete All Video File Record
+	QMSqlite *pDb = QMSqlite::getInstance();
+	pDb->cleanData(DELETE_ALL_SEARCH_VIDEO);
 }

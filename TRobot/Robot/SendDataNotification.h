@@ -9,6 +9,7 @@ using Poco::AutoPtr;
 
 typedef struct _DOWNLOADFILEINFO
 {
+	int nID;
 	DWORD dwTotalSize;
 	DWORD dwDownLoadSize;
 }DOWNLOADFILEINFO, *LPDOWNLOADFILEINFO;

@@ -31,7 +31,7 @@ public:
 	void Search(const size_t channel, const time_range& range);
 	void Download(const size_t channel, const time_range& range);
 	void PlayVideo(const size_t channel, const time_range& range);
-	void Download(const size_t channel, const std::string& fileName);
+	void Download(const size_t channel, const std::string& fileName, const int nID);
 	void PlayVideo(const size_t channel, const std::string& fileName);
 	bool StopDownload();
 

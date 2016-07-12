@@ -15,6 +15,7 @@
 
 #include "DownloadVideo.h"
 
+
 TEST_CASE("This is a demo", "[demo]")
 {
 	SECTION("Test login the device")
@@ -105,38 +106,41 @@ TEST_CASE("This is a demo", "[demo]")
 
 		SDK_DOWNLOAD_INFO sdi;
 		sdi.tChannel = 0;
-
-// 		DOWNLOADID DownloadID;
-// 		DownloadID.nID = 0;
-// 		DownloadID.strFileName.append("channel0-20160702000000-20160702235959-3");
-// 
-// 		sdi.vecInfo.push_back(DownloadID);
-		/*sdi.strVector.push_back("channel0-20160702000000-20160702235959-3");*/
+		sdi.strFileName.append("channel0-20160702000000-20160702235959-3");
+		sdi.nID = 2;
 
 		std::vector<SDK_DOWNLOAD_INFO> SDIVector;
 		SDIVector.push_back(sdi);
-		std::cout << "1111:"<<SDIVector.size() << std::endl;
+		
 		//视频文件下载类
 		DownloadVideo dvObj;
 		dvObj.SetDownloadInfo(&dObj, SDIVector);
 
-		DWORD dwDownLoadSize = 0;
-		DWORD dwTotalSize = 0;
-
-//		dvObj.getFlieSizeTest(dwDownLoadSize, dwTotalSize);
-//		std::cout << "dwDownLoadSize:" << dwDownLoadSize/1024/1024<< std::endl;
-//		std::cout << "dwTotalSize:" << dwTotalSize/1024 / 1024 << std::endl;
-
-// 		std::vector<DOWNLOADFILEINFO> Obj;
-// 		dvObj.GetVec(Obj);
-// 		std::cout << "大小："<<Obj.size() << std::endl;
-		
-
-		while (true)
+		DOWNLOAD_OUTPUT_INFO doi;
+		DOWNLOAD_OUTPUT_INFO doiTemp;
+		dvObj.GetDownloadInfo(doi);
+// 		std::cout << "----------nDownloadPos:"<<doi.nDownloadPos << std::endl;
+// 		std::cout << "----------nID:" << doi.nID << std::endl;
+// 		std::cout << "----------strFileName:" << doi.strFileName << std::endl;
+// 		std::cout << "----------strFileSize:" << doi.strFileSize << std::endl;
+// 		std::cout << "----------strRemainingTime:" << doi.strRemainingTime << std::endl;
+// 		std::cout << "----------strSpeed:" << doi.strSpeed << std::endl;
+// 		doiTemp = doi;
+// 		dvObj.GetDownloadInfo(doi);
+		while (!isEqual(doiTemp, doi))
+		//while (true)
 		{
-			::Sleep(100);
-		}
+			std::cout << "----------nDownloadPos:" << doi.nDownloadPos << std::endl;
+			std::cout << "----------nID:" << doi.nID << std::endl;
+			std::cout << "----------strFileName:" << doi.strFileName << std::endl;
+			std::cout << "----------strFileSize:" << doi.strFileSize << std::endl;
+			std::cout << "----------strRemainingTime:" << doi.strRemainingTime << std::endl;
+			std::cout << "----------strSpeed:" << doi.strSpeed << std::endl;
+			std::cout << std::endl;
+			doiTemp = doi;
 
+			dvObj.GetDownloadInfo(doi);
+		}
 		return;
 	}
 

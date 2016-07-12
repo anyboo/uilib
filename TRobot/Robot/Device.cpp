@@ -93,10 +93,10 @@ void Device::PlayVideo(const size_t channel, const time_range& range)
 	m_pVendor->PlayVideo(m_lLoginHandle, channel, range);
 }
 
-void Device::Download(const size_t channel, const std::string& fileName)
+void Device::Download(const size_t channel, const std::string& fileName, const int nID)
 {
 	assert(m_pVendor);
-	m_pVendor->Download(m_lLoginHandle, channel, fileName);
+	m_pVendor->Download(m_lLoginHandle, channel, fileName, nID);
 }
 
 void Device::PlayVideo(const size_t channel, const std::string& fileName)

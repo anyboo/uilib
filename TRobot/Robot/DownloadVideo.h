@@ -16,18 +16,6 @@ using Poco::ThreadPool;
 #define MINUTE_DOWNLOAD 60
 #define SECOND_DOWNLOAD 60
 
-// typedef struct _DOWNLOADID
-// {
-// 	int nID;
-// 	std::string strFileName;
-// }DOWNLOADID, *LPDOWNLOADID;
-
-
-// typedef struct _SDK_DOWNLOAD_INFO
-// {
-// 	std::vector<DOWNLOADID> vecInfo;
-// 	size_t tChannel;
-// }SDK_DOWNLOAD_INFO, *LPSDK_DOWNLOAD_INFO;
 
 typedef struct _SDK_DOWNLOAD_INFO
 {
@@ -46,6 +34,17 @@ typedef struct _DOWNLOAD_OUTPUT_INFO
 	std::string strSpeed;
 	int strRemainingTime;
 }DOWNLOAD_OUTPUT_INFO, *LPDOWNLOAD_OUTPUT_INFO;
+
+static bool isEqual(DOWNLOAD_OUTPUT_INFO One, DOWNLOAD_OUTPUT_INFO Two)
+{
+	if (One.nDownloadPos == Two.nDownloadPos && One.nID == Two.nID && One.strFileName == Two.strFileName &&
+		One.strFileSize == Two.strFileSize && One.strRemainingTime == Two.strRemainingTime && One.strSpeed == Two.strSpeed)
+	{
+		return true;
+	}
+
+	return false;
+}
 
 class DownloadVideo
 {
@@ -69,6 +68,7 @@ private:
 
 private:
 	AcquireDataRunable m_AcquireDataRunable;
+	std::vector<SDK_DOWNLOAD_INFO> m_VecDownloadInputInfo;
 };
 
 #endif 

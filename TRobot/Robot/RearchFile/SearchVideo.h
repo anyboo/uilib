@@ -1,17 +1,7 @@
-#ifndef __SEARCHVIDEO_H__
-#define __SEARCHVIDEO_H__
-
-#include "SearchHead.h"
+#pragma once
 
 #include "Device.h"
 #include "QMSqlite.h"
-
-#include <string>
-#include <vector>
-#include <ctime>
-#include <assert.h> 
-
-#define SUCCES_REARCH_FILE  1
 
 
 class CSearchVideo
@@ -20,18 +10,13 @@ public:
 	CSearchVideo();
 	~CSearchVideo();
 
-	int SearchFile(const std::string &ip, const time_range &range, Device *dObj, std::vector<size_t> channelList);
+	static CSearchVideo& getInstance();
 
-	void ReadDataFromTable(std::vector<readSearchVideo> &RSVObj);
+	void SearchFile(Device* pDevice, const time_range& range, const std::vector<size_t> channelList);
+	bool ReadDataFromTable(std::vector<readSearchVideo> &RSVObj);
 
-	
-
-private:
-	time_range m_TimeRange;
-	int m_nNotify;
-	bool m_bFlag;
-
+protected:
+	void ClearData();
 };
 
-#endif 
 

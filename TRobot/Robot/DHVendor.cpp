@@ -346,7 +346,7 @@ void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const tim
 	}
 }
 
-void DHVendor::Download(const long loginHandle, const size_t channel, const std::string& filename)
+void DHVendor::Download(const long loginHandle, const size_t channel, const std::string& filename, const int nID)
 {
 	if (0 >= loginHandle)
 	{
@@ -373,7 +373,7 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const std:
 		if (it->name == filename)
 		{
 			NET_RECORDFILE_INFO* pData = (NET_RECORDFILE_INFO*)it->getPrivateData();
-			long lRet = CLIENT_DownloadByRecordFile(loginHandle, pData, szTime, DH_BTDownLoadFile, (DWORD)this);
+			long lRet = CLIENT_DownloadByRecordFile(loginHandle, pData, szTime, DH_BTDownLoadFile, nID);
 			m_lDownloadHandle = lRet;
 
 // 			int total, cur;
@@ -486,6 +486,7 @@ void CALLBACK DH_BTDownLoadPos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDow
 void CALLBACK DH_BTDownLoadFile(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser)
 {
 	DOWNLOADFILEINFO DownloadFileInfo;
+	DownloadFileInfo.nID = dwUser;
 	DownloadFileInfo.dwDownLoadSize = dwDownLoadSize;
 	DownloadFileInfo.dwTotalSize = dwTotalSize;
 

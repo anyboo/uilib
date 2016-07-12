@@ -149,7 +149,7 @@ public:
 	virtual void Search(const long loginHandle, const size_t channel, const time_range& range) = 0;
 	virtual void Download(const long loginHandle, const size_t channel, const time_range& range) = 0;
 	virtual void PlayVideo(const long loginHandle, const size_t channel, const time_range& range) = 0;
-	virtual void Download(const long loginHandle, const size_t channel, const std::string& filename) = 0;
+	virtual void Download(const long loginHandle, const size_t channel, const std::string& filename, const int nID) = 0;
 	virtual void PlayVideo(const long loginHandle, const size_t channel, const std::string& filename) = 0;
 	virtual bool StopDownload() = 0;
 
