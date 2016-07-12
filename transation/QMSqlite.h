@@ -10,8 +10,8 @@
 #include <vector>
 
 using namespace std;
-using namespace Poco::Data::Keywords;
-using namespace Poco::Data;
+//using namespace Poco::Data::Keywords;
+//using namespace Poco::Data;
 using Poco::Data::Session;
 using Poco::Data::Statement;
 using Poco::Data::Statement;
@@ -114,7 +114,7 @@ public:
 			return false;
 		try
 		{
-			sess << sql , use(searchrecode), now;
+			sess << sql, Poco::Data::Keywords::use(searchrecode), Poco::Data::Keywords::now;
 			closeConnect(sess);
 		}
 		catch (Poco::Exception &ex)
@@ -136,7 +136,7 @@ public:
 		try
 		{
 			Statement insert(sess);
-			insert << sql, use(Record), now;
+			insert << sql, Poco::Data::Keywords::use(Record), Poco::Data::Keywords::now;
 			closeConnect(sess);
 		}
 		catch (Poco::Exception &ex)
@@ -160,7 +160,7 @@ private:
 	void closeSessionPool();
 	bool execSql(string sql);
 	Session connectDb();
-	SessionPool *m_pool;
+	Poco::Data::SessionPool *m_pool;
 	
 };
 

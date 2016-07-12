@@ -31,7 +31,7 @@ string::const_iterator caseInsFind(string& s, const string& p)
 	return (search(s.begin(), s.end(), tmp.begin(), tmp.end(), caseInsCharCompSingle));
 }
 
-void GetLocalNetCar(std::string& Desc, std::string& AdapterName, std::vector<string>& IPList)
+void GetLocalNetCar(std::string& Desc, std::string& AdapterName, std::vector<string>& IPList, u_char *Macaddr)
 {
 	PIP_ADAPTER_INFO pIpAdapterInfo = new IP_ADAPTER_INFO();
 	unsigned long stSize = sizeof(IP_ADAPTER_INFO);
@@ -70,6 +70,12 @@ void GetLocalNetCar(std::string& Desc, std::string& AdapterName, std::vector<str
 							cout << "IP address:" << pIpAddrString->IpAddress.String << endl;							
 							pIpAddrString = pIpAddrString->Next;
 						} while (pIpAddrString);
+
+						//copy mac
+						for (int i = 0; i < 6; i++)
+						{
+							Macaddr[i] = pIpAdapterInfo->Address[i];
+						}						
 					}					
 					
 					break;
@@ -119,15 +125,19 @@ string GetNetCardName(std::string uuid)
 	return CardName;
 }
 
-string ConvertNICUUIDtoPcapName(pcap_if_t* devs, const string& uuid)
+string WindowUtils::ConvertNICUUIDtoPcapName(pcap_if_t* devs, const string& uuid)
 {
 	string pcap_name;
 	
 	for (pcap_if_t *d = devs; d && d->next; d = d->next)
 	{
 		string tmp(d->name);		
-		if (tmp.compare(uuid) == 0)
+		if (/*tmp.compare(uuid) == 0*/tmp.find(uuid) != string::npos)
+		{
 			pcap_name = tmp;
+			break;
+		}
+			
 	}
 
 	return pcap_name;
@@ -157,7 +167,8 @@ void WindowUtils::getLocalIPs(std::vector<string> &IPs)
     IPs.clear();
 	string sDesc;
 	string uuid;
-	GetLocalNetCar(sDesc, uuid, IPs);
+	u_char mac[6] = { 0 };
+	GetLocalNetCar(sDesc, uuid, IPs, mac);
 }
 
 
@@ -439,7 +450,7 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
 
 	if ((adhandle = pcap_open_live(pcap_name.data(), 65536, 1, 1000, errbuf)) == NULL)
     {
-       //cout << string("kevin : pcap_open_live failed!  not surpport by WinPcap ? alldev->name : %1").arg(alldevs->name);
+       cout << string("kevin : pcap_open_live failed!  not surpport by WinPcap ? alldev->name : ");
         pcap_freealldevs(alldevs);
         return false;
     }
@@ -477,6 +488,7 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
         if (GetTickCount() - start > secondsWait * 1000)
         {
             cout << "arp time out";
+			pcap_close(adhandle);
             break;
         }
         //循环解析ARP数据包
@@ -708,7 +720,8 @@ const string& WindowUtils::getLoacalNetName()
 	{
 		string sUuid;
 		vector<string> IpList;
-		GetLocalNetCar(localNetName, sUuid, IpList);
+		u_char mac[6] = { 0 };
+		GetLocalNetCar(localNetName, sUuid, IpList, mac);
 	}
 
 	return localNetName;
@@ -801,7 +814,70 @@ const string& WindowUtils::getLocalUuid()
 	{
 		string sNetName;
 		vector<string> IpList;
-		GetLocalNetCar(sNetName, uuid, IpList);
+		u_char mac[6] = { 0 };
+		GetLocalNetCar(sNetName, uuid, IpList, mac);
 	}
 	return uuid;
+}
+
+void WindowUtils::getMacByArpTable(vector<string>Ips, vector<IPMAC>& IpMacs)
+{
+	MIB_IPNETTABLE *ipNetTable = NULL;
+	ULONG size = 0;
+	ULONG result = 0;
+	int i, j;
+	in_addr inaddr;
+	
+	result = GetIpNetTable(ipNetTable, &size, TRUE);
+	if (result == ERROR_INSUFFICIENT_BUFFER)
+	{
+		ipNetTable = (MIB_IPNETTABLE *)malloc(size);
+		result = GetIpNetTable(ipNetTable, &size, TRUE);
+		if (result == ERROR_SUCCESS) {
+			for (i = 0; i < ipNetTable->dwNumEntries; i++)
+			{							
+				for (j = 0; j < Ips.size(); j++)
+				{										
+					if (inet_addr(Ips[j].c_str()) == ipNetTable->table[i].dwAddr) 					
+					{						
+						IPMAC ipmac = { 0 };
+						ipmac.ip = ipNetTable->table[i].dwAddr;
+						char sztmp[80] = { 0 };
+						sprintf_s(sztmp, "i: %d, ip: %02x, mac:%02x-%02x-%02x-%02x-%02x-%02x\n", i, ipNetTable->table[i].dwAddr
+							, ipNetTable->table[i].bPhysAddr[0], ipNetTable->table[i].bPhysAddr[1]
+							, ipNetTable->table[i].bPhysAddr[2], ipNetTable->table[i].bPhysAddr[3]
+							, ipNetTable->table[i].bPhysAddr[4], ipNetTable->table[i].bPhysAddr[5]);
+						printf(sztmp);
+						if (ipNetTable->table[i].bPhysAddr[0] == 0
+							&& ipNetTable->table[i].bPhysAddr[1] == 0
+							&& ipNetTable->table[i].bPhysAddr[2] == 0
+							&& ipNetTable->table[i].bPhysAddr[3] == 0)
+						{
+							
+						}
+						else
+						{
+							for (j = 0; j < 6; j++)
+							{
+								ipmac.mac[j] = ipNetTable->table[i].bPhysAddr[j];
+							}
+							IpMacs.push_back(ipmac);
+						}
+						
+						break;
+					}
+				}
+			}
+			
+		}
+	}
+
+}
+
+void WindowUtils::getLocalIPsMac(std::vector<string> &IPs, u_char *mac)
+{
+	IPs.clear();
+	string sDesc;
+	string uuid;	
+	GetLocalNetCar(sDesc, uuid, IPs, mac);
 }
