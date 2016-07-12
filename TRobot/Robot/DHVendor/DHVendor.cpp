@@ -119,6 +119,8 @@ void DHVendor::StartSearchDevice()
 {
 	std::cout << "DH 搜索设备 开始！" << std::endl;
 
+	m_listDeviceInfo.clear();
+
  	DEVICE_NET_INFO Device[256] = { 0 };
  	int nLength = 0;
  

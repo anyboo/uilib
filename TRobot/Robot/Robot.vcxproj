@@ -55,12 +55,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)poco\Data\include;$(SolutionDir)poco\Foundation\include;$(SolutionDir)poco\Data\SQLite\include;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\bin;$(SolutionDir)\bin\poco_bin;$(SolutionDir)\dll;$(SolutionDir)\Test\single_include;$(SolutionDir)\TRobot\Robot;$(SolutionDir)\TRobot\Robot\inc;$(SolutionDir)\TRobot\Robot\Depend;$(SolutionDir)\TRobot\Robot\JxjVendor;$(SolutionDir)\TRobot\Robot\JxjVendor\sdk;$(SolutionDir)\TRobot\Robot\DHVendor;$(SolutionDir)\TRobot\Robot\DHVendor\sdk;$(SolutionDir)\TRobot\Robot\DZPVendor;$(SolutionDir)\TRobot\Robot\DZPVendor\sdk;$(SolutionDir)\TRobot\Robot\HKVendor;$(SolutionDir)\TRobot\Robot\HKVendor\sdk</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)poco\Data\include;$(SolutionDir)poco\Foundation\include;$(SolutionDir)poco\Data\SQLite\include;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\bin;$(SolutionDir)\bin\poco_bin;$(SolutionDir)\dll;$(SolutionDir)\Test\single_include;$(SolutionDir)\TRobot\Robot;$(SolutionDir)\TRobot\Robot\inc;$(SolutionDir)\TRobot\Robot\Depend;$(SolutionDir)\TRobot\Robot\JxjVendor;$(SolutionDir)\TRobot\Robot\JxjVendor\sdk;$(SolutionDir)\TRobot\Robot\DHVendor;$(SolutionDir)\TRobot\Robot\DHVendor\sdk;$(SolutionDir)\TRobot\Robot\DZPVendor;$(SolutionDir)\TRobot\Robot\DZPVendor\sdk;$(SolutionDir)\TRobot\Robot\HKVendor;$(SolutionDir)\TRobot\Robot\HKVendor\sdk;$(SolutionDir)\TRobot\Robot\Network;$(SolutionDir)\TRobot\Robot\Network\wpcap;$(SolutionDir)\TRobot\Robot\Network\wpcap\pcap</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)poco\lib;$(SolutionDir)\lib;$(SolutionDir)\lib\poco_lib;$(SolutionDir)\TRobot\Robot\DHVendor\sdk;$(SolutionDir)\TRobot\Robot\JxjVendor\sdk;$(SolutionDir)\TRobot\Robot\DZPVendor\sdk;$(SolutionDir)\TRobot\Robot\HKVendor\sdk;$(SolutionDir)\TRobot\Robot\HKVendor\sdk\HCNetSDKCom;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)poco\lib;$(SolutionDir)\lib;$(SolutionDir)\lib\poco_lib;$(SolutionDir)\TRobot\Robot\DHVendor\sdk;$(SolutionDir)\TRobot\Robot\JxjVendor\sdk;$(SolutionDir)\TRobot\Robot\DZPVendor\sdk;$(SolutionDir)\TRobot\Robot\HKVendor\sdk;$(SolutionDir)\TRobot\Robot\HKVendor\sdk\HCNetSDKCom;$(SolutionDir)\TRobot\Robot\Network\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -94,7 +94,10 @@
     <ClInclude Include="HKVendor\HKVendor.h" />
     <ClInclude Include="JxjVendor\JXJVendor.h" />
     <ClInclude Include="LoginDevice.h" />
+    <ClInclude Include="Network\PING.h" />
+    <ClInclude Include="Network\utils.h" />
     <ClInclude Include="Notification.h" />
+    <ClInclude Include="NotificationCenter.h" />
     <ClInclude Include="NotificationQueue.h" />
     <ClInclude Include="PlayVideo.h" />
     <ClInclude Include="QMSqlite.h" />
@@ -102,6 +105,7 @@
     <ClInclude Include="SearchDevice.h" />
     <ClInclude Include="SearchVideo.h" />
     <ClInclude Include="TestWindows.h" />
+    <ClInclude Include="WindowUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Device.cpp" />
@@ -112,7 +116,10 @@
     <ClCompile Include="HKVendor\HKVendor.cpp" />
     <ClCompile Include="JxjVendor\JXJVendor.cpp" />
     <ClCompile Include="LoginDevice.cpp" />
+    <ClCompile Include="Network\PING.cpp" />
+    <ClCompile Include="Network\utils.cpp" />
     <ClCompile Include="Notification.cpp" />
+    <ClCompile Include="NotificationCenter.cpp" />
     <ClCompile Include="NotificationQueue.cpp" />
     <ClCompile Include="PlayVideo.cpp" />
     <ClCompile Include="QMSqlite.cpp" />
@@ -120,6 +127,7 @@
     <ClCompile Include="SearchDevice.cpp" />
     <ClCompile Include="SearchVideo.cpp" />
     <ClCompile Include="TestWindows.cpp" />
+    <ClCompile Include="WindowUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Robot.rc" />

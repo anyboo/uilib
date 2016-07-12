@@ -80,6 +80,10 @@ Device* CLoginDevice::GetDevice(const std::string ip)
 		{
 			return pDev;
 		}
+		else
+		{
+			iter++;
+		}
 	}
 
 	return NULL;

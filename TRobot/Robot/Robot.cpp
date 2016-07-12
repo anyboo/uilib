@@ -10,18 +10,22 @@
 #include "LoginDevice.h"
 #include "SearchVideo.h"
 #include "DownloadFile.h"
+#include "NotificationCenter.h"
 
 #include "JXJVendor.h"
 #include "DZPVendor.h"
 #include "DHVendor.h"
 #include "HKVendor.h"
 
-
 TEST_CASE("This is a demo", "[demo]")
 {
 	SECTION("Test login the device")
 	{
-		/************************* 初始化播放窗帘句柄 **********************/
+		/************************* 初始化消息中心 **********************/
+		Poco::ThreadPool pool;
+		pool.start(CNotificationCenter::getInstance());
+
+		/************************* 初始化播放窗口句柄 **********************/
 		TestWindows::getInstance().Init();
 
 		/************************* 初始化数据库 **********************/
@@ -34,15 +38,15 @@ TEST_CASE("This is a demo", "[demo]")
 
 		/************************* 初始化SDK厂商 **********************/
 		VENDOR_LIST pVendorList;
-		CJXJVendor jxjVendor;
-		CDZPVendor dzpVendor;
-		DHVendor dhVendor;
-		HKVendor hkVendor;
+		CJXJVendor* jxjVendor = new CJXJVendor();
+		CDZPVendor* dzpVendor = new CDZPVendor();
+		DHVendor* dhVendor = new DHVendor();
+		HKVendor* hkVendor = new HKVendor();
 
-		//pVendorList.push_back(&jxjVendor);
-		pVendorList.push_back(&dzpVendor);
-		//pVendorList.push_back(&dhVendor);
-		//pVendorList.push_back(&hkVendor);
+		//pVendorList.push_back(jxjVendor);
+		pVendorList.push_back(dzpVendor);
+		//pVendorList.push_back(dhVendor);
+		//pVendorList.push_back(hkVendor);
 
 		/************************* 初始化IP列表 **********************/
 		DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
@@ -93,10 +97,16 @@ TEST_CASE("This is a demo", "[demo]")
 		listDeviceSimpleInfo.push_back(devInfoSimple4);
 #endif
 
-		
 		/************************* 设备发现 **********************/
-		CSearchDevice::getInstance().Search(pVendorList, listDeviceSimpleInfo);
+		CSearchDevice::getInstance().Init(pVendorList, listDeviceSimpleInfo);
+		pool.start(CSearchDevice::getInstance());
+
 		DEVICE_INFO_LIST devInfoList = CSearchDevice::getInstance().GetDeviceInfoList();
+		while (devInfoList.size() == 0)
+		{
+			devInfoList = CSearchDevice::getInstance().GetDeviceInfoList();
+			::Sleep(1000);
+		}
 
 		/************************* 设备登陆登出测试 **********************/
 #if 0
@@ -121,13 +131,14 @@ TEST_CASE("This is a demo", "[demo]")
 			{
 				// 获取登陆成功后的设备对象
 				Device* pDev = CLoginDevice::getInstance().GetDevice(devInfo->szIp);
+
 				// 搜索视频文件
-				int channel = 0;
+				int m_channel = 0;
 				time_range timeRangeSearch;
-				timeRangeSearch.start = 1467820800; // 1467820800 - jxj  // 1467734400 - dh  // 1467820800 - dzp
-				timeRangeSearch.end = 1467907199; // 1467993599 - jxj  // 1467905003 - dh  // 1467907199 - dzp
+				timeRangeSearch.start = 1467820800; // 1467770400 - jxj  // 1467734400 - dh  // 1467820800 - dzp
+				timeRangeSearch.end = 1467907199; // 1467777599 - jxj  // 1467905003 - dh  // 1467907199 - dzp
 				std::vector<size_t> channelList;
-				channelList.push_back(channel);
+				channelList.push_back(m_channel);
 				CSearchVideo::getInstance().SearchFile(pDev, timeRangeSearch, channelList);
 				// 获取搜索视频文件列表
 				std::vector<readSearchVideo> fileList;
@@ -135,49 +146,38 @@ TEST_CASE("This is a demo", "[demo]")
 				// 获取某一文件信息
 				readSearchVideo sr;
 				std::string fileName;
+				int channel;
 				time_range timeRangeItem;
 				if (fileList.size() > 0)
 				{
 					sr = fileList[1];
 					fileName = sr.get<0>();
+					channel = sr.get<1>();
 					timeRangeItem.start = sr.get<2>();
 					timeRangeItem.end = sr.get<3>();
-					//CDownloadFile dlFile1(pDev, channel, timeRangeItem);
-					CDownloadFile dlFile1(pDev, channel, timeRangeItem, fileName);
+					CDownloadFile dlFile1(pDev, channel, timeRangeItem);
+					//CDownloadFile dlFile1(pDev, channel, timeRangeItem, fileName);
 
 					sr = fileList[2];
 					fileName = sr.get<0>();
+					channel = sr.get<1>();
 					timeRangeItem.start = sr.get<2>();
 					timeRangeItem.end = sr.get<3>();
 					//CDownloadFile dlFile2(pDev, channel, timeRangeItem);
-					CDownloadFile dlFile2(pDev, channel+1, timeRangeItem, fileName);
+					//CDownloadFile dlFile2(pDev, channel, timeRangeItem, fileName);
 
-					ThreadPool pool;
 					pool.start(dlFile1);
-					pool.start(dlFile2);
-
-					// wait until queue is empty and all threads are 
-					// waiting for new work.
-					NotificationQueue& queue = CNotificationQueue::getInstance().GetQueue();
-					while (!queue.empty())
-					{
-						Thread::sleep(200);
-					}
-					Thread::sleep(500);
-
-					// stop all worker threads
-					queue.wakeUpAll();
-					pool.joinAll();
+					//pool.start(dlFile2);					
 
 					while (true)
 					{
 						::Sleep(100);
 					}
-
-					
 				}
 			}
 		}
+
+		return;
 #endif
 	}
 

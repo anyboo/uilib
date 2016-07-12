@@ -1,7 +1,14 @@
 
 #include "SearchDevice.h"
-#include <Poco/SingletonHolder.h>
+#include "WindowUtils.h"
+#include "Notification.h"
+#include "NotificationQueue.h"
 
+#include <Poco/SingletonHolder.h>
+#include "Poco/Thread.h"
+
+
+using Poco::Thread;
 
 NET_SDK_TYPE g_SDKTypeLimit = NONE_SDK;
 
@@ -65,7 +72,28 @@ CSearchDevice& CSearchDevice::getInstance()
 	static Poco::SingletonHolder<CSearchDevice> shSearchDevice;
 	return *shSearchDevice.get();
 }
-
+void CSearchDevice::Init(const VENDOR_LIST& pVendorList, const DEVICE_INFO_SIMPLE_LIST& listDeviceSimpleInfo)
+{
+	m_pVendorList = pVendorList;
+	m_listDeviceSimpleInfo = listDeviceSimpleInfo;
+}
+void CSearchDevice::run()
+{
+	static bool bNetStatusLast = false;
+	for (;;)
+	{
+		bool bStatus  = CWindowUtils::isOnLine();
+		if (bNetStatusLast != bStatus)
+		{
+			NotificationQueue& queue = CNotificationQueue::getInstance().GetQueue();
+			queue.enqueueNotification(new CNotification(Notification_Type_Network));
+			bNetStatusLast = bStatus;
+			Search(m_pVendorList, m_listDeviceSimpleInfo);
+			queue.enqueueNotification(new CNotification(Notification_Type_SearchFile));
+		}
+		::Sleep(1000);
+	}
+}
 void CSearchDevice::InitDeviceList(const VENDOR_LIST& pVendorList)
 {
 	if (pVendorList.size() <= 0)
@@ -160,6 +188,8 @@ void CSearchDevice::Search(const VENDOR_LIST& pVendorList, const DEVICE_INFO_SIM
 
 void CSearchDevice::DeleteDeviceList()
 {
+	int a = 0;
+
 	for (auto pDev : m_listDeviceKnown)
 	{
 		delete pDev;
@@ -176,6 +206,8 @@ void CSearchDevice::DeleteDeviceList()
 }
 void CSearchDevice::DeleteDeviceInfoList()
 {
+	int a = 0;
+
 	for (auto pDevInfo : m_listDeviceInfo)
 	{
 		delete pDevInfo;

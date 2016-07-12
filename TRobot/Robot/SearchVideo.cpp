@@ -17,7 +17,6 @@ CSearchVideo& CSearchVideo::getInstance()
 	return *shSearchVideo.get();
 }
 
-
 void CSearchVideo::SearchFile(Device* pDevice, const time_range& range, const std::vector<size_t> channelList)
 {
 	ClearData();

@@ -8,6 +8,20 @@
 using Poco::Notification;
 using Poco::AutoPtr;
 
+typedef enum
+{
+	Notification_Type_None = 0,
+	Notification_Type_Network,
+	Notification_Type_SearchFile,
+	Notification_Type_Download_Start,
+	Notification_Type_Download_End,
+	Notification_Type_PlayVideo_Start,
+	Notification_Type_PlayVideo_Parse,
+	Notification_Type_PlayVideo_Restart,
+	Notification_Type_PlayVideo_End,
+
+}NOTIFICATION_TYPE;
+
 class CNotification : public Notification
 {
 public:
@@ -15,17 +29,17 @@ public:
 	~CNotification();
 
 	typedef AutoPtr<CNotification> Ptr;
-	CNotification(const DownloadInfo& downloadInfo) :
-		_downloadInfo(downloadInfo)
+	CNotification(const NOTIFICATION_TYPE notificationType) :
+		_notificationType(notificationType)
 	{
 	}
 
-	DownloadInfo downloadInfo() const
+	NOTIFICATION_TYPE GetNotificationType() const
 	{
-		return _downloadInfo;
+		return _notificationType;
 	}
 
 private:
-	DownloadInfo _downloadInfo;
+	NOTIFICATION_TYPE _notificationType;
 };
 

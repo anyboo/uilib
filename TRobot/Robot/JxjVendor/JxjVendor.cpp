@@ -1,6 +1,9 @@
 
 #include "JXJVendor.h"
 
+#include "Notification.h"
+#include "NotificationQueue.h"
+
 // JXJ SDK
 #include "mb_api.h"
 #include "j_sdk.h"
@@ -24,7 +27,7 @@ long m_lDownloadFileHandle = -1;
 long m_lRecHandle = -1;
 long m_lDownLoadStartTime = -1;
 long m_lDownLoadTotalTime = -1;
-int m_iDownLoadPos = 0;
+//int m_iDownLoadPos = 0;
 int m_iPlayVideoChannel = -1;
 
 static bool JXJ_Init_Flag = false;
@@ -162,7 +165,6 @@ long CJXJVendor::Login(const std::string& ip, size_t port, const std::string& us
 	if (iRet < 0)
 	{
 		std::string m_sLastError = GetErrorString(iRet);
-		//throw std::exception(m_sLastError.c_str());
 		return -1;
 	}
 
@@ -212,6 +214,8 @@ void CJXJVendor::Logout(const long loginHandle)
 
 void CJXJVendor::StartSearchDevice()
 {
+	m_listDeviceInfo.clear();
+
 	char szIp[11] = "224.0.0.99";
 	int nPort = 40086;
 	long lResult = JNetMBOpen(szIp, nPort, JXJ_JMBNotify, this, JNET_PRO_T_JPF, m_lSearchDeviceHandle);
@@ -675,8 +679,7 @@ std::string JXJ_MakeFileName(int channel, const std::string& startTime, const st
 
 void JXJ_SearchUnit(const long loginHandle, const size_t channel, const time_range& range, RECORD_FILE_LIST& recordFiles)
 {
-	JStoreLog m_storeLog;
-
+	
 	JXJ_MakeStoreLog(m_storeLog, ALL_RECODE, m_iBeginNode, m_iEndNode, m_iSsid, range.start, range.end);
 
 	// Get Search File Info
@@ -791,12 +794,11 @@ bool JXJ_CheckFileExist(const RecordFile& file, const std::vector<RecordFile>& f
 
 int __stdcall JXJ_JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam)
 {
-	static int index = 0;
+	static int prePos = 0;
+	int curPos = 0;
 
 	if (pBuff)
 	{
-		index++;
-
 		j_frame_t *pFrame = (j_frame_t *)pBuff;
 		if (m_lDownLoadStartTime == -1 && pFrame->frame_type != j_audio_frame)
 		{
@@ -812,19 +814,36 @@ int __stdcall JXJ_JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void*
 
 		if (pFrame->timestamp_sec > 0 && m_lDownLoadTotalTime > 0)
 		{
-			m_iDownLoadPos = (pFrame->timestamp_sec - m_lDownLoadStartTime) / (m_lDownLoadTotalTime / 100);
-			char cDownInfo[100];
-			sprintf_s(cDownInfo, 100, "m_idownloadpos = %d , starttime = %ld, curtime = %ld, totaltime = %ld\r\n", m_iDownLoadPos, m_lDownLoadStartTime, pFrame->timestamp_sec, m_lDownLoadTotalTime);
-			std::cout << cDownInfo << std::endl;
+			curPos = (pFrame->timestamp_sec - m_lDownLoadStartTime) * 100 / m_lDownLoadTotalTime;
+			if (curPos != prePos)
+			{
+				prePos = curPos;
+
+				char cDownInfo[100];
+				sprintf_s(cDownInfo, 100, "m_idownloadpos = %d , starttime = %ld, curtime = %ld, totaltime = %ld\r\n", curPos, m_lDownLoadStartTime, pFrame->timestamp_sec, m_lDownLoadTotalTime);
+				std::cout << cDownInfo << std::endl;
+
+				NotificationQueue& queue = CNotificationQueue::getInstance().GetQueue();
+				queue.enqueueNotification(new CNotification(Notification_Type_Download_Start));
+			}
 		}
 
 		if ((m_lDownLoadStartTime + m_lDownLoadTotalTime) == pFrame->timestamp_sec)
 		{
 			m_errCode = Err_DownloadSuccess;
 
-			m_iDownLoadPos = 100;
 			m_lDownLoadStartTime = -1;
 			m_lDownLoadTotalTime = -1;
+
+			curPos = 100;
+			prePos = 0;
+
+			char cDownInfo[100];
+			sprintf_s(cDownInfo, 100, "m_idownloadpos = %d , starttime = %ld, curtime = %ld, totaltime = %ld\r\n", curPos, m_lDownLoadStartTime, pFrame->timestamp_sec, m_lDownLoadTotalTime);
+			std::cout << cDownInfo << std::endl;
+
+			NotificationQueue& queue = CNotificationQueue::getInstance().GetQueue();
+			queue.enqueueNotification(new CNotification(Notification_Type_Download_End));
 
 			JXJ_CloseDownload();
 		}

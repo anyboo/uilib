@@ -72,7 +72,7 @@ bool Device::LoginChain(const NET_DEVICE_INFO_SIMPLE* pDevInfoSimple, int& index
 {
 	if (Login(pDevInfoSimple->szIP, pDevInfoSimple->nPort))
 	{
-		Logout();
+		//Logout();
 		return true;
 	}
 	else

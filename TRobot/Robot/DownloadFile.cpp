@@ -12,6 +12,7 @@ CDownloadFile::CDownloadFile()
 CDownloadFile::~CDownloadFile()
 {
 }
+
 CDownloadFile::CDownloadFile(Device* pDev, const int channel, const time_range& timeRange, const std::string& filename)
 {
 	m_pDev = pDev;
@@ -40,19 +41,13 @@ void CDownloadFile::run()
 			CNotification::Ptr pWorkNf = pNf.cast<CNotification>();
 			if (pWorkNf)
 			{
-				if (pWorkNf->downloadInfo().pos < 100)
+				FastMutex::ScopedLock lock(_mutex);
+				if (pWorkNf->GetNotificationType() == Notification_Type_Download_End)
 				{
-					FastMutex::ScopedLock lock(_mutex);
-					//std::cout << "Pos : " << pWorkNf->downloadInfo().pos << " - " << m_fileName << std::endl;
-				}
-				else
-				{
-					m_isDownloadFinish = true;
-					//break;
+					break;
 				}
 			}
 		}
-		//else break;
 	}
 }
 void CDownloadFile::DownloadFileByTime()
