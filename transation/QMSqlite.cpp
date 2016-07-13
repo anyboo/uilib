@@ -62,6 +62,8 @@ bool QMSqlite::creatSessionPool()
 		//create pool
 #ifdef _DEBUG
 		m_pool = new SessionPool(SQLite::Connector::KEY, "memory.db", 1, 100, 10);
+		Session sess = connectDb();
+		sess << "PRAGMA synchronous = OFF; ", now;
 #else
 		m_pool = new SessionPool(SQLite::Connector::KEY, ":memory:", 1, 100, 10);
 #endif
