@@ -241,12 +241,12 @@ typedef struct arppkt
 bool WindowUtils::getDirectDevice(string& ip, string& netGate)
 {
     ip.clear();
-    struct tm * timeinfo;
-    struct tm *ltime;
-    time_t rawtime;
+    //struct tm * timeinfo;
+    //struct tm *ltime;
+    //time_t rawtime;
 
-    int result;
-    int i = 0, inum;
+    //int result;
+    int i = 0;
     pcap_if_t * alldevs;//指向pcap_if_t结构列表指针
     pcap_t * adhandle;//定义包捕捉句柄
     char errbuf[PCAP_ERRBUF_SIZE];//错误缓冲最小为256
@@ -304,12 +304,12 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
     }
     std::vector<string> IPs;
     getLocalIPs(IPs);
-    const int nMaxSeconds = 30;
+    const int nMaxSeconds = 8;
     int start = GetTickCount();
     string specialIP;
     while (true)
     {
-        if (GetTickCount() - start > 30 * 1000)
+		if (GetTickCount() - start > nMaxSeconds * 1000)
         {
             cout << "arp time out";
             break;
@@ -344,7 +344,7 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
             netGate = source;
             if (ip.empty())
             {
-                start = GetTickCount() - 29 * 1000;
+                start = GetTickCount() - 7 * 1000;
             }
 
 			char szdIP[30] = { 0 };
@@ -411,15 +411,15 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
     return !ip.empty();	
 }
 
-bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>& otherIPS, int secondsWait){
+bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>& otherIPS, long secondsWait){
 
     ip.clear();
-    struct tm * timeinfo;
-    struct tm *ltime;
-    time_t rawtime;
+    //struct tm * timeinfo;
+    //struct tm *ltime;
+    //time_t rawtime;
 
-    int result;
-    int i = 0, inum;
+    //int result;
+    int i = 0;
     pcap_if_t * alldevs;//指向pcap_if_t结构列表指针
     pcap_t * adhandle;//定义包捕捉句柄
     char errbuf[PCAP_ERRBUF_SIZE];//错误缓冲最小为256
@@ -481,7 +481,7 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
     string specialIP;
     std::vector<string> IPs;
     getLocalIPs(IPs);
-    int start = GetTickCount();
+    long start = GetTickCount();
     const int MAX_WAIT_OTHER_IP_SECONDS = 10;
     while (true)
     {
@@ -826,7 +826,7 @@ void WindowUtils::getMacByArpTable(vector<string>Ips, vector<IPMAC>& IpMacs)
 	ULONG size = 0;
 	ULONG result = 0;
 	int i, j;
-	in_addr inaddr;
+	//in_addr inaddr;
 	
 	result = GetIpNetTable(ipNetTable, &size, TRUE);
 	if (result == ERROR_INSUFFICIENT_BUFFER)
@@ -842,12 +842,12 @@ void WindowUtils::getMacByArpTable(vector<string>Ips, vector<IPMAC>& IpMacs)
 					{						
 						IPMAC ipmac = { 0 };
 						ipmac.ip = ipNetTable->table[i].dwAddr;
-						char sztmp[80] = { 0 };
+						/*char sztmp[80] = { 0 };
 						sprintf_s(sztmp, "i: %d, ip: %02x, mac:%02x-%02x-%02x-%02x-%02x-%02x\n", i, ipNetTable->table[i].dwAddr
 							, ipNetTable->table[i].bPhysAddr[0], ipNetTable->table[i].bPhysAddr[1]
 							, ipNetTable->table[i].bPhysAddr[2], ipNetTable->table[i].bPhysAddr[3]
 							, ipNetTable->table[i].bPhysAddr[4], ipNetTable->table[i].bPhysAddr[5]);
-						printf(sztmp);
+						printf(sztmp);*/
 						if (ipNetTable->table[i].bPhysAddr[0] == 0
 							&& ipNetTable->table[i].bPhysAddr[1] == 0
 							&& ipNetTable->table[i].bPhysAddr[2] == 0

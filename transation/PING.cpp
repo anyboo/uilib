@@ -135,7 +135,7 @@ void CPing::ScanIPs(vector<string> &vecIPs, const string& netIp, bool bArp, std:
             continue;
         }
 
-        if (Ping((char *)strIpTmp.c_str(), 20, bArp))
+        if (Ping((char *)strIpTmp.c_str(), 8, bArp))
         {
             vecIPs.push_back(strIpTmp.c_str());
         }
