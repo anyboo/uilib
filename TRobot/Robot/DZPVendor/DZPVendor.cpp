@@ -1,12 +1,12 @@
-
 #include "DZPVendor.h"
 
-#include "Notification.h"
-#include "NotificationQueue.h"
+#include "Poco/NotificationQueue.h"
 
 // JXJ DZP
 #include "netsdk.h"
 #include "H264Play.h"
+
+using Poco::NotificationQueue;
 
 #pragma comment(lib, "NetSdk")
 #pragma comment(lib, "H264Play")
@@ -113,9 +113,11 @@ void TMToNetTime(const tm& t, H264_DVR_TIME& nt)
 CDZPVendor::CDZPVendor()
 {
 	m_eSDKType = DZP_SDK;
-
+	m_bSearchDeviceAPI = true;
 	m_sDefUserName = "admin";
 	m_sDefPassword = "";
+	m_iMaxChannel = 0;
+	m_lSearchDeviceHandle = -1;
 }
 
 CDZPVendor::~CDZPVendor()
@@ -530,21 +532,17 @@ void __stdcall DZP_DownLoadPosCallBack(long lPlayHandle, long lTotalSize, long l
 	static int prePos = 0;
 	int curPos = 0;
 
-	curPos = (int)(lDownLoadSize * 100 / lTotalSize);
-	NotificationQueue& queue = CNotificationQueue::getInstance().GetQueue();
+	curPos = DZP_GetDownloadPos(m_lFileHandle);
 
 	if (curPos != prePos)
 	{
-		std::cout << lDownLoadSize << "/" << lTotalSize << " - " << DZP_GetDownloadPos(m_lFileHandle) << std::endl;
-		
+		std::cout << lDownLoadSize << "/" << lTotalSize << " - " << curPos << std::endl;
 		prePos = curPos;
-		queue.enqueueNotification(new CNotification(Notification_Type_Download_Start));
 	}
 	
 	if (lDownLoadSize == -1)
 	{
 		prePos = 0;
-		queue.enqueueNotification(new CNotification(Notification_Type_Download_End));
 	}
 }
 int __stdcall DZP_RealDataCallBack(long lRealHandle, long dwDataType, unsigned char *pBuffer, long lbufsize, long dwUser)

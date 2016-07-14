@@ -24,10 +24,10 @@ static bool HK_Init_Flag = false;
 HKVendor::HKVendor()
 {
 	m_eSDKType = HK_SDK;
+	m_bSearchDeviceAPI = false;
 	m_sDefUserName = "admin";
 	m_sDefPassword = "admin123";
 	m_iMaxChannel = 0;
-
 	m_lSearchDeviceHandle = -1;
 }
 

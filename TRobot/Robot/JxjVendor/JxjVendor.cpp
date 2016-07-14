@@ -1,8 +1,7 @@
 
 #include "JXJVendor.h"
 
-#include "Notification.h"
-#include "NotificationQueue.h"
+#include "Poco/NotificationQueue.h"
 
 // JXJ SDK
 #include "mb_api.h"
@@ -11,6 +10,8 @@
 #include "Jtype.h"
 #include "JNetSDK.h"
 #include "AVPlayer.h"
+
+using Poco::NotificationQueue;
 
 #pragma comment(lib, "JNetSDK")
 #pragma comment(lib, "AVPlayer")
@@ -117,10 +118,10 @@ CJXJVendor::CJXJVendor()
 {
 	// Init Param
 	m_eSDKType = JXJ_SDK;
+	m_bSearchDeviceAPI = true;
 	m_sDefUserName = "admin";
 	m_sDefPassword = "admin";
 	m_iMaxChannel = 0;
-
 	m_lSearchDeviceHandle = -1;
 }
 
@@ -822,9 +823,6 @@ int __stdcall JXJ_JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void*
 				char cDownInfo[100];
 				sprintf_s(cDownInfo, 100, "m_idownloadpos = %d , starttime = %ld, curtime = %ld, totaltime = %ld\r\n", curPos, m_lDownLoadStartTime, pFrame->timestamp_sec, m_lDownLoadTotalTime);
 				std::cout << cDownInfo << std::endl;
-
-				NotificationQueue& queue = CNotificationQueue::getInstance().GetQueue();
-				queue.enqueueNotification(new CNotification(Notification_Type_Download_Start));
 			}
 		}
 
@@ -841,9 +839,6 @@ int __stdcall JXJ_JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void*
 			char cDownInfo[100];
 			sprintf_s(cDownInfo, 100, "m_idownloadpos = %d , starttime = %ld, curtime = %ld, totaltime = %ld\r\n", curPos, m_lDownLoadStartTime, pFrame->timestamp_sec, m_lDownLoadTotalTime);
 			std::cout << cDownInfo << std::endl;
-
-			NotificationQueue& queue = CNotificationQueue::getInstance().GetQueue();
-			queue.enqueueNotification(new CNotification(Notification_Type_Download_End));
 
 			JXJ_CloseDownload();
 		}

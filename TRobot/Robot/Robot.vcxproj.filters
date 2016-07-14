@@ -30,9 +30,6 @@
     <ClInclude Include="Device.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="QMSqlite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SearchDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -51,22 +48,10 @@
     <ClInclude Include="HKVendor\HKVendor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SearchVideo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="JxjVendor\JXJVendor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PlayVideo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DownloadFile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Notification.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NotificationQueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WindowUtils.h">
@@ -78,7 +63,19 @@
     <ClInclude Include="Network\utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NotificationCenter.h">
+    <ClInclude Include="DeviceManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NotificationSearchDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NotificationNetworkStatus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NotificationDeviceManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QMFileSqlite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -110,25 +107,10 @@
     <ClCompile Include="HKVendor\HKVendor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SearchVideo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="JxjVendor\JXJVendor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PlayVideo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DownloadFile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Notification.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NotificationQueue.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QMSqlite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="WindowUtils.cpp">
@@ -140,7 +122,10 @@
     <ClCompile Include="Network\utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NotificationCenter.cpp">
+    <ClCompile Include="DeviceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QMFileSqlite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

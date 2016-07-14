@@ -7,10 +7,8 @@
 
 #include "Device.h"
 #include "SearchDevice.h"
+#include "DeviceManager.h"
 #include "LoginDevice.h"
-#include "SearchVideo.h"
-#include "DownloadFile.h"
-#include "NotificationCenter.h"
 
 #include "JXJVendor.h"
 #include "DZPVendor.h"
@@ -21,20 +19,19 @@ TEST_CASE("This is a demo", "[demo]")
 {
 	SECTION("Test login the device")
 	{
-		/************************* 初始化消息中心 **********************/
+		/************************* 初始化线程池 **********************/
 		Poco::ThreadPool pool;
-		pool.start(CNotificationCenter::getInstance());
 
 		/************************* 初始化播放窗口句柄 **********************/
 		TestWindows::getInstance().Init();
 
 		/************************* 初始化数据库 **********************/
 		//获取指针
-		QMSqlite *pDb = QMSqlite::getInstance();
+		QFileSqlite *pDb = QFileSqlite::getInstance();
 		//删除表
-		pDb->dropTable(DROP_SEARCH_VIDEO_TABLE);
+		pDb->dropTable(DROP_LOGIN_DEVICE_INFO_TABLE);
 		//创建记录表
-		pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
+		pDb->createTable(CREATE_LOGIN_DEVICE_INFO_TABLE);
 
 		/************************* 初始化SDK厂商 **********************/
 		VENDOR_LIST pVendorList;
@@ -54,7 +51,7 @@ TEST_CASE("This is a demo", "[demo]")
 		int nPort = 0;
 
 		// DZP
-#if 1
+#if 0
 		NET_DEVICE_INFO_SIMPLE* devInfoSimple1 = new NET_DEVICE_INFO_SIMPLE;
 		memset(devInfoSimple1, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
 		strIP = "192.168.0.66";
@@ -97,86 +94,59 @@ TEST_CASE("This is a demo", "[demo]")
 		listDeviceSimpleInfo.push_back(devInfoSimple4);
 #endif
 
-		/************************* 设备发现 **********************/
-		CSearchDevice::getInstance().Init(pVendorList, listDeviceSimpleInfo);
-		pool.start(CSearchDevice::getInstance());
+		/************************* 设备发现类测试 **********************/
+		NotificationQueue queueSearchDevice; // 设备发现消息队列
+		CSearchDevice sd(pVendorList, listDeviceSimpleInfo, queueSearchDevice);
+		pool.start(sd);
 
-		DEVICE_INFO_LIST devInfoList = CSearchDevice::getInstance().GetDeviceInfoList();
-		while (devInfoList.size() == 0)
+		DEVICE_INFO_LIST devInfoList = CSearchDevice::GetDeviceInfoList();
+		while (devInfoList.size() <= 0)
 		{
-			devInfoList = CSearchDevice::getInstance().GetDeviceInfoList();
-			::Sleep(1000);
+			devInfoList = CSearchDevice::GetDeviceInfoList();
+			::Sleep(3000);
 		}
+		//queueSearchDevice.enqueueNotification(new CNotificationSearchDevice(Notification_Type_Search_Device_Cancel));
 
-		/************************* 设备登陆登出测试 **********************/
-#if 0
-		for (auto devInfo : devInfoList)
-		{
-			CLoginDevice::getInstance().Login(devInfo->pVendor, devInfo->szIp, devInfo->nPort);
-		}
-		for (auto devInfo : devInfoList)
-		{
-			CLoginDevice::getInstance().Logout(devInfo->szIp);
-		}
-#endif
+		/************************* 设备管理类测试 **********************/
+		NotificationQueue queueDeviceManager; // 设备管理消息队列
+		CDeviceManager dm(pVendorList, queueDeviceManager);
+		pool.start(dm);
 
-		/************************* 文件搜索、下载、播放测试 **********************/
+		//queueDeviceManager.enqueueNotification(new CNotificationDeviceManager(Notification_Type_Device_Manager_Cancel));
+
+		/************************* 设备登陆、登出测试 **********************/
 #if 1
-		if (devInfoList.size() > 0)
+		for (size_t i = 0; i < devInfoList.size(); i++)
 		{
 			// 获取设备信息
-			NET_DEVICE_INFO* devInfo = devInfoList[0];
+			NET_DEVICE_INFO* devInfo = devInfoList[i];
 			// 登陆设备
 			if (CLoginDevice::getInstance().Login(devInfo->pVendor, devInfo->szIp, devInfo->nPort))
 			{
 				// 获取登陆成功后的设备对象
-				Device* pDev = CLoginDevice::getInstance().GetDevice(devInfo->szIp);
-
-				// 搜索视频文件
-				int m_channel = 0;
-				time_range timeRangeSearch;
-				timeRangeSearch.start = 1467820800; // 1467770400 - jxj  // 1467734400 - dh  // 1467820800 - dzp
-				timeRangeSearch.end = 1467907199; // 1467777599 - jxj  // 1467905003 - dh  // 1467907199 - dzp
-				std::vector<size_t> channelList;
-				channelList.push_back(m_channel);
-				CSearchVideo::getInstance().SearchFile(pDev, timeRangeSearch, channelList);
-				// 获取搜索视频文件列表
-				std::vector<readSearchVideo> fileList;
-				CSearchVideo::getInstance().ReadDataFromTable(fileList);
-				// 获取某一文件信息
-				readSearchVideo sr;
-				std::string fileName;
-				int channel;
-				time_range timeRangeItem;
-				if (fileList.size() > 0)
-				{
-					sr = fileList[1];
-					fileName = sr.get<0>();
-					channel = sr.get<1>();
-					timeRangeItem.start = sr.get<2>();
-					timeRangeItem.end = sr.get<3>();
-					CDownloadFile dlFile1(pDev, channel, timeRangeItem);
-					//CDownloadFile dlFile1(pDev, channel, timeRangeItem, fileName);
-
-					sr = fileList[2];
-					fileName = sr.get<0>();
-					channel = sr.get<1>();
-					timeRangeItem.start = sr.get<2>();
-					timeRangeItem.end = sr.get<3>();
-					//CDownloadFile dlFile2(pDev, channel, timeRangeItem);
-					//CDownloadFile dlFile2(pDev, channel, timeRangeItem, fileName);
-
-					pool.start(dlFile1);
-					//pool.start(dlFile2);					
-
-					while (true)
-					{
-						::Sleep(100);
-					}
-				}
+				//Device* pDev = CLoginDevice::getInstance().GetDevice(devInfo->szIp);
+				//::Sleep(100);
+				//CLoginDevice::getInstance().Logout(devInfo->szIp);
+				::Sleep(100);
 			}
 		}
 
+		::Sleep(1000);
+
+		std::vector<Device*>& listDevice = CLoginDevice::getInstance().GetDeviceList();
+		Device* pDev = listDevice[0];
+		CLoginDevice::getInstance().Logout(pDev->getIP());
+
+		//for (size_t i = 0; i < listDevice.size(); i++)
+		//{
+		//	Device* pDev = listDevice[i];
+		//	CLoginDevice::getInstance().Logout(pDev->getIP());
+		//}
+
+		while (true)
+		{
+			::Sleep(100);
+		}
 		return;
 #endif
 	}

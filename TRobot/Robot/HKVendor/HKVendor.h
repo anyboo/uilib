@@ -28,6 +28,7 @@ public:
 	std::string GetDefPassword(){ return m_sDefPassword; }
 
 	NET_SDK_TYPE GetSDKType(){ return m_eSDKType; }
+	bool IsSearchDeviceAPIExist(){ return m_bSearchDeviceAPI; }
 	void StartSearchDevice();
 	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_listDeviceInfo; }
 	void StopSearchDevice();
@@ -40,6 +41,7 @@ private:
 	HWND m_hWnd;
 	std::string m_sRoot;
 	NET_SDK_TYPE m_eSDKType;
+	bool m_bSearchDeviceAPI;
 
 	/* Login */
 	size_t m_iMaxChannel;

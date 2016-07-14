@@ -26,10 +26,10 @@ void DH_CreatePath(const size_t channel);
 DHVendor::DHVendor()
 {
 	m_eSDKType = DH_SDK;
+	m_bSearchDeviceAPI = true;
 	m_sDefUserName = "admin";
 	m_sDefPassword = "";
 	m_iMaxChannel = 0;
-
 	m_lSearchDeviceHandle = -1;
 }
 

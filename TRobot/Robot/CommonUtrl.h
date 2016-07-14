@@ -16,7 +16,8 @@
 
 // Self
 #include "AbstractVendor.h"
-#include "QMSqlite.h"
+//#include "QMSqlite.h"
+#include "QMFileSqlite.h"
 #include "TestWindows.h"
 
 // Json
@@ -85,6 +86,8 @@ public:
 
 	// DB Operation
 	void WriteFileListToDB(RECORD_FILE_LIST& recordFiles);
+
+	std::string GetCurTime();
 
 };
 
