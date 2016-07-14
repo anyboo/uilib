@@ -80,12 +80,14 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PING.cpp" />
+    <ClCompile Include="QMFileSqlite.cpp" />
     <ClCompile Include="QMSqlite.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="windowutils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PING.h" />
+    <ClInclude Include="QMFileSqlite.h" />
     <ClInclude Include="QMSqlite.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="windowutils.h" />
