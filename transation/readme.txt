@@ -1,7 +1,15 @@
 头文件包含路径：$(SolutionDir)poco\Data\include;$(SolutionDir)poco\Foundation\include;$(SolutionDir)poco\Data\SQLite\include;
 lib文件包含路径：$(SolutionDir)poco\lib;
+
+
 1.数据库类获取指针
+    内存数据库
     QMSqlite *pDb = QMSqlite::getInstance();
+    文件数据库
+    QFileSqlite *pDb = QFileSqlite::getInstance();
+
+下面的操作相同
+
 
 2.创建搜索结果内存表,输入参数SQL语句,已定义
     pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);

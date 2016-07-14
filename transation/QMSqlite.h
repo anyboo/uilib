@@ -57,33 +57,8 @@ public:
 private:
 	QMSqlite();
 	~QMSqlite();
-	static QMSqlite* m_instance;
-
-	class Garbo
-
-	{
-
-	public:
-
-		~Garbo()
-
-		{
-
-			if (QMSqlite::m_instance)
-
-			{
-
-				//cout << "Garbo dtor" << endl;
-
-				delete QMSqlite::m_instance;
-
-			}
-
-		}
-
-	};
-
-	static Garbo garbo;
+	QMSqlite(QMSqlite const& other);
+	QMSqlite& operator=(QMSqlite const& other);
 public:
 	template<typename T> 
 	bool GetData(string sql, std::vector<T>& Record)
