@@ -4,12 +4,16 @@
 #include <list>
 #include <vector>
 
+#ifndef _TIME_RANGE
+#define _TIME_RANGE
+
 typedef struct _time_range
 {
 	std::time_t start;
 	std::time_t end;
 } time_range, *ptime_range;
 
+#endif 
 
 #define  MAX_IPADDR_LEN				16       //ip address length    
 #define  MAX_MACADDR_LEN			32		 //mac address length
@@ -41,20 +45,6 @@ struct NET_DEVICE_INFO_SIMPLE
 	char				szIP[MAX_IPADDR_LEN];
 	int					nPort;
 };
-
-typedef enum
-{
-	Notification_Type_None = 0,
-	Notification_Type_Network_status_Change,
-	Notification_Type_SearchFileFinish,
-	Notification_Type_Download_Start,
-	Notification_Type_Download_End,
-	Notification_Type_PlayVideo_Start,
-	Notification_Type_PlayVideo_Parse,
-	Notification_Type_PlayVideo_Restart,
-	Notification_Type_PlayVideo_End,
-
-}NOTIFICATION_TYPE;
 
 struct RecordFile
 {

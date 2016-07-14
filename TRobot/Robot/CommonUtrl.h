@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __COMMONUTRIL_H__
+#define __COMMONUTRIL_H__
 
 // System
 #include <Windows.h>
@@ -60,6 +61,9 @@ typedef enum
 	Err_DownloadSuccess, // Download Success
 }eErrCode;
 
+
+#ifndef __COMTIME
+#define __COMTIME
 typedef struct __ComTime
 {
 	uint8_t year;					//从1900开始, J_SDK_DEF_BASE_YEAR
@@ -70,6 +74,7 @@ typedef struct __ComTime
 	uint8_t second;
 	uint16_t weekday;				//详情见JWeekDay
 }ComTime;
+#endif 
 
 class CCommonUtrl
 {
@@ -96,3 +101,4 @@ public:
 
 };
 
+#endif 

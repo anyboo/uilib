@@ -111,16 +111,25 @@
     <ClInclude Include="SendDataNotification.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DownloadFileNotificationQueue.h">
+    <ClInclude Include="AcquireDataRunable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AcquireDataRunable.h">
+    <ClInclude Include="SearchFileRunable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchFileWorker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SearchFileNotification.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SearchFileRunable.h">
+    <ClInclude Include="AcquireSerachFileData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ReciveUINotification.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ReciveUIQunue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -164,16 +173,25 @@
     <ClCompile Include="SendDataNotification.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DownloadFileNotificationQueue.cpp">
+    <ClCompile Include="AcquireDataRunable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AcquireDataRunable.cpp">
+    <ClCompile Include="SearchFileRunable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchFileWorker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SearchFileNotification.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SearchFileRunable.cpp">
+    <ClCompile Include="AcquireSerachFileData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ReciveUINotification.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ReciveUIQunue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

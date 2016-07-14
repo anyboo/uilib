@@ -24,7 +24,7 @@ void CSearchVideo::SearchFile(Device* pDevice, const time_range& range, const st
 	int nChannelList = channelList.size();
 
 	NotificationQueue& queue = NotificationQueue::defaultQueue();
-	queue.enqueueNotification(new SearchFileNotification(EChannel, nChannelList));
+//	queue.enqueueNotification(new SearchFileNotification(EChannel, nChannelList));
 
 	for (auto channel : channelList)
 	{
@@ -36,7 +36,7 @@ void CSearchVideo::SearchFile(Device* pDevice, const time_range& range, const st
 		pDevice->Search(channel, range);
 	}
 
-	queue.enqueueNotification(new SearchFileNotification(EFinish, SEARCH_DEFAULT));
+//	queue.enqueueNotification(new SearchFileNotification(EFinish, SEARCH_DEFAULT));
 
 }
 

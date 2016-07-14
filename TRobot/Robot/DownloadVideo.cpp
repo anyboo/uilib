@@ -2,7 +2,7 @@
 
 
 DownloadVideo::DownloadVideo():
-m_AcquireDataRunable(DownloadFileNotificationQueue::GetInstance().GetQueue())
+m_AcquireDataRunable(NotificationQueue::defaultQueue())
 {
 	// start worker threads
 	ThreadPool::defaultPool().start(m_AcquireDataRunable);
@@ -12,7 +12,7 @@ m_AcquireDataRunable(DownloadFileNotificationQueue::GetInstance().GetQueue())
 DownloadVideo::~DownloadVideo()
 {
 	//SendDataNotification::.wakeUpAll();
-	DownloadFileNotificationQueue::GetInstance().GetQueue().wakeUpAll();
+	NotificationQueue::defaultQueue().wakeUpAll();
 	ThreadPool::defaultPool().joinAll();
 }
 

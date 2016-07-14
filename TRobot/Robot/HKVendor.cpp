@@ -10,7 +10,8 @@ void HK_timeStdToDH(tm *pTimeStd, NET_DVR_TIME *pTimeDH);
 void HK_trTOndt(NET_DVR_TIME &ndtStartTime, NET_DVR_TIME &ndtEndTime, const time_range range);
 
 std::string HK_GetLastErrorString();
-void HK_CreatePath(const size_t channel);
+std::string HK_CreatePath(const size_t channel, const std::string& Root);
+std::string HK_MakeFileName(int channel, const std::string& startTime, const std::string& endTime);
 
 std::string HK_MakeStrByInteger(int data);
 std::string HK_MakeStrTimeByTimestamp(time_t time);
@@ -26,6 +27,8 @@ HKVendor::HKVendor()
 	m_iMaxChannel = 0;
 
 	m_lSearchDeviceHandle = -1;
+
+	m_sRoot = "D:\\DownLoadVideo\\";
 }
 
 HKVendor::~HKVendor()
@@ -217,22 +220,39 @@ void HKVendor::Download(const long loginHandle, const size_t channel, const time
 		return;
 	}
 
+	std::string strTimeStart;
+	std::string strTimeEnd;
+	std::string strTimeStartZero;
+	std::string strTimeEndZero;
+
+	struct tm ttime;
+
+	localtime_s(&ttime, &range.start);
+	strftime((char *)strTimeStart.data(), 24, "%Y%m%d%H%M%S", &ttime);
+	strftime((char *)strTimeStartZero.data(), 24, "%Y%m%d0000", &ttime);
+	strftime((char *)strTimeEndZero.data(), 24, "%Y%m%d2359", &ttime);
+	localtime_s(&ttime, &range.end);
+	strftime((char *)strTimeEnd.data(), 24, "%Y%m%d%H%M%S", &ttime);
+
+	std::string strFileName = HK_MakeFileName(channel, strTimeStart, strTimeEnd);
+
+
  	NET_DVR_TIME ndtStime;
  	NET_DVR_TIME ndtEtime;
  
 	HK_trTOndt(ndtStime, ndtEtime, range);
 
+	std::string strPath = HK_CreatePath(channel, m_sRoot);
+	strPath += strFileName;
  
-	HK_CreatePath(channel);
- 
- 	char szTime[512];
-	ZeroMemory(szTime, 512);
-	sprintf_s(szTime, "D:\\DownLoadVideo\\海康\\通道%d\\channel%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d.mp4", channel, channel, ndtStime.dwYear, ndtStime.dwMonth, ndtStime.dwDay,
-		ndtStime.dwHour, ndtStime.dwMinute, ndtStime.dwSecond, ndtEtime.dwYear, ndtEtime.dwMonth, ndtEtime.dwDay, ndtEtime.dwHour, ndtEtime.dwMinute, ndtEtime.dwSecond);
-	std::cout << "strName:" << szTime << std::endl;
+//  	char szTime[512];
+// 	ZeroMemory(szTime, 512);
+// 	sprintf_s(szTime, "D:\\DownLoadVideo\\海康\\通道%d\\channel%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d.mp4", channel, channel, ndtStime.dwYear, ndtStime.dwMonth, ndtStime.dwDay,
+// 		ndtStime.dwHour, ndtStime.dwMinute, ndtStime.dwSecond, ndtEtime.dwYear, ndtEtime.dwMonth, ndtEtime.dwDay, ndtEtime.dwHour, ndtEtime.dwMinute, ndtEtime.dwSecond);
+// 	std::cout << "strName:" << szTime << std::endl;
 
 	size_t sChannel = HK_getChannel(loginHandle, channel);
-	LONG lRet = NET_DVR_GetFileByTime(loginHandle, sChannel, &ndtStime, &ndtEtime, szTime);
+	LONG lRet = NET_DVR_GetFileByTime(loginHandle, sChannel, &ndtStime, &ndtEtime, (char *)strPath.c_str());
 	
 	if (-1 == lRet)
 	{
@@ -300,7 +320,7 @@ void HKVendor::PlayVideo(const long loginHandle, const size_t channel, const tim
 	system("PAUSE");
 }
 
-void HKVendor::Download(const long loginHandle, const size_t channel, const std::string& filename)
+void HKVendor::Download(const long loginHandle, const size_t channel, const std::string& filename, const int nID)
 {
 	if (-1 == loginHandle)
 	{
@@ -308,7 +328,7 @@ void HKVendor::Download(const long loginHandle, const size_t channel, const std:
 		return;
 	}
 
-	HK_CreatePath(channel);
+	HK_CreatePath(channel, m_sRoot);
 
 	char szTime[512];
 	ZeroMemory(szTime, 512);
@@ -403,9 +423,14 @@ void HKVendor::PlayVideo(const long loginHandle, const size_t channel, const std
 
 }
 
+bool HKVendor::StopDownload()
+{
+	return true;
+}
+
 void HKVendor::SetDownloadPath(const std::string& Root)
 {
-
+	m_sRoot = Root;
 }
 
 void HKVendor::throwException()
@@ -482,44 +507,56 @@ size_t HK_getChannel(const long loginHandle, size_t channel)
 	//获取设备的配置信息成功就启用模拟通道
 	if (HK_isGetDVRConfig(loginHandle))
 	{
-		return channel += 32;
+		return channel += 33;
 	}
 	else
 	{
-		return channel;
+		return channel + 1;
 	}
 }
 
-void HK_CreatePath(const size_t channel)
+std::string HK_MakeFileName(int channel, const std::string& startTime, const std::string& endTime)
 {
-	std::string strPath = "D:\\DownLoadVideo\\";
+	std::string strFileName;
 
-	BOOL bOne = CreateDirectoryA(strPath.c_str(), NULL);
-	if (!bOne)
+	strFileName += "channel";
+	if (channel < 10)
 	{
-		std::cout << "创建文件夹失败!" << std::endl;
-		return;
+		strFileName += "0";
 	}
+	strFileName += std::to_string(channel);
+	strFileName += "-";
+	strFileName += startTime.data();
+	strFileName += "-";
+	strFileName += endTime.data();
+	strFileName.append(".dav");
+
+	return strFileName;
+}
+
+std::string HK_CreatePath(const size_t channel, const std::string& Root)
+{
+	std::string strPath = Root;
 
 	strPath.append("海康\\");
-	BOOL bTwo = CreateDirectoryA(strPath.c_str(), NULL);
-	if (!bTwo)
-	{
-		std::cout << "创建文件夹失败!" << std::endl;
-		return;
-	}
+
 	char szChannel[10];
 	ZeroMemory(szChannel, 10);
-	sprintf_s(szChannel, "通道%d", channel);
+	if (channel < 10)
+	{
+		sprintf_s(szChannel, "通道0%d", channel);
+	}
+	else
+	{
+		sprintf_s(szChannel, "通道%d", channel);
+	}
+
 	strPath.append(szChannel);
 	strPath.append("\\");
 
-	BOOL bThree = CreateDirectoryA(strPath.c_str(), NULL);
-	if (!bThree)
-	{
-		std::cout << "创建文件夹失败!" << std::endl;
-		return;
-	}
+	CCommonUtrl::getInstance().MakeFolder(strPath);
+
+	return strPath;
 }
 
 void HKVendor::StartSearchDevice()

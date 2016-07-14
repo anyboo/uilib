@@ -2,8 +2,6 @@
 
 #include "CommonUtrl.h"
 
-
-#include "DownloadFileNotificationQueue.h"
 #include "SendDataNotification.h"
 #include "SearchFileNotification.h"
 
@@ -56,6 +54,7 @@ private:
 
 	/* Search */
 	RECORD_FILE_LIST m_files;
+	RECORD_FILE_LIST m_FilesChange;
 	int m_nPos;
 
 	/*Download*/

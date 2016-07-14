@@ -17,8 +17,9 @@ public:
 	void Search(const long loginHandle, const size_t channel, const time_range& range);
 	void Download(const long loginHandle, const size_t channel, const time_range& range);
 	void PlayVideo(const long loginHandle, const size_t channel, const time_range& range);
-	void Download(const long loginHandle, const size_t channel, const std::string& filename);
+	void Download(const long loginHandle, const size_t channel, const std::string& filename, const int nID);
 	void PlayVideo(const long loginHandle, const size_t channel, const std::string& filename);
+	bool StopDownload();
 
 	void SetDownloadPath(const std::string& Root);
 	void throwException();

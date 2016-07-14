@@ -7,7 +7,6 @@
 #include "Device.h"
 
 #include "AcquireDataRunable.h"
-#include "DownloadFileNotificationQueue.h"
 
 #include "Poco/ThreadPool.h"
 using Poco::ThreadPool;
