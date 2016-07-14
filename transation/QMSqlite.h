@@ -46,6 +46,15 @@ typedef Poco::Tuple<std::string, std::string, int> SearchDevice;
 //struct search factory
 typedef Poco::Tuple<std::string, std::string> SearchFactory;
 
+//scan port result table
+#define CREATE_SCAN_PORT_TABLE		"CREATE TABLE ScanPort(ip VARCHAR(20), port INTEGER)"
+#define DELETE_ALL_SCAN_PORT		"DELETE from ScanPort"
+#define DROP_SCAN_PORT_TABLE		"DROP TABLE IF EXISTS ScanPort"
+#define SELECT_ALL_SCAN_PORT		"SELECT * FROM ScanPort"
+#define INSERT_SCAN_PORTE			"INSERT INTO ScanPort VALUES(:ip, :port)"
+//struct search device
+typedef Poco::Tuple<std::string, int> ScanPortRecord;
+
 
 
 

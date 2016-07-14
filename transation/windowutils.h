@@ -28,7 +28,7 @@ public:
     static bool setNetDhcp(const string& sName);
     static bool isConnecteTo(const string& IP, int millSeconds = 500);
     static bool getDirectDevice(string& ip, string& netGate);
-    static bool getDirectDevice(string& ip, string& netGate, std::set<string>& otherIPS, int secondsWait = 60);
+    static bool getDirectDevice(string& ip, string& netGate, std::set<string>& otherIPS, long secondsWait = 60);
     static bool setIPByDHCP(string& ip, string& mask, string& netGate);
     static const string& getLoacalNetName();
 	static const string& WindowUtils::getLocalUuid();

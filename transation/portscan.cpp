@@ -17,6 +17,7 @@
 #include "Poco/AutoPtr.h"
 #include "Poco/Delegate.h"
 #include "PING.h"
+#include "QMSqlite.h"
 
 using Poco::Notification;
 using Poco::NotificationQueue;
@@ -33,7 +34,7 @@ PortScan::PortScan()
 {
 	_adhandle = NULL;
 	initPcapDev();
-	//_scanPorts = scanPorts;
+	setDefaultScanPorts();
 	WindowUtils::getLocalIPsMac(_localIps, _localMac);
 };
 
@@ -57,7 +58,7 @@ void ReceiveData::analyzePacket(const u_char *pkt_data, u_short size, vector<lon
 		in_addr srcaddr;		
 		srcaddr.S_un.S_addr = ip->sourceIP;
 		string srcip(inet_ntoa(srcaddr));
-		cout << "src ip:" << srcip << endl;
+		//cout << "src ip:" << srcip << endl;
 
 		/*int i, j;
 		for (i = 0; i < ips.size(); i++)
@@ -168,34 +169,20 @@ bool PortScan::searchFactory( vector<u_short> ports, vector<SCANRESULT>& outIps)
 	vector<string> Ips;
 	std::shared_ptr<bool> bpCancel = std::make_shared<bool>(false);
 
-	CPing::instance().ScanIp(Ips, false, bpCancel);
-	for (i = 0; i < Ips.size(); i++)
-	{
-		cout << i << "   ip:  " << Ips[i] << endl;
-	}
+	CPing::instance().ScanIp(Ips, false, bpCancel);	
+	cout << "ping ip size: " << Ips.size() << endl;
 
 	//获取mac地址
 	vector<IPMAC> IpMacs;
 	if (Ips.size() > 0)
 	{
 		WindowUtils::getMacByArpTable(Ips, IpMacs);
-	}
-
-	for (i = 0; i < IpMacs.size(); i++)
-	{
-		IN_ADDR ip;
-		ip.S_un.S_addr = IpMacs[i].ip;
-		char sztmp[512] = { 0 };
-		sprintf_s(sztmp, "111 i: %d, ip: %s, mac: %02x-%02x-%02x-%02x-%02x-%02x \n", i, inet_ntoa(ip),
-			IpMacs[i].mac[0], IpMacs[i].mac[1], IpMacs[i].mac[2],
-			IpMacs[i].mac[3], IpMacs[i].mac[4], IpMacs[i].mac[5]);
-		printf(sztmp);
-	}
-
+	}	
+	cout << " get mac size: " << IpMacs.size() << endl;
 	
 	vector <SendData> sendThreads;
 	for (i = 0; i < _localIps.size(); i++)
-	{
+	{		
 		IPMAC localIpMac = { 0 };
 		localIpMac.ip = inet_addr(_localIps[i].c_str());
 		memcpy(localIpMac.mac, _localMac, 6);			
@@ -204,17 +191,23 @@ bool PortScan::searchFactory( vector<u_short> ports, vector<SCANRESULT>& outIps)
 			IPMAC dstMac = { 0 };
 			dstMac.ip = IpMacs[j].ip;
 			memcpy(dstMac.mac, IpMacs[j].mac, 6);
-			SendData sendthread(localIpMac, dstMac, ports, queue, _adhandle);
-			sendThreads.push_back(sendthread);
+			in_addr inaddr;
+			inaddr.S_un.S_addr = dstMac.ip;
+			string dstIp = inet_ntoa(inaddr);
+			if (isNetworkSegment(_localIps[i], dstIp))
+			{
+				SendData sendthread(localIpMac, dstMac, ports, queue, _adhandle);
+				sendThreads.push_back(sendthread);
+			}			
 		}
 	}
-	
+	cout << "sendThreads size: " << sendThreads.size() << endl;
+
 	Poco::ThreadPool scanPool;
 	scanPool.addCapacity(sendThreads.size());
 
 	for (i = 0; i < sendThreads.size(); i++)
-	{
-		//cout << "i: " << i << endl;
+	{		
 		scanPool.start(sendThreads[i]);
 	}
 
@@ -235,7 +228,7 @@ bool PortScan::searchFactory( vector<u_short> ports, vector<SCANRESULT>& outIps)
 
 	while (!queue.empty()) 
 		Thread::sleep(200);
-	Thread::sleep(1000*10);
+	Thread::sleep(1000*9);
 
 	queue.wakeUpAll();
 	_theEvent += Poco::delegate(&receiveThread, &ReceiveData::onEvent);
@@ -246,9 +239,12 @@ bool PortScan::searchFactory( vector<u_short> ports, vector<SCANRESULT>& outIps)
 	
 
 	outIps = receiveThread.getScanResult();
+	cout << "scan result size: " << outIps.size() << endl;
 
 	std::sort(outIps.begin(), outIps.end(), sortByIp);
 	std::unique(outIps.begin(), outIps.end(), UniqueByIp);
+
+	writeDb();
 
 	return true;
 }
@@ -354,19 +350,16 @@ void SendData::run()
 			if (pWorkNf)
 			{
 				{
-					FastMutex::ScopedLock lock(_mutex);
-					//std::cout << _name << " got work notification " << pWorkNf->data() << std::endl;
+					FastMutex::ScopedLock lock(_mutex);					
 					vector<SendPacket> packets;
 					buildTcpPacket(_srcIp, _dstIp, _ports, packets);
 					send(_adhandle, packets);
 				}
-				Thread::sleep(rnd.next(200));
-				//std::cout << _name << " worker " << std::endl;
+				Thread::sleep(rnd.next(200));				
 			}
 		}
 		else
-		{
-			std::cout << _name << " break " << std::endl;
+		{			
 			break;
 		}		
 	}
@@ -420,8 +413,7 @@ bool PortScan::sortByIp(SCANRESULT srFirst, SCANRESULT srSecond)
 	else
 	{
 		return (lIp1 < lIp2);
-	}
-	
+	}	
 }
 
 bool PortScan::UniqueByIp(SCANRESULT srFirst, SCANRESULT srSecond)
@@ -429,17 +421,114 @@ bool PortScan::UniqueByIp(SCANRESULT srFirst, SCANRESULT srSecond)
 	unsigned long lIp1 = inet_addr(srFirst.ip);
 	unsigned long lIp2 = inet_addr(srSecond.ip);
 
-	return (lIp1 == lIp2) && (srFirst.port == srSecond.port);
+	
+	
+	return (lIp1 == lIp2) && (srFirst.port == srSecond.port);	
 }
 
-//void PortScan::run()
-//{
-//	searchFactory(_scanPorts, _outReuslts);
-//}
+bool PortScan::isNetworkSegment(string srcIP, string dstIP)
+{
+	string strSrc = srcIP;
+	string strDst = dstIP;
+	strSrc = strSrc.substr(0, strSrc.find_last_of(".") + 1);
+	strDst = strDst.substr(0, strDst.find_last_of(".") + 1);
 
-//vector<SCANRESULT> PortScan::getScanResult()
-//{
-//	std::sort(_outReuslts.begin(), _outReuslts.end(), sortByIp);
-//	std::unique(_outReuslts.begin(), _outReuslts.end(), UniqueByIp);
-//	return _outReuslts;
-//}
+	return (strSrc.compare(strDst) == 0);
+}
+
+
+
+void PortScan::run()
+{
+	time_t t_start, t_end;
+	t_start = time(NULL);
+	searchFactory(_scanPorts, _outReuslts);
+	t_end = time(NULL);
+	printf("0 time: %.0f s\n", difftime(t_end, t_start));
+
+}
+
+bool PortScan::writeDb()
+{
+	int i;
+
+	try
+	{
+		QMSqlite *pDb = QMSqlite::getInstance();
+
+		pDb->dropTable(DROP_SCAN_PORT_TABLE);
+		
+		pDb->createTable(CREATE_SCAN_PORT_TABLE);
+
+		vector<ScanPortRecord> scanResults;
+		for (i = 0; i < _outReuslts.size(); i++)
+		{
+			ScanPortRecord scanRecord(_outReuslts[i].ip, _outReuslts[i].port);
+			scanResults.push_back(scanRecord);
+		}
+		pDb->writeDataByVector(INSERT_SCAN_PORTE, scanResults);
+	}
+	catch (int e)
+	{
+		cout << " error: " << e << endl;
+	}
+	
+
+	return true;
+}
+
+PortScan::PortScan(vector<u_short> ports)
+{
+	_adhandle = NULL;
+	initPcapDev();
+	InitPorts(ports);
+	WindowUtils::getLocalIPsMac(_localIps, _localMac);
+}
+
+void PortScan::InitPorts(vector<u_short> ports)
+{
+	if (ports.empty())
+	{
+		setDefaultScanPorts();
+	}
+	else
+		_scanPorts = ports;
+}
+
+void PortScan::setDefaultScanPorts()
+{
+	//大华
+	_scanPorts.push_back(37777);
+	//迪智浦
+	_scanPorts.push_back(34567);
+	//佳信捷
+	_scanPorts.push_back(3321);
+	//宝欣盛，海康，沃仕达,鑫鹏安防
+	_scanPorts.push_back(8000);
+	//蓝色星际
+	_scanPorts.push_back(3721);
+	//波粒
+	_scanPorts.push_back(9000);
+	//大立科技
+	_scanPorts.push_back(9998);
+	//东阳国际
+	_scanPorts.push_back(6001);
+	//汉邦
+	_scanPorts.push_back(8101);
+	//航景科技
+	_scanPorts.push_back(7777);
+	//九安光电
+	_scanPorts.push_back(80);
+	//俊明视
+	_scanPorts.push_back(8670);
+	//天地伟业(192.168.0.23,无法返回正确值，待确认)
+	//_scanPorts.push_back(3000);
+	//同为
+	_scanPorts.push_back(6036);
+	//星网锐捷
+	_scanPorts.push_back(8081);
+	//宇视科技
+	//scanports.push_back(0);
+	//中维
+	_scanPorts.push_back(9101);
+}

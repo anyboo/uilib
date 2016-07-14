@@ -211,37 +211,42 @@ private:
 };
 
 
-class PortScan 
+class PortScan : public Poco::Runnable
 {
 public:
-	PortScan::PortScan();
+	PortScan();
+
+	PortScan::PortScan(vector<u_short> ports);
 
 	~PortScan();
 
-	bool searchFactory(vector<u_short> ports, vector<SCANRESULT>& outIps);
 	
-	void fireEvent(bool n)
-	{
-		_theEvent(this, n);
-	}
 
-	//void run();
-
-	//vector<SCANRESULT> getScanResult();
+	void run();	
 	
 private:
 		
 	bool initPcapDev();
 	static bool sortByIp(SCANRESULT srFirst, SCANRESULT srSecond);
 	static bool UniqueByIp(SCANRESULT srFirst, SCANRESULT srSecond);
+	bool isNetworkSegment(string srcIP, string dstIP);
+	bool writeDb();
+	bool searchFactory(vector<u_short> ports, vector<SCANRESULT>& outIps);
+	void fireEvent(bool n)
+	{
+		_theEvent(this, n);
+	}
 
+	void InitPorts(vector<u_short> ports);
+
+	void setDefaultScanPorts();
 private:
 	pcap_t * _adhandle;
 	vector<string> _localIps;
 	u_char   _localMac[6];
 	Poco::BasicEvent<bool> _theEvent;
 	vector<SCANRESULT> _outReuslts;
-	//vector<u_short> _scanPorts;
+	vector<u_short> _scanPorts;
 };
 
 #endif
