@@ -12,7 +12,7 @@ SendDataNotification::~SendDataNotification()
 
 }
 
-DOWNLOADFILEINFO SendDataNotification::GetData() const
+DOWNLOADFILEINFO SendDataNotification::GetDownloadFile() const
 {
 	return m_DownloadFileInfo;
 }

@@ -108,6 +108,8 @@
     <ClInclude Include="JxjVendor\TestWindows.h" />
     <ClInclude Include="RearchFile\SearchVideo.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SearchFileNotification.h" />
+    <ClInclude Include="SearchFileRunable.h" />
     <ClInclude Include="SendDataNotification.h" />
   </ItemGroup>
   <ItemGroup>
@@ -125,6 +127,8 @@
     <ClCompile Include="JxjVendor\TestWindows.cpp" />
     <ClCompile Include="RearchFile\SearchVideo.cpp" />
     <ClCompile Include="Robot.cpp" />
+    <ClCompile Include="SearchFileNotification.cpp" />
+    <ClCompile Include="SearchFileRunable.cpp" />
     <ClCompile Include="SendDataNotification.cpp" />
   </ItemGroup>
   <ItemGroup>

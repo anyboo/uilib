@@ -33,7 +33,7 @@ void AcquireDataRunable::run()
 			{
 				{
 					FastMutex::ScopedLock lock(_mutex);
-					m_DownloadFileInfo = pSendDataNf->GetData();
+					m_DownloadFileInfo = pSendDataNf->GetDownloadFile();
 				}
 
 				if (0 != m_DownloadFileInfo.dwTotalSize)

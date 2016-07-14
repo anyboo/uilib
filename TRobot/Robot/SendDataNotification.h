@@ -14,6 +14,8 @@ typedef struct _DOWNLOADFILEINFO
 	DWORD dwDownLoadSize;
 }DOWNLOADFILEINFO, *LPDOWNLOADFILEINFO;
 
+
+
 class SendDataNotification:public Notification
 {
 public:
@@ -22,7 +24,7 @@ public:
 	SendDataNotification(DOWNLOADFILEINFO DownloadFileInfo);
 	~SendDataNotification();
 
-	DOWNLOADFILEINFO GetData() const;
+	DOWNLOADFILEINFO GetDownloadFile() const;
 private:
 	DOWNLOADFILEINFO m_DownloadFileInfo;
 };

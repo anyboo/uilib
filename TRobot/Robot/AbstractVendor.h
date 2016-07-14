@@ -42,6 +42,20 @@ struct NET_DEVICE_INFO_SIMPLE
 	int					nPort;
 };
 
+typedef enum
+{
+	Notification_Type_None = 0,
+	Notification_Type_Network_status_Change,
+	Notification_Type_SearchFileFinish,
+	Notification_Type_Download_Start,
+	Notification_Type_Download_End,
+	Notification_Type_PlayVideo_Start,
+	Notification_Type_PlayVideo_Parse,
+	Notification_Type_PlayVideo_Restart,
+	Notification_Type_PlayVideo_End,
+
+}NOTIFICATION_TYPE;
+
 struct RecordFile
 {
 	RecordFile()

@@ -5,6 +5,7 @@
 
 #include "DownloadFileNotificationQueue.h"
 #include "SendDataNotification.h"
+#include "SearchFileNotification.h"
 
 class DHVendor :
 	public AbstractVendor
@@ -55,7 +56,10 @@ private:
 
 	/* Search */
 	RECORD_FILE_LIST m_files;
+	int m_nPos;
 
 	/*Download*/
 	long m_lDownloadHandle;
+
+	
 };

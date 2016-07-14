@@ -33,6 +33,8 @@ DHVendor::DHVendor()
 	m_lDownloadHandle = 0;
 
 	m_lSearchDeviceHandle = -1;
+
+	m_nPos = 0;
 }
 
 DHVendor::~DHVendor()
@@ -201,14 +203,18 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 		return;
 	}
 
-	//m_files.clear();
-
 	std::vector<time_range> trInfor = CCommonUtrl::getInstance().MakeTimeRangeList(range);
+
+	int nDay = trInfor.size();
+	NotificationQueue& queue = NotificationQueue::defaultQueue();
+	queue.enqueueNotification(new SearchFileNotification(EDay, nDay));
 
 	std::vector<time_range>::iterator it;
 
 	for (it = trInfor.begin(); it != trInfor.end(); ++it)
 	{
+		m_files.clear();
+
 		NET_TIME ntStime;
 		NET_TIME ntEtime;
 
@@ -222,6 +228,8 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 
 		if (!bRet)
 		{
+			queue.enqueueNotification(new SearchFileNotification(EFinish, SEARCH_DEFAULT));
+
 			std::cout << "GetRecordFileList 查询录像失败，错误原因：" << DH_GetLastErrorString() << std::endl;
 			throw std::exception("Search file by time failed");
 		}
@@ -259,12 +267,18 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 			info.setPrivateData(&ifileinfo[i], sizeof(NET_RECORDFILE_INFO));
 			m_files.push_back(info);
 
-			std::cout << "GetRecordFileList 文件名:" << info.name <<endl<< "  " << "文件大小:" << info.size << "  " << "通道:" << info.channel << std::endl;
+			std::cout << "GetRecordFileList 文件名:" << info.name <<std::endl<< "  " << "文件大小:" << info.size << "  " << "通道:" << info.channel << std::endl;
 		}
+		
+		m_nPos++;
+		std::cout << "----------m_nPos:" << m_nPos << std::endl;
+		CCommonUtrl::getInstance().WriteFileListToDB(m_files);
+
+		queue.enqueueNotification(new SearchFileNotification(EPos, m_nPos));
 	}
 
 	// Save Search Video List Result to Config File
-	//CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files, Vendor_DH_Abbr);
+	CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files, Vendor_DH_Abbr);
 
 	// Write File List to DB
 	//CCommonUtrl::getInstance().WriteFileListToDB(m_files);
@@ -427,6 +441,7 @@ bool DHVendor::StopDownload()
 		return false;
 	}
 }
+
 
 void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const std::string& filename)
 {

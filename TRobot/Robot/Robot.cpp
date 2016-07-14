@@ -3,17 +3,35 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
+
+#include "Poco/NotificationQueue.h"
+#include "Poco/Runnable.h"
+#include "Poco/Mutex.h"
+#include "Poco/Random.h"
+#include "Poco/Thread.h"
+#include "Poco/ThreadPool.h"
+
+
+using Poco::NotificationQueue;
+using Poco::Runnable;
+using Poco::FastMutex;
+using Poco::Thread;
+using Poco::ThreadPool;
+
+
 #include <vector>
 #include "SearchVideo.h"
 
 // #include "jxjVendor.h"
 //#include "DZPVendor.h"
 #include "DHVendor.h"
-#include "HKVendor.h"
+//#include "HKVendor.h"
 
-#include "Device.h"
+//#include "Device.h"
 
-#include "DownloadVideo.h"
+//#include "DownloadVideo.h"
+#include "SearchFileRunable.h"
+#include "SearchVideo.h"
 
 
 TEST_CASE("This is a demo", "[demo]")
@@ -92,55 +110,90 @@ TEST_CASE("This is a demo", "[demo]")
 // 		HKObj.Logout(lLogin);
 // 	
 
-		//大华
-		DHVendor DHObj;
-		time_range range;
-		range.start = 1467302400;
-		range.end = 1467648000;
-		//初始化设备类
-		Device dObj(&DHObj);
-		//大华的登录
-		dObj.Login("192.168.0.55", 37777, "admin", "112233");
-		dObj.Search(0, range);
-		
-
-		SDK_DOWNLOAD_INFO sdi;
-		sdi.tChannel = 0;
-		sdi.strFileName.append("channel0-20160702000000-20160702235959-3");
-		sdi.nID = 2;
-
-		std::vector<SDK_DOWNLOAD_INFO> SDIVector;
-		SDIVector.push_back(sdi);
-		
-		//视频文件下载类
-		DownloadVideo dvObj;
-		dvObj.SetDownloadInfo(&dObj, SDIVector);
-
-		DOWNLOAD_OUTPUT_INFO doi;
-		DOWNLOAD_OUTPUT_INFO doiTemp;
-		dvObj.GetDownloadInfo(doi);
-// 		std::cout << "----------nDownloadPos:"<<doi.nDownloadPos << std::endl;
-// 		std::cout << "----------nID:" << doi.nID << std::endl;
-// 		std::cout << "----------strFileName:" << doi.strFileName << std::endl;
-// 		std::cout << "----------strFileSize:" << doi.strFileSize << std::endl;
-// 		std::cout << "----------strRemainingTime:" << doi.strRemainingTime << std::endl;
-// 		std::cout << "----------strSpeed:" << doi.strSpeed << std::endl;
-// 		doiTemp = doi;
+// 		//大华
+// 		DHVendor DHObj;
+// 		time_range range;
+// 		range.start = 1467302400;
+// 		range.end = 1467648000;
+// 		//初始化设备类
+// 		Device dObj(&DHObj);
+// 		//大华的登录
+// 		dObj.Login("192.168.0.55", 37777, "admin", "112233");
+// 		dObj.Search(0, range);
+// 		
+// 
+// 		SDK_DOWNLOAD_INFO sdi;
+// 		sdi.tChannel = 0;
+// 		sdi.strFileName.append("channel0-20160702000000-20160702235959-3");
+// 		sdi.nID = 2;
+// 
+// 		std::vector<SDK_DOWNLOAD_INFO> SDIVector;
+// 		SDIVector.push_back(sdi);
+// 		
+// 		//视频文件下载类
+// 		DownloadVideo dvObj;
+// 		dvObj.SetDownloadInfo(&dObj, SDIVector);
+// 
+// 		DOWNLOAD_OUTPUT_INFO doi;
+// 		DOWNLOAD_OUTPUT_INFO doiTemp;
 // 		dvObj.GetDownloadInfo(doi);
-		while (!isEqual(doiTemp, doi))
-		//while (true)
-		{
-			std::cout << "----------nDownloadPos:" << doi.nDownloadPos << std::endl;
-			std::cout << "----------nID:" << doi.nID << std::endl;
-			std::cout << "----------strFileName:" << doi.strFileName << std::endl;
-			std::cout << "----------strFileSize:" << doi.strFileSize << std::endl;
-			std::cout << "----------strRemainingTime:" << doi.strRemainingTime << std::endl;
-			std::cout << "----------strSpeed:" << doi.strSpeed << std::endl;
-			std::cout << std::endl;
-			doiTemp = doi;
+// // 		std::cout << "----------nDownloadPos:"<<doi.nDownloadPos << std::endl;
+// // 		std::cout << "----------nID:" << doi.nID << std::endl;
+// // 		std::cout << "----------strFileName:" << doi.strFileName << std::endl;
+// // 		std::cout << "----------strFileSize:" << doi.strFileSize << std::endl;
+// // 		std::cout << "----------strRemainingTime:" << doi.strRemainingTime << std::endl;
+// // 		std::cout << "----------strSpeed:" << doi.strSpeed << std::endl;
+// // 		doiTemp = doi;
+// // 		dvObj.GetDownloadInfo(doi);
+// 		while (!isEqual(doiTemp, doi))
+// 		{
+// 			std::cout << "----------nDownloadPos:" << doi.nDownloadPos << std::endl;
+// 			std::cout << "----------nID:" << doi.nID << std::endl;
+// 			std::cout << "----------strFileName:" << doi.strFileName << std::endl;
+// 			std::cout << "----------strFileSize:" << doi.strFileSize << std::endl;
+// 			std::cout << "----------strRemainingTime:" << doi.strRemainingTime << std::endl;
+// 			std::cout << "----------strSpeed:" << doi.strSpeed << std::endl;
+// 			std::cout << std::endl;
+// 			doiTemp = doi;
+// 
+// 			dvObj.GetDownloadInfo(doi);
+// 		}
 
-			dvObj.GetDownloadInfo(doi);
-		}
+
+NotificationQueue& queue = NotificationQueue::defaultQueue();
+
+SearchFileRunable SearchRunable(queue);
+
+ThreadPool::defaultPool().start(SearchRunable);
+
+	DHVendor DHObj;
+	time_range range;
+	range.start = 1467302400;
+	range.end = 1467648000;
+	//初始化设备类
+	Device dObj(&DHObj);
+	//大华的登录
+	dObj.Login("192.168.0.55", 37777, "admin", "112233");
+	/*dObj.Search(0, range);*/
+
+	std::vector<size_t> channelList;
+	channelList.push_back(0);
+	channelList.push_back(1);
+
+	CSearchVideo::getInstance().SearchFile(&dObj, range, channelList);
+	
+
+	
+
+// 	while (!queue.empty())
+// 	{
+// 		Thread::sleep(200);
+// 	}
+
+	queue.wakeUpAll();
+	ThreadPool::defaultPool().joinAll();
+
+
 		return;
 	}
 

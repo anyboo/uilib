@@ -5,6 +5,7 @@
 
 CSearchVideo::CSearchVideo()
 {
+	m_bCancel = false;
 }
 
 CSearchVideo::~CSearchVideo()
@@ -19,27 +20,31 @@ CSearchVideo& CSearchVideo::getInstance()
 
 void CSearchVideo::SearchFile(Device* pDevice, const time_range& range, const std::vector<size_t> channelList)
 {
-	ClearData();
+		
+	int nChannelList = channelList.size();
+
+	NotificationQueue& queue = NotificationQueue::defaultQueue();
+	queue.enqueueNotification(new SearchFileNotification(EChannel, nChannelList));
 
 	for (auto channel : channelList)
 	{
+		if (m_bCancel)
+		{
+			break;
+		}
+
 		pDevice->Search(channel, range);
+	}
+
+	queue.enqueueNotification(new SearchFileNotification(EFinish, SEARCH_DEFAULT));
+
+}
+
+void CSearchVideo::CancelSearchFile()
+{
+	if (!m_bCancel)
+	{
+		m_bCancel = true;
 	}
 }
 
-bool CSearchVideo::ReadDataFromTable(std::vector<readSearchVideo>& RSVObj)
-{
-	RSVObj.clear();
-
-	QMSqlite *pDb = QMSqlite::getInstance();
-	std::string strSql = SELECT_ALL_SEARCH_VIDEO;
-
-	return pDb->GetData(strSql, RSVObj);
-}
-
-void CSearchVideo::ClearData()
-{
-	// Delete All Video File Record
-	QMSqlite *pDb = QMSqlite::getInstance();
-	pDb->cleanData(DELETE_ALL_SEARCH_VIDEO);
-}
