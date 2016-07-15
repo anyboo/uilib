@@ -1,12 +1,12 @@
 #pragma once
 
-#include "AbstractVendor.h"
-#include "NotificationDeviceManager.h"
-
 #include "Poco/Runnable.h"
 #include "Poco/NotificationQueue.h"
 #include "Poco/Mutex.h"
 #include "Poco/AutoPtr.h"
+
+#include "AbstractVendor.h"
+#include "NotificationDeviceManager.h"
 
 using Poco::Runnable;
 using Poco::NotificationQueue;

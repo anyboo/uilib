@@ -1,8 +1,9 @@
 
-#include "LoginDevice.h"
 #include <Poco/SingletonHolder.h>
 #include <cassert>
 
+#include "LoginDevice.h"
+#include "Device.h"
 #include "CommonUtrl.h"
 
 static int loginCount = 0;

@@ -27,6 +27,7 @@ HKVendor::HKVendor()
 	m_bSearchDeviceAPI = false;
 	m_sDefUserName = "admin";
 	m_sDefPassword = "admin123";
+	m_iDefPort = 8000;
 	m_iMaxChannel = 0;
 	m_lSearchDeviceHandle = -1;
 }
@@ -71,7 +72,7 @@ long HKVendor::Login(const std::string& ip, size_t port, const std::string& user
 	/*m_lLoginHandle = lLoginID;*/
 	if (-1 == lLoginID)
 	{
-		std::cout << "µÇÂ¼Ê§°Ü(Failed)£º" << HK_GetLastErrorString().c_str() << std::endl;
+		std::cout << "µÇÂ¼Ê§°Ü(Failed)£º" << HK_GetLastErrorString().c_str() << ip << std::endl;
 		//throw std::exception("Login failed");
 		std::cout << "HK µÇÂ½ Ê§°Ü£¡" << std::endl;
 		return -1;
@@ -79,7 +80,7 @@ long HKVendor::Login(const std::string& ip, size_t port, const std::string& user
 
 	m_iMaxChannel = DeviceInfoTmp.byIPChanNum;
 
-	std::cout << "HK µÇÂ½ ³É¹¦£¡" << std::endl;
+	std::cout << "HK µÇÂ½ ³É¹¦£¡" << ip << std::endl;
 
 	return lLoginID;
 }

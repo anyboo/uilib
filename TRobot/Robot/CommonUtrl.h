@@ -16,7 +16,7 @@
 
 // Self
 #include "AbstractVendor.h"
-//#include "QMSqlite.h"
+#include "QMSqlite.h"
 #include "QMFileSqlite.h"
 #include "TestWindows.h"
 

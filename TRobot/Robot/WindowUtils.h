@@ -1,27 +1,42 @@
-#pragma once
+#ifndef WINDOWUTILS_H
+#define WINDOWUTILS_H
 
-#include <vector>
-#include <string>
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+
 #include <set>
+#include <iostream>
+#include <vector>
+#include <pcap.h>
 
-class CWindowUtils
+using namespace std;
+
+typedef struct ip_mac
+{
+	long ip;
+	short port;
+	unsigned char mac[6];
+}IPMAC, *PIPMAC;
+
+class WindowUtils
 {
 public:
 	static bool isValidNetMacaddress(const std::string& macaddress);
-	static void GetIPfromLocalNIC(std::vector<std::string> &IPs);
-	static void getLocalIPs(std::vector<std::string> &IPs);
-	static void getLocalIPs(const std::string& sHostName, std::vector<std::string> &IPs);
-	static bool setNetConfig(const std::string& sName, const std::string& sIP, const std::string& sMask = "255.255.255.0", const std::string& sGate = "", bool bWait = false);
-	static bool setNetDhcp(const std::string& sName);
-	static bool isConnecteTo(const std::string& IP, int millSeconds = 500);
-	static bool getDirectDevice(std::string& ip, std::string& netGate);
-	static bool getDirectDevice(std::string& ip, std::string& netGate, std::set<std::string>& otherIPS, int secondsWait = 60);
-	static bool setIPByDHCP(std::string& ip, std::string& mask, std::string& netGate);
-	static const std::string& getLoacalNetName();
-	static const std::string& getLocalUuid();
+	static void GetIPfromLocalNIC(std::vector<string> &IPs);
+	static void getLocalIPs(std::vector<string> &IPs);
+	static bool setNetConfig(const string& sName, const string& sIP, const string& sMask = "255.255.255.0", const string& sGate = "", bool bWait = false);
+	static bool setNetDhcp(const string& sName);
+	static bool isConnecteTo(const string& IP, int millSeconds = 500);
+	static bool getDirectDevice(string& ip, string& netGate);
+	static bool getDirectDevice(string& ip, string& netGate, std::set<string>& otherIPS, long secondsWait = 60);
+	static bool setIPByDHCP(string& ip, string& mask, string& netGate);
+	static const string& getLoacalNetName();
+	static const string& WindowUtils::getLocalUuid();
 	static bool isOnLine();
-
+	static void getMacByArpTable(vector<string> Ips, vector<IPMAC>& IpMacs);
+	static string ConvertNICUUIDtoPcapName(pcap_if_t* devs, const string& uuid);
+	static void getLocalIPsMac(std::vector<string> &IPs, u_char *mac);
 private:
-	CWindowUtils();
+	WindowUtils();
 };
 
+#endif // WINDOWUTILS_H

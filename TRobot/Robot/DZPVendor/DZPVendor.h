@@ -28,6 +28,7 @@ public:
 
 	std::string GetDefUsearName(){ return m_sDefUserName; }
 	std::string GetDefPassword(){ return m_sDefPassword; }
+	int GetDefPort() { return m_iDefPort; }
 
 	NET_SDK_TYPE GetSDKType(){ return m_eSDKType; }
 	bool IsSearchDeviceAPIExist(){ return m_bSearchDeviceAPI; }
@@ -49,6 +50,7 @@ private:
 	size_t m_iMaxChannel;
 	std::string m_sDefUserName;
 	std::string m_sDefPassword;
+	int m_iDefPort;
 
 	/* Search Device */
 	long m_lSearchDeviceHandle;

@@ -1,10 +1,10 @@
 #pragma once
+
 #include <string>
 #include <ctime>
 #include <list>
 #include <vector>
 #include <Windows.h>
-
 
 typedef struct _time_range
 {
@@ -13,7 +13,7 @@ typedef struct _time_range
 } time_range, *ptime_range;
 
 
-#define  MAX_IPADDR_LEN				16       //ip address length    
+#define  MAX_IPADDR_LEN				16       //\ length    
 #define  MAX_MACADDR_LEN			32		 //mac address length
 
 typedef enum tagSDK_TYPE
@@ -182,6 +182,7 @@ public:
 
 	virtual std::string GetDefUsearName() = 0;
 	virtual std::string GetDefPassword() = 0;
+	virtual int GetDefPort() = 0;
 	virtual NET_SDK_TYPE GetSDKType() = 0;
 	virtual bool IsSearchDeviceAPIExist() = 0;
 

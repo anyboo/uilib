@@ -61,6 +61,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)poco\lib;$(SolutionDir)\lib;$(SolutionDir)\lib\poco_lib;$(SolutionDir)\TRobot\Robot\DHVendor\sdk;$(SolutionDir)\TRobot\Robot\JxjVendor\sdk;$(SolutionDir)\TRobot\Robot\DZPVendor\sdk;$(SolutionDir)\TRobot\Robot\HKVendor\sdk;$(SolutionDir)\TRobot\Robot\HKVendor\sdk\HCNetSDKCom;$(SolutionDir)\TRobot\Robot\Network\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>wpcap.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -85,6 +86,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DatabaseException.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="AbstractVendor.h" />
     <ClInclude Include="CommonUtrl.h" />
@@ -94,19 +96,23 @@
     <ClInclude Include="HKVendor\HKVendor.h" />
     <ClInclude Include="JxjVendor\JXJVendor.h" />
     <ClInclude Include="LoginDevice.h" />
+    <ClInclude Include="netdefine.h" />
     <ClInclude Include="NotificationDeviceManager.h" />
     <ClInclude Include="NotificationNetworkStatus.h" />
     <ClInclude Include="Network\PING.h" />
     <ClInclude Include="Network\utils.h" />
     <ClInclude Include="NotificationSearchDevice.h" />
     <ClInclude Include="PlayVideo.h" />
+    <ClInclude Include="portscan.h" />
     <ClInclude Include="QMFileSqlite.h" />
+    <ClInclude Include="QMSqlite.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SearchDevice.h" />
     <ClInclude Include="TestWindows.h" />
     <ClInclude Include="WindowUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DatabaseException.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="CommonUtrl.cpp" />
     <ClCompile Include="DeviceManager.cpp" />
@@ -118,7 +124,9 @@
     <ClCompile Include="Network\PING.cpp" />
     <ClCompile Include="Network\utils.cpp" />
     <ClCompile Include="PlayVideo.cpp" />
+    <ClCompile Include="portscan.cpp" />
     <ClCompile Include="QMFileSqlite.cpp" />
+    <ClCompile Include="QMSqlite.cpp" />
     <ClCompile Include="Robot.cpp" />
     <ClCompile Include="SearchDevice.cpp" />
     <ClCompile Include="TestWindows.cpp" />
@@ -126,6 +134,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Robot.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

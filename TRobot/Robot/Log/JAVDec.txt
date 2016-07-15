@@ -2165,3 +2165,255 @@
 2016-07-12 17:07:03	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
 2016-07-12 17:07:03	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
 2016-07-12 17:07:03	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 17:02:31 --------
+2016-07-15 17:02:31	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 17:02:31	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 17:02:31	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 17:02:31	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 17:02:31	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 17:02:31	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 17:05:10 --------
+2016-07-15 17:05:10	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 17:05:10	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 17:05:10	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 17:05:10	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 17:05:10	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 17:05:10	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 17:26:36 --------
+2016-07-15 17:26:36	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 17:26:36	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 17:26:36	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 17:26:36	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 17:26:36	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 17:26:36	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 17:31:28 --------
+2016-07-15 17:31:28	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 17:31:28	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 17:31:28	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 17:31:28	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 17:31:28	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 17:31:28	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 17:32:51 --------
+2016-07-15 17:32:51	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 17:32:51	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 17:32:51	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 17:32:51	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 17:32:51	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 17:32:51	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 17:35:22 --------
+2016-07-15 17:35:22	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 17:35:22	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 17:35:22	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 17:35:22	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 17:35:22	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 17:35:22	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 17:36:12 --------
+2016-07-15 17:36:12	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 17:36:12	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 17:36:12	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 17:36:12	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 17:36:12	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 17:36:12	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 17:39:37 --------
+2016-07-15 17:39:37	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 17:39:37	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 17:39:37	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 17:39:37	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 17:39:37	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 17:39:37	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 18:12:11 --------
+2016-07-15 18:12:11	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 18:12:11	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 18:12:11	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 18:12:11	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 18:12:11	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 18:12:11	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 18:14:29 --------
+2016-07-15 18:14:30	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 18:14:30	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 18:14:30	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 18:14:30	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 18:14:30	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 18:14:30	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 18:17:59 --------
+2016-07-15 18:17:59	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 18:17:59	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 18:17:59	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 18:17:59	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 18:17:59	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 18:17:59	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 18:19:49 --------
+2016-07-15 18:19:49	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 18:19:49	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 18:19:49	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 18:19:49	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 18:19:49	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 18:19:49	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 18:20:53 --------
+2016-07-15 18:20:53	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 18:20:53	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 18:20:53	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 18:20:53	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 18:20:53	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 18:20:53	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 18:22:34 --------
+2016-07-15 18:22:34	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 18:22:34	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 18:22:34	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 18:22:34	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 18:22:34	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 18:22:34	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 18:26:08 --------
+2016-07-15 18:26:08	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 18:26:08	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 18:26:08	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 18:26:09	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 18:26:09	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 18:26:09	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 18:27:35 --------
+2016-07-15 18:27:35	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 18:27:35	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 18:27:35	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 18:27:35	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 18:27:35	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 18:27:35	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 18:30:53 --------
+2016-07-15 18:30:53	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 18:30:53	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 18:30:53	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 18:30:53	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 18:30:53	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 18:30:53	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 18:31:55 --------
+2016-07-15 18:31:55	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 18:31:55	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 18:31:55	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 18:31:55	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 18:31:55	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 18:31:55	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 18:34:57 --------
+2016-07-15 18:34:57	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 18:34:57	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 18:34:57	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 18:34:57	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 18:34:57	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 18:34:57	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 18:39:12 --------
+2016-07-15 18:39:12	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 18:39:12	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 18:39:12	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 18:39:12	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 18:39:12	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 18:39:12	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 18:42:25 --------
+2016-07-15 18:42:25	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 18:42:25	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 18:42:25	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 18:42:25	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 18:42:25	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 18:42:25	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 19:01:16 --------
+2016-07-15 19:01:16	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 19:01:16	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 19:01:16	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 19:01:16	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 19:01:16	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 19:01:16	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 19:16:27 --------
+2016-07-15 19:16:27	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 19:16:27	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 19:16:27	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 19:16:27	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 19:16:27	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 19:16:27	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 19:22:31 --------
+2016-07-15 19:22:31	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 19:22:31	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 19:22:31	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 19:22:31	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 19:22:31	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 19:22:31	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 19:27:14 --------
+2016-07-15 19:27:14	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 19:27:14	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 19:27:14	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 19:27:14	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 19:27:14	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 19:27:14	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 19:29:08 --------
+2016-07-15 19:29:08	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 19:29:08	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 19:29:08	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 19:29:08	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 19:29:08	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 19:29:08	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 19:40:10 --------
+2016-07-15 19:40:10	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 19:40:10	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 19:40:10	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 19:40:10	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 19:40:10	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 19:40:10	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-15 19:42:21 --------
+2016-07-15 19:42:21	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-15 19:42:21	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-15 19:42:21	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-15 19:42:21	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-15 19:42:21	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-15 19:42:21	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}

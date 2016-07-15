@@ -3,9 +3,9 @@
 #define WIN32_LEAN_AND_MEAN
 
 #endif
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
 
- #include <windows.h>
+
+#include <windows.h>
 #include <WinSock2.h>
 #include <string>
 #include <vector>
@@ -36,7 +36,7 @@ struct IPHeader
 };
 
 struct ICMPHeader
-{ 
+{
 	BYTE m_byType;   //类型
 	BYTE m_byCode;   //代码
 	USHORT m_usChecksum; //检验和 
@@ -54,40 +54,40 @@ struct PingReply
 };
 struct OnePingInfo
 {
-    SOCKET m_sockRaw;
-    WSAEVENT m_event;
-    bool m_bStop;
-    char* m_szICMPData;
-    std::shared_ptr<std::thread> m_pReadThread;
-    OnePingInfo();
-    ~OnePingInfo();
+	SOCKET m_sockRaw;
+	WSAEVENT m_event;
+	bool m_bStop;
+	char* m_szICMPData;
+	std::shared_ptr<std::thread> m_pReadThread;
+	OnePingInfo();
+	~OnePingInfo();
 };
 class CPing
 {
 
-    static CPing* spInstance;
-    CPing(); 
-    bool init(std::shared_ptr<OnePingInfo> pingInfo);
-    ~CPing();
-    
-public:
-    static CPing& instance(){
-        if (NULL == spInstance)
-        {
-            spInstance = new CPing();
-        }
-        
-        return *spInstance;
-    }
+	static CPing* spInstance;
+	CPing();
+	bool init(std::shared_ptr<OnePingInfo> pingInfo);
+	~CPing();
 
-    void ScanIp(vector<string> &vecIp, bool bArp = false, std::shared_ptr<bool> bpCancel = std::shared_ptr<bool>());
-    void ScanIPs(vector<string> &vecIP, const string& netIp, bool bArp = false, std::shared_ptr<bool> bpCancel = std::shared_ptr<bool>());
-    bool ScanOneIP(string &ip, const string& netIp, bool bArp = false);
-    BOOL Ping(DWORD dwDestIP, long dwTimeout = 20, bool bArp = false);
-    BOOL Ping(const char *szDestIP, long dwTimeout = 20, bool bArp = false);
+public:
+	static CPing& instance(){
+		if (NULL == spInstance)
+		{
+			spInstance = new CPing();
+		}
+
+		return *spInstance;
+	}
+
+	void ScanIp(vector<string> &vecIp, bool bArp = false, std::shared_ptr<bool> bpCancel = std::shared_ptr<bool>());
+	void ScanIPs(vector<string> &vecIP, const string& netIp, bool bArp = false, std::shared_ptr<bool> bpCancel = std::shared_ptr<bool>());
+	bool ScanOneIP(string &ip, const string& netIp, bool bArp = false);
+	BOOL Ping(DWORD dwDestIP, long dwTimeout = 20, bool bArp = false);
+	BOOL Ping(const char *szDestIP, long dwTimeout = 20, bool bArp = false);
 
 private:
-    BOOL PingCore(DWORD dwDestIP, long dwTimeout, std::shared_ptr<OnePingInfo> pingInfo, bool bArp = false);
+	BOOL PingCore(DWORD dwDestIP, long dwTimeout, std::shared_ptr<OnePingInfo> pingInfo, bool bArp = false);
 	USHORT CalCheckSum(USHORT *pBuffer, int nSize);
 	ULONG GetTickCountCalibrate();
 private:
@@ -96,9 +96,9 @@ private:
 
 
 
-    std::shared_ptr<OnePingInfo> mpLastPingInfo;
-    std::recursive_mutex mMtLastPingInfo;
+	std::shared_ptr<OnePingInfo> mpLastPingInfo;
+	std::recursive_mutex mMtLastPingInfo;
 private:
 	static ULONG s_usPacketSeq;
-    
+
 };

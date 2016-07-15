@@ -116,6 +116,7 @@ CDZPVendor::CDZPVendor()
 	m_bSearchDeviceAPI = true;
 	m_sDefUserName = "admin";
 	m_sDefPassword = "";
+	m_iDefPort = 34567;
 	m_iMaxChannel = 0;
 	m_lSearchDeviceHandle = -1;
 }

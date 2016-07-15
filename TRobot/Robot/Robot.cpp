@@ -1,24 +1,58 @@
 // Robot.cpp : Defines the entry point for the console application.
 //
 #define CATCH_CONFIG_MAIN
+
+#include <winsock2.h>
+#include <windows.h>
+
 #include "catch.hpp"
 
-#include "TestWindows.h"
-
-#include "Device.h"
+#include "LoginDevice.h"
 #include "SearchDevice.h"
 #include "DeviceManager.h"
-#include "LoginDevice.h"
+#include "portscan.h"
 
 #include "JXJVendor.h"
 #include "DZPVendor.h"
 #include "DHVendor.h"
 #include "HKVendor.h"
 
+#include "TestWindows.h"
+
+DEVICE_INFO_SIMPLE_LIST GetDeviceInfoSimpleList()
+{
+	DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
+
+	vector<ScanPortRecord> scanResults;
+	//获取指针
+	QMSqlite *pDb = QMSqlite::getInstance();
+	std::string sql = SELECT_ALL_SCAN_PORT;
+	pDb->GetData(sql, scanResults);
+
+	for (size_t i = 0; i < scanResults.size(); i++)
+	{
+		ScanPortRecord spr = scanResults[i];
+		if (spr.get<1>() == 80)
+		{
+			continue;
+		}
+
+		NET_DEVICE_INFO_SIMPLE* devInfoSimple = new NET_DEVICE_INFO_SIMPLE;
+		memset(devInfoSimple, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
+		std::string ip = spr.get<0>();
+		memcpy(devInfoSimple->szIP, ip.c_str(), ip.length());
+		devInfoSimple->nPort = spr.get<1>();
+		listDeviceSimpleInfo.push_back(devInfoSimple);
+	}
+
+	return listDeviceSimpleInfo;
+}
+
 TEST_CASE("This is a demo", "[demo]")
 {
+#if 1
 	SECTION("Test login the device")
-	{
+	{	
 		/************************* 初始化线程池 **********************/
 		Poco::ThreadPool pool;
 
@@ -27,11 +61,11 @@ TEST_CASE("This is a demo", "[demo]")
 
 		/************************* 初始化数据库 **********************/
 		//获取指针
-		QFileSqlite *pDb = QFileSqlite::getInstance();
+		QFileSqlite *pFileDb = QFileSqlite::getInstance();
 		//删除表
-		pDb->dropTable(DROP_LOGIN_DEVICE_INFO_TABLE);
+		pFileDb->dropTable(DROP_LOGIN_DEVICE_INFO_TABLE);
 		//创建记录表
-		pDb->createTable(CREATE_LOGIN_DEVICE_INFO_TABLE);
+		pFileDb->createTable(CREATE_LOGIN_DEVICE_INFO_TABLE);
 
 		/************************* 初始化SDK厂商 **********************/
 		VENDOR_LIST pVendorList;
@@ -40,82 +74,68 @@ TEST_CASE("This is a demo", "[demo]")
 		DHVendor* dhVendor = new DHVendor();
 		HKVendor* hkVendor = new HKVendor();
 
-		//pVendorList.push_back(jxjVendor);
+		pVendorList.push_back(jxjVendor);
 		pVendorList.push_back(dzpVendor);
-		//pVendorList.push_back(dhVendor);
-		//pVendorList.push_back(hkVendor);
+		pVendorList.push_back(dhVendor);
+		pVendorList.push_back(hkVendor);
 
 		/************************* 初始化IP列表 **********************/
+		std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Start!" << std::endl;
+		NotificationQueue queuePortScan;
+		PortScan portScan(queuePortScan);
+		//开始扫描
+		ThreadPool::defaultPool().start(portScan);
+
 		DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
-		std::string strIP = "";
-		int nPort = 0;
-
-		// DZP
-#if 0
-		NET_DEVICE_INFO_SIMPLE* devInfoSimple1 = new NET_DEVICE_INFO_SIMPLE;
-		memset(devInfoSimple1, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
-		strIP = "192.168.0.66";
-		nPort = 34567;
-		memcpy(devInfoSimple1->szIP, strIP.c_str(), strIP.length());
-		devInfoSimple1->nPort = nPort;
-		listDeviceSimpleInfo.push_back(devInfoSimple1);
-#endif
-
-		// JXJ
-#if 0
-		NET_DEVICE_INFO_SIMPLE* devInfoSimple2 = new NET_DEVICE_INFO_SIMPLE;
-		memset(devInfoSimple2, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
-		strIP = "192.168.0.89";
-		nPort = 3321;
-		memcpy(devInfoSimple2->szIP, strIP.c_str(), strIP.length());
-		devInfoSimple2->nPort = nPort;
-		listDeviceSimpleInfo.push_back(devInfoSimple2);
-#endif
-
-		// HK
-#if 0
-		NET_DEVICE_INFO_SIMPLE* devInfoSimple3 = new NET_DEVICE_INFO_SIMPLE;
-		memset(devInfoSimple3, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
-		strIP = "192.168.0.92";
-		nPort = 8000;
-		memcpy(devInfoSimple3->szIP, strIP.c_str(), strIP.length());
-		devInfoSimple3->nPort = nPort;
-		listDeviceSimpleInfo.push_back(devInfoSimple3);
-#endif
-
-		// DH
-#if 0
-		NET_DEVICE_INFO_SIMPLE* devInfoSimple4 = new NET_DEVICE_INFO_SIMPLE;
-		memset(devInfoSimple4, 0, sizeof(NET_DEVICE_INFO_SIMPLE));
-		strIP = "192.168.0.96";
-		nPort = 37777;
-		memcpy(devInfoSimple4->szIP, strIP.c_str(), strIP.length());
-		devInfoSimple4->nPort = nPort;
-		listDeviceSimpleInfo.push_back(devInfoSimple4);
-#endif
+		while (true)
+		{
+			Notification::Ptr pNf(queuePortScan.waitDequeueNotification());
+			if (pNf)
+			{
+				ScanNotification::Ptr pWorkNf = pNf.cast<ScanNotification>();
+				if (pWorkNf)
+				{
+					listDeviceSimpleInfo = GetDeviceInfoSimpleList();
+					std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Stop!" << std::endl;
+					break;
+				}
+			}
+		}
 
 		/************************* 设备发现类测试 **********************/
+		std::cout << CCommonUtrl::getInstance().GetCurTime() << "Search Device Start!" << std::endl;
 		NotificationQueue queueSearchDevice; // 设备发现消息队列
 		CSearchDevice sd(pVendorList, listDeviceSimpleInfo, queueSearchDevice);
 		pool.start(sd);
-
-		DEVICE_INFO_LIST devInfoList = CSearchDevice::GetDeviceInfoList();
-		while (devInfoList.size() <= 0)
-		{
-			devInfoList = CSearchDevice::GetDeviceInfoList();
-			::Sleep(3000);
-		}
 		//queueSearchDevice.enqueueNotification(new CNotificationSearchDevice(Notification_Type_Search_Device_Cancel));
 
 		/************************* 设备管理类测试 **********************/
 		NotificationQueue queueDeviceManager; // 设备管理消息队列
 		CDeviceManager dm(pVendorList, queueDeviceManager);
 		pool.start(dm);
-
 		//queueDeviceManager.enqueueNotification(new CNotificationDeviceManager(Notification_Type_Device_Manager_Cancel));
 
+		while (true)
+		{
+			Notification::Ptr pNf(NotificationQueue::defaultQueue().waitDequeueNotification());
+			if (pNf)
+			{
+				CNotificationSearchDevice::Ptr pWorkNf = pNf.cast<CNotificationSearchDevice>();
+				if (pWorkNf)
+				{
+					if (pWorkNf->GetNotificationType() == Notification_Type_Search_Device_Finish)
+					{
+						break;
+					}
+				}
+			}
+		}
+		
 		/************************* 设备登陆、登出测试 **********************/
 #if 1
+		std::cout << CCommonUtrl::getInstance().GetCurTime() << "Search Device Stop!" << std::endl;
+
+		DEVICE_INFO_LIST devInfoList = CSearchDevice::GetDeviceInfoList();	
 		for (size_t i = 0; i < devInfoList.size(); i++)
 		{
 			// 获取设备信息
@@ -123,25 +143,9 @@ TEST_CASE("This is a demo", "[demo]")
 			// 登陆设备
 			if (CLoginDevice::getInstance().Login(devInfo->pVendor, devInfo->szIp, devInfo->nPort))
 			{
-				// 获取登陆成功后的设备对象
-				//Device* pDev = CLoginDevice::getInstance().GetDevice(devInfo->szIp);
-				//::Sleep(100);
-				//CLoginDevice::getInstance().Logout(devInfo->szIp);
 				::Sleep(100);
 			}
 		}
-
-		::Sleep(1000);
-
-		std::vector<Device*>& listDevice = CLoginDevice::getInstance().GetDeviceList();
-		Device* pDev = listDevice[0];
-		CLoginDevice::getInstance().Logout(pDev->getIP());
-
-		//for (size_t i = 0; i < listDevice.size(); i++)
-		//{
-		//	Device* pDev = listDevice[i];
-		//	CLoginDevice::getInstance().Logout(pDev->getIP());
-		//}
 
 		while (true)
 		{
@@ -150,6 +154,7 @@ TEST_CASE("This is a demo", "[demo]")
 		return;
 #endif
 	}
+#endif
 
 	SECTION("Test Search videos from the device")
 	{

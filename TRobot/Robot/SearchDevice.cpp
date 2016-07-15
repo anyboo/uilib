@@ -1,6 +1,6 @@
 
-#include "SearchDevice.h"
 #include "WindowUtils.h"
+#include "SearchDevice.h"
 
 
 DEVICE_INFO_LIST CSearchDevice::m_listDeviceInfo;
@@ -196,7 +196,7 @@ void CSearchDevice::run()
 			}
 		}
 
-		bool bNetStatus = CWindowUtils::isOnLine();
+		bool bNetStatus = WindowUtils::isOnLine();
 		if (bNetStatusLast != bNetStatus)
 		{
 			NotificationQueue& queue = NotificationQueue::defaultQueue();

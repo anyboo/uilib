@@ -1,7 +1,9 @@
 #pragma once
 
-#include "Device.h"
 #include "QMFileSqlite.h"
+
+class Device;
+class AbstractVendor;
 
 class CLoginDevice
 {
