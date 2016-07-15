@@ -20,21 +20,21 @@ using Poco::ThreadPool;
 
 
 #include <vector>
-#include "SearchVideo.h"
+//#include "SearchVideo.h"
 
 // #include "jxjVendor.h"
 //#include "DZPVendor.h"
 #include "DHVendor.h"
 #include "HKVendor.h"
 
-#include "Device.h"
+//#include "Device.h"
 
-#include "DownloadVideo.h"
-#include "SearchFileRunable.h"
+//#include "DownloadVideo.h"
+//#include "SearchFileRunable.h"
 #include "SearchFileWorker.h"
 #include "AcquireSerachFileData.h"
-#include "SearchVideo.h"
-#include "ReciveUIQunue.h"
+//#include "SearchVideo.h"
+//#include "ReciveUIQunue.h"
 
 
 TEST_CASE("This is a demo", "[demo]")
@@ -162,7 +162,7 @@ TEST_CASE("This is a demo", "[demo]")
 // 			dvObj.GetDownloadInfo(doi);
 // 		}
 
-/*
+
 NotificationQueue& queue = NotificationQueue::defaultQueue();
 
 AcquireSerachFileData AcquireData(queue);
@@ -206,7 +206,7 @@ ThreadPool::defaultPool().start(AcquireData);
 	queue.wakeUpAll();
 	ThreadPool::defaultPool().joinAll();
 
-*/
+
 		return;
 	}
 

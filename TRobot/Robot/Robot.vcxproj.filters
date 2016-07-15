@@ -99,9 +99,6 @@
     <ClInclude Include="..\..\transation\QMSqlite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RearchFile\SearchVideo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="HKVendor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -112,9 +109,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AcquireDataRunable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SearchFileRunable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SearchFileWorker.h">
@@ -161,9 +155,6 @@
     <ClCompile Include="..\..\transation\QMSqlite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RearchFile\SearchVideo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="HKVendor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -174,9 +165,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AcquireDataRunable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SearchFileRunable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SearchFileWorker.cpp">

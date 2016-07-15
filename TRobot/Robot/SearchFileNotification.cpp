@@ -14,8 +14,6 @@ SearchFileNotification::SearchFileNotification(NOTIFICATION_TYPE eNotify, int nD
 		break;
 	case Notification_Type_Search_File_Finish:
 		break;
-// 	case Notification_Type_Search_File_Cancel:
-// 		break;
 	default:
 		break;
 	}
@@ -47,10 +45,6 @@ int SearchFileNotification::GetData()
 	case Notification_Type_Search_File_Finish:
 		return SEARCHFILE_DEFAULT;
 		break;
-
-// 	case Notification_Type_Search_File_Cancel:
-// 		return SEARCHFILE_DEFAULT;
-// 		break;
 
 	default:
 		return SEARCHFILE_DEFAULT;
