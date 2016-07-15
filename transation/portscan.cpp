@@ -505,7 +505,7 @@ void PortScan::setDefaultScanPorts()
 	//星网锐捷
 	_scanPorts.push_back(8081);
 	//宇视科技
-	//scanports.push_back(0);
+	_scanPorts.push_back(82);
 	//中维
 	_scanPorts.push_back(9101);
 }
