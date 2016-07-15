@@ -8,10 +8,11 @@
 #include "Poco/Data/SQLite/Connector.h"
 #include <iostream>
 #include <vector>
+#include "DatabaseException.h"
 
 using namespace std;
-using namespace Poco::Data::Keywords;
-using namespace Poco::Data;
+//using namespace Poco::Data::Keywords;
+//using namespace Poco::Data;
 using Poco::Data::Session;
 using Poco::Data::Statement;
 using Poco::Data::Statement;
@@ -46,6 +47,15 @@ typedef Poco::Tuple<std::string, std::string, int> SearchDevice;
 //struct search factory
 typedef Poco::Tuple<std::string, std::string> SearchFactory;
 
+//scan port result table
+#define CREATE_SCAN_PORT_TABLE		"CREATE TABLE ScanPort(ip VARCHAR(20), port INTEGER)"
+#define DELETE_ALL_SCAN_PORT		"DELETE from ScanPort"
+#define DROP_SCAN_PORT_TABLE		"DROP TABLE IF EXISTS ScanPort"
+#define SELECT_ALL_SCAN_PORT		"SELECT * FROM ScanPort"
+#define INSERT_SCAN_PORTE			"INSERT INTO ScanPort VALUES(:ip, :port)"
+//struct search device
+typedef Poco::Tuple<std::string, int> ScanPortRecord;
+
 
 
 
@@ -57,33 +67,8 @@ public:
 private:
 	QMSqlite();
 	~QMSqlite();
-	static QMSqlite* m_instance;
-
-	class Garbo
-
-	{
-
-	public:
-
-		~Garbo()
-
-		{
-
-			if (QMSqlite::m_instance)
-
-			{
-
-				//cout << "Garbo dtor" << endl;
-
-				delete QMSqlite::m_instance;
-
-			}
-
-		}
-
-	};
-
-	static Garbo garbo;
+	QMSqlite(QMSqlite const& other);
+	QMSqlite& operator=(QMSqlite const& other);
 public:
 	template<typename T> 
 	bool GetData(string sql, std::vector<T>& Record)
@@ -99,7 +84,7 @@ public:
 		}
 		catch (Poco::Exception &ex)
 		{
-			throw(ex.displayText());
+			throw DatabaseException(ex.displayText());
 			closeConnect(sess);
 			return false;
 		}
@@ -114,12 +99,12 @@ public:
 			return false;
 		try
 		{
-			sess << sql , use(searchrecode), now;
+			sess << sql, Poco::Data::Keywords::use(searchrecode), Poco::Data::Keywords::now;
 			closeConnect(sess);
 		}
 		catch (Poco::Exception &ex)
 		{
-			throw(ex.displayText());
+			throw DatabaseException(ex.displayText());
 			closeConnect(sess);
 			return false;
 		}
@@ -136,12 +121,12 @@ public:
 		try
 		{
 			Statement insert(sess);
-			insert << sql, use(Record), now;
+			insert << sql, Poco::Data::Keywords::use(Record), Poco::Data::Keywords::now;
 			closeConnect(sess);
 		}
 		catch (Poco::Exception &ex)
 		{
-			throw(ex.displayText());
+			throw DatabaseException(ex.displayText());
 			closeConnect(sess);
 			return false;
 		}
@@ -160,7 +145,7 @@ private:
 	void closeSessionPool();
 	bool execSql(string sql);
 	Session connectDb();
-	SessionPool *m_pool;
+	Poco::Data::SessionPool *m_pool;
 	
 };
 
