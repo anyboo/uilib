@@ -328,17 +328,38 @@ void HKVendor::Download(const long loginHandle, const size_t channel, const std:
 		return;
 	}
 
-	HK_CreatePath(channel, m_sRoot);
+	RecordFile file;
+	size_t i = 0;
+	for (; i < m_files.size(); i++)
+	{
+		file = m_files[i];
+		if (filename.compare(file.name) == 0)
+		{
+			break;
+		}
+	}
 
-	char szTime[512];
-	ZeroMemory(szTime, 512);
-	sprintf_s(szTime, "D:\\DownLoadVideo\\海康\\通道%d\\", channel);
+	if (i >= m_files.size())
+	{
+		throw std::exception("Search File List Not Contain the Filename!");
+		return;
+	}
 
-	char szBuf[] = ".mp4";
-	strcat_s(szTime, (char *)filename.c_str());
-	strcat_s(szTime, szBuf);
+	std::string strPath  = HK_CreatePath(channel, m_sRoot);
+	strPath += file.name.data();
+	strPath.append(".mp4");
 
-	std::cout << szTime << std::endl;
+	std::cout << "文件路径：" << strPath << std::endl;
+
+// 	char szTime[512];
+// 	ZeroMemory(szTime, 512);
+// 	sprintf_s(szTime, "D:\\DownLoadVideo\\海康\\通道%d\\", channel);
+// 
+// 	char szBuf[] = ".mp4";
+// 	strcat_s(szTime, (char *)filename.c_str());
+// 	strcat_s(szTime, szBuf);
+// 
+// 	std::cout << szTime << std::endl;
 
 	std::vector<RecordFile>::iterator it;
 	int nSize = 0;
@@ -346,7 +367,7 @@ void HKVendor::Download(const long loginHandle, const size_t channel, const std:
 	{
 		if (it->name == filename)
 		{	
-			LONG lRet = NET_DVR_GetFileByName(loginHandle, (char *)filename.c_str(), szTime);
+			LONG lRet = NET_DVR_GetFileByName(loginHandle, (char *)filename.c_str(), (char *)strPath.c_str());
 
 			if (0 < lRet)
 			{
@@ -370,6 +391,8 @@ void HKVendor::Download(const long loginHandle, const size_t channel, const std:
 
 				std::cout << "downLoadByRecordFile 下载录像成功！" << std::endl;
 			}
+
+			break;
 		}
 
 // 		if (m_files.size() - 1 == nSize)
@@ -529,7 +552,7 @@ std::string HK_MakeFileName(int channel, const std::string& startTime, const std
 	strFileName += startTime.data();
 	strFileName += "-";
 	strFileName += endTime.data();
-	strFileName.append(".dav");
+	strFileName.append(".mp4");
 
 	return strFileName;
 }

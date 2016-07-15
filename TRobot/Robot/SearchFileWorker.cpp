@@ -34,38 +34,33 @@ void SearchFileWorker::run()
 		{
 			m_pDevice->Search(channel, m_range);
 
-			Notification::Ptr pNf(m_queue.waitDequeueNotification());
-			if (pNf)
+			if (!m_queue.empty())
 			{
-				ReciveUINotification::Ptr pReciveDataNf = pNf.cast<ReciveUINotification>();
-				if (pReciveDataNf)
+				Notification::Ptr pNf(m_queue.waitDequeueNotification());
+				if (pNf)
 				{
+					ReciveUINotification::Ptr pReciveDataNf = pNf.cast<ReciveUINotification>();
+					if (pReciveDataNf)
 					{
-						FastMutex::ScopedLock lock(m_mutex);
-						m_bCancel = pReciveDataNf->GetData();
-						std::cout << "取消：" << m_bCancel << std::endl;
+						{
+							FastMutex::ScopedLock lock(m_mutex);
+							m_bCancel = pReciveDataNf->GetData();
+							std::cout << "取消：" << m_bCancel << std::endl;
+						}
 					}
 				}
-			}
 
-			if (m_bCancel)
-			{
-				return;
+				if (m_bCancel)
+				{
+					return;
+				}
+
 			}
+			
 		}
 	}
 
 	queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_Finish, SEARCHFILE_DEFAULT));
-
-
-	for (;;)
-	{
-		
-	}
-
-	
-	//	queue.enqueueNotification(new SearchFileNotification(EChannel, nChannelList));
-
 }
 
 std::vector<time_range> SearchFileWorker::MakeTimeRangeList(const time_range& range)

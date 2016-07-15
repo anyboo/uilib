@@ -87,6 +87,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\transation\DatabaseException.h" />
     <ClInclude Include="..\..\transation\QMSqlite.h" />
     <ClInclude Include="AcquireDataRunable.h" />
     <ClInclude Include="AcquireSerachFileData.h" />
@@ -114,6 +115,7 @@
     <ClInclude Include="SendDataNotification.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\transation\DatabaseException.cpp" />
     <ClCompile Include="..\..\transation\QMSqlite.cpp" />
     <ClCompile Include="AcquireDataRunable.cpp" />
     <ClCompile Include="AcquireSerachFileData.cpp" />

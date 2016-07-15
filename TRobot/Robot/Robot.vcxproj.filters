@@ -126,6 +126,9 @@
     <ClInclude Include="ReciveUIQunue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\transation\DatabaseException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Robot.cpp">
@@ -180,6 +183,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ReciveUIQunue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\transation\DatabaseException.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

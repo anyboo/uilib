@@ -363,13 +363,14 @@ void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const tim
 
 	BOOL lPlayID = CLIENT_PlayBackByTimeEx(loginHandle, channel, &ntStime, &ntEtime, g_hWnd, DH_PlayCallBack, (DWORD)this, DH_PBDataCallBack, (DWORD)this);
 
-	//system("PAUSE");
+	
 
 	if (!lPlayID)
 	{
 		std::cout << "播放失败原因：" << DH_GetLastErrorString() << std::endl;
 		throw std::exception("Play back by time failed");
 	}
+	//system("PAUSE");
 }
 
 void DHVendor::Download(const long loginHandle, const size_t channel, const std::string& filename, const int nID)
@@ -396,8 +397,6 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const std:
 		throw std::exception("Search File List Not Contain the Filename!");
 		return;
 	}
-
-	DH_CreatePath(channel, m_sRoot);
 
 	std::string strPath = DH_CreatePath(channel, m_sRoot);
 	strPath += file.name.data();
@@ -448,6 +447,8 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const std:
 			{
 				std::cout << "downLoadByRecordFile 下载录像成功！" << std::endl;
 			}
+
+			break;
 		}
 
 	}
@@ -488,13 +489,14 @@ void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const std
 			NET_RECORDFILE_INFO* pData = (NET_RECORDFILE_INFO*)it->getPrivateData();
 			BOOL lPlayID = CLIENT_PlayBackByRecordFile(loginHandle, pData, g_hWnd, DH_PlayCallBack, (DWORD)this);
 
-			//system("PAUSE");
+			
 
 			if (!lPlayID)
 			{
 				std::cout << "播放失败原因：" << DH_GetLastErrorString() << std::endl;
 				throw std::exception("Play back by time failed");
 			}
+			//system("PAUSE");
 		}
 
 		if (m_files.size() - 1 == nSize)

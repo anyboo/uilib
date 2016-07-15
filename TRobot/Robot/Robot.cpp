@@ -41,19 +41,11 @@ TEST_CASE("This is a demo", "[demo]")
 {
 	SECTION("Test login the device")
 	{
-// 		time_range range;
-// 		range.start = 1467475200;
-// 		//range.end = 1466524800;
-// 		range.end = 1467561600;
-// 		//range.end = 1478833871;
- 
 // 		HKVendor Obj;
 // 		Obj.Init();
 // 		Obj.Login("192.168.0.92", 8000, "admin", "admin123");
 // 		Obj.Search(0, 33, range);
 // 		Obj.Download(0, 33, range);
-
-
 // 		time_range range;
 // 		range.start = 1467475200;
 // 		range.end = 1467561600;
@@ -88,29 +80,29 @@ TEST_CASE("This is a demo", "[demo]")
 // 		Obj.Init();
 // 		Obj.StartSearchDevice();
 // 		long lLogin = Obj.Login("192.168.0.55", 37777, "admin", "112233");
-// 		Obj.Search(lLogin, 0, range);
-// 		//Obj.Download(lLogin, 0, range);
-// 		Obj.Download(lLogin, 0, "channel0-20160710000000-20160711000000-2", 0);
-// 		//Obj.PlayVideo(lLogin, range);
-// 		Obj.PlayVideo(lLogin, 0,"channel0-20160710000000-20160711000000-2");
-// 		Obj.Logout(lLogin);
-	 
-// 		//海康
-// 		HKVendor HKObj;
-// 		time_range range;
-// 		range.start = 1467475200;
-// 		//range.end = 1466524800;
-// 		range.end = 1467561600;
-// 		//range.end = 1478833871;
-// 
-// 		HKObj.Init();
-// 		long lLogin = HKObj.Login("192.168.0.93", 8000, "admin", "admin1234");
-// 		HKObj.Search(lLogin, 0, range);
-// 		//HKObj.Download(lLogin, 0, range);
-// 		HKObj.Download(lLogin, 0, "ch01_00000000062000006", 0);
-// 		//HKObj.PlayVideo(lLogin, 1, range);
-// 		//HKObj.PlayVideo(lLogin, 1, "ch0003_00000000008000000");
-// 		HKObj.Logout(lLogin);
+// 		Obj.Search(lLogin, 1, range);
+// 		Obj.Download(lLogin, 1, range);
+// 		//Obj.Download(lLogin, 0, "channel0-20160710000000-20160711000000-2", 0);
+// 		Obj.PlayVideo(lLogin, 1, range);
+// 		//Obj.PlayVideo(lLogin, 0,"channel0-20160710000000-20160711000000-0");
+// 		//Obj.Logout(lLogin);
+ 
+		//海康
+		HKVendor HKObj;
+		time_range range;
+		range.start = 1467475200;
+		//range.end = 1466524800;
+		range.end = 1467561600;
+		//range.end = 1478833871;
+
+		HKObj.Init();
+		long lLogin = HKObj.Login("192.168.0.22", 8000, "admin", "12345");
+		HKObj.Search(lLogin, 1, range);
+		//HKObj.Download(lLogin, 0, range);
+		HKObj.Download(lLogin, 1, "ch01_00000000060000100", 0);
+		//HKObj.PlayVideo(lLogin, 1, range);
+		//HKObj.PlayVideo(lLogin, 1, "ch0003_00000000008000000");
+		//HKObj.Logout(lLogin);
 	
 
 // 		//大华
@@ -162,11 +154,11 @@ TEST_CASE("This is a demo", "[demo]")
 // 			dvObj.GetDownloadInfo(doi);
 // 		}
 
-
+/*
 NotificationQueue& queue = NotificationQueue::defaultQueue();
 
 AcquireSerachFileData AcquireData(queue);
-ThreadPool::defaultPool().start(AcquireData);
+//ThreadPool::defaultPool().start(AcquireData);
 
 
 	DHVendor DHObj;
@@ -183,8 +175,8 @@ ThreadPool::defaultPool().start(AcquireData);
 	channelList.push_back(1);
 
 	ReciveUIQunue queue1;
-	bool b = true;
-	queue1.enqueueNotification(new ReciveUINotification(b));
+ 	//bool b = true;
+ 	//queue1.enqueueNotification(new ReciveUINotification(b));
 	SearchFileWorker SearchWork(&dObj, range, channelList, queue1);
 	
 	ThreadPool::defaultPool().start(SearchWork);
@@ -205,7 +197,7 @@ ThreadPool::defaultPool().start(AcquireData);
 
 	queue.wakeUpAll();
 	ThreadPool::defaultPool().joinAll();
-
+*/
 
 		return;
 	}
