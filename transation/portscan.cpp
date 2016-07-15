@@ -58,32 +58,7 @@ void ReceiveData::analyzePacket(const u_char *pkt_data, u_short size, vector<lon
 		in_addr srcaddr;		
 		srcaddr.S_un.S_addr = ip->sourceIP;
 		string srcip(inet_ntoa(srcaddr));
-		//cout << "src ip:" << srcip << endl;
-
-		/*int i, j;
-		for (i = 0; i < ips.size(); i++)
-		{
-			if (ip->sourceIP == ips[i])
-			{
-				for (j = 0; j < ports.size(); j++)
-				{
-					if (htons(tcp->sport) == ports[j])
-					{
-						char log[512] = { 0 };
-						sprintf_s(log, " port src: %d, dst: %d, len: %d, flag: %02x\n",
-							htons(tcp->sport), htons(tcp->dport), size, tcp->flag);
-						cout << string(log) << endl;
-
-
-						SCANRESULT out = { 0 };
-						char *sip = inet_ntoa(srcaddr);
-						memcpy(out.ip, sip, strlen(sip));
-						out.port = htons(tcp->sport);
-						outIps.push_back(out);
-					}
-				}				
-			}		
-		}		*/
+				
 		SCANRESULT out = { 0 };
 		char *sip = inet_ntoa(srcaddr);
 		memcpy(out.ip, sip, strlen(sip));
@@ -255,7 +230,7 @@ void SendData::initHeader(struct iphdr *ip, struct tcphdr *tcp, struct pseudohdr
 	int len = sizeof(struct iphdr) + sizeof(struct tcphdr);
 	// IP头部数据初始化
 	ip->hl = (4 << 4 | sizeof(struct iphdr) / sizeof(unsigned int));
-	ip->tos = 0;
+	ip->tos = 0;	
 	ip->total_len = htons(len);
 	ip->id = 1;
 	ip->frag_and_flags = 0x40;
@@ -298,6 +273,7 @@ void SendData::buildTcpPacket(IPMAC srcip, IPMAC dstip, vector<u_short> ports, v
 	for (i = 0; i < ports.size(); i++)
 	{
 		char data[100] = { 0 };
+
 		ip.sourceIP = srcip.ip;
 		initHeader(&ip, &tcp, &pseudoheader, dstip.ip, ports[i]);
 		memcpy(data, &ip, sizeof(struct iphdr));
@@ -321,6 +297,7 @@ void SendData::buildTcpPacket(IPMAC srcip, IPMAC dstip, vector<u_short> ports, v
 
 		SendPacket senddata(data, sizeof(struct ethhdr) + sizeof(struct iphdr) + sizeof(struct tcphdr));
 		packets.push_back(senddata);
+
 	}
 
 }
@@ -521,8 +498,8 @@ void PortScan::setDefaultScanPorts()
 	_scanPorts.push_back(80);
 	//俊明视
 	_scanPorts.push_back(8670);
-	//天地伟业(192.168.0.23,无法返回正确值，待确认)
-	//_scanPorts.push_back(3000);
+	//天地伟业
+	_scanPorts.push_back(3001);
 	//同为
 	_scanPorts.push_back(6036);
 	//星网锐捷

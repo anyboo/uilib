@@ -140,6 +140,8 @@ bool QFileSqlite::execSql(string sql)
 		return false;
 	try
 	{
+		if (sql.empty())
+			return false;
 		sess << sql , now;
 		closeConnect(sess);
 	}

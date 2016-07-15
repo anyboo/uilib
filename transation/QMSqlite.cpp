@@ -144,6 +144,8 @@ bool QMSqlite::execSql(string sql)
 		return false;
 	try
 	{
+		if (sql.empty())
+			return false;
 		sess << sql , now;
 		closeConnect(sess);
 	}
@@ -157,12 +159,14 @@ bool QMSqlite::execSql(string sql)
 }
 
 bool QMSqlite::searchFactoryName(string sx, std::vector<string>& Record)
-{
+{		
 	Session sess = connectDb();
 	if (!checkConnect(sess))
 		return false;
 	try
 	{
+		if (sx.empty())
+			return false;
 		Statement select(sess);
 		string sql = "SELECT name FROM SearchFactory where sx like \"" + sx;
 		sql.append("%\"");		
