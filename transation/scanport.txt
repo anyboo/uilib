@@ -1,6 +1,8 @@
     端口扫描demo
     #include "portscan.h"
-
+    
+    
+   暂不支持天地伟业和宇视科技
    结果写入内存表ScanPort
      
     PortScan portScan;
