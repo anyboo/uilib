@@ -8,6 +8,7 @@
 #include "Poco/Data/SQLite/Connector.h"
 #include <iostream>
 #include <vector>
+#include "DatabaseException.h"
 
 using namespace std;
 using Poco::Data::Session;
@@ -70,7 +71,7 @@ public:
 		}
 		catch (Poco::Exception &ex)
 		{
-			throw(ex.displayText());
+			throw DatabaseException(ex.displayText());
 			closeConnect(sess);
 			return false;
 		}
@@ -90,7 +91,7 @@ public:
 		}
 		catch (Poco::Exception &ex)
 		{
-			throw(ex.displayText());
+			throw DatabaseException(ex.displayText());
 			closeConnect(sess);
 			return false;
 		}
@@ -112,7 +113,7 @@ public:
 		}
 		catch (Poco::Exception &ex)
 		{
-			throw(ex.displayText());
+			throw DatabaseException(ex.displayText());
 			closeConnect(sess);
 			return false;
 		}

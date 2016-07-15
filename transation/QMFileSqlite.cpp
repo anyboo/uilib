@@ -41,7 +41,7 @@ bool QFileSqlite::Initialize()
 	}
 	catch (Poco::Exception &ex)
 	{
-		throw(ex.displayText());		
+		throw DatabaseException(ex.displayText());
 		return false;
 	}
 	
@@ -59,11 +59,11 @@ bool QFileSqlite::creatSessionPool()
 		Session sess = connectDb();
 		sess << "PRAGMA synchronous = OFF; ", now;
 		if (!m_pool->isActive())
-			throw "new session fail";
+			throw DatabaseException("new session fail");
 	}
 	catch (Poco::Exception &ex)
 	{
-		throw(ex.displayText());
+		throw DatabaseException(ex.displayText());
 		return false;
 	}
 	
@@ -76,7 +76,7 @@ Session QFileSqlite::connectDb()
 	//get session
 	Session sess(m_pool->get());
 	if (!sess.isConnected())	
-		throw "session get error";	
+		throw DatabaseException("session get error");
 
 	return sess;	
 }
@@ -121,7 +121,7 @@ bool QFileSqlite::unInitialize()
 	}
 	catch (Poco::Exception &ex)
 	{
-		throw(ex.displayText());		
+		throw DatabaseException(ex.displayText());
 		return false;
 	}
 
@@ -145,7 +145,7 @@ bool QFileSqlite::execSql(string sql)
 	}
 	catch (Poco::Exception &ex)
 	{
-		throw(ex.displayText());
+		throw DatabaseException(ex.displayText());
 		closeConnect(sess);
 		return false;
 	}

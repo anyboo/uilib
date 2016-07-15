@@ -78,6 +78,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DatabaseException.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PING.cpp" />
     <ClCompile Include="QMFileSqlite.cpp" />
@@ -86,6 +87,7 @@
     <ClCompile Include="windowutils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DatabaseException.h" />
     <ClInclude Include="PING.h" />
     <ClInclude Include="QMFileSqlite.h" />
     <ClInclude Include="QMSqlite.h" />
