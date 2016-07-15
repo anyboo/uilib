@@ -130,7 +130,7 @@ public:
 	void run();
 
 private:
-	void initHeader(struct iphdr *ip, struct tcphdr *tcp, struct pseudohdr *pseudoheader, long dst_ip, USHORT dst_port);
+	void initHeader(struct iphdr *ip, struct tcphdr *tcp, struct pseudohdr *pseudoheader, long dst_ip, USHORT dst_port);	
 	void buildTcpPacket(IPMAC srcip, IPMAC dstip, vector<u_short> ports, vector<SendPacket>& packets);
 	void send(pcap_t * adhandle, vector<SendPacket> packets);
 

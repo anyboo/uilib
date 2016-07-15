@@ -129,7 +129,7 @@ string WindowUtils::ConvertNICUUIDtoPcapName(pcap_if_t* devs, const string& uuid
 {
 	string pcap_name;
 	
-	for (pcap_if_t *d = devs; d && d->next; d = d->next)
+	for (pcap_if_t *d = devs; d; d = d->next)
 	{
 		string tmp(d->name);		
 		if (/*tmp.compare(uuid) == 0*/tmp.find(uuid) != string::npos)
