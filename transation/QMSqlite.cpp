@@ -41,7 +41,7 @@ bool QMSqlite::Initialize()
 	}
 	catch (Poco::Exception &ex)
 	{
-		throw(ex.displayText());		
+		throw DatabaseException(ex.displayText());
 		return false;
 	}
 	
@@ -63,11 +63,11 @@ bool QMSqlite::creatSessionPool()
 		m_pool = new SessionPool(SQLite::Connector::KEY, ":memory:", 1, 100, 10);
 #endif
 		if (!m_pool->isActive())
-			throw "new session fail";
+			throw DatabaseException("new session fail");
 	}
 	catch (Poco::Exception &ex)
 	{
-		throw(ex.displayText());
+		throw DatabaseException(ex.displayText());
 		return false;
 	}
 	
@@ -80,7 +80,7 @@ Session QMSqlite::connectDb()
 	//get session
 	Session sess(m_pool->get());
 	if (!sess.isConnected())	
-		throw "session get error";	
+		throw DatabaseException("session get error");
 
 	return sess;	
 }
@@ -125,7 +125,7 @@ bool QMSqlite::unInitialize()
 	}
 	catch (Poco::Exception &ex)
 	{
-		throw(ex.displayText());		
+		throw DatabaseException(ex.displayText());
 		return false;
 	}
 
@@ -149,7 +149,7 @@ bool QMSqlite::execSql(string sql)
 	}
 	catch (Poco::Exception &ex)
 	{
-		throw(ex.displayText());
+		throw DatabaseException(ex.displayText());
 		closeConnect(sess);
 		return false;
 	}
@@ -171,7 +171,7 @@ bool QMSqlite::searchFactoryName(string sx, std::vector<string>& Record)
 	}
 	catch (Poco::Exception &ex)
 	{
-		throw(ex.displayText());
+		throw DatabaseException(ex.displayText());
 		closeConnect(sess);
 		return false;
 	}

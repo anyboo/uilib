@@ -468,9 +468,9 @@ bool PortScan::writeDb()
 		}
 		pDb->writeDataByVector(INSERT_SCAN_PORTE, scanResults);
 	}
-	catch (int e)
+	catch (DatabaseException& ex)
 	{
-		cout << " error: " << e << endl;
+		cout << " error: " << ex.displayText() << endl;
 	}
 	
 
