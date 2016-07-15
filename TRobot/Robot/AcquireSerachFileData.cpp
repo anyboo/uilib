@@ -39,16 +39,16 @@ void AcquireSerachFileData::run()
 				switch (eNotify)
 				{
 				case Notification_Type_Search_File_Process:
-					std::cout << "分子：" <<nData<< std::endl;
+					std::cout << "nPos:" <<nData<< std::endl;
 					break;
 				case Notification_Type_Search_File_TotalSize:
-					std::cout << "分母：" << nData << std::endl;
+					std::cout << "Total:" << nData << std::endl;
 					break;
 				case Notification_Type_Search_File_Finish:
-					std::cout << "完成：" << nData << std::endl;
+					std::cout << "Finish:" << nData << std::endl;
 					break;
 				default:
-					std::cout << "Error" << std::endl;
+					std::cout << "Error:" << std::endl;
 					break;
 				}				
 			}

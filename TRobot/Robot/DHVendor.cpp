@@ -34,8 +34,6 @@ DHVendor::DHVendor()
 
 	m_lSearchDeviceHandle = -1;
 
-	m_nPos = 0;
-
 	m_sRoot = "D:\\DownLoadVideo\\";
 }
 
@@ -269,10 +267,8 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 		std::cout << "GetRecordFileList 文件名:" << info.name << std::endl << "  " << "文件大小:" << info.size << "  " << "通道:" << info.channel << std::endl;
 	}
 
-	m_nPos++;
-	std::cout << "----------m_nPos:" << m_nPos << std::endl;
-	NotificationQueue& queue = NotificationQueue::defaultQueue();
-	queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_Process, m_nPos));
+// 	m_nPos++;
+// 	std::cout << "----------m_nPos:" << m_nPos << std::endl;
 
 
 	// Save Search Video List Result to Config File

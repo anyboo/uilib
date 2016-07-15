@@ -19,6 +19,7 @@ SearchFileWorker::~SearchFileWorker()
 void SearchFileWorker::run()
 {
 	Poco::Random rnd;
+	int nPos = 0;
 
 	std::vector<time_range> trInfor = this->MakeTimeRangeList(m_range);
 
@@ -34,6 +35,10 @@ void SearchFileWorker::run()
 		{
 			m_pDevice->Search(channel, m_range);
 
+			NotificationQueue& queue = NotificationQueue::defaultQueue();
+			queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_Process, nPos));
+
+
 			if (!m_queue.empty())
 			{
 				Notification::Ptr pNf(m_queue.waitDequeueNotification());
@@ -45,7 +50,7 @@ void SearchFileWorker::run()
 						{
 							FastMutex::ScopedLock lock(m_mutex);
 							m_bCancel = pReciveDataNf->GetData();
-							std::cout << "È¡Ïû£º" << m_bCancel << std::endl;
+							std::cout << "Cancel£º" << m_bCancel << std::endl;
 						}
 					}
 				}

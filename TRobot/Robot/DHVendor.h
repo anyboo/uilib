@@ -55,7 +55,7 @@ private:
 	/* Search */
 	RECORD_FILE_LIST m_files;
 	RECORD_FILE_LIST m_FilesChange;
-	int m_nPos;
+	//int m_nPos;
 
 	/*Download*/
 	long m_lDownloadHandle;
