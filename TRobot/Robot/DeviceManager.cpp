@@ -1,7 +1,7 @@
 
+#include "Device.h"
 #include "LoginDevice.h"
 #include "DeviceManager.h"
-
 
 FastMutex CDeviceManager::m_mutex;
 

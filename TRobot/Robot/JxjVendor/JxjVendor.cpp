@@ -121,6 +121,7 @@ CJXJVendor::CJXJVendor()
 	m_bSearchDeviceAPI = true;
 	m_sDefUserName = "admin";
 	m_sDefPassword = "admin";
+	m_iDefPort = 3321;
 	m_iMaxChannel = 0;
 	m_lSearchDeviceHandle = -1;
 }
@@ -238,9 +239,11 @@ void CJXJVendor::SearchAll(const long loginHandle)
 
 void CJXJVendor::Search(const long loginHandle, const size_t channel, const time_range& range)
 {
-	std::cout << "JXJ 搜索文件 开始！" << std::endl;
+	assert(range.end - range.start <= 24 * 3600);
 
-	m_files.clear();
+	std::cout << "JXJ 搜索文件 开始！" << std::endl;		
+	
+	m_files_Unit.clear();
 
 	if (range.start > range.end)
 	{
@@ -248,25 +251,34 @@ void CJXJVendor::Search(const long loginHandle, const size_t channel, const time
 		return;
 	}
 
-	std::vector<time_range> timeRangeList = CCommonUtrl::getInstance().MakeTimeRangeList(range);
-	for (size_t i = 0; i < timeRangeList.size(); i++)
+	//std::vector<time_range> timeRangeList = CCommonUtrl::getInstance().MakeTimeRangeList(range);
+	//for (size_t i = 0; i < timeRangeList.size(); i++)
 	{
-		JXJ_SearchUnit(loginHandle, channel, timeRangeList[i], m_files);
+		JXJ_SearchUnit(loginHandle, channel, range, m_files_Unit);
 	}
 
 	std::cout << "JXJ 搜索文件 结束！" << std::endl;
 
 	// Save Search Video List Result to Config File
 	std::cout << "JXJ 写Json数据到文件 开始！" << std::endl;
-	CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files, Vendor_JXJ_Abbr);
+	CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files_Unit, Vendor_JXJ_Abbr);
 	std::cout << "JXJ 写Json数据到文件 结束！" << std::endl;
 
 	// Write File List to DB
 	std::cout << "JXJ 写文件数据到数据库 开始！" << std::endl;
-	CCommonUtrl::getInstance().WriteFileListToDB(m_files);
+	CCommonUtrl::getInstance().WriteFileListToDB(m_files_Unit);
 	std::cout << "JXJ 写文件数据到数据库 结束！" << std::endl;
 
+	for (size_t i = 0; i < m_files_Unit.size(); i++)
+	{
+		m_files.push_back(m_files_Unit[i]);
+	}
+
 	return;
+}
+void CJXJVendor::ClearLocalRecordFiles()
+{
+	m_files.clear();
 }
 
 //void CJxjVendor::DownloadByTime(const std::time_t& start, const std::time_t& end)
@@ -464,7 +476,7 @@ void CJXJVendor::PlayVideo(const long loginHandle, const size_t channel, const t
 		return;
 	}
 
-	AVP_AddPlayWnd(m_iPlayVideoChannel, NULL, NULL, NULL, NULL);
+	AVP_AddPlayWnd(m_iPlayVideoChannel, NULL, m_hWnd, NULL, NULL);
 
 	// 开启解码
 	AVP_Play(m_iPlayVideoChannel);
@@ -527,7 +539,7 @@ void CJXJVendor::PlayVideo(const long loginHandle, const size_t channel, const s
 		return;
 	}
 
-	AVP_AddPlayWnd(m_iPlayVideoChannel, NULL, NULL, NULL, NULL);
+	AVP_AddPlayWnd(m_iPlayVideoChannel, NULL, m_hWnd, NULL, NULL);
 
 	// 开启解码
 	AVP_Play(m_iPlayVideoChannel);
@@ -866,8 +878,9 @@ int __stdcall JXJ_JRecStream(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* p
 	j_frame_t *pFrame = (j_frame_t *)pBuff;
 
 	char cPlayInfo[100];
-	sprintf_s(cPlayInfo, 100, "--------%d    %d\r\n", pFrame->timestamp_sec, pFrame->timestamp_usec);
+	sprintf_s(cPlayInfo, 100, "Play Video - %d\t%d\r\n", pFrame->timestamp_sec, pFrame->timestamp_usec);
 	std::cout << cPlayInfo << std::endl;
+
 	AVP_PutFrame(m_iPlayVideoChannel, pBuff);
 
 	return 0;

@@ -38,6 +38,7 @@ public:
 	void SetDownloadPath(const std::string& root);
 	void SearchAll();
 	void Search(const size_t channel, const time_range& range);
+	void ClearLocalRecordFiles(){ return m_pVendor->ClearLocalRecordFiles(); }
 	void Download(const size_t channel, const time_range& range);
 	void PlayVideo(const HWND hWnd, const size_t channel, const time_range& range);
 	void Download(const size_t channel, const std::string& fileName);

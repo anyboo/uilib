@@ -1,6 +1,6 @@
 
-#include "SearchDevice.h"
 #include "WindowUtils.h"
+#include "SearchDevice.h"
 
 
 DEVICE_INFO_LIST CSearchDevice::m_listDeviceInfo;
