@@ -79,7 +79,7 @@ public:
 		try
 		{
 			Statement select(sess);
-			select << sql, into(Record), now;
+			select << sql, Poco::Data::Keywords::into(Record), Poco::Data::Keywords::now;
 			closeConnect(sess);
 		}
 		catch (Poco::Exception &ex)
