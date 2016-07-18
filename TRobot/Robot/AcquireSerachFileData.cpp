@@ -46,6 +46,8 @@ void AcquireSerachFileData::run()
 					break;
 				case Notification_Type_Search_File_Finish:
 					std::cout << "Finish:" << nData << std::endl;
+				case Notification_Type_Search_File_Failure:
+					std::cout << "Fail:" << nData << std::endl;
 					break;
 				default:
 					std::cout << "Error:" << std::endl;

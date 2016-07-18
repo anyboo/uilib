@@ -18,7 +18,6 @@ std::string HK_MakeStrTimeByTimestamp(time_t time);
 
 bool HK_isGetDVRConfig(const long loginHandle);
 size_t HK_getChannel(const long loginHandle, size_t channel);
-/*bool SameFile(RECORD_FILE_LIST FileList, std::string strFileName);*/
 
 HKVendor::HKVendor()
 {
@@ -540,19 +539,6 @@ size_t HK_getChannel(const long loginHandle, size_t channel)
 	}
 }
 
-// bool SameFile(RECORD_FILE_LIST FileList, std::string strFileName)
-// {
-// 	RECORD_FILE_LIST::iterator it = FileList.begin();
-// 	for (; it != FileList.end(); ++it)
-// 	{
-// 		if (it->name == strFileName)
-// 		{
-// 			return true;
-// 		}
-// 	}
-// 
-// 	return false;
-// }
 
 std::string HK_MakeFileName(int channel, const std::string& startTime, const std::string& endTime)
 {

@@ -142,6 +142,7 @@ typedef std::vector<NET_DEVICE_INFO_SIMPLE*> DEVICE_INFO_SIMPLE_LIST;
 typedef std::vector<AbstractVendor*> VENDOR_LIST;
 typedef std::vector<RecordFile> RECORD_FILE_LIST;
 
+
 class AbstractVendor
 {
 public:

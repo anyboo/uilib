@@ -34,9 +34,21 @@ void SearchFileWorker::run()
 		for (auto day : trInfor)
 		{
 			m_pDevice->Search(channel, m_range);
+// 			try
+// 			{
+// 				m_pDevice->Search(channel, m_range);
+// 			}
+// 			catch (std::string &strObj)
+// 			{
+// // 				if (strObj == "Search file by time failed")
+// // 				{
+// 					queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_Failure, SEARCHFILE_DEFAULT));
+// 				//}
+// 			}
+			
 
 			nPos++;
-			NotificationQueue& queue = NotificationQueue::defaultQueue();
+			//NotificationQueue& queue = NotificationQueue::defaultQueue();
 			queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_Process, nPos));
 
 

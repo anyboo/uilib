@@ -17,6 +17,7 @@ typedef enum
 	Notification_Type_Search_Device_Finish,
 	Notification_Type_Search_File_Process,
 	Notification_Type_Search_File_TotalSize,
+	Notification_Type_Search_File_Failure,
 	Notification_Type_Search_File_Finish,
 	Notification_Type_Search_File_Cancel,
 	Notification_Type_Download_File_Process,

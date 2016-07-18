@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __DHVENDOR_H__
+#define __DHVENDOR_H__
 
 #include "CommonUtrl.h"
 
@@ -18,6 +19,7 @@ public:
 
 	void SearchAll(const long loginHandle);
 	void Search(const long loginHandle, const size_t channel, const time_range& range);
+
 	void Download(const long loginHandle, const size_t channel, const time_range& range);
 	void PlayVideo(const long loginHandle, const size_t channel, const time_range& range);
 	void Download(const long loginHandle, const size_t channel, const std::string& filename, const int nID);
@@ -59,6 +61,6 @@ private:
 
 	/*Download*/
 	long m_lDownloadHandle;
-
-	
 };
+
+#endif 

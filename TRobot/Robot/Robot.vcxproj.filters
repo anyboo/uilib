@@ -36,9 +36,6 @@
     <ClInclude Include="AbstractVendor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="JxjVendor\JxjVendor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="inc\stdint.h">
       <Filter>inc</Filter>
     </ClInclude>
@@ -58,9 +55,6 @@
       <Filter>JNetSDK</Filter>
     </ClInclude>
     <ClInclude Include="JxjVendor\TestWindows.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DZPVendor\DZPVendor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CommonUtrl.h">
@@ -129,18 +123,15 @@
     <ClInclude Include="..\..\transation\DatabaseException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BusinessProcessException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Robot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="JxjVendor\JxjVendor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="JxjVendor\TestWindows.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DZPVendor\DZPVendor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CommonUtrl.cpp">
@@ -186,6 +177,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\transation\DatabaseException.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BusinessProcessException.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
