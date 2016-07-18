@@ -26,6 +26,7 @@ HKVendor::HKVendor()
 	m_sDefPassword = "12345";
 	m_iMaxChannel = 0;
 	m_bSearchDeviceAPI = false;
+	m_iDefPort = 8000;
 
 	m_lSearchDeviceHandle = -1;
 
@@ -102,6 +103,11 @@ void HKVendor::Logout(const long loginHandle)
 void HKVendor::SearchAll(const long loginHandle)
 {
 
+}
+
+void HKVendor::ClearLocalRecordFiles()
+{
+	m_files.clear();
 }
 
 void HKVendor::Search(const long loginHandle, const size_t channel, const time_range& range)

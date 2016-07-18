@@ -29,6 +29,8 @@ void SearchFileWorker::run()
 	NotificationQueue& queue = NotificationQueue::defaultQueue();
 	queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_TotalSize, nDay*nChannelList));
 
+	m_pDevice->ClearLocalRecordFiles();
+
 	for (auto channel : m_channelList)
 	{
 		for (auto day : trInfor)

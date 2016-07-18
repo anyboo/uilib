@@ -15,6 +15,7 @@ public:
 
 	void SearchAll(const long loginHandle);
 	void Search(const long loginHandle, const size_t channel, const time_range& range);
+	void ClearLocalRecordFiles();
 	void Download(const long loginHandle, const size_t channel, const time_range& range);
 	void PlayVideo(const long loginHandle, const size_t channel, const time_range& range);
 	void Download(const long loginHandle, const size_t channel, const std::string& filename);
@@ -47,6 +48,7 @@ private:
 	size_t m_iMaxChannel;
 	std::string m_sDefUserName;
 	std::string m_sDefPassword;
+	int m_iDefPort;
 
 	/* Search Device */
 	long m_lSearchDeviceHandle;

@@ -31,6 +31,7 @@ DHVendor::DHVendor()
 	m_iMaxChannel = 0;
 	m_lDownloadHandle = 0;
 	m_bSearchDeviceAPI = true;
+	m_iDefPort = 37777;
 
 	m_lSearchDeviceHandle = -1;
 
@@ -182,6 +183,11 @@ void timeStdToDH(tm *pTimeStd, NET_TIME *pTimeDH)
 	pTimeDH->dwHour = pTimeStd->tm_hour;
 	pTimeDH->dwMinute = pTimeStd->tm_min;
 	pTimeDH->dwSecond = pTimeStd->tm_sec;
+}
+
+void DHVendor::ClearLocalRecordFiles()
+{
+	m_files.clear();
 }
 
 void DHVendor::Search(const long loginHandle, const size_t channel, const time_range& range)
