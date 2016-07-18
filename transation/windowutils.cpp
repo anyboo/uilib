@@ -649,6 +649,8 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
         }
     }
 
+	if (adhandle)
+		pcap_close(adhandle);
 
     return !ip.empty();
 	
