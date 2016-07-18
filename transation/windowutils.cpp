@@ -96,8 +96,8 @@ void GetLocalNetCar(std::string& Desc, std::string& AdapterName, std::vector<str
 			
 				pIpAdapterInfo = pIpAdapterInfo->Next;				
 			}
-		}
-		delete[]pfirstIpAdapterInfo;		
+		}		
+		delete[] pfirstIpAdapterInfo;		
 	}	
 }
 
@@ -745,7 +745,7 @@ bool WindowUtils::isOnLine(){
     char *pIfTable = new char[dwSize];   
 
     if (GetIfTable((MIB_IFTABLE *)pIfTable, &dwSize, 0) == ERROR_INSUFFICIENT_BUFFER) {
-        delete pIfTable;
+        delete[] pIfTable;
         pIfTable = new char[dwSize];
     }
    
@@ -803,7 +803,7 @@ bool WindowUtils::isOnLine(){
         }
 
     }
-    delete pIfTable;
+    delete[] pIfTable;
     return r;
 }
 
