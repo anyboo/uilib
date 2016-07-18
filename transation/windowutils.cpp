@@ -202,7 +202,7 @@ bool WindowUtils::setNetConfig(const string& sName, const string& sIP, const str
     }
     int maxPingTime = 1000 * 3;
     ::Sleep(2000);
-    while (maxPingTime > 0 && !CPing::instance().Ping(sIP.c_str(), 20)){
+	while (maxPingTime > 0 && !CPing::instance().Ping(sGate.c_str(), 8)){
         ::Sleep(1000);
         maxPingTime -= 1000;
     }
@@ -214,7 +214,9 @@ bool WindowUtils::setNetDhcp(const string& sName){
 	string sCmd("interface ip set address name=\"");
 	sCmd += sName;
 	sCmd.append("\" source=dhcp");
-	::ShellExecuteA(NULL, (LPCSTR)"open", (LPCSTR)"netsh.exe", (LPCSTR)sCmd.c_str(), NULL, SW_SHOWNORMAL);	
+	int nRun = (int)::ShellExecuteA(NULL, (LPCSTR)"open", (LPCSTR)"netsh.exe", (LPCSTR)sCmd.c_str(), NULL, SW_SHOWNORMAL);
+	if (nRun <= 32)
+		return false;
     return true;
 }
 
@@ -332,6 +334,7 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
 
 			char szIP[30] = { 0 };
 			sprintf_s(szIP, "%d.%d.%d.%d", arph->sip[0], arph->sip[1], arph->sip[2], arph->sip[3]);
+			cout << "ip 0: " << szIP << endl;
 
 			string source = string(szIP);
             if (IPs.end() != std::find(IPs.begin(), IPs.end(), source)){
@@ -349,6 +352,7 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
 
 			char szdIP[30] = { 0 };
 			sprintf_s(szdIP, "%d.%d.%d.%d", arph->dip[0], arph->dip[1], arph->dip[2], arph->dip[3]);
+			cout << "ip 1: " << szdIP << endl;
 			ip = string(szdIP);
             if (arph->dip[0] != arph->sip[0] || arph->dip[1] != arph->sip[1] || arph->dip[2] != arph->sip[2] || ip == netGate)
             {
@@ -357,11 +361,13 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
 					char sztmp[30] = { 0 };
 					sprintf_s(sztmp, "%d.%d.%d.44", arph->sip[0], arph->sip[1], arph->sip[2]);
 					ip = string(sztmp);
+					cout << "ip 2: " << ip << endl;
                 }
                 else{
 					char sztmp[30] = { 0 };
 					sprintf_s(sztmp, "%d.%d.%d.254", arph->sip[0], arph->sip[1], arph->sip[2]);
 					ip = string(sztmp);
+					cout << "ip 3: " << ip << endl;
                 }
             }
 
@@ -380,6 +386,7 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
 
 			char szsource[30] = { 0 };
 			sprintf_s(szsource, "%d.%d.%d.%d", arph->sip[0], arph->sip[1], arph->sip[2], arph->sip[3]);
+			cout << "ip 3: " << szsource << endl;
 			string source = string(szsource);
             if (IPs.end() != std::find(IPs.begin(), IPs.end(), source)){
                 continue;
@@ -396,16 +403,17 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate)
 				char sztmp[30] = { 0 };
 				sprintf_s(sztmp, "%d.%d.%d.44", arph->sip[0], arph->sip[1], arph->sip[2]);
 				ip = string(sztmp);
+				cout << "ip 4: " << ip << endl;
             }
             else{
 				char sztmp[30] = { 0 };
 				sprintf_s(sztmp, "%d.%d.%d.254", arph->sip[0], arph->sip[1], arph->sip[2]);
 				ip = string(sztmp);
+				cout << "ip 5: " << ip << endl;
             }
            
             break;
         }
-
     }
 
     return !ip.empty();	
@@ -647,8 +655,9 @@ bool WindowUtils::getDirectDevice(string& ip, string& netGate, std::set<string>&
 }
 bool WindowUtils::setIPByDHCP(string& ip, string& mask, string& netGate){
 	string sName = GetNetCardName(WindowUtils::getLocalUuid());
-    cout<<__FILE__<<__FUNCTION__<<__LINE__<<sName;
-    WindowUtils::setNetDhcp(sName);
+    
+	if (!WindowUtils::setNetDhcp(sName))
+		return false;
     std::vector<string> ips;
     int maxPingTime = 1000 * 3;
     ::Sleep(2000);
@@ -690,10 +699,10 @@ bool WindowUtils::setIPByDHCP(string& ip, string& mask, string& netGate){
                     pIpAddrString != NULL && (!r); pIpAddrString = pIpAddrString->Next){
                     if (*ips.begin() == pIpAddrString->IpAddress.String)
                     {
-						if (!WindowUtils::setNetConfig(pIpAdapterInfo->AdapterName, *ips.begin(), pIpAddrString->IpMask.String, pIpAdapterInfo->GatewayList.IpAddress.String, true))
+						/*if (!WindowUtils::setNetConfig(pIpAdapterInfo->AdapterName, *ips.begin(), pIpAddrString->IpMask.String, pIpAdapterInfo->GatewayList.IpAddress.String, true))
                         {
                             break;
-                        }
+                        }*/
                         ip = *ips.begin();
                         mask = pIpAddrString->IpMask.String;
                         netGate = pIpAdapterInfo->GatewayList.IpAddress.String;
