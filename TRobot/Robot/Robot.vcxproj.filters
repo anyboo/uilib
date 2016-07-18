@@ -81,13 +81,19 @@
     <ClInclude Include="QMSqlite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="netdefine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="portscan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DatabaseException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\netdefine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\portscan.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\WindowUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -125,9 +131,6 @@
     <ClCompile Include="PlayVideo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WindowUtils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Network\PING.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -143,10 +146,13 @@
     <ClCompile Include="QMSqlite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="portscan.cpp">
+    <ClCompile Include="DatabaseException.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DatabaseException.cpp">
+    <ClCompile Include="Network\portscan.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\WindowUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

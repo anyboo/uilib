@@ -96,7 +96,9 @@
     <ClInclude Include="HKVendor\HKVendor.h" />
     <ClInclude Include="JxjVendor\JXJVendor.h" />
     <ClInclude Include="LoginDevice.h" />
-    <ClInclude Include="netdefine.h" />
+    <ClInclude Include="Network\netdefine.h" />
+    <ClInclude Include="Network\portscan.h" />
+    <ClInclude Include="Network\WindowUtils.h" />
     <ClInclude Include="NotificationDeviceManager.h" />
     <ClInclude Include="NotificationNetworkStatus.h" />
     <ClInclude Include="Network\PING.h" />
@@ -122,15 +124,15 @@
     <ClCompile Include="JxjVendor\JXJVendor.cpp" />
     <ClCompile Include="LoginDevice.cpp" />
     <ClCompile Include="Network\PING.cpp" />
+    <ClCompile Include="Network\portscan.cpp" />
     <ClCompile Include="Network\utils.cpp" />
+    <ClCompile Include="Network\WindowUtils.cpp" />
     <ClCompile Include="PlayVideo.cpp" />
-    <ClCompile Include="portscan.cpp" />
     <ClCompile Include="QMFileSqlite.cpp" />
     <ClCompile Include="QMSqlite.cpp" />
     <ClCompile Include="Robot.cpp" />
     <ClCompile Include="SearchDevice.cpp" />
     <ClCompile Include="TestWindows.cpp" />
-    <ClCompile Include="WindowUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Robot.rc" />
