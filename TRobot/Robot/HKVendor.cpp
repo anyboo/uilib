@@ -18,7 +18,7 @@ std::string HK_MakeStrTimeByTimestamp(time_t time);
 
 bool HK_isGetDVRConfig(const long loginHandle);
 size_t HK_getChannel(const long loginHandle, size_t channel);
-bool SameFile(RECORD_FILE_LIST FileList, std::string strFileName);
+/*bool SameFile(RECORD_FILE_LIST FileList, std::string strFileName);*/
 
 HKVendor::HKVendor()
 {
@@ -192,16 +192,11 @@ void HKVendor::Search(const long loginHandle, const size_t channel, const time_r
 					rf.beginTime = mktime(&tmStart);
 					rf.endTime = mktime(&tmEnd);
 
-					if (!SameFile(m_files, rf.name))
-					{
-						m_files.push_back(rf);
-
-						std::cout << "GetRecordFileList 文件名:" << rf.name << endl << "  " << "文件大小:" << rf.size << "  " << "通道:" << rf.channel << endl;
-					}
-					
+					m_files.push_back(rf);
 
 					ret = NET_DVR_FindNextFile_V30(hFindHandle, &FindData);
 
+					std::cout << "GetRecordFileList 文件名:" << rf.name << endl << "  " << "文件大小:" << rf.size << "  " << "通道:" << rf.channel << endl;
 					
 
 				}
@@ -545,19 +540,19 @@ size_t HK_getChannel(const long loginHandle, size_t channel)
 	}
 }
 
-bool SameFile(RECORD_FILE_LIST FileList, std::string strFileName)
-{
-	RECORD_FILE_LIST::iterator it = FileList.begin();
-	for (; it != FileList.end(); ++it)
-	{
-		if (it->name == strFileName)
-		{
-			return true;
-		}
-	}
-
-	return false;
-}
+// bool SameFile(RECORD_FILE_LIST FileList, std::string strFileName)
+// {
+// 	RECORD_FILE_LIST::iterator it = FileList.begin();
+// 	for (; it != FileList.end(); ++it)
+// 	{
+// 		if (it->name == strFileName)
+// 		{
+// 			return true;
+// 		}
+// 	}
+// 
+// 	return false;
+// }
 
 std::string HK_MakeFileName(int channel, const std::string& startTime, const std::string& endTime)
 {

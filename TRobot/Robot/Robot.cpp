@@ -97,7 +97,7 @@ TEST_CASE("This is a demo", "[demo]")
 
 		HKObj.Init();
 		long lLogin = HKObj.Login("192.168.0.22", 8000, "admin", "12345");
-		HKObj.Search(lLogin, 1, range);
+		HKObj.Search(lLogin, 0, range);
 		//HKObj.Download(lLogin, 0, range);
 		HKObj.Download(lLogin, 1, "ch01_00000000060000100", 0);
 		//HKObj.PlayVideo(lLogin, 1, range);

@@ -69,8 +69,8 @@ public:
 	SearchFileWorker(Device* pDevice, const time_range& range, const std::vector<size_t> channelList, ReciveUIQunue& queue);
 	~SearchFileWorker();
 
+private:
 	void run();
-
 	std::vector<time_range> MakeTimeRangeList(const time_range& range);
 
 private:

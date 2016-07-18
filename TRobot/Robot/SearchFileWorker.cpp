@@ -35,6 +35,7 @@ void SearchFileWorker::run()
 		{
 			m_pDevice->Search(channel, m_range);
 
+			nPos++;
 			NotificationQueue& queue = NotificationQueue::defaultQueue();
 			queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_Process, nPos));
 
