@@ -86,12 +86,15 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AcquireDataRunable.h" />
+    <ClInclude Include="AcquireSerachFileData.h" />
     <ClInclude Include="DatabaseException.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="AbstractVendor.h" />
     <ClInclude Include="CommonUtrl.h" />
     <ClInclude Include="DeviceManager.h" />
     <ClInclude Include="DHVendor\DHVendor.h" />
+    <ClInclude Include="DownloadVideo.h" />
     <ClInclude Include="DZPVendor\DZPVendor.h" />
     <ClInclude Include="HKVendor\HKVendor.h" />
     <ClInclude Include="JxjVendor\JXJVendor.h" />
@@ -108,17 +111,25 @@
     <ClInclude Include="portscan.h" />
     <ClInclude Include="QMFileSqlite.h" />
     <ClInclude Include="QMSqlite.h" />
+    <ClInclude Include="ReciveUINotification.h" />
+    <ClInclude Include="ReciveUIQunue.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SearchDevice.h" />
+    <ClInclude Include="SearchFileNotification.h" />
+    <ClInclude Include="SearchFileWorker.h" />
+    <ClInclude Include="SendDataNotification.h" />
     <ClInclude Include="TestWindows.h" />
     <ClInclude Include="WindowUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AcquireDataRunable.cpp" />
+    <ClCompile Include="AcquireSerachFileData.cpp" />
     <ClCompile Include="DatabaseException.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="CommonUtrl.cpp" />
     <ClCompile Include="DeviceManager.cpp" />
     <ClCompile Include="DHVendor\DHVendor.cpp" />
+    <ClCompile Include="DownloadVideo.cpp" />
     <ClCompile Include="DZPVendor\DZPVendor.cpp" />
     <ClCompile Include="HKVendor\HKVendor.cpp" />
     <ClCompile Include="JxjVendor\JXJVendor.cpp" />
@@ -130,8 +141,13 @@
     <ClCompile Include="PlayVideo.cpp" />
     <ClCompile Include="QMFileSqlite.cpp" />
     <ClCompile Include="QMSqlite.cpp" />
+    <ClCompile Include="ReciveUINotification.cpp" />
+    <ClCompile Include="ReciveUIQunue.cpp" />
     <ClCompile Include="Robot.cpp" />
     <ClCompile Include="SearchDevice.cpp" />
+    <ClCompile Include="SearchFileNotification.cpp" />
+    <ClCompile Include="SearchFileWorker.cpp" />
+    <ClCompile Include="SendDataNotification.cpp" />
     <ClCompile Include="TestWindows.cpp" />
   </ItemGroup>
   <ItemGroup>

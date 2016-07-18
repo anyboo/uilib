@@ -1,0 +1,8 @@
+    端口扫描demo
+    #include "portscan.h"
+
+   结果写入内存表ScanPort
+     
+    PortScan portScan;
+    //开始扫描
+    ThreadPool::defaultPool().start(portScan);

@@ -1,0 +1,97 @@
+ #include "utils.h"
+#include "windowutils.h"
+#include "PING.h"
+ 
+ 
+ //判断网卡状态
+    if (!WindowUtils::isOnLine())
+    {       
+        cout << "本地连接断开，请插好网线或开启本地连接！" << endl;
+        return 0;
+    }
+    
+    cout << "开始进行下载器智能匹配" << endl;
+
+
+    std::shared_ptr<string> pIP = std::make_shared<string>();
+    std::shared_ptr<string> pNetGate = std::make_shared<string>();
+    std::shared_ptr<string> pMask = std::make_shared<string>("255.255.255.0");
+    std::shared_ptr<bool> bResult = std::make_shared<bool>(false);
+    std::shared_ptr<bool> bpCancel = std::make_shared<bool>(false);
+
+    cout << "正在智能匹配，请稍等...." << endl;   
+
+    //通过DHCP方式设置IP地址
+    *bResult = WindowUtils::setIPByDHCP(*pIP, *pMask, *pNetGate);
+    
+    if (!*bResult)
+    {
+        //直连方式获取ip和网关
+        *bResult = WindowUtils::getDirectDevice(*pIP, *pNetGate);       
+        if (*bResult)
+        {
+            //通过静态方式设置IP地址
+            if (!WindowUtils::setNetConfig(WindowUtils::getLocalUuid(), *pIP, "255.255.255.0", *pNetGate, true))
+            {
+                *bResult = false;
+            }
+        }
+    }
+
+
+    if (*bResult)
+    {       
+        cout << " current ip:" << *pIP << endl;
+        cout << " other ip:" << *pNetGate << endl;
+        
+    }
+    else{
+        cout << "智能识别网段失败！是否进行深度匹配？" << endl;
+        //深度匹配方式设置ip
+        deepConfig();
+        
+
+    }
+
+//深度匹配方式设置ip
+    void deepConfig(){
+    std::shared_ptr<bool> bResult = std::make_shared<bool>(false);
+    std::shared_ptr<string> pIP = std::make_shared<string>();
+    std::shared_ptr<string> pNetGate = std::make_shared<string>();
+    std::shared_ptr<bool> bpCancel = std::make_shared<bool>(false);
+    
+    cout << "正在深度匹配，请稍等..." << endl;
+    for (int i = 0; i < 255; i++)
+    {
+        string sNetGate("192.168.");
+        sNetGate.append(std::to_string(i));
+        sNetGate.append(".1");
+        string sIP("192.168.");
+        sIP.append(std::to_string(i));
+        sIP.append(".44");
+        *pNetGate = sNetGate;
+        *pIP = sIP;
+
+        if (!WindowUtils::setNetConfig(WindowUtils::getLocalUuid(), *pIP, "255.255.255.0", *pNetGate, true))
+        {
+            continue;
+        }
+
+
+        if (CPing::instance().instance().ScanOneIP(*pNetGate, *pIP, false))
+        {
+            *bResult = true;
+            break;
+        }
+    }
+
+    if (*bResult)
+    {
+        cout << "current ip:" << *pIP << endl;
+        cout << "255.255.255.0" << endl;
+        cout << "dest ip: " << *pNetGate << endl;
+    }
+    else{
+        cout << "智能识别网段失败！请手动设置！" << endl;
+    }
+}

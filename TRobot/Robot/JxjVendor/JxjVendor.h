@@ -20,6 +20,7 @@ public:
 	void PlayVideo(const long loginHandle, const size_t channel, const time_range& range);
 	void Download(const long loginHandle, const size_t channel, const std::string& filename);
 	void PlayVideo(const long loginHandle, const size_t channel, const std::string& filename);
+	bool StopDownload(){ return true; }
 
 	void SetHWnd(const HWND& hWnd){ m_hWnd = hWnd; }
 	void SetDownloadPath(const std::string& Root);

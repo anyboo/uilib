@@ -96,6 +96,30 @@
     <ClInclude Include="Network\WindowUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AcquireDataRunable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AcquireSerachFileData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DownloadVideo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ReciveUINotification.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ReciveUIQunue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchFileNotification.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchFileWorker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SendDataNotification.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Robot.cpp">
@@ -153,6 +177,30 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Network\WindowUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AcquireDataRunable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AcquireSerachFileData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DownloadVideo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ReciveUINotification.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ReciveUIQunue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchFileNotification.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchFileWorker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SendDataNotification.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

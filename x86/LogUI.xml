@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Window size="1024,768" caption="0,0,0,30" roundcorner="4,4" showdirty="false">
+<Window size="1024,768" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
 	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
 	<Include source="scrollbar.xml" />
-	<VerticalLayout bkimage="file='Downloader/bsbj.png'" width="1024" height="768" bordersize="3" bordercolor="0xf1234567">
+	<VerticalLayout bkimage="file='Downloader/bsbj.png'" width="1024" height="768" >
 		<HorizontalLayout height="60" width="1024" bkimage="file='Downloader/beijing.png'">
-			<Button name="closebtn" width="38" height="38" padding="20,10,0,0" tooltip="返回" foreimage="file='Downloader/back.png'" hotimage="file='Downloader/beijing.png'"/>
+			<Button name="closebtn" width="30" height="30" padding="10,10,0,0" tooltip="返回" foreimage="file='Downloader/xz.png' dest='6,2,20,29'" hotimage="file='Downloader/hsbj.png'"/>
 			<Label text="日志管理" textcolor="#FFFFFFFF" font="1" padding="400,1,1,1" />
 		</HorizontalLayout>
 		<HorizontalLayout width="1024" height="110">
@@ -39,7 +39,7 @@
 				<Button name="export" pos="110,0,190,80" float="true" align="bottom" text="导出" textcolor="#00000000" font="1" textpadding="0,40,0,0" pushedimage="Downloader/chaxunanniu.png" foreimage="file='Downloader/save.png' dest='21,8,59,46'" normalimage="file='Downloader/chaxunanniu.png'"/>
 			</HorizontalLayout>
 		</HorizontalLayout>
-		<VerticalLayout width="1024" height="590">
+		<VerticalLayout  height="590" bkimage="file='Downloader/bsbj.png'" >
 			<List name="domainlist" width="980" padding="20,0,0,0" bkcolor="#FFFFFFFF" inset="0,0,0,0" itemshowhtml="true" vscrollbar="true" hscrollbar="true" headerbkimage="file='Downloader/lbl.png'" itemalign="center" itembkcolor="#FFE2DDDF" itemaltbk="true" hscrollbar="false" menu="true">
 				<ListHeader name="list_head" height="31" menu="true" width="980">
 					<ListHeaderItem name="Item1" text="时间" font="1" width="200" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>

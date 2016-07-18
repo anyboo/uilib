@@ -1,19 +1,21 @@
 #pragma once
-
 #include <string>
 #include <ctime>
 #include <list>
 #include <vector>
 #include <Windows.h>
 
+#ifndef _TIME_RANGE
+#define _TIME_RANGE
 typedef struct _time_range
 {
 	std::time_t start;
 	std::time_t end;
 } time_range, *ptime_range;
+#endif 
 
 
-#define  MAX_IPADDR_LEN				16       //\ length    
+#define  MAX_IPADDR_LEN				16       //ip address length    
 #define  MAX_MACADDR_LEN			32		 //mac address length
 
 typedef enum tagSDK_TYPE
@@ -36,6 +38,8 @@ typedef enum
 	Notification_Type_Device_Manager_Dropped,
 	Notification_Type_Device_Manager_Cancel,
 	Notification_Type_Search_File_Process,
+	Notification_Type_Search_File_TotalSize,
+	Notification_Type_Search_File_Failure,
 	Notification_Type_Search_File_Finish,
 	Notification_Type_Search_File_Cancel,
 	Notification_Type_Download_File_Process,
@@ -171,11 +175,11 @@ public:
 
 	virtual void SearchAll(const long loginHandle) = 0;
 	virtual void Search(const long loginHandle, const size_t channel, const time_range& range) = 0;
-	virtual void ClearLocalRecordFiles() = 0;
 	virtual void Download(const long loginHandle, const size_t channel, const time_range& range) = 0;
 	virtual void PlayVideo(const long loginHandle, const size_t channel, const time_range& range) = 0;
 	virtual void Download(const long loginHandle, const size_t channel, const std::string& filename) = 0;
 	virtual void PlayVideo(const long loginHandle, const size_t channel, const std::string& filename) = 0;
+	virtual bool StopDownload() = 0;
 
 	virtual void SetHWnd(const HWND& hWnd) = 0;
 	virtual void SetDownloadPath(const std::string& Root) = 0;
@@ -183,9 +187,9 @@ public:
 
 	virtual std::string GetDefUsearName() = 0;
 	virtual std::string GetDefPassword() = 0;
-	virtual int GetDefPort() = 0;
 	virtual NET_SDK_TYPE GetSDKType() = 0;
 	virtual bool IsSearchDeviceAPIExist() = 0;
+
 
 	virtual void StartSearchDevice() = 0;
 	virtual DEVICE_INFO_LIST& GetDeviceInfoList() = 0;

@@ -10,7 +10,8 @@ void HK_timeStdToDH(tm *pTimeStd, NET_DVR_TIME *pTimeDH);
 void HK_trTOndt(NET_DVR_TIME &ndtStartTime, NET_DVR_TIME &ndtEndTime, const time_range range);
 
 std::string HK_GetLastErrorString();
-void HK_CreatePath(const size_t channel);
+std::string HK_CreatePath(const size_t channel, const std::string& Root);
+std::string HK_MakeFileName(int channel, const std::string& startTime, const std::string& endTime);
 
 std::string HK_MakeStrByInteger(int data);
 std::string HK_MakeStrTimeByTimestamp(time_t time);
@@ -18,26 +19,24 @@ std::string HK_MakeStrTimeByTimestamp(time_t time);
 bool HK_isGetDVRConfig(const long loginHandle);
 size_t HK_getChannel(const long loginHandle, size_t channel);
 
-
-static bool HK_Init_Flag = false;
-
 HKVendor::HKVendor()
 {
 	m_eSDKType = HK_SDK;
-	m_bSearchDeviceAPI = false;
 	m_sDefUserName = "admin";
-	m_sDefPassword = "admin123";
-	m_iDefPort = 8000;
+	m_sDefPassword = "12345";
 	m_iMaxChannel = 0;
+
 	m_lSearchDeviceHandle = -1;
+
+	m_sRoot = "D:\\DownLoadVideo\\";
 }
 
 HKVendor::~HKVendor()
 {
-	if (HK_Init_Flag)
-	{
-		assert(NET_DVR_Cleanup());
-	}
+	m_iMaxChannel = 0;
+	m_lSearchDeviceHandle = -1;
+
+	assert(NET_DVR_Cleanup());
 }
 
 void HKVendor::Init()
@@ -51,15 +50,13 @@ void HKVendor::Init()
 	}
 	else
 	{
-		std::cout << "HK 初始化SDK 成功！" << std::endl;
+		std::cout << "初始化SDK成功！" << std::endl;
 	}
 
 	BOOL bConnect = NET_DVR_SetConnectTime(1000, 30);
 	BOOL bReConnect = NET_DVR_SetReconnect(3000);
 	assert(bConnect);
 	assert(bReConnect);
-
-	HK_Init_Flag = true;
 }
 
 long HKVendor::Login(const std::string& ip, size_t port, const std::string& user, const std::string& password)
@@ -72,33 +69,32 @@ long HKVendor::Login(const std::string& ip, size_t port, const std::string& user
 	/*m_lLoginHandle = lLoginID;*/
 	if (-1 == lLoginID)
 	{
-		std::cout << "登录失败(Failed)：" << HK_GetLastErrorString().c_str() << ip << std::endl;
+		std::cout << "登录失败(Failed)：" << HK_GetLastErrorString().c_str() << std::endl;
 		//throw std::exception("Login failed");
-		std::cout << "HK 登陆 失败！" << std::endl;
 		return -1;
 	}
 
 	m_iMaxChannel = DeviceInfoTmp.byIPChanNum;
+ 
+// 	m_struDeviceInfo.lLoginID = lLoginID;
+// 	m_struDeviceInfo.iDeviceChanNum = DeviceInfoTmp.byChanNum;
+// 	m_struDeviceInfo.iIPChanNum = DeviceInfoTmp.byIPChanNum;
+// 	m_struDeviceInfo.iStartChan = DeviceInfoTmp.byStartChan;
 
-	std::cout << "HK 登陆 成功！" << ip << std::endl;
+// 	cout << m_struDeviceInfo.struChanInfo[32].iChanIndex << endl;
+// 	DoGetDeviceResoureCfg();  //获取设备资源信息	
+// 	cout << m_struDeviceInfo.struChanInfo[32].iChanIndex << endl;
 
 	return lLoginID;
 }
 
 void HKVendor::Logout(const long loginHandle)
 {
-	if (loginHandle >= 0)
+	if (loginHandle < 0 && !NET_DVR_Logout(loginHandle))
 	{
-		if (!NET_DVR_Logout(loginHandle))
-		{
-			//std::cout << "退出失败：" << HK_GetLastErrorString().c_str() << std::endl;
-			std::cout << "HK 退出登陆 失败！" << std::endl;
-			throw std::exception("Logout failed");
-		}
-		else
-		{
-			std::cout << "HK 退出登陆 成功！" << std::endl;
-		}
+		std::cout << "退出失败：" << HK_GetLastErrorString().c_str() << std::endl;
+		throw std::exception("Logout failed");
+		return;
 	}
 }
 
@@ -143,8 +139,8 @@ void HKVendor::Search(const long loginHandle, const size_t channel, const time_r
 		LONG hFindHandle = NET_DVR_FindFile_V30(loginHandle, &FileCond);
 		if (-1 == hFindHandle)
 		{
-			std::cout << "Error:" << HK_GetLastErrorString() << std::endl;
-			return;
+			std::cout << "Error:" << HK_GetLastErrorString() << endl;
+				return;
 		}
 		else
 		{
@@ -199,7 +195,8 @@ void HKVendor::Search(const long loginHandle, const size_t channel, const time_r
 
 					ret = NET_DVR_FindNextFile_V30(hFindHandle, &FindData);
 
-					std::cout << "GetRecordFileList 文件名:" << rf.name << std::endl<< "  " << "文件大小:" << rf.size << "  " << "通道:" << rf.channel << std::endl;
+					std::cout << "GetRecordFileList 文件名:" << rf.name << endl << "  " << "文件大小:" << rf.size << "  " << "通道:" << rf.channel << endl;
+					
 
 				}
 			}
@@ -224,22 +221,39 @@ void HKVendor::Download(const long loginHandle, const size_t channel, const time
 		return;
 	}
 
+	std::string strTimeStart;
+	std::string strTimeEnd;
+	std::string strTimeStartZero;
+	std::string strTimeEndZero;
+
+	struct tm ttime;
+
+	localtime_s(&ttime, &range.start);
+	strftime((char *)strTimeStart.data(), 24, "%Y%m%d%H%M%S", &ttime);
+	strftime((char *)strTimeStartZero.data(), 24, "%Y%m%d0000", &ttime);
+	strftime((char *)strTimeEndZero.data(), 24, "%Y%m%d2359", &ttime);
+	localtime_s(&ttime, &range.end);
+	strftime((char *)strTimeEnd.data(), 24, "%Y%m%d%H%M%S", &ttime);
+
+	std::string strFileName = HK_MakeFileName(channel, strTimeStart, strTimeEnd);
+
+
  	NET_DVR_TIME ndtStime;
  	NET_DVR_TIME ndtEtime;
  
 	HK_trTOndt(ndtStime, ndtEtime, range);
 
+	std::string strPath = HK_CreatePath(channel, m_sRoot);
+	strPath += strFileName;
  
-	HK_CreatePath(channel);
- 
- 	char szTime[512];
-	ZeroMemory(szTime, 512);
-	sprintf_s(szTime, "D:\\DownLoadVideo\\海康\\通道%d\\channel%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d.mp4", channel, channel, ndtStime.dwYear, ndtStime.dwMonth, ndtStime.dwDay,
-		ndtStime.dwHour, ndtStime.dwMinute, ndtStime.dwSecond, ndtEtime.dwYear, ndtEtime.dwMonth, ndtEtime.dwDay, ndtEtime.dwHour, ndtEtime.dwMinute, ndtEtime.dwSecond);
-	std::cout << "strName:" << szTime << std::endl;
+//  	char szTime[512];
+// 	ZeroMemory(szTime, 512);
+// 	sprintf_s(szTime, "D:\\DownLoadVideo\\海康\\通道%d\\channel%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d.mp4", channel, channel, ndtStime.dwYear, ndtStime.dwMonth, ndtStime.dwDay,
+// 		ndtStime.dwHour, ndtStime.dwMinute, ndtStime.dwSecond, ndtEtime.dwYear, ndtEtime.dwMonth, ndtEtime.dwDay, ndtEtime.dwHour, ndtEtime.dwMinute, ndtEtime.dwSecond);
+// 	std::cout << "strName:" << szTime << std::endl;
 
 	size_t sChannel = HK_getChannel(loginHandle, channel);
-	LONG lRet = NET_DVR_GetFileByTime(loginHandle, sChannel, &ndtStime, &ndtEtime, szTime);
+	LONG lRet = NET_DVR_GetFileByTime(loginHandle, sChannel, &ndtStime, &ndtEtime, (char *)strPath.c_str());
 	
 	if (-1 == lRet)
 	{
@@ -256,10 +270,16 @@ void HKVendor::Download(const long loginHandle, const size_t channel, const time
 
 // 		DWORD pos;
 // 		pos = NET_DVR_GetDownloadPos(lRet);
-// 
+// 	
 // 		while (pos < 100)
 // 		{
 // 			pos = NET_DVR_GetDownloadPos(lRet);
+// 			if (2 == pos)
+// 			{
+// 				bool b = NET_DVR_StopGetFile(lRet);
+// 				std::cout << "b:" << b<<std::endl;
+// 				//break;
+// 			}
 // 			std::cout << "Pos:" <<pos<< std::endl;
 // 		}
 	}	
@@ -279,9 +299,12 @@ void HKVendor::PlayVideo(const long loginHandle, const size_t channel, const tim
 
 	HK_trTOndt(ndtStime, ndtEtime, range);
 
+	TestWindows Test;
+	Test.Init();
+
 	size_t sChannel = HK_getChannel(loginHandle, channel);
 	//BOOL lPlayID = CLIENT_PlayBackByTimeEx(loginHandle, channel, &ntStime, &ntEtime, g_hWnd, PlayCallBack, (DWORD)this, PBDataCallBack, (DWORD)this);
-	LONG hPlayHandle = NET_DVR_PlayBackByTime(loginHandle, sChannel, &ndtStime, &ndtEtime, m_hWnd);
+	LONG hPlayHandle = NET_DVR_PlayBackByTime(loginHandle, sChannel, &ndtStime, &ndtEtime, g_hWnd);
 
 	if (hPlayHandle < 0)
 	{
@@ -306,17 +329,38 @@ void HKVendor::Download(const long loginHandle, const size_t channel, const std:
 		return;
 	}
 
-	HK_CreatePath(channel);
+	RecordFile file;
+	size_t i = 0;
+	for (; i < m_files.size(); i++)
+	{
+		file = m_files[i];
+		if (filename.compare(file.name) == 0)
+		{
+			break;
+		}
+	}
 
-	char szTime[512];
-	ZeroMemory(szTime, 512);
-	sprintf_s(szTime, "D:\\DownLoadVideo\\海康\\通道%d\\", channel);
+	if (i >= m_files.size())
+	{
+		throw std::exception("Search File List Not Contain the Filename!");
+		return;
+	}
 
-	char szBuf[] = ".mp4";
-	strcat_s(szTime, (char *)filename.c_str());
-	strcat_s(szTime, szBuf);
+	std::string strPath  = HK_CreatePath(channel, m_sRoot);
+	strPath += file.name.data();
+	strPath.append(".mp4");
 
-	std::cout << szTime << std::endl;
+	std::cout << "文件路径：" << strPath << std::endl;
+
+// 	char szTime[512];
+// 	ZeroMemory(szTime, 512);
+// 	sprintf_s(szTime, "D:\\DownLoadVideo\\海康\\通道%d\\", channel);
+// 
+// 	char szBuf[] = ".mp4";
+// 	strcat_s(szTime, (char *)filename.c_str());
+// 	strcat_s(szTime, szBuf);
+// 
+// 	std::cout << szTime << std::endl;
 
 	std::vector<RecordFile>::iterator it;
 	int nSize = 0;
@@ -324,7 +368,7 @@ void HKVendor::Download(const long loginHandle, const size_t channel, const std:
 	{
 		if (it->name == filename)
 		{	
-			LONG lRet = NET_DVR_GetFileByName(loginHandle, (char *)filename.c_str(), szTime);
+			LONG lRet = NET_DVR_GetFileByName(loginHandle, (char *)filename.c_str(), (char *)strPath.c_str());
 
 			if (0 < lRet)
 			{
@@ -335,17 +379,21 @@ void HKVendor::Download(const long loginHandle, const size_t channel, const std:
 			else
 			{
 				NET_DVR_PlayBackControl(lRet, NET_DVR_PLAYSTART, 0, NULL);
-				std::cout << "downLoadByRecordFile 下载录像成功！" << std::endl;
 
-				DWORD pos;
-				pos = NET_DVR_GetDownloadPos(lRet);
-				
-				while (pos < 100)
-				{
-					pos = NET_DVR_GetDownloadPos(lRet);
-					std::cout << "Pos:" <<pos<< std::endl;
-				}
+// 				DWORD pos;
+// 				pos = NET_DVR_GetDownloadPos(lRet);
+// 
+// 				while (pos < 100)
+// 				{
+// 					pos = NET_DVR_GetDownloadPos(lRet);
+// 					std::cout << "Pos:" << pos << std::endl;
+// 				}
+			
+
+				std::cout << "downLoadByRecordFile 下载录像成功！" << std::endl;
 			}
+
+			break;
 		}
 
 // 		if (m_files.size() - 1 == nSize)
@@ -360,7 +408,7 @@ void HKVendor::PlayVideo(const long loginHandle, const size_t channel, const std
 {
 	if (-1 == loginHandle)
 	{
-		std::cout << "PlayVideo 在线播放失败原因：" << HK_GetLastErrorString() << std::endl;
+		cout << "PlayVideo 在线播放失败原因：" << HK_GetLastErrorString() << endl;
 		return;
 	}
 
@@ -370,7 +418,10 @@ void HKVendor::PlayVideo(const long loginHandle, const size_t channel, const std
 	{
 		if (it->name == filename)
 		{
-			LONG hPlayHandle = NET_DVR_PlayBackByName(loginHandle, (char *)filename.c_str(), m_hWnd);
+			TestWindows Test;
+			Test.Init();
+
+			LONG hPlayHandle = NET_DVR_PlayBackByName(loginHandle, (char *)filename.c_str(), g_hWnd);
 
 			if (hPlayHandle < 0)
 			{
@@ -396,9 +447,14 @@ void HKVendor::PlayVideo(const long loginHandle, const size_t channel, const std
 
 }
 
+bool HKVendor::StopDownload()
+{
+	return true;
+}
+
 void HKVendor::SetDownloadPath(const std::string& Root)
 {
-
+	m_sRoot = Root;
 }
 
 void HKVendor::throwException()
@@ -446,7 +502,7 @@ std::string HK_MakeStrTimeByTimestamp(time_t time)
 	localtime_s(&ttime, &time);
 	strftime(cTime, 50, "%Y%m%d%H%M%S", &ttime);
 
-	std::string strTime(cTime);
+	string strTime(cTime);
 
 	return strTime;
 }
@@ -456,7 +512,7 @@ std::string HK_MakeStrByInteger(int data)
 
 	sprintf_s(cData, 50, "%d", data);
 
-	std::string strTime(cData);
+	string strTime(cData);
 
 	return strTime;
 }
@@ -475,54 +531,67 @@ size_t HK_getChannel(const long loginHandle, size_t channel)
 	//获取设备的配置信息成功就启用模拟通道
 	if (HK_isGetDVRConfig(loginHandle))
 	{
-		return channel += 32;
+		return channel += 33;
 	}
 	else
 	{
-		return channel;
+		return channel + 1;
 	}
 }
 
-void HK_CreatePath(const size_t channel)
-{
-	std::string strPath = "D:\\DownLoadVideo\\";
 
-	BOOL bOne = CreateDirectoryA(strPath.c_str(), NULL);
-	if (!bOne)
+std::string HK_MakeFileName(int channel, const std::string& startTime, const std::string& endTime)
+{
+	std::string strFileName;
+
+	strFileName += "channel";
+	if (channel < 10)
 	{
-		std::cout << "Error!" << std::endl;
-		return;
+		strFileName += "0";
 	}
+	strFileName += std::to_string(channel);
+	strFileName += "-";
+	strFileName += startTime.data();
+	strFileName += "-";
+	strFileName += endTime.data();
+	strFileName.append(".mp4");
+
+	return strFileName;
+}
+
+std::string HK_CreatePath(const size_t channel, const std::string& Root)
+{
+	std::string strPath = Root;
 
 	strPath.append("海康\\");
-	BOOL bTwo = CreateDirectoryA(strPath.c_str(), NULL);
-	if (!bTwo)
-	{
-		std::cout << "Error!" << std::endl;
-		return;
-	}
+
 	char szChannel[10];
 	ZeroMemory(szChannel, 10);
-	sprintf_s(szChannel, "通道%d", channel);
+	if (channel < 10)
+	{
+		sprintf_s(szChannel, "通道0%d", channel);
+	}
+	else
+	{
+		sprintf_s(szChannel, "通道%d", channel);
+	}
+
 	strPath.append(szChannel);
 	strPath.append("\\");
 
-	BOOL bThree = CreateDirectoryA(strPath.c_str(), NULL);
-	if (!bThree)
-	{
-		std::cout << "Error!" << std::endl;
-		return;
-	}
+	CCommonUtrl::getInstance().MakeFolder(strPath);
+
+	return strPath;
 }
 
 void HKVendor::StartSearchDevice()
 {
-	std::cout << "DH 搜索设备 开始！" << std::endl;
+
 }
 
 void HKVendor::StopSearchDevice()
 {
-	std::cout << "DH 搜索设备 结束！" << std::endl;
+
 }
 
 

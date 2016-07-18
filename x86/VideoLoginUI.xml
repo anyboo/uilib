@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Window size="1024,768" caption="0,0,0,30" roundcorner="4,4" showdirty="false">
+<Window size="1024,768" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
 	<Font shared="true" id="1" name="微软雅黑" size="18" bold="false" />
-	<VerticalLayout height="765" bkimage="file='Downloader/VideoLogin.png'">
+	<VerticalLayout bkimage="file='Downloader/VideoLogin.png'"  padding="4,4,4,4" width="700" bordersize="3" bordercolor="0xf1234567">
 		<HorizontalLayout height="60" width="1024" bkimage="file='Downloader/beijing.png'">
-			<Button name="closebtn" width="38" height="38" padding="20,10,0,0" tooltip="返回" foreimage="file='Downloader/back.png'" hotimage="file='Downloader/hsbj.png'"/>
+			<Button name="closebtn" width="30" height="30" padding="10,10,0,0" tooltip="返回" foreimage="file='Downloader/xz.png' dest='6,2,20,29'" hotimage="file='Downloader/hsbj.png'"/>
 			<Label text="视频登录" textcolor="#FFFFFFFF" font="1" width="860" align="center"/>
 		</HorizontalLayout>
 		<HorizontalLayout >

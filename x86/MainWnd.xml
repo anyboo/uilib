@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Window size="1024,768" caption="0,0,0,30" roundcorner="4,4" showdirty="false">
+<Window size="1024,768" caption="0,0,0,0" roundcorner="4,4" showdirty="false">
 	<Font shared="true" id="0" name="微软雅黑" size="30" bold="false" />
 	<VerticalLayout bkimage="file='Downloader/bg1.png'" height="765" >
 		<HorizontalLayout height="60" width="1024">
 			<Control width="45" height="45" padding="30,7,10,7"bkimage="Downloader/logo.png"/>
 			<Label text="视频高速下载器" textcolor="#FFFFFFFF" font="0" width="300" align="left"/>
-			<Button name="minbtn" width="30" height="30" padding="540,10,1,5" tooltip="最小化" normalimage="file='Downloader/reduce.png' source='0,90,30,120'" hotimage="file='Downloader/reduce.png' source='0,60,30,90'" />
+			<Button name="aboutbt" width="30" height="30" padding="500,10,1,5" tooltip="关于" normalimage="file='Downloader/function.png' source='0,90,30,120'" hotimage="file='Downloader/function.png' source='0,60,30,90'"/>
+			<Button name="minbtn" width="30" height="30" padding="9,10,1,5" tooltip="最小化" normalimage="file='Downloader/reduce.png' source='0,90,30,120'" hotimage="file='Downloader/reduce.png' source='0,60,30,90'" />
 			<Button name="closebtn" width="30" height="30" padding="9,10,5,5" tooltip="关闭" normalimage="file='Downloader/close.png' source='0,90,30,120'" hotimage="file='Downloader/close.png' source='0,60,30,90'" />
 		</HorizontalLayout>
 		<Button name="download" float="true" pos="235,134,512,390" width="275" height="256" normalimage="file='Downloader/download_normal.png'" hotimage="file='Downloader/download_normal.png'" pushedimage="file='Downloader/download_normal.png"/>

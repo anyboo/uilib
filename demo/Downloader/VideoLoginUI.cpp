@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "VideoLoginUI.h"
-
+#include "VideoVendorUI.h"
 
 VideoLoginUI::VideoLoginUI()
 {
@@ -12,6 +12,7 @@ VideoLoginUI::~VideoLoginUI()
 }
 
 DUI_BEGIN_MESSAGE_MAP(VideoLoginUI, WindowImplBase)
+DUI_ON_CLICK_CTRNAME(BT_VideoVendor, OnOpenVideoVendorWnd)
 DUI_END_MESSAGE_MAP()
 
 LPCTSTR VideoLoginUI::GetWindowClassName() const
@@ -46,4 +47,13 @@ void VideoLoginUI::Notify(TNotifyUI& msg)
 		}		
 	}
 	WindowImplBase::Notify(msg);
+}
+
+void VideoLoginUI::OnOpenVideoVendorWnd(TNotifyUI& msg)
+{
+	CVideoVendorUI* pDlg = new CVideoVendorUI();
+	assert(pDlg);
+	pDlg->Create(this->GetHWND(), NULL, UI_WNDSTYLE_EX_DIALOG, 0L, 0, 0, 0, 0);
+	pDlg->CenterWindow();
+	pDlg->ShowModal();
 }
