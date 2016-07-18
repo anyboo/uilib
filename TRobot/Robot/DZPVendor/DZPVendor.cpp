@@ -238,9 +238,11 @@ void CDZPVendor::SearchAll(const long loginHandle)
 }
 void CDZPVendor::Search(const long loginHandle, const size_t channel, const time_range& range)
 {
-	std::cout << "DZP 搜索文件 开始！" << std::endl;
+	assert(range.end - range.start <= 24 * 3600);
 
-	m_files.clear();
+	std::cout << "DZP 搜索文件 开始！" << std::endl;	
+
+	m_files_Unit.clear();
 
 	if (range.start > range.end)
 	{
@@ -248,25 +250,34 @@ void CDZPVendor::Search(const long loginHandle, const size_t channel, const time
 		return;
 	}
 
-	std::vector<time_range> timeRangeList = CCommonUtrl::getInstance().MakeTimeRangeList(range);
-	for (size_t i = 0; i < timeRangeList.size(); i++)
+	//std::vector<time_range> timeRangeList = CCommonUtrl::getInstance().MakeTimeRangeList(range);
+	//for (size_t i = 0; i < timeRangeList.size(); i++)
 	{
-		DZP_SearchUnit(loginHandle, channel, timeRangeList[i], m_files);
+		DZP_SearchUnit(loginHandle, channel, range, m_files_Unit);
 	}
 
 	std::cout << "DZP 搜索文件 结束！" << std::endl;
 
 	// Save Search Video List Result to Config File
 	std::cout << "DZP 写Json数据到文件 开始！" << std::endl;
-	CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files, Vendor_DZP_Abbr);
+	CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files_Unit, Vendor_DZP_Abbr);
 	std::cout << "DZP 写Json数据到文件 结束！" << std::endl;
 
 	// Write File List to DB
 	std::cout << "DZP 写文件数据到数据库 开始！" << std::endl;
-	CCommonUtrl::getInstance().WriteFileListToDB(m_files);
+	CCommonUtrl::getInstance().WriteFileListToDB(m_files_Unit);
 	std::cout << "DZP 写文件数据到数据库 结束！" << std::endl;
 
+	for (size_t i = 0; i < m_files_Unit.size(); i++)
+	{
+		m_files.push_back(m_files_Unit[i]);
+	}
+	
 	return;
+}
+void CDZPVendor::ClearLocalRecordFiles()
+{
+	m_files.clear();
 }
 void CDZPVendor::Download(const long loginHandle, const size_t channel, const time_range& range)
 {

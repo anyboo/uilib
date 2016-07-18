@@ -34,6 +34,7 @@ public:
 	void SetDownloadPath(const std::string& root);
 	void SearchAll();
 	void Search(const size_t channel, const time_range& range);
+	void ClearLocalRecordFiles(){ m_pVendor->ClearLocalRecordFiles(); }
 	void Download(const size_t channel, const time_range& range);
 	void PlayVideo(const HWND hWnd, const size_t channel, const time_range& range);
 	void Download(const size_t channel, const std::string& fileName);
@@ -61,7 +62,7 @@ public:
 	AbstractVendor* GetSDK(){ return m_pVendor; }
 	bool IsSearchDeviceAPIExist(){ return m_pVendor->IsSearchDeviceAPIExist(); }
 
-protected:
+//protected:
 	RECORD_FILE_LIST GetRecordFileList(){ return m_pVendor->GetRecordFileList(); }
 	
 private:

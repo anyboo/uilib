@@ -67,17 +67,24 @@ TEST_CASE("This is a demo", "[demo]")
 		//创建记录表
 		pFileDb->createTable(CREATE_LOGIN_DEVICE_INFO_TABLE);
 
+		//获取指针
+		QMSqlite *pDb = QMSqlite::getInstance();
+		//删除表
+		pDb->dropTable(DROP_SEARCH_VIDEO_TABLE);
+		//创建记录表
+		pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
+
 		/************************* 初始化SDK厂商 **********************/
 		VENDOR_LIST pVendorList;
 		CJXJVendor* jxjVendor = new CJXJVendor();
 		CDZPVendor* dzpVendor = new CDZPVendor();
-		DHVendor* dhVendor = new DHVendor();
-		HKVendor* hkVendor = new HKVendor();
+		//DHVendor* dhVendor = new DHVendor();
+		//HKVendor* hkVendor = new HKVendor();
 
 		pVendorList.push_back(jxjVendor);
-		pVendorList.push_back(dzpVendor);
-		pVendorList.push_back(dhVendor);
-		pVendorList.push_back(hkVendor);
+		//pVendorList.push_back(dzpVendor);
+		//pVendorList.push_back(dhVendor);
+		//pVendorList.push_back(hkVendor);
 
 		/************************* 初始化IP列表 **********************/
 		std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Start!" << std::endl;
@@ -140,11 +147,28 @@ TEST_CASE("This is a demo", "[demo]")
 		{
 			// 获取设备信息
 			NET_DEVICE_INFO* devInfo = devInfoList[i];
-			// 登陆设备
-			if (CLoginDevice::getInstance().Login(devInfo->pVendor, devInfo->szIp, devInfo->nPort))
+			std::string ip(devInfo->szIp);
+			//if (ip.compare("10.168.0.66") == 0)
+			if (ip.compare("192.168.0.89") == 0)
 			{
-				::Sleep(100);
-			}
+				// 登陆设备
+				if (CLoginDevice::getInstance().Login(devInfo->pVendor, devInfo->szIp, devInfo->nPort))
+				{
+					::Sleep(100);
+
+					Device* pDev = CLoginDevice::getInstance().GetDevice(ip);
+					time_range timeSearch;
+					timeSearch.start = 1468771200; //DZP - 1468771200
+					timeSearch.end = 1468857599; //DZP - 1468857598
+					pDev->Search(2, timeSearch);
+					RECORD_FILE_LIST list = pDev->GetRecordFileList();
+
+					time_range timePlay;
+					timePlay.start = list[0].beginTime; //DZP - 1468771200
+					timePlay.end = list[0].endTime; //DZP - 1468857599
+					pDev->PlayVideo(TestWindows::getInstance().GetHWnd(),2, timePlay);
+				}
+			}			
 		}
 
 		while (true)
