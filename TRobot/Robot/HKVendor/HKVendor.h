@@ -41,6 +41,7 @@ private:
 	HWND g_hWnd;
 	std::string m_sRoot;
 	NET_SDK_TYPE m_eSDKType;
+	bool m_bSearchDeviceAPI;
 
 	/* Login */
 	size_t m_iMaxChannel;

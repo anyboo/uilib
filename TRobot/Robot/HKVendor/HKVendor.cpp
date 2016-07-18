@@ -25,6 +25,7 @@ HKVendor::HKVendor()
 	m_sDefUserName = "admin";
 	m_sDefPassword = "12345";
 	m_iMaxChannel = 0;
+	m_bSearchDeviceAPI = false;
 
 	m_lSearchDeviceHandle = -1;
 

@@ -30,6 +30,7 @@ DHVendor::DHVendor()
 	m_sDefPassword = "";
 	m_iMaxChannel = 0;
 	m_lDownloadHandle = 0;
+	m_bSearchDeviceAPI = true;
 
 	m_lSearchDeviceHandle = -1;
 
