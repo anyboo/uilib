@@ -1,0 +1,7 @@
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-18 17:43:25 --------
+2016-07-18 17:43:25	CAVMng::DDEnumCallbackEx NVIDIA GeForce GT 730 -- \\.\DISPLAY1
+2016-07-18 17:43:25	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-18 17:43:25	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-18 17:43:54	0 CJAVPlayer::SetCoder:jxjcodec.dll
+2016-07-18 17:43:54	0 CJAVPlayer::SetCoder OK
+2016-07-18 17:43:54	0 DecBuff()::frame lost [0]-[2]

@@ -2,6 +2,7 @@
 #include "CommonUtrl.h"
 #include <Poco/SingletonHolder.h>
 
+using namespace rapidjson;
 
 CCommonUtrl::CCommonUtrl()
 {
@@ -174,43 +175,6 @@ std::vector<time_range> CCommonUtrl::MakeTimeRangeList(const time_range& range)
 	return timeRangeList;
 }
 
-//void CCommonUtrl::InitSearchTime(JTime& jStartTime, JTime& jStopTime, const __time64_t& timeStart, const __time64_t& timeEnd)
-//{
-//	struct tm Tm;
-//
-//	localtime_s(&Tm, (const time_t*)&timeStart);
-//	jStartTime.year = Tm.tm_year;
-//	jStartTime.month = Tm.tm_mon;
-//	jStartTime.date = Tm.tm_mday;
-//	jStartTime.hour = Tm.tm_hour;
-//	jStartTime.minute = Tm.tm_min;
-//	jStartTime.second = Tm.tm_sec;
-//	jStartTime.weekday = Tm.tm_wday;
-//
-//	localtime_s(&Tm, (const time_t*)&timeEnd);
-//	jStopTime.year = Tm.tm_year;
-//	jStopTime.month = Tm.tm_mon;
-//	jStopTime.date = Tm.tm_mday;
-//	jStopTime.hour = Tm.tm_hour;
-//	jStopTime.minute = Tm.tm_min;
-//	jStopTime.second = Tm.tm_sec;
-//	jStopTime.weekday = Tm.tm_wday;
-//}
-
-//time_t CCommonUtrl::MakeTimestampByJTime(JTime jTime)
-//{
-//	struct tm ttime;
-//	ttime.tm_year = jTime.year;
-//	ttime.tm_mon = jTime.month - 1;
-//	ttime.tm_mday = jTime.date;
-//	ttime.tm_hour = jTime.hour;
-//	ttime.tm_min = jTime.minute;
-//	ttime.tm_sec = jTime.second;
-//	time_t time = mktime(&ttime);
-//
-//	return time;
-//}
-
 std::string CCommonUtrl::MakeStrTimeByTimestamp(std::time_t time)
 {
 	std::string strTime = "20160101000000";
@@ -291,33 +255,46 @@ std::vector<RecordFile> CCommonUtrl::LoadSearchFileListFromFile()
 
 void CCommonUtrl::WriteFileListToDB(RECORD_FILE_LIST& recordFiles)
 {
-	//获取指针
-	QMSqlite *pDb = QMSqlite::getInstance();
-	////删除表
-	//pDb->dropTable(DROP_SEARCH_VIDEO_TABLE);
-	////创建记录表
-	//pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
-	//一次插入所有数据
-	std::vector<writeSearchVideo> RecordList;
-	for (size_t i = 0; i < recordFiles.size(); i++)
-	{
-		writeSearchVideo sr;
-		RecordFile record = recordFiles[i];
-		//文件名称
-		sr.set<0>(record.name);
-		//通道号
-		sr.set<1>(record.channel);
-		//开始时间
-		sr.set<2>(record.beginTime);
-		//结束时间
-		sr.set<3>(record.endTime);
-		sr.set<4>(record.size);
-		RecordList.push_back(sr);
-	}
+//	//获取指针
+//	QMSqlite *pDb = QMSqlite::getInstance();
+//	////删除表
+//	//pDb->dropTable(DROP_SEARCH_VIDEO_TABLE);
+//	////创建记录表
+//	//pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
+//	//一次插入所有数据
+//	std::vector<writeSearchVideo> RecordList;
+//	for (size_t i = 0; i < recordFiles.size(); i++)
+//	{
+//		writeSearchVideo sr;
+//		RecordFile record = recordFiles[i];
+//		//文件名称
+//		sr.set<0>(record.name);
+//		//通道号
+//		sr.set<1>(record.channel);
+//		//开始时间
+//		sr.set<2>(record.beginTime);
+//		//结束时间
+//		sr.set<3>(record.endTime);
+//		sr.set<4>(record.size);
+//		RecordList.push_back(sr);
+//	}
+//
+//	if (RecordList.size() > 0)
+//	{
+//		std::string sql(INSERT_SEARCH_VIDEO);
+//		pDb->writeDataByVector(sql, RecordList);
+//	}
+}
 
-	if (RecordList.size() > 0)
-	{
-		string sql(INSERT_SEARCH_VIDEO);
-		pDb->writeDataByVector(sql, RecordList);
-	}
+std::string CCommonUtrl::GetCurTime()
+{
+	time_t t = time(0);
+	char tmp[64];
+	strftime(tmp, sizeof(tmp), "%Y-%m-%d %H:%M:%S", localtime(&t));
+
+	std::string curTime(tmp);
+	curTime = "[" + curTime;
+	curTime += "] ";
+
+	return curTime;
 }

@@ -1,5 +1,4 @@
-#ifndef __COMMONUTRIL_H__
-#define __COMMONUTRIL_H__
+#pragma once
 
 // System
 #include <Windows.h>
@@ -18,6 +17,7 @@
 // Self
 #include "AbstractVendor.h"
 #include "QMSqlite.h"
+#include "QMFileSqlite.h"
 #include "TestWindows.h"
 
 // Json
@@ -26,14 +26,6 @@
 #include "stringbuffer.h"
 #include "ostreamwrapper.h"
 #include "istreamwrapper.h"
-
-using namespace rapidjson;
-
-//Poco
-#include "Poco/NotificationQueue.h"
-
-using Poco::NotificationQueue;
-
 
 #define Test_Bug
 #define Test_Filename
@@ -61,9 +53,6 @@ typedef enum
 	Err_DownloadSuccess, // Download Success
 }eErrCode;
 
-
-#ifndef __COMTIME
-#define __COMTIME
 typedef struct __ComTime
 {
 	uint8_t year;					//从1900开始, J_SDK_DEF_BASE_YEAR
@@ -74,7 +63,6 @@ typedef struct __ComTime
 	uint8_t second;
 	uint16_t weekday;				//详情见JWeekDay
 }ComTime;
-#endif 
 
 class CCommonUtrl
 {
@@ -99,6 +87,7 @@ public:
 	// DB Operation
 	void WriteFileListToDB(RECORD_FILE_LIST& recordFiles);
 
+	std::string GetCurTime();
+
 };
 
-#endif 

@@ -21,7 +21,7 @@ void SearchFileWorker::run()
 	Poco::Random rnd;
 	int nPos = 0;
 
-	std::vector<time_range> trInfor = this->MakeTimeRangeList(m_range);
+	std::vector<time_range> trInfor = CCommonUtrl::getInstance().MakeTimeRangeList(m_range);
 
 	int nDay = trInfor.size();
 	int nChannelList = m_channelList.size();
@@ -79,115 +79,4 @@ void SearchFileWorker::run()
 	}
 
 	queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_Finish, SEARCHFILE_DEFAULT));
-}
-
-std::vector<time_range> SearchFileWorker::MakeTimeRangeList(const time_range& range)
-{
-	time_t timeStart = range.start;
-	time_t timeEnd = range.end;
-	std::vector<time_range> timeRangeList;
-
-	ComTime jStartTime, jStopTime;
-
-	struct tm Tm;
-
-	localtime_s(&Tm, (const time_t*)&timeStart);
-	jStartTime.year = Tm.tm_year;
-	jStartTime.month = Tm.tm_mon;
-	jStartTime.date = Tm.tm_mday;
-	jStartTime.hour = Tm.tm_hour;
-	jStartTime.minute = Tm.tm_min;
-	jStartTime.second = Tm.tm_sec;
-	jStartTime.weekday = Tm.tm_wday;
-
-	localtime_s(&Tm, (const time_t*)&timeEnd);
-	jStopTime.year = Tm.tm_year;
-	jStopTime.month = Tm.tm_mon;
-	jStopTime.date = Tm.tm_mday;
-	jStopTime.hour = Tm.tm_hour;
-	jStopTime.minute = Tm.tm_min;
-	jStopTime.second = Tm.tm_sec;
-	jStopTime.weekday = Tm.tm_wday;
-
-	if (timeEnd - timeStart <= ONE_DAY)
-	{
-		if (jStartTime.date == jStopTime.date)
-		{
-			timeRangeList.push_back(range);
-		}
-		else
-		{
-			time_range rangeItem;
-			rangeItem.start = timeStart;
-			time_t diff = (23 - jStartTime.hour) * ONE_HOUR + (59 - jStartTime.minute) * ONE_MINUTE + (59 - jStartTime.second);
-			rangeItem.end = timeStart + diff;
-			timeRangeList.push_back(rangeItem);
-
-			rangeItem.start = timeStart + diff + 1;
-			rangeItem.end = timeEnd;
-			timeRangeList.push_back(rangeItem);
-		}
-	}
-	else
-	{
-		time_t diff = timeEnd - timeStart;
-		int day = (diff / ONE_DAY) + (diff % ONE_DAY > 0 ? 1 : 0);
-
-		if (jStartTime.hour == 0 && jStartTime.minute == 0 && jStartTime.second == 0)
-		{
-			for (size_t i = 0; i < day - 1; i++)
-			{
-				time_range rangeItem;
-				rangeItem.start = timeStart;
-				rangeItem.end = timeStart + ONE_DAY - 1;
-				timeRangeList.push_back(rangeItem);
-
-				timeStart = timeStart + ONE_DAY;
-			}
-
-			time_range rangeItem;
-			rangeItem.start = timeStart;
-			rangeItem.end = timeEnd;
-			timeRangeList.push_back(rangeItem);
-		}
-		else
-		{
-			time_range rangeItem;
-			rangeItem.start = timeStart;
-			time_t diff = (23 - jStartTime.hour) * ONE_HOUR + (59 - jStartTime.minute) * ONE_MINUTE + (59 - jStartTime.second);
-			rangeItem.end = timeStart + diff;
-			timeRangeList.push_back(rangeItem);
-
-			timeStart = timeStart + diff + 1;
-			for (size_t i = 0; i < day - 2; i++)
-			{
-				time_range rangeItem;
-				rangeItem.start = timeStart;
-				rangeItem.end = timeStart + ONE_DAY - 1;
-				timeRangeList.push_back(rangeItem);
-
-				timeStart = timeStart + ONE_DAY;
-			}
-
-			if (timeEnd > timeStart + ONE_DAY - 1)
-			{
-				rangeItem.start = timeStart;
-				rangeItem.end = timeStart + ONE_DAY - 1;
-				timeRangeList.push_back(rangeItem);
-
-				timeStart = timeStart + ONE_DAY;
-				rangeItem.start = timeStart;
-				rangeItem.end = timeEnd;
-				timeRangeList.push_back(rangeItem);
-			}
-			else
-			{
-				rangeItem.start = timeStart;
-				rangeItem.end = timeEnd;
-				timeRangeList.push_back(rangeItem);
-			}
-		}
-	}
-
-	return timeRangeList;
 }

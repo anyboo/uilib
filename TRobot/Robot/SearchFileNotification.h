@@ -4,29 +4,12 @@
 #include "Poco/Notification.h"
 #include "Poco/AutoPtr.h"
 
+#include "AbstractVendor.h"
+
 using Poco::Notification;
 using Poco::AutoPtr;
 
 #define SEARCHFILE_DEFAULT -1
-
-typedef enum
-{
-	Notification_Type_None = 0,
-	Notification_Type_Network_status_Connect,
-	Notification_Type_Network_status_Disconnect,
-	Notification_Type_Search_Device_Finish,
-	Notification_Type_Search_File_Process,
-	Notification_Type_Search_File_TotalSize,
-	Notification_Type_Search_File_Failure,
-	Notification_Type_Search_File_Finish,
-	Notification_Type_Search_File_Cancel,
-	Notification_Type_Download_File_Process,
-	Notification_Type_Download_File_Finish,
-	Notification_Type_Download_File_Cancel,
-	Notification_Type_Device_Manage_Cancel,
-	Notification_Type_Port_Scan_Finish,
-	Notification_Type_Express,
-}NOTIFICATION_TYPE;
 
 class SearchFileNotification :public Notification
 {

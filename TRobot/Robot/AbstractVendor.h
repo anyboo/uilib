@@ -3,28 +3,52 @@
 #include <ctime>
 #include <list>
 #include <vector>
+#include <Windows.h>
 
 #ifndef _TIME_RANGE
 #define _TIME_RANGE
-
 typedef struct _time_range
 {
 	std::time_t start;
 	std::time_t end;
 } time_range, *ptime_range;
-
 #endif 
+
 
 #define  MAX_IPADDR_LEN				16       //ip address length    
 #define  MAX_MACADDR_LEN			32		 //mac address length
 
 typedef enum tagSDK_TYPE
 {
-	DH_SDK = 1,
+	NONE_SDK = 0,
 	JXJ_SDK,
 	DZP_SDK,
+	DH_SDK,
 	HK_SDK,
 }NET_SDK_TYPE;
+
+typedef enum
+{
+	Notification_Type_None = 0,
+	Notification_Type_Network_status_Connect,
+	Notification_Type_Network_status_Disconnect,
+	Notification_Type_Search_Device_Finish,
+	Notification_Type_Search_Device_Cancel,
+	Notification_Type_Device_Manager_Online,
+	Notification_Type_Device_Manager_Dropped,
+	Notification_Type_Device_Manager_Cancel,
+	Notification_Type_Search_File_Process,
+	Notification_Type_Search_File_TotalSize,
+	Notification_Type_Search_File_Failure,
+	Notification_Type_Search_File_Finish,
+	Notification_Type_Search_File_Cancel,
+	Notification_Type_Download_File_Process,
+	Notification_Type_Download_File_Finish,
+	Notification_Type_Download_File_Cancel,
+	Notification_Type_Port_Scan_Finish,
+	Notification_Type_Express,
+
+}NOTIFICATION_TYPE;
 
 class AbstractVendor;
 
@@ -142,7 +166,6 @@ typedef std::vector<NET_DEVICE_INFO_SIMPLE*> DEVICE_INFO_SIMPLE_LIST;
 typedef std::vector<AbstractVendor*> VENDOR_LIST;
 typedef std::vector<RecordFile> RECORD_FILE_LIST;
 
-
 class AbstractVendor
 {
 public:
@@ -154,16 +177,19 @@ public:
 	virtual void Search(const long loginHandle, const size_t channel, const time_range& range) = 0;
 	virtual void Download(const long loginHandle, const size_t channel, const time_range& range) = 0;
 	virtual void PlayVideo(const long loginHandle, const size_t channel, const time_range& range) = 0;
-	virtual void Download(const long loginHandle, const size_t channel, const std::string& filename, const int nID) = 0;
+	virtual void Download(const long loginHandle, const size_t channel, const std::string& filename) = 0;
 	virtual void PlayVideo(const long loginHandle, const size_t channel, const std::string& filename) = 0;
 	virtual bool StopDownload() = 0;
 
+	virtual void SetHWnd(const HWND& hWnd) = 0;
 	virtual void SetDownloadPath(const std::string& Root) = 0;
 	virtual void throwException() = 0;
 
 	virtual std::string GetDefUsearName() = 0;
 	virtual std::string GetDefPassword() = 0;
 	virtual NET_SDK_TYPE GetSDKType() = 0;
+	virtual bool IsSearchDeviceAPIExist() = 0;
+
 
 	virtual void StartSearchDevice() = 0;
 	virtual DEVICE_INFO_LIST& GetDeviceInfoList() = 0;

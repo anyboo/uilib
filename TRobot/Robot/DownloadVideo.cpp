@@ -26,7 +26,7 @@ void DownloadVideo::SetDownloadInfo(Device *dObj, std::vector<SDK_DOWNLOAD_INFO>
 		std::vector<SDK_DOWNLOAD_INFO>::iterator itSDI = SDIObj.begin();
 		for (; itSDI != SDIObj.end(); ++itSDI)
 		{
-			dObj->Download(itSDI->tChannel, itSDI->strFileName, itSDI->nID);
+			//dObj->Download(itSDI->tChannel, itSDI->strFileName, itSDI->nID);
 		}
 	}// if
 }

@@ -1,22 +1,30 @@
 #pragma once
 
-#include "device.h"
-#include <vector>
+#include "AbstractVendor.h"
+#include "NotificationDeviceManager.h"
 
-class CDeviceManager
+#include "Poco/Runnable.h"
+#include "Poco/NotificationQueue.h"
+#include "Poco/Mutex.h"
+#include "Poco/AutoPtr.h"
+
+using Poco::Runnable;
+using Poco::NotificationQueue;
+using Poco::FastMutex;
+using Poco::AutoPtr;
+
+class CDeviceManager :
+	public Runnable
 {
 public:
-	CDeviceManager();
+	CDeviceManager(VENDOR_LIST& pVendorList, NotificationQueue& queue);
 	~CDeviceManager();
 
-	static CDeviceManager& getInstance();
-
-	void addDevice(Device* pDev);
-	Device& getDevice(const std::string ip);
-	void deleteDevice(const std::string ip);
+	virtual void run();
 
 private:
-	std::vector<Device*> m_vDeviceList;
-
+	VENDOR_LIST& m_pVendorList;
+	NotificationQueue& m_queue;
+	static FastMutex m_mutex;
 };
 
