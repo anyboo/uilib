@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DatabaseException.cpp" />
+    <ClCompile Include="ipset.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PING.cpp" />
     <ClCompile Include="QMFileSqlite.cpp" />
@@ -88,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DatabaseException.h" />
+    <ClInclude Include="ipset.h" />
     <ClInclude Include="PING.h" />
     <ClInclude Include="QMFileSqlite.h" />
     <ClInclude Include="QMSqlite.h" />
