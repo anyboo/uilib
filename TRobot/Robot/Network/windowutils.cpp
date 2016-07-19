@@ -783,7 +783,7 @@ bool WindowUtils::isOnLine(){
                         r = true;
                         break;
                     case IF_OPER_STATUS_OPERATIONAL:
-                        cout << __FILE__ << __FUNCTION__ << __LINE__ << "Operational";
+                        //cout << __FILE__ << __FUNCTION__ << __LINE__ << "Operational";
                         r = true;
                         break;
                     default:

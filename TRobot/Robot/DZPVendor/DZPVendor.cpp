@@ -158,7 +158,7 @@ long CDZPVendor::Login(const std::string& ip, size_t port, const std::string& us
 	if (loginHandle <= 0)
 	{
 		std::string m_sLastError = GZLL_GetLastErrorString(nError);
-		//throw std::exception(m_sLastError.c_str());
+		throw LoginException(m_sLastError.c_str());
 		std::cout << "DZP 登陆 失败！" << std::endl;
 		return -1;
 	}
@@ -239,23 +239,15 @@ void CDZPVendor::SearchAll(const long loginHandle)
 void CDZPVendor::Search(const long loginHandle, const size_t channel, const time_range& range)
 {
 	assert(range.end - range.start <= 24 * 3600);
-
-	std::cout << "DZP 搜索文件 开始！" << std::endl;	
-
-	m_files_Unit.clear();
-
 	if (range.start > range.end)
 	{
 		throw std::exception("Time Range Error!");
 		return;
 	}
 
-	//std::vector<time_range> timeRangeList = CCommonUtrl::getInstance().MakeTimeRangeList(range);
-	//for (size_t i = 0; i < timeRangeList.size(); i++)
-	{
-		DZP_SearchUnit(loginHandle, channel, range, m_files_Unit);
-	}
-
+	std::cout << "DZP 搜索文件 开始！" << std::endl;	
+	m_files_Unit.clear();
+	DZP_SearchUnit(loginHandle, channel, range, m_files_Unit);
 	std::cout << "DZP 搜索文件 结束！" << std::endl;
 
 	// Save Search Video List Result to Config File
@@ -485,7 +477,7 @@ void DZP_SearchUnit(const long loginHandle, const size_t channel, const time_ran
 	if (hdl <= 0)
 	{
 		std::string m_sLastError = std::string("查询失败！错误为:") + GZLL_GetLastErrorString();
-		throw std::exception(m_sLastError.c_str());
+		throw SearchFileException(m_sLastError.c_str());
 		return;
 	}
 	else

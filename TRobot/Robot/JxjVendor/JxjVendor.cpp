@@ -166,7 +166,11 @@ long CJXJVendor::Login(const std::string& ip, size_t port, const std::string& us
 	int iRet = JNetLogin(ip.c_str(), port, user.c_str(), password.c_str(), 10, JXJ_ConnEventCB, NULL, JNET_PRO_T_JPF, loginHandle, NULL);
 	if (iRet < 0)
 	{
+		std::string strLoginFail = "JXJ 登陆 失败！";
+		std::cout << strLoginFail << std::endl;
+
 		std::string m_sLastError = GetErrorString(iRet);
+		throw LoginException(m_sLastError.c_str());
 		return -1;
 	}
 
@@ -177,7 +181,9 @@ long CJXJVendor::Login(const std::string& ip, size_t port, const std::string& us
 
 	if (m_errCode == Err_LoginFail)
 	{
-		std::cout << "JXJ 登陆 失败！" << std::endl;
+		std::string strLoginFail = "JXJ 登陆 失败！";
+		std::cout << strLoginFail << std::endl;
+		throw LoginException(strLoginFail.c_str());
 		return -1;
 	}
 
@@ -186,7 +192,8 @@ long CJXJVendor::Login(const std::string& ip, size_t port, const std::string& us
 	iRet = JNetGetParam(loginHandle, 0, PARAM_DEVICE_INFO, (char *)&deviceinfo, sizeof(deviceinfo), NULL, NULL);
 	if (iRet != 0)
 	{
-		throw std::exception("获取设备信息失败");
+		throw LoginException("获取设备信息失败");
+		return -1;
 	}
 
 	m_iMaxChannel = deviceinfo.channel_num;
@@ -240,23 +247,15 @@ void CJXJVendor::SearchAll(const long loginHandle)
 void CJXJVendor::Search(const long loginHandle, const size_t channel, const time_range& range)
 {
 	assert(range.end - range.start <= 24 * 3600);
-
-	std::cout << "JXJ 搜索文件 开始！" << std::endl;		
-	
-	m_files_Unit.clear();
-
 	if (range.start > range.end)
 	{
 		throw std::exception("Time Range Error!");
 		return;
 	}
 
-	//std::vector<time_range> timeRangeList = CCommonUtrl::getInstance().MakeTimeRangeList(range);
-	//for (size_t i = 0; i < timeRangeList.size(); i++)
-	{
-		JXJ_SearchUnit(loginHandle, channel, range, m_files_Unit);
-	}
-
+	std::cout << "JXJ 搜索文件 开始！" << std::endl;		
+	m_files_Unit.clear();	
+	JXJ_SearchUnit(loginHandle, channel, range, m_files_Unit);
 	std::cout << "JXJ 搜索文件 结束！" << std::endl;
 
 	// Save Search Video List Result to Config File
@@ -700,7 +699,8 @@ void JXJ_SearchUnit(const long loginHandle, const size_t channel, const time_ran
 	iRet = JNetGetParam(loginHandle, channel, PARAM_STORE_LOG, (char *)&m_storeLog, sizeof(m_storeLog), NULL, NULL);
 	if (iRet != 0)
 	{
-		throw std::exception("Search Error!");
+		std::string m_sLastError = GetErrorString(iRet);
+		throw SearchFileException(m_sLastError.c_str());
 	}
 
 	if (m_storeLog.total_count > 0)

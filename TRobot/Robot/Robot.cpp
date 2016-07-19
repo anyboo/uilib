@@ -82,32 +82,32 @@ TEST_CASE("This is a demo", "[demo]")
 		//HKVendor* hkVendor = new HKVendor();
 
 		pVendorList.push_back(jxjVendor);
-		//pVendorList.push_back(dzpVendor);
-		//pVendorList.push_back(dhVendor);
-		//pVendorList.push_back(hkVendor);
+		pVendorList.push_back(dzpVendor);
+	/*	pVendorList.push_back(dhVendor);
+		pVendorList.push_back(hkVendor);*/
 
 		/************************* 初始化IP列表 **********************/
-		std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Start!" << std::endl;
-		NotificationQueue queuePortScan;
-		PortScan portScan(queuePortScan);
-		//开始扫描
-		ThreadPool::defaultPool().start(portScan);
+		//std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Start!" << std::endl;
+		//NotificationQueue queuePortScan;
+		//PortScan portScan(queuePortScan);
+		////开始扫描
+		//ThreadPool::defaultPool().start(portScan);
 
 		DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
-		while (true)
-		{
-			Notification::Ptr pNf(queuePortScan.waitDequeueNotification());
-			if (pNf)
-			{
-				ScanNotification::Ptr pWorkNf = pNf.cast<ScanNotification>();
-				if (pWorkNf)
-				{
-					listDeviceSimpleInfo = GetDeviceInfoSimpleList();
-					std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Stop!" << std::endl;
-					break;
-				}
-			}
-		}
+		//while (true)
+		//{
+		//	Notification::Ptr pNf(queuePortScan.waitDequeueNotification());
+		//	if (pNf)
+		//	{
+		//		ScanNotification::Ptr pWorkNf = pNf.cast<ScanNotification>();
+		//		if (pWorkNf)
+		//		{
+		//			listDeviceSimpleInfo = GetDeviceInfoSimpleList();
+		//			std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Stop!" << std::endl;
+		//			break;
+		//		}
+		//	}
+		//}
 
 		/************************* 设备发现类测试 **********************/
 		std::cout << CCommonUtrl::getInstance().GetCurTime() << "Search Device Start!" << std::endl;
@@ -128,6 +128,7 @@ TEST_CASE("This is a demo", "[demo]")
 			if (pNf)
 			{
 				CNotificationSearchDevice::Ptr pWorkNf = pNf.cast<CNotificationSearchDevice>();
+				//CNotificationDeviceManager::Ptr pWorkNf = pNf.cast<CNotificationDeviceManager>();
 				if (pWorkNf)
 				{
 					if (pWorkNf->GetNotificationType() == Notification_Type_Search_Device_Finish)

@@ -46,7 +46,7 @@ typedef enum
 	Notification_Type_Download_File_Finish,
 	Notification_Type_Download_File_Cancel,
 	Notification_Type_Port_Scan_Finish,
-	Notification_Type_Express,
+	Notification_Type_Exception_Login,
 
 }NOTIFICATION_TYPE;
 

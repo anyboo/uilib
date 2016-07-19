@@ -81,7 +81,6 @@ void CSearchDevice::InitDeviceList(const VENDOR_LIST& pVendorList)
 		{
 			m_listDeviceUnknown.push_back(pDev);
 		}
-
 	}
 	if (m_listDeviceUnknown.size() > 0)
 	{

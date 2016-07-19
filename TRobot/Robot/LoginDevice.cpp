@@ -1,10 +1,14 @@
 
 #include <Poco/SingletonHolder.h>
+#include <Poco/NotificationQueue.h>
 #include <cassert>
 
 #include "LoginDevice.h"
 #include "Device.h"
 #include "CommonUtrl.h"
+#include "NotificationException.h"
+
+using Poco::NotificationQueue;
 
 static int loginCount = 0;
 
@@ -36,15 +40,17 @@ bool CLoginDevice::Login(AbstractVendor* pVendor, const std::string& ip, const i
 		sPassword = pVendor->GetDefPassword();
 	}
 
-	if (pDev->Login(ip, port, sUserName, sPassword))
+	try
 	{
+		pDev->Login(ip, port, sUserName, sPassword);
+
 		std::vector<Device*>::iterator result = find(m_listDevice.begin(), m_listDevice.end(), pDev); //≤È’“
 		if (result == m_listDevice.end())
 		{
 			m_listDevice.push_back(pDev);
 
 			LoginDeviceInfo ld;
-			//ype
+			//type
 			ld.set<0>(pDev->GetSDKType());
 			//ip
 			ld.set<1>(pDev->getIP());
@@ -72,11 +78,20 @@ bool CLoginDevice::Login(AbstractVendor* pVendor, const std::string& ip, const i
 
 		return true;
 	}
-	else
+	catch (LoginException& ex)
 	{
+		std::cout << ex.displayText() << std::endl;
+
+		NotificationQueue& queue = NotificationQueue::defaultQueue();
+		queue.enqueueNotification(new CNotificationException(Notification_Type_Exception_Login, ex.displayText()));
+
 		delete pDev;
 		pDev = nullptr;
 		return false;
+	}
+	catch (exception& ex)
+	{
+		cout << ex.what() << endl;
 	}
 }
 
@@ -97,7 +112,7 @@ void CLoginDevice::Logout(const std::string& ip)
 			sql += "'";
 			pDb->dropTable(sql);
 
-			std::cout << CCommonUtrl::getInstance().GetCurTime() << pDev->getIP()  << " - " << --loginCount << std::endl;
+			std::cout << CCommonUtrl::getInstance().GetCurTime() << pDev->getIP() << " - " << --loginCount << std::endl;
 
 			pDev->Logout();
 			iter = m_listDevice.erase(iter);
