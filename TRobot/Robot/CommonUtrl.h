@@ -49,14 +49,6 @@
 #define ONE_HOUR	 (60 * 60)
 #define ONE_MINUTE	 (60)
 
-typedef enum
-{
-	Err_No = 0,
-	Err_LoginSuccess, // Login Success
-	Err_LoginFail,	// Login Fail
-	Err_DownloadSuccess, // Download Success
-}eErrCode;
-
 typedef struct __ComTime
 {
 	uint8_t year;					//´Ó1900¿ªÊ¼, J_SDK_DEF_BASE_YEAR

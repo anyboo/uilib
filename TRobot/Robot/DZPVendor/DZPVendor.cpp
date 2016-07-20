@@ -11,14 +11,20 @@ using Poco::NotificationQueue;
 #pragma comment(lib, "NetSdk")
 #pragma comment(lib, "H264Play")
 
-std::string DZP_MakeFileName(int channel, const std::string& startTime);
-void DZP_SearchUnit(const long loginHandle, const size_t channel, const time_range& range, RECORD_FILE_LIST& recordFiles);
-void __stdcall DZP_DownLoadPosCallBack(long lPlayHandle, long lTotalSize, long lDownLoadSize, long dwUser);
-int __stdcall DZP_RealDataCallBack(long lRealHandle, long dwDataType, unsigned char *pBuffer, long lbufsize, long dwUser);
-int DZP_GetDownloadPos(const int fileHandle);
 
-int m_lFileHandle = 0;
-static bool DZP_Init_Flag = false;
+class DZP_SDK_INTERFACE
+{
+public:
+	static std::string DZP_MakeFileName(int channel, const std::string& startTime);
+	static void DZP_SearchUnit(const long loginHandle, const size_t channel, const time_range& range, RECORD_FILE_LIST& recordFiles);
+	static void __stdcall DZP_DownLoadPosCallBack(long lPlayHandle, long lTotalSize, long lDownLoadSize, long dwUser);
+	static int __stdcall DZP_RealDataCallBack(long lRealHandle, long dwDataType, unsigned char *pBuffer, long lbufsize, long dwUser);
+	static int DZP_GetDownloadPos(const int fileHandle);
+
+	static int m_lFileHandle;
+};
+
+int DZP_SDK_INTERFACE::m_lFileHandle = 0;
 
 std::string GZLL_GetLastErrorString(int error)
 {
@@ -123,10 +129,7 @@ CDZPVendor::CDZPVendor()
 
 CDZPVendor::~CDZPVendor()
 {
-	if (DZP_Init_Flag)
-	{
-		H264_DVR_Cleanup();
-	}
+	H264_DVR_Cleanup();
 }
 
 void CDZPVendor::Init()
@@ -139,8 +142,6 @@ void CDZPVendor::Init()
 	}
 
 	H264_DVR_SetConnectTime(5000, 3);
-
-	DZP_Init_Flag = true;
 
 	std::cout << "DZP 初始化SDK 成功！" << std::endl;
 }
@@ -247,7 +248,7 @@ void CDZPVendor::Search(const long loginHandle, const size_t channel, const time
 
 	std::cout << "DZP 搜索文件 开始！" << std::endl;	
 	m_files_Unit.clear();
-	DZP_SearchUnit(loginHandle, channel, range, m_files_Unit);
+	DZP_SDK_INTERFACE::DZP_SearchUnit(loginHandle, channel, range, m_files_Unit);
 	std::cout << "DZP 搜索文件 结束！" << std::endl;
 
 	// Save Search Video List Result to Config File
@@ -300,12 +301,12 @@ void CDZPVendor::Download(const long loginHandle, const size_t channel, const ti
 	localtime_s(&ttime, &range.end);
 	strftime((char *)strTimeEnd.data(), 24, "%Y%m%d%H%M%S", &ttime);
 
-	std::string strFileName = DZP_MakeFileName(channel, strTimeStart);
+	std::string strFileName = DZP_SDK_INTERFACE::DZP_MakeFileName(channel, strTimeStart);
 
 	// Init File Save Path 
 	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_DZP, channel);
-	m_lFileHandle = H264_DVR_GetFileByTime(loginHandle, &info, (char *)strPath.c_str(), true, DZP_DownLoadPosCallBack, 0);
-	if (m_lFileHandle <= 0)
+	DZP_SDK_INTERFACE::m_lFileHandle = H264_DVR_GetFileByTime(loginHandle, &info, (char *)strPath.c_str(), true, DZP_SDK_INTERFACE::DZP_DownLoadPosCallBack, 0);
+	if (DZP_SDK_INTERFACE::m_lFileHandle <= 0)
 	{
 		std::string m_sLastError = std::string("下载失败！错误为:") + GZLL_GetLastErrorString();
 		return;
@@ -352,14 +353,14 @@ void CDZPVendor::Download(const long loginHandle, const size_t channel, const st
 	localtime_s(&ttime, &file.endTime);
 	strftime((char *)strTimeEnd.data(), 24, "%Y%m%d%H%M%S", &ttime);
 
-	std::string strFileName = DZP_MakeFileName(channel, strTimeStart);
+	std::string strFileName = DZP_SDK_INTERFACE::DZP_MakeFileName(channel, strTimeStart);
 
 	// Init File Save Path 
 	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_DZP, channel);
 	strPath.append(file.name);
 	H264_DVR_FILE_DATA* pData = (H264_DVR_FILE_DATA*)file.getPrivateData();
-	m_lFileHandle = H264_DVR_GetFileByName(loginHandle, pData, (char *)strPath.c_str(), DZP_DownLoadPosCallBack, 0);
-	if (m_lFileHandle <= 0)
+	DZP_SDK_INTERFACE::m_lFileHandle = H264_DVR_GetFileByName(loginHandle, pData, (char *)strPath.c_str(), DZP_SDK_INTERFACE::DZP_DownLoadPosCallBack, 0);
+	if (DZP_SDK_INTERFACE::m_lFileHandle <= 0)
 	{
 		std::string m_sLastError = GZLL_GetLastErrorString();
 		throw std::exception(m_sLastError.c_str());
@@ -382,7 +383,7 @@ void CDZPVendor::PlayVideo(const long loginHandle, const size_t channel, const t
 
 	info.hWnd = m_hWnd;
 
-	int playbackHandle = H264_DVR_PlayBackByTime(loginHandle, &info, DZP_DownLoadPosCallBack, DZP_RealDataCallBack, 0);
+	int playbackHandle = H264_DVR_PlayBackByTime(loginHandle, &info, DZP_SDK_INTERFACE::DZP_DownLoadPosCallBack, DZP_SDK_INTERFACE::DZP_RealDataCallBack, 0);
 	if (0 == playbackHandle)
 	{
 		H264_DVR_StopPlayBack(playbackHandle);
@@ -438,7 +439,7 @@ void CDZPVendor::throwException()
 
 }
 /****************************************************************************************/
-std::string DZP_MakeFileName(int channel, const std::string& startTime)
+std::string DZP_SDK_INTERFACE::DZP_MakeFileName(int channel, const std::string& startTime)
 {
 	std::string strFileName;
 	std::string strStartTime = startTime.c_str();
@@ -458,7 +459,7 @@ std::string DZP_MakeFileName(int channel, const std::string& startTime)
 
 	return strFileName;
 }
-void DZP_SearchUnit(const long loginHandle, const size_t channel, const time_range& range, RECORD_FILE_LIST& recordFiles)
+void DZP_SDK_INTERFACE::DZP_SearchUnit(const long loginHandle, const size_t channel, const time_range& range, RECORD_FILE_LIST& recordFiles)
 {
 	H264_DVR_FINDINFO info;
 	memset(&info, 0, sizeof(info));
@@ -531,7 +532,7 @@ void DZP_SearchUnit(const long loginHandle, const size_t channel, const time_ran
 	}
 }
 
-void __stdcall DZP_DownLoadPosCallBack(long lPlayHandle, long lTotalSize, long lDownLoadSize, long dwUser)
+void __stdcall DZP_SDK_INTERFACE::DZP_DownLoadPosCallBack(long lPlayHandle, long lTotalSize, long lDownLoadSize, long dwUser)
 {
 	static int prePos = 0;
 	int curPos = 0;
@@ -549,11 +550,11 @@ void __stdcall DZP_DownLoadPosCallBack(long lPlayHandle, long lTotalSize, long l
 		prePos = 0;
 	}
 }
-int __stdcall DZP_RealDataCallBack(long lRealHandle, long dwDataType, unsigned char *pBuffer, long lbufsize, long dwUser)
+int __stdcall DZP_SDK_INTERFACE::DZP_RealDataCallBack(long lRealHandle, long dwDataType, unsigned char *pBuffer, long lbufsize, long dwUser)
 {
 	return 0;
 }
-int DZP_GetDownloadPos(const int fileHandle)
+int DZP_SDK_INTERFACE::DZP_GetDownloadPos(const int fileHandle)
 {
 	int pos = H264_DVR_GetDownloadPos(fileHandle);
 

@@ -52,7 +52,7 @@ TEST_CASE("This is a demo", "[demo]")
 {
 #if 1
 	SECTION("Test login the device")
-	{	
+	{
 		/************************* 初始化线程池 **********************/
 		Poco::ThreadPool pool;
 
@@ -83,31 +83,31 @@ TEST_CASE("This is a demo", "[demo]")
 
 		pVendorList.push_back(jxjVendor);
 		pVendorList.push_back(dzpVendor);
-	/*	pVendorList.push_back(dhVendor);
-		pVendorList.push_back(hkVendor);*/
+		/*	pVendorList.push_back(dhVendor);
+			pVendorList.push_back(hkVendor);*/
 
 		/************************* 初始化IP列表 **********************/
-		//std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Start!" << std::endl;
-		//NotificationQueue queuePortScan;
-		//PortScan portScan(queuePortScan);
-		////开始扫描
-		//ThreadPool::defaultPool().start(portScan);
+		std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Start!" << std::endl;
+		NotificationQueue queuePortScan;
+		PortScan portScan(queuePortScan);
+		//开始扫描
+		ThreadPool::defaultPool().start(portScan);
 
 		DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
-		//while (true)
-		//{
-		//	Notification::Ptr pNf(queuePortScan.waitDequeueNotification());
-		//	if (pNf)
-		//	{
-		//		ScanNotification::Ptr pWorkNf = pNf.cast<ScanNotification>();
-		//		if (pWorkNf)
-		//		{
-		//			listDeviceSimpleInfo = GetDeviceInfoSimpleList();
-		//			std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Stop!" << std::endl;
-		//			break;
-		//		}
-		//	}
-		//}
+		while (true)
+		{
+			Notification::Ptr pNf(queuePortScan.waitDequeueNotification());
+			if (pNf)
+			{
+				ScanNotification::Ptr pWorkNf = pNf.cast<ScanNotification>();
+				if (pWorkNf)
+				{
+					listDeviceSimpleInfo = GetDeviceInfoSimpleList();
+					std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Stop!" << std::endl;
+					break;
+				}
+			}
+		}
 
 		/************************* 设备发现类测试 **********************/
 		std::cout << CCommonUtrl::getInstance().GetCurTime() << "Search Device Start!" << std::endl;
@@ -126,7 +126,7 @@ TEST_CASE("This is a demo", "[demo]")
 		{
 			Notification::Ptr pNf(NotificationQueue::defaultQueue().waitDequeueNotification());
 			if (pNf)
-			{
+			{			
 				CNotificationSearchDevice::Ptr pWorkNf = pNf.cast<CNotificationSearchDevice>();
 				//CNotificationDeviceManager::Ptr pWorkNf = pNf.cast<CNotificationDeviceManager>();
 				if (pWorkNf)
@@ -138,19 +138,19 @@ TEST_CASE("This is a demo", "[demo]")
 				}
 			}
 		}
-		
+
 		/************************* 设备登陆、登出测试 **********************/
 #if 1
 		std::cout << CCommonUtrl::getInstance().GetCurTime() << "Search Device Stop!" << std::endl;
 
-		DEVICE_INFO_LIST devInfoList = CSearchDevice::GetDeviceInfoList();	
+		DEVICE_INFO_LIST devInfoList = CSearchDevice::GetDeviceInfoList();
 		for (size_t i = 0; i < devInfoList.size(); i++)
 		{
 			// 获取设备信息
 			NET_DEVICE_INFO* devInfo = devInfoList[i];
 			std::string ip(devInfo->szIp);
-			//if (ip.compare("10.168.0.66") == 0)
-			if (ip.compare("192.168.0.89") == 0)
+			if (ip.compare("10.168.0.66") == 0)
+			//if (ip.compare("192.168.0.89") == 0)
 			{
 				// 登陆设备
 				if (CLoginDevice::getInstance().Login(devInfo->pVendor, devInfo->szIp, devInfo->nPort))
@@ -167,9 +167,9 @@ TEST_CASE("This is a demo", "[demo]")
 					time_range timePlay;
 					timePlay.start = list[0].beginTime; //DZP - 1468771200
 					timePlay.end = list[0].endTime; //DZP - 1468857599
-					pDev->PlayVideo(TestWindows::getInstance().GetHWnd(),2, timePlay);
+					//pDev->PlayVideo(TestWindows::getInstance().GetHWnd(), 2, timePlay);
 				}
-			}			
+			}
 		}
 
 		while (true)

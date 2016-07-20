@@ -2,6 +2,14 @@
 
 #include "CommonUtrl.h"
 
+typedef enum
+{
+	Err_No = 0,
+	Err_LoginSuccess, // Login Success
+	Err_LoginFail,	// Login Fail
+	Err_DownloadSuccess, // Download Success
+}eErrCode;
+
 class CJXJVendor :
 	public AbstractVendor
 {

@@ -16,44 +16,63 @@ using Poco::NotificationQueue;
 #pragma comment(lib, "JNetSDK")
 #pragma comment(lib, "AVPlayer")
 
-static eErrCode m_errCode = Err_No; // Error Code
-JStoreLog m_storeLog;
-JRecodeType m_recordType = ALL_RECODE;
-int	m_iBeginNode = 0;
-int	m_iEndNode = J_SDK_MAX_STORE_LOG_SIZE - 1;
-int	m_iSsid = -1;
 
-long m_lDownloadHandle = -1;
-long m_lDownloadFileHandle = -1;
-long m_lRecHandle = -1;
-long m_lDownLoadStartTime = -1;
-long m_lDownLoadTotalTime = -1;
+class JXJ_SDK_INTERFACE
+{
+public:
+	// Login Callback
+	static int __stdcall JXJ_ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, void* pEventData, int iDataLen, void* pUserParam);
+	// Search Device Callback
+	static int __stdcall JXJ_JMBNotify(long lHandle, DWORD dwPortocol, int iErr, int iMsgID, LPCTSTR lpszDstID, void* pData, int iDataLen, void* pUserParam);
+	// Search Callback
+	static void JXJ_MakeStoreLog(JStoreLog& storeLog, const JRecodeType recordType, const int beginNode, const int endNode, const int ssid, const std::time_t& start, const std::time_t& end);
+	static std::string JXJ_MakeFileName(int channel, const std::string& startTime, const std::string& endTime);
+	static void JXJ_SearchUnit(const long loginHandle, const size_t channel, const time_range& range, RECORD_FILE_LIST& recordFiles);
+	static void JXJ_ReFreshVideoList(const long loginHandle, int channel, const time_range& range, RECORD_FILE_LIST& recordFiles);
+	static void JXJ_AddSearchFileList(int channel, RECORD_FILE_LIST& recordFiles);
+	static time_t JXJ_MakeTimestampByJTime(JTime jTime);
+	static bool JXJ_CheckFileExist(const RecordFile& file, const std::vector<RecordFile>& fileList);
+
+	// Download Callback
+	static int  __stdcall JXJ_JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam);
+	static void JXJ_CloseDownload();
+
+	// PlayVideo Callback
+	static int  __stdcall JXJ_JRecStream(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam);
+	static DWORD JXJ_PlayThreadFun(LPVOID lpThreadParameter);
+
+public:
+	static eErrCode m_errCode; // Error Code
+	static JStoreLog m_storeLog;
+	static JRecodeType m_recordType;
+	static int	m_iBeginNode;
+	static int	m_iEndNode;
+	static int	m_iSsid;
+
+	static long m_lDownloadHandle;
+	static long m_lDownloadFileHandle;
+	static long m_lRecHandle;
+	static long m_lDownLoadStartTime;
+	static long m_lDownLoadTotalTime;
+	//int m_iDownLoadPos = 0;
+	static int m_iPlayVideoChannel;
+};
+
+eErrCode JXJ_SDK_INTERFACE::m_errCode = Err_No; // Error Code
+JStoreLog JXJ_SDK_INTERFACE::m_storeLog;
+JRecodeType JXJ_SDK_INTERFACE::m_recordType = ALL_RECODE;
+int	JXJ_SDK_INTERFACE::m_iBeginNode = 0;
+int	JXJ_SDK_INTERFACE::m_iEndNode = J_SDK_MAX_STORE_LOG_SIZE - 1;
+int	JXJ_SDK_INTERFACE::m_iSsid = -1;
+
+long JXJ_SDK_INTERFACE::m_lDownloadHandle = -1;
+long JXJ_SDK_INTERFACE::m_lDownloadFileHandle = -1;
+long JXJ_SDK_INTERFACE::m_lRecHandle = -1;
+long JXJ_SDK_INTERFACE::m_lDownLoadStartTime = -1;
+long JXJ_SDK_INTERFACE::m_lDownLoadTotalTime = -1;
 //int m_iDownLoadPos = 0;
-int m_iPlayVideoChannel = -1;
+int JXJ_SDK_INTERFACE::m_iPlayVideoChannel = -1;
 
-static bool JXJ_Init_Flag = false;
-
-
-// Login Callback
-int __stdcall JXJ_ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, void* pEventData, int iDataLen, void* pUserParam);
-// Search Device Callback
-int __stdcall JXJ_JMBNotify(long lHandle, DWORD dwPortocol, int iErr, int iMsgID, LPCTSTR lpszDstID, void* pData, int iDataLen, void* pUserParam);
-// Search Callback
-void JXJ_MakeStoreLog(JStoreLog& storeLog, const JRecodeType recordType, const int beginNode, const int endNode, const int ssid, const std::time_t& start, const std::time_t& end);
-std::string JXJ_MakeFileName(int channel, const std::string& startTime, const std::string& endTime);
-void JXJ_SearchUnit(const long loginHandle, const size_t channel, const time_range& range, RECORD_FILE_LIST& recordFiles);
-void JXJ_ReFreshVideoList(const long loginHandle, int channel, const time_range& range, RECORD_FILE_LIST& recordFiles);
-void JXJ_AddSearchFileList(int channel, RECORD_FILE_LIST& recordFiles);
-time_t JXJ_MakeTimestampByJTime(JTime jTime);
-bool JXJ_CheckFileExist(const RecordFile& file, const std::vector<RecordFile>& fileList);
-
-// Download Callback
-int  __stdcall JXJ_JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam);
-static void JXJ_CloseDownload();
-
-// PlayVideo Callback
-int  __stdcall JXJ_JRecStream(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam);
-DWORD JXJ_PlayThreadFun(LPVOID lpThreadParameter);
 
 typedef enum
 {
@@ -128,10 +147,7 @@ CJXJVendor::CJXJVendor()
 
 CJXJVendor::~CJXJVendor()
 {
-	if (JXJ_Init_Flag)
-	{
-		assert(!JNetCleanup());
-	}
+	assert(!JNetCleanup());
 }
 
 void CJXJVendor::Init()
@@ -153,17 +169,15 @@ void CJXJVendor::Init()
 
 	AVP_InitRecMng(128, 8);
 
-	JXJ_Init_Flag = true;
-
 	std::cout << "JXJ 初始化SDK 成功！" << std::endl;
 }
 
 long CJXJVendor::Login(const std::string& ip, size_t port, const std::string& user, const std::string& password)
 {
-	m_errCode = Err_No;
+	JXJ_SDK_INTERFACE::m_errCode = Err_No;
 
 	long loginHandle = -1;
-	int iRet = JNetLogin(ip.c_str(), port, user.c_str(), password.c_str(), 10, JXJ_ConnEventCB, NULL, JNET_PRO_T_JPF, loginHandle, NULL);
+	int iRet = JNetLogin(ip.c_str(), port, user.c_str(), password.c_str(), 10, JXJ_SDK_INTERFACE::JXJ_ConnEventCB, NULL, JNET_PRO_T_JPF, loginHandle, NULL);
 	if (iRet < 0)
 	{
 		std::string strLoginFail = "JXJ 登陆 失败！";
@@ -174,12 +188,12 @@ long CJXJVendor::Login(const std::string& ip, size_t port, const std::string& us
 		return -1;
 	}
 
-	while (m_errCode == Err_No)
+	while (JXJ_SDK_INTERFACE::m_errCode == Err_No)
 	{
 		::Sleep(100);
 	}
 
-	if (m_errCode == Err_LoginFail)
+	if (JXJ_SDK_INTERFACE::m_errCode == Err_LoginFail)
 	{
 		std::string strLoginFail = "JXJ 登陆 失败！";
 		std::cout << strLoginFail << std::endl;
@@ -227,7 +241,7 @@ void CJXJVendor::StartSearchDevice()
 
 	char szIp[11] = "224.0.0.99";
 	int nPort = 40086;
-	long lResult = JNetMBOpen(szIp, nPort, JXJ_JMBNotify, this, JNET_PRO_T_JPF, m_lSearchDeviceHandle);
+	long lResult = JNetMBOpen(szIp, nPort, JXJ_SDK_INTERFACE::JXJ_JMBNotify, this, JNET_PRO_T_JPF, m_lSearchDeviceHandle);
 	lResult = JNetMBSearch(m_lSearchDeviceHandle, 5);
 
 	std::cout << "JXJ 搜索设备 开始！" << std::endl;
@@ -255,7 +269,7 @@ void CJXJVendor::Search(const long loginHandle, const size_t channel, const time
 
 	std::cout << "JXJ 搜索文件 开始！" << std::endl;		
 	m_files_Unit.clear();	
-	JXJ_SearchUnit(loginHandle, channel, range, m_files_Unit);
+	JXJ_SDK_INTERFACE::JXJ_SearchUnit(loginHandle, channel, range, m_files_Unit);
 	std::cout << "JXJ 搜索文件 结束！" << std::endl;
 
 	// Save Search Video List Result to Config File
@@ -298,7 +312,7 @@ void CJXJVendor::Download(const long loginHandle, const size_t channel, const ti
 	localtime_s(&ttime, &range.end);
 	strftime((char *)strTimeEnd.data(), 24, "%Y%m%d%H%M%S", &ttime);
 
-	std::string strFileName = JXJ_MakeFileName(channel, strTimeStart, strTimeEnd);
+	std::string strFileName = JXJ_SDK_INTERFACE::JXJ_MakeFileName(channel, strTimeStart, strTimeEnd);
 
 	if (m_files.size() == 0)
 	{
@@ -328,15 +342,15 @@ void CJXJVendor::Download(const long loginHandle, const size_t channel, const ti
 	strPath += file.name.data();
 
 	// Set File Total Time
-	m_lDownLoadTotalTime = file.duration;
-	m_lDownloadHandle = JNetRecOpen4Time(loginHandle, "", channel, j_primary_stream, strTimeStart.c_str(), strTimeEnd.c_str(), 4096, IsPlay_Download, JXJ_JRecDownload, this, m_lRecHandle);
-	if (m_lDownloadHandle > 0)
+	JXJ_SDK_INTERFACE::m_lDownLoadTotalTime = file.duration;
+	JXJ_SDK_INTERFACE::m_lDownloadHandle = JNetRecOpen4Time(loginHandle, "", channel, j_primary_stream, strTimeStart.c_str(), strTimeEnd.c_str(), 4096, IsPlay_Download, JXJ_SDK_INTERFACE::JXJ_JRecDownload, this, JXJ_SDK_INTERFACE::m_lRecHandle);
+	if (JXJ_SDK_INTERFACE::m_lDownloadHandle > 0)
 	{
 		Sleep(1000);
-		JNetRecCtrl(m_lRecHandle, JNET_PB_CTRL_START, NULL);
+		JNetRecCtrl(JXJ_SDK_INTERFACE::m_lRecHandle, JNET_PB_CTRL_START, NULL);
 
-		m_lDownloadFileHandle = AVP_CreateRecFile(strPath.c_str(), AVP_PROTOCOL_JPF, Encoder_DM365);
-		if (m_lDownloadFileHandle == -1)
+		JXJ_SDK_INTERFACE::m_lDownloadFileHandle = AVP_CreateRecFile(strPath.c_str(), AVP_PROTOCOL_JPF, Encoder_DM365);
+		if (JXJ_SDK_INTERFACE::m_lDownloadFileHandle == -1)
 		{
 			throw std::exception("Create File Error!");
 		}
@@ -388,22 +402,22 @@ void CJXJVendor::Download(const long loginHandle, const size_t channel, const st
 	localtime_s(&ttime, &file.endTime);
 	strftime((char *)strTimeEnd.data(), 24, "%Y%m%d%H%M%S", &ttime);
 
-	std::string strFileName = JXJ_MakeFileName(channel, strTimeStart, strTimeEnd);
+	std::string strFileName = JXJ_SDK_INTERFACE::JXJ_MakeFileName(channel, strTimeStart, strTimeEnd);
 
 	// Init File Save Path 
 	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_JXJ, channel);
 	strPath += file.name.data();
 
 	// Set File Total Time
-	m_lDownLoadTotalTime = file.duration;
-	m_lDownloadHandle = JNetRecOpen4Time(loginHandle, "", channel, j_primary_stream, strTimeStart.c_str(), strTimeEnd.c_str(), 4096, IsPlay_Download, JXJ_JRecDownload, this, m_lRecHandle);
-	if (m_lDownloadHandle > 0)
+	JXJ_SDK_INTERFACE::m_lDownLoadTotalTime = file.duration;
+	JXJ_SDK_INTERFACE::m_lDownloadHandle = JNetRecOpen4Time(loginHandle, "", channel, j_primary_stream, strTimeStart.c_str(), strTimeEnd.c_str(), 4096, IsPlay_Download, JXJ_SDK_INTERFACE::JXJ_JRecDownload, this, JXJ_SDK_INTERFACE::m_lRecHandle);
+	if (JXJ_SDK_INTERFACE::m_lDownloadHandle > 0)
 	{
 		Sleep(1000);
-		JNetRecCtrl(m_lRecHandle, JNET_PB_CTRL_START, NULL);
+		JNetRecCtrl(JXJ_SDK_INTERFACE::m_lRecHandle, JNET_PB_CTRL_START, NULL);
 
-		m_lDownloadFileHandle = AVP_CreateRecFile(strPath.c_str(), AVP_PROTOCOL_JPF, Encoder_DM365);
-		if (m_lDownloadFileHandle == -1)
+		JXJ_SDK_INTERFACE::m_lDownloadFileHandle = AVP_CreateRecFile(strPath.c_str(), AVP_PROTOCOL_JPF, Encoder_DM365);
+		if (JXJ_SDK_INTERFACE::m_lDownloadFileHandle == -1)
 		{
 			throw std::exception("Create File Error!");
 		}
@@ -428,7 +442,7 @@ void CJXJVendor::PlayVideo(const long loginHandle, const size_t channel, const t
 	localtime_s(&ttime, &range.end);
 	strftime((char *)strTimeEnd.c_str(), 24, "%Y%m%d%H%M%S", &ttime);
 
-	std::string strFileName = JXJ_MakeFileName(channel, strTimeStart, strTimeEnd);
+	std::string strFileName = JXJ_SDK_INTERFACE::JXJ_MakeFileName(channel, strTimeStart, strTimeEnd);
 
 	if (m_files.size() == 0)
 	{
@@ -453,32 +467,32 @@ void CJXJVendor::PlayVideo(const long loginHandle, const size_t channel, const t
 		return;
 	}
 
-	m_iPlayVideoChannel = AVP_GetFreePort();
+	JXJ_SDK_INTERFACE::m_iPlayVideoChannel = AVP_GetFreePort();
 
-	m_lRecHandle = JNetRecOpen4Time(loginHandle, "", channel, 0, strTimeStart.c_str(), strTimeEnd.c_str(), 4096, IsPlay_Play, JXJ_JRecStream, this, m_lRecHandle);
-	if (m_lRecHandle > 0)
+	JXJ_SDK_INTERFACE::m_lRecHandle = JNetRecOpen4Time(loginHandle, "", channel, 0, strTimeStart.c_str(), strTimeEnd.c_str(), 4096, IsPlay_Play, JXJ_SDK_INTERFACE::JXJ_JRecStream, this, JXJ_SDK_INTERFACE::m_lRecHandle);
+	if (JXJ_SDK_INTERFACE::m_lRecHandle > 0)
 	{
 		Sleep(1000);
-		JNetRecCtrl(m_lRecHandle, JNET_PB_CTRL_START, NULL);
+		JNetRecCtrl(JXJ_SDK_INTERFACE::m_lRecHandle, JNET_PB_CTRL_START, NULL);
 	}
 
 	int iRet = -1;
-	AVP_SetPlayPriority(m_iPlayVideoChannel, AVPPlaySmooth);
-	AVP_SetDataProtocol(m_iPlayVideoChannel, AVP_PROTOCOL_JPF);
+	AVP_SetPlayPriority(JXJ_SDK_INTERFACE::m_iPlayVideoChannel, AVPPlaySmooth);
+	AVP_SetDataProtocol(JXJ_SDK_INTERFACE::m_iPlayVideoChannel, AVP_PROTOCOL_JPF);
 
 	//AVP_EnableYUVDraw(gChannel,TRUE);
 	// 设置通道使用的解码器
-	iRet = AVP_SetCoder(m_iPlayVideoChannel, AVP_CODER_JXJ);
+	iRet = AVP_SetCoder(JXJ_SDK_INTERFACE::m_iPlayVideoChannel, AVP_CODER_JXJ);
 	if (iRet != AVPErrSuccess)
 	{
 		throw std::exception("AVP_SetCoder Error!");
 		return;
 	}
 
-	AVP_AddPlayWnd(m_iPlayVideoChannel, NULL, m_hWnd, NULL, NULL);
+	AVP_AddPlayWnd(JXJ_SDK_INTERFACE::m_iPlayVideoChannel, NULL, m_hWnd, NULL, NULL);
 
 	// 开启解码
-	AVP_Play(m_iPlayVideoChannel);
+	AVP_Play(JXJ_SDK_INTERFACE::m_iPlayVideoChannel);
 }
 void CJXJVendor::PlayVideo(const long loginHandle, const size_t channel, const std::string& filename)
 {
@@ -516,32 +530,32 @@ void CJXJVendor::PlayVideo(const long loginHandle, const size_t channel, const s
 	localtime_s(&ttime, &file.endTime);
 	strftime((char *)strTimeEnd.c_str(), 24, "%Y%m%d%H%M%S", &ttime);
 
-	m_iPlayVideoChannel = AVP_GetFreePort();
+	JXJ_SDK_INTERFACE::m_iPlayVideoChannel = AVP_GetFreePort();
 
-	m_lRecHandle = JNetRecOpen4Time(loginHandle, "", channel, 0, strTimeStart.c_str(), strTimeEnd.c_str(), 4096, IsPlay_Play, JXJ_JRecStream, this, m_lRecHandle);
-	if (m_lRecHandle > 0)
+	JXJ_SDK_INTERFACE::m_lRecHandle = JNetRecOpen4Time(loginHandle, "", channel, 0, strTimeStart.c_str(), strTimeEnd.c_str(), 4096, IsPlay_Play, JXJ_SDK_INTERFACE::JXJ_JRecStream, this, JXJ_SDK_INTERFACE::m_lRecHandle);
+	if (JXJ_SDK_INTERFACE::m_lRecHandle > 0)
 	{
 		Sleep(1000);
-		JNetRecCtrl(m_lRecHandle, JNET_PB_CTRL_START, NULL);
+		JNetRecCtrl(JXJ_SDK_INTERFACE::m_lRecHandle, JNET_PB_CTRL_START, NULL);
 	}
 
 	int iRet = -1;
-	AVP_SetPlayPriority(m_iPlayVideoChannel, AVPPlaySmooth);
-	AVP_SetDataProtocol(m_iPlayVideoChannel, AVP_PROTOCOL_JPF);
+	AVP_SetPlayPriority(JXJ_SDK_INTERFACE::m_iPlayVideoChannel, AVPPlaySmooth);
+	AVP_SetDataProtocol(JXJ_SDK_INTERFACE::m_iPlayVideoChannel, AVP_PROTOCOL_JPF);
 
 	//AVP_EnableYUVDraw(gChannel,TRUE);
 	// 设置通道使用的解码器
-	iRet = AVP_SetCoder(m_iPlayVideoChannel, AVP_CODER_JXJ);
+	iRet = AVP_SetCoder(JXJ_SDK_INTERFACE::m_iPlayVideoChannel, AVP_CODER_JXJ);
 	if (iRet != AVPErrSuccess)
 	{
 		throw std::exception("AVP_SetCoder Error!");
 		return;
 	}
 
-	AVP_AddPlayWnd(m_iPlayVideoChannel, NULL, m_hWnd, NULL, NULL);
+	AVP_AddPlayWnd(JXJ_SDK_INTERFACE::m_iPlayVideoChannel, NULL, m_hWnd, NULL, NULL);
 
 	// 开启解码
-	AVP_Play(m_iPlayVideoChannel);
+	AVP_Play(JXJ_SDK_INTERFACE::m_iPlayVideoChannel);
 
 	return;
 }
@@ -555,7 +569,7 @@ void CJXJVendor::throwException()
 }
 
 /***********************************************************************************************/
-int __stdcall JXJ_ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, void* pEventData, int iDataLen, void* pUserParam)
+int __stdcall JXJ_SDK_INTERFACE::JXJ_ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, void* pEventData, int iDataLen, void* pUserParam)
 {
 	switch (eType)
 	{
@@ -578,7 +592,7 @@ int __stdcall JXJ_ConnEventCB(long lHandle, eJNetEvent eType, int iDataType, voi
 	return 0;
 }
 
-int __stdcall JXJ_JMBNotify(long lHandle, DWORD dwPortocol, int iErr, int iMsgID, LPCTSTR lpszDstID, void* pData, int iDataLen, void* pUserParam)
+int __stdcall JXJ_SDK_INTERFACE::JXJ_JMBNotify(long lHandle, DWORD dwPortocol, int iErr, int iMsgID, LPCTSTR lpszDstID, void* pData, int iDataLen, void* pUserParam)
 {
 	CJXJVendor* jxjVendor = (CJXJVendor *)pUserParam;
 
@@ -639,7 +653,7 @@ int __stdcall JXJ_JMBNotify(long lHandle, DWORD dwPortocol, int iErr, int iMsgID
 	jxjVendor->GetDeviceInfoList().push_back(ndiInfo);
 }
 
-void JXJ_MakeStoreLog(JStoreLog& storeLog, const JRecodeType recordType, const int beginNode, const int endNode, const int ssid, const std::time_t& start, const std::time_t& end)
+void JXJ_SDK_INTERFACE::JXJ_MakeStoreLog(JStoreLog& storeLog, const JRecodeType recordType, const int beginNode, const int endNode, const int ssid, const std::time_t& start, const std::time_t& end)
 {
 	//查询录像参数
 	ZeroMemory(&storeLog, sizeof(JStoreLog));
@@ -670,7 +684,7 @@ void JXJ_MakeStoreLog(JStoreLog& storeLog, const JRecodeType recordType, const i
 	storeLog.end_time.second = (uint8_t)ttimeEnd.tm_sec;
 }
 
-std::string JXJ_MakeFileName(int channel, const std::string& startTime, const std::string& endTime)
+std::string JXJ_SDK_INTERFACE::JXJ_MakeFileName(int channel, const std::string& startTime, const std::string& endTime)
 {
 	std::string strFileName;
 
@@ -689,7 +703,7 @@ std::string JXJ_MakeFileName(int channel, const std::string& startTime, const st
 	return strFileName;
 }
 
-void JXJ_SearchUnit(const long loginHandle, const size_t channel, const time_range& range, RECORD_FILE_LIST& recordFiles)
+void JXJ_SDK_INTERFACE::JXJ_SearchUnit(const long loginHandle, const size_t channel, const time_range& range, RECORD_FILE_LIST& recordFiles)
 {
 	
 	JXJ_MakeStoreLog(m_storeLog, ALL_RECODE, m_iBeginNode, m_iEndNode, m_iSsid, range.start, range.end);
@@ -709,7 +723,7 @@ void JXJ_SearchUnit(const long loginHandle, const size_t channel, const time_ran
 	}
 }
 
-void JXJ_ReFreshVideoList(const long loginHandle, int channel, const time_range& range, RECORD_FILE_LIST& recordFiles)
+void JXJ_SDK_INTERFACE::JXJ_ReFreshVideoList(const long loginHandle, int channel, const time_range& range, RECORD_FILE_LIST& recordFiles)
 {
 	JXJ_AddSearchFileList(channel, recordFiles);
 
@@ -728,7 +742,7 @@ void JXJ_ReFreshVideoList(const long loginHandle, int channel, const time_range&
 	}
 }
 
-void JXJ_AddSearchFileList(int channel, RECORD_FILE_LIST& recordFiles)
+void JXJ_SDK_INTERFACE::JXJ_AddSearchFileList(int channel, RECORD_FILE_LIST& recordFiles)
 {
 	int j = m_iBeginNode;
 
@@ -774,7 +788,7 @@ void JXJ_AddSearchFileList(int channel, RECORD_FILE_LIST& recordFiles)
 		j++;
 	}
 }
-time_t JXJ_MakeTimestampByJTime(JTime jTime)
+time_t JXJ_SDK_INTERFACE::JXJ_MakeTimestampByJTime(JTime jTime)
 {
 	struct tm ttime;
 	ttime.tm_year = jTime.year;
@@ -788,7 +802,7 @@ time_t JXJ_MakeTimestampByJTime(JTime jTime)
 	return time;
 }
 
-bool JXJ_CheckFileExist(const RecordFile& file, const std::vector<RecordFile>& fileList)
+bool JXJ_SDK_INTERFACE::JXJ_CheckFileExist(const RecordFile& file, const std::vector<RecordFile>& fileList)
 {
 	for (size_t i = 0; i < fileList.size(); i++)
 	{
@@ -805,7 +819,7 @@ bool JXJ_CheckFileExist(const RecordFile& file, const std::vector<RecordFile>& f
 	return false;
 }
 
-int __stdcall JXJ_JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam)
+int __stdcall JXJ_SDK_INTERFACE::JXJ_JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam)
 {
 	static int prePos = 0;
 	int curPos = 0;
@@ -858,7 +872,7 @@ int __stdcall JXJ_JRecDownload(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void*
 	return 0;
 }
 
-void JXJ_CloseDownload()
+void JXJ_SDK_INTERFACE::JXJ_CloseDownload()
 {
 	if (m_lDownloadFileHandle)
 	{
@@ -873,7 +887,7 @@ void JXJ_CloseDownload()
 	}
 }
 
-int __stdcall JXJ_JRecStream(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam)
+int __stdcall JXJ_SDK_INTERFACE::JXJ_JRecStream(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam)
 {
 	j_frame_t *pFrame = (j_frame_t *)pBuff;
 
@@ -886,7 +900,7 @@ int __stdcall JXJ_JRecStream(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* p
 	return 0;
 }
 
-DWORD JXJ_PlayThreadFun(LPVOID lpThreadParameter)
+DWORD JXJ_SDK_INTERFACE::JXJ_PlayThreadFun(LPVOID lpThreadParameter)
 {
 	return 0;
 }
