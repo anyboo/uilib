@@ -25,6 +25,7 @@ public:
 	void SetHWnd(const HWND& hWnd){ g_hWnd = hWnd; }
 	void SetDownloadPath(const std::string& Root);
 	void throwException();
+	bool IsSearchDeviceAPIExist();
 
 	std::string GetDefUsearName(){ return m_sDefUserName; }
 	std::string GetDefPassword(){ return m_sDefPassword; }

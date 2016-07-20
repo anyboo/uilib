@@ -25,10 +25,9 @@
 //
 ////#include "DownloadVideo.h"
 ////#include "SearchFileRunable.h"
-//#include "SearchFileWorker.h"
-//#include "AcquireSerachFileData.h"
-////#include "SearchVideo.h"
-////#include "ReciveUIQunue.h"
+#include "SearchFileWorker.h"
+#include "AcquireSerachFileData.h"
+#include "ReciveUIQunue.h"
 
 #include "LoginDevice.h"
 #include "SearchDevice.h"
@@ -111,7 +110,7 @@ TEST_CASE("This is a demo", "[demo]")
 // 	 	//range.end = 1466524800;
 // 		range.end = 1468166400;
 // 	 	//range.end = 1478833871;
-// 		SDKDOWNLOADINFO info;
+// 		//SDKDOWNLOADINFO info;
 // 		
 // 		Obj.Init();
 // 		Obj.StartSearchDevice();
@@ -119,14 +118,14 @@ TEST_CASE("This is a demo", "[demo]")
 // 		Obj.Search(lLogin, 1, range);
 // 
 // 		//info.tChannel = 1;
-// 		info.trRange = range;
+// 		//info.trRange = range;
 // // 		info.strFileName = "channel01-20160710000000-20160711000000-2";
 // // 		info.trRange.start = -1;
 // // 		info.trRange.end = -1;
 // 		//Obj.Download(info);
 // 		//Obj.Download(lLogin, 1, 0, info);
-// 		//Obj.Download(lLogin, 0, "channel1-20160710000000-20160711000000-2", 0);
-// 		Obj.PlayVideo(lLogin, 1, info);
+// 		Obj.Download(lLogin, 1, "channel01-20160710000000-20160711000000-2");
+// 		//Obj.PlayVideo(lLogin, 1, info);
 // 		//Obj.PlayVideo(lLogin, 0,"channel0-20160710000000-20160711000000-0");
 // 		//Obj.Logout(lLogin);
  
@@ -197,10 +196,10 @@ TEST_CASE("This is a demo", "[demo]")
 // 			dvObj.GetDownloadInfo(doi);
 // 		}
 
-/*
+
 NotificationQueue& queue = NotificationQueue::defaultQueue();
 
-AcquireSerachFileData AcquireData(queue);
+//AcquireSerachFileData AcquireData(queue);
 //ThreadPool::defaultPool().start(AcquireData);
 
 
@@ -224,148 +223,184 @@ AcquireSerachFileData AcquireData(queue);
 	
 	ThreadPool::defaultPool().start(SearchWork);
 
-	
 	//NotificationQueue& queue = NotificationQueue::defaultQueue();
 	
 	//queue.enqueueNotification(new ReciveUINotification(b));
 	
-	
-
-	
-
 // 	while (!queue.empty())
 // 	{
 // 		Thread::sleep(200);
 // 	}
 
+	Poco::Random rnd;
+
+	NOTIFICATION_TYPE eNotify;
+	int nData;
+
+	FastMutex   m_mutex;
+	for (;;)
+	{
+		Notification::Ptr pNf(queue.waitDequeueNotification());
+		if (pNf)
+		{
+			SearchFileNotification::Ptr pAcquireDataNf = pNf.cast<SearchFileNotification>();
+
+			if (pAcquireDataNf)
+			{
+				{
+					FastMutex::ScopedLock lock(m_mutex);
+					eNotify = pAcquireDataNf->GetNotify();
+					nData = pAcquireDataNf->GetData();
+				}
+
+				switch (eNotify)
+				{
+				case Notification_Type_Search_File_Process:
+					std::cout << "nPos:" << nData << std::endl;
+					break;
+				case Notification_Type_Search_File_TotalSize:
+					std::cout << "Total:" << nData << std::endl;
+					break;
+				case Notification_Type_Search_File_Finish:
+					std::cout << "Finish:" << nData << std::endl;
+				case Notification_Type_Search_File_Failure:
+					std::cout << "Fail:" << nData << std::endl;
+					break;
+				default:
+					std::cout << "Error:" << std::endl;
+					break;
+				}
+			}
+		}
+	} //for
+
 	queue.wakeUpAll();
 	ThreadPool::defaultPool().joinAll();
 
-	*/
 
-/************************* 初始化线程池 **********************/
-Poco::ThreadPool pool;
-
-/************************* 初始化播放窗口句柄 **********************/
-TestWindows::getInstance().Init();
-
-/************************* 初始化数据库 **********************/
-//获取指针
-QFileSqlite *pFileDb = QFileSqlite::getInstance();
-//删除表
-pFileDb->dropTable(DROP_LOGIN_DEVICE_INFO_TABLE);
-//创建记录表
-pFileDb->createTable(CREATE_LOGIN_DEVICE_INFO_TABLE);
-
-//获取指针
-QMSqlite *pDb = QMSqlite::getInstance();
-//删除表
-pDb->dropTable(DROP_SEARCH_VIDEO_TABLE);
-//创建记录表
-pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
-
-/************************* 初始化SDK厂商 **********************/
-VENDOR_LIST pVendorList;
-CJXJVendor* jxjVendor = new CJXJVendor();
-CDZPVendor* dzpVendor = new CDZPVendor();
-//DHVendor* dhVendor = new DHVendor();
-//HKVendor* hkVendor = new HKVendor();
-
-pVendorList.push_back(jxjVendor);
-//pVendorList.push_back(dzpVendor);
-//pVendorList.push_back(dhVendor);
-//pVendorList.push_back(hkVendor);
-
-/************************* 初始化IP列表 **********************/
-std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Start!" << std::endl;
-NotificationQueue queuePortScan;
-PortScan portScan(queuePortScan);
-//开始扫描
-ThreadPool::defaultPool().start(portScan);
-
-DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
-while (true)
-{
-	Notification::Ptr pNf(queuePortScan.waitDequeueNotification());
-	if (pNf)
-	{
-		ScanNotification::Ptr pWorkNf = pNf.cast<ScanNotification>();
-		if (pWorkNf)
-		{
-			listDeviceSimpleInfo = GetDeviceInfoSimpleList();
-			std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Stop!" << std::endl;
-			break;
-		}
-	}
-}
-
-/************************* 设备发现类测试 **********************/
-std::cout << CCommonUtrl::getInstance().GetCurTime() << "Search Device Start!" << std::endl;
-NotificationQueue queueSearchDevice; // 设备发现消息队列
-CSearchDevice sd(pVendorList, listDeviceSimpleInfo, queueSearchDevice);
-pool.start(sd);
-//queueSearchDevice.enqueueNotification(new CNotificationSearchDevice(Notification_Type_Search_Device_Cancel));
-
-/************************* 设备管理类测试 **********************/
-NotificationQueue queueDeviceManager; // 设备管理消息队列
-CDeviceManager dm(pVendorList, queueDeviceManager);
-pool.start(dm);
-//queueDeviceManager.enqueueNotification(new CNotificationDeviceManager(Notification_Type_Device_Manager_Cancel));
-
-while (true)
-{
-	Notification::Ptr pNf(NotificationQueue::defaultQueue().waitDequeueNotification());
-	if (pNf)
-	{
-		CNotificationSearchDevice::Ptr pWorkNf = pNf.cast<CNotificationSearchDevice>();
-		if (pWorkNf)
-		{
-			if (pWorkNf->GetNotificationType() == Notification_Type_Search_Device_Finish)
-			{
-				break;
-			}
-		}
-	}
-}
-
-/************************* 设备登陆、登出测试 **********************/
-#if 1
-std::cout << CCommonUtrl::getInstance().GetCurTime() << "Search Device Stop!" << std::endl;
-
-DEVICE_INFO_LIST devInfoList = CSearchDevice::GetDeviceInfoList();
-for (size_t i = 0; i < devInfoList.size(); i++)
-{
-	// 获取设备信息
-	NET_DEVICE_INFO* devInfo = devInfoList[i];
-	std::string ip(devInfo->szIp);
-	//if (ip.compare("10.168.0.66") == 0)
-	if (ip.compare("192.168.0.89") == 0)
-	{
-		// 登陆设备
-		if (CLoginDevice::getInstance().Login(devInfo->pVendor, devInfo->szIp, devInfo->nPort))
-		{
-			::Sleep(100);
-
-			Device* pDev = CLoginDevice::getInstance().GetDevice(ip);
-			time_range timeSearch;
-			timeSearch.start = 1468771200; //DZP - 1468771200
-			timeSearch.end = 1468857599; //DZP - 1468857598
-			pDev->Search(2, timeSearch);
-			RECORD_FILE_LIST list = pDev->GetRecordFileList();
-
-			time_range timePlay;
-			timePlay.start = list[0].beginTime; //DZP - 1468771200
-			timePlay.end = list[0].endTime; //DZP - 1468857599
-			pDev->PlayVideo(TestWindows::getInstance().GetHWnd(), 2, timePlay);
-		}
-	}
-}
-
-while (true)
-{
-	::Sleep(100);
-}
-#endif
+// /************************* 初始化线程池 **********************/
+// Poco::ThreadPool pool;
+// 
+// /************************* 初始化播放窗口句柄 **********************/
+// TestWindows::getInstance().Init();
+// 
+// /************************* 初始化数据库 **********************/
+// //获取指针
+// QFileSqlite *pFileDb = QFileSqlite::getInstance();
+// //删除表
+// pFileDb->dropTable(DROP_LOGIN_DEVICE_INFO_TABLE);
+// //创建记录表
+// pFileDb->createTable(CREATE_LOGIN_DEVICE_INFO_TABLE);
+// 
+// //获取指针
+// QMSqlite *pDb = QMSqlite::getInstance();
+// //删除表
+// pDb->dropTable(DROP_SEARCH_VIDEO_TABLE);
+// //创建记录表
+// pDb->createTable(CREATE_SEARCH_VIDEO_TABLE);
+// 
+// /************************* 初始化SDK厂商 **********************/
+// VENDOR_LIST pVendorList;
+// CJXJVendor* jxjVendor = new CJXJVendor();
+// CDZPVendor* dzpVendor = new CDZPVendor();
+// //DHVendor* dhVendor = new DHVendor();
+// //HKVendor* hkVendor = new HKVendor();
+// 
+// pVendorList.push_back(jxjVendor);
+// //pVendorList.push_back(dzpVendor);
+// //pVendorList.push_back(dhVendor);
+// //pVendorList.push_back(hkVendor);
+// 
+// /************************* 初始化IP列表 **********************/
+// std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Start!" << std::endl;
+// NotificationQueue queuePortScan;
+// PortScan portScan(queuePortScan);
+// //开始扫描
+// ThreadPool::defaultPool().start(portScan);
+// 
+// DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
+// while (true)
+// {
+// 	Notification::Ptr pNf(queuePortScan.waitDequeueNotification());
+// 	if (pNf)
+// 	{
+// 		ScanNotification::Ptr pWorkNf = pNf.cast<ScanNotification>();
+// 		if (pWorkNf)
+// 		{
+// 			listDeviceSimpleInfo = GetDeviceInfoSimpleList();
+// 			std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Stop!" << std::endl;
+// 			break;
+// 		}
+// 	}
+// }
+// 
+// /************************* 设备发现类测试 **********************/
+// std::cout << CCommonUtrl::getInstance().GetCurTime() << "Search Device Start!" << std::endl;
+// NotificationQueue queueSearchDevice; // 设备发现消息队列
+// CSearchDevice sd(pVendorList, listDeviceSimpleInfo, queueSearchDevice);
+// pool.start(sd);
+// //queueSearchDevice.enqueueNotification(new CNotificationSearchDevice(Notification_Type_Search_Device_Cancel));
+// 
+// /************************* 设备管理类测试 **********************/
+// NotificationQueue queueDeviceManager; // 设备管理消息队列
+// CDeviceManager dm(pVendorList, queueDeviceManager);
+// pool.start(dm);
+// //queueDeviceManager.enqueueNotification(new CNotificationDeviceManager(Notification_Type_Device_Manager_Cancel));
+// 
+// while (true)
+// {
+// 	Notification::Ptr pNf(NotificationQueue::defaultQueue().waitDequeueNotification());
+// 	if (pNf)
+// 	{
+// 		CNotificationSearchDevice::Ptr pWorkNf = pNf.cast<CNotificationSearchDevice>();
+// 		if (pWorkNf)
+// 		{
+// 			if (pWorkNf->GetNotificationType() == Notification_Type_Search_Device_Finish)
+// 			{
+// 				break;
+// 			}
+// 		}
+// 	}
+// }
+// 
+// /************************* 设备登陆、登出测试 **********************/
+// #if 1
+// std::cout << CCommonUtrl::getInstance().GetCurTime() << "Search Device Stop!" << std::endl;
+// 
+// DEVICE_INFO_LIST devInfoList = CSearchDevice::GetDeviceInfoList();
+// for (size_t i = 0; i < devInfoList.size(); i++)
+// {
+// 	// 获取设备信息
+// 	NET_DEVICE_INFO* devInfo = devInfoList[i];
+// 	std::string ip(devInfo->szIp);
+// 	//if (ip.compare("10.168.0.66") == 0)
+// 	if (ip.compare("192.168.0.89") == 0)
+// 	{
+// 		// 登陆设备
+// 		if (CLoginDevice::getInstance().Login(devInfo->pVendor, devInfo->szIp, devInfo->nPort))
+// 		{
+// 			::Sleep(100);
+// 
+// 			Device* pDev = CLoginDevice::getInstance().GetDevice(ip);
+// 			time_range timeSearch;
+// 			timeSearch.start = 1468771200; //DZP - 1468771200
+// 			timeSearch.end = 1468857599; //DZP - 1468857598
+// 			pDev->Search(2, timeSearch);
+// 			RECORD_FILE_LIST list = pDev->GetRecordFileList();
+// 
+// 			time_range timePlay;
+// 			timePlay.start = list[0].beginTime; //DZP - 1468771200
+// 			timePlay.end = list[0].endTime; //DZP - 1468857599
+// 			pDev->PlayVideo(TestWindows::getInstance().GetHWnd(), 2, timePlay);
+// 		}
+// 	}
+// }
+// 
+// while (true)
+// {
+// 	::Sleep(100);
+// }
+// #endif
 		return;
 	}
 

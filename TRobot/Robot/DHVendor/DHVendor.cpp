@@ -220,15 +220,15 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 	ZeroMemory(ifileinfo, sizeof(ifileinfo));
 	int iMaxNum = 0;
 
-	//BOOL bRet = CLIENT_QueryRecordFile(loginHandle, channel, 0, &ntStime, &ntEtime, 0, ifileinfo, sizeof(ifileinfo), &iMaxNum, 5000, true);
-	BOOL bRet = CLIENT_QueryRecordFile(loginHandle, channel, 0, 0, 0, 0, ifileinfo, sizeof(ifileinfo), &iMaxNum, 5000, true);
+	BOOL bRet = CLIENT_QueryRecordFile(loginHandle, channel, 0, &ntStime, &ntEtime, 0, ifileinfo, sizeof(ifileinfo), &iMaxNum, 5000, true);
+	//BOOL bRet = CLIENT_QueryRecordFile(loginHandle, channel, 0, 0, 0, 0, ifileinfo, sizeof(ifileinfo), &iMaxNum, 5000, true);
 
 	if (!bRet)
 	{
 		std::cout << "GetRecordFileList 查询录像失败，错误原因：" << DH_GetLastErrorString() << std::endl;
-		throw std::exception("Search file by time failed");
-		
+		throw SearchFileException(DH_GetLastErrorString().c_str());
 	}
+
 	if (iMaxNum <= 0)
 	{
 		std::cout << "GetRecordFileList 查询录像成功，录像个数为0" << std::endl;
@@ -398,7 +398,25 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const std:
 		if (it->name == filename)
 		{
 			NET_RECORDFILE_INFO* pData = (NET_RECORDFILE_INFO*)it->getPrivateData();
+// 			NET_RECORDFILE_INFO info;
+// 			info.ch = 1;
+// 			info.size = 20048;
+// 			info.starttime.dwYear = 2016;
+// 			info.starttime.dwMonth = 7;
+// 			info.starttime.dwDay = 10;
+// 			info.starttime.dwHour = 0;
+// 			info.starttime.dwMinute = 0;
+// 			info.starttime.dwSecond = 0;
+// 
+// 			info.endtime.dwYear = 2016;
+// 			info.endtime.dwMonth = 7;
+// 			info.endtime.dwDay = 10;
+// 			info.endtime.dwHour = 0;
+// 			info.endtime.dwMinute = 45;
+// 			info.endtime.dwSecond = 45;
+
 			long lRet = CLIENT_DownloadByRecordFile(loginHandle, pData, (char *)strPath.c_str(), DH_BTDownLoadFile, 0);
+			//long lRet = CLIENT_DownloadByRecordFile(loginHandle, &info, (char *)strPath.c_str(), DH_BTDownLoadFile, 0);
 			m_lDownloadHandle = lRet;
 
 			// 			int total, cur;
@@ -514,6 +532,11 @@ void DHVendor::throwException()
 
 }
 
+bool DHVendor::IsSearchDeviceAPIExist()
+{
+	return m_bSearchDeviceAPI;
+}
+
 void CALLBACK DH_BTDownLoadPos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, int index, NET_RECORDFILE_INFO recordfileinfo, LDWORD dwUser)
 {
 	
@@ -521,13 +544,13 @@ void CALLBACK DH_BTDownLoadPos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDow
 
 void CALLBACK DH_BTDownLoadFile(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser)
 {
-	DOWNLOADFILEINFO DownloadFileInfo;
-	DownloadFileInfo.nID = dwUser;
-	DownloadFileInfo.dwDownLoadSize = dwDownLoadSize;
-	DownloadFileInfo.dwTotalSize = dwTotalSize;
+// 	DOWNLOADFILEINFO DownloadFileInfo;
+// 	DownloadFileInfo.nID = dwUser;
+// 	DownloadFileInfo.dwDownLoadSize = dwDownLoadSize;
+// 	DownloadFileInfo.dwTotalSize = dwTotalSize;
 
 //	DownloadFileNotificationQueue::GetInstance().GetQueue().enqueueNotification(new SendDataNotification(DownloadFileInfo));
-	NotificationQueue::defaultQueue().enqueueNotification(new SendDataNotification(DownloadFileInfo));
+//	NotificationQueue::defaultQueue().enqueueNotification(new SendDataNotification(DownloadFileInfo));
 }
 
 void CALLBACK DH_PlayCallBack(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser)

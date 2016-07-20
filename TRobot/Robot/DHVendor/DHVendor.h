@@ -1,12 +1,12 @@
 #ifndef __DHVENDOR_H__
 #define __DHVENDOR_H__
 
-#include "SendDataNotification.h"
 #include "SearchFileNotification.h"
 
 #include "Poco/NotificationQueue.h"
 
 #include "CommonUtrl.h"
+#include "SearchFileException.h"
 
 
 using Poco::NotificationQueue;
@@ -38,6 +38,7 @@ public:
 	std::string GetDefUsearName(){ return m_sDefUserName; }
 	std::string GetDefPassword(){ return m_sDefPassword; }
 	
+	bool IsSearchDeviceAPIExist();
 	NET_SDK_TYPE GetSDKType(){ return m_eSDKType; }
 	void StartSearchDevice();
 	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_listDeviceInfo; }

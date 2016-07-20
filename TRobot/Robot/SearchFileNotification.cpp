@@ -9,11 +9,17 @@ SearchFileNotification::SearchFileNotification(NOTIFICATION_TYPE eNotify, int nD
 	case Notification_Type_Search_File_Process:
 		m_nSearchPos = nData;
 		break;
+
 	case Notification_Type_Search_File_TotalSize:
 		m_nTotal = nData;
 		break;
+
 	case Notification_Type_Search_File_Finish:
 		break;
+
+	case Notification_Type_Search_File_Failure:
+		break;
+
 	default:
 		break;
 	}
@@ -43,6 +49,10 @@ int SearchFileNotification::GetData()
 		break;
 
 	case Notification_Type_Search_File_Finish:
+		return SEARCHFILE_DEFAULT;
+		break;
+
+	case Notification_Type_Search_File_Failure:
 		return SEARCHFILE_DEFAULT;
 		break;
 

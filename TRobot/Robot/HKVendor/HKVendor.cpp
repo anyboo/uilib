@@ -469,6 +469,11 @@ void HKVendor::throwException()
 
 }
 
+bool HKVendor::IsSearchDeviceAPIExist()
+{
+	return m_bSearchDeviceAPI;
+}
+
 void HK_timeDHToStd(NET_DVR_TIME *pTimeDH, tm *pTimeStd)
 {
 	pTimeStd->tm_year = pTimeDH->dwYear - 1900;
