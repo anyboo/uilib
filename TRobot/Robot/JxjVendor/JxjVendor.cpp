@@ -273,9 +273,9 @@ void CJXJVendor::Search(const long loginHandle, const size_t channel, const time
 	std::cout << "JXJ 搜索文件 结束！" << std::endl;
 
 	// Save Search Video List Result to Config File
-	std::cout << "JXJ 写Json数据到文件 开始！" << std::endl;
-	CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files_Unit, Vendor_JXJ_Abbr);
-	std::cout << "JXJ 写Json数据到文件 结束！" << std::endl;
+	//std::cout << "JXJ 写Json数据到文件 开始！" << std::endl;
+	//CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files_Unit, Vendor_JXJ_Abbr);
+	//std::cout << "JXJ 写Json数据到文件 结束！" << std::endl;
 
 	// Write File List to DB
 	std::cout << "JXJ 写文件数据到数据库 开始！" << std::endl;
@@ -294,99 +294,8 @@ void CJXJVendor::ClearLocalRecordFiles()
 	m_files.clear();
 }
 
-//void CJxjVendor::DownloadByTime(const std::time_t& start, const std::time_t& end)
-void CJXJVendor::Download(const long loginHandle, const size_t channel, const time_range& range)
+void CJXJVendor::Download(const long loginHandle, const size_t channel, const RecordFile& file)
 {
-	// Init File Starttime and Endtime
-	std::string strTimeStart;
-	std::string strTimeEnd;
-	std::string strTimeStartZero;
-	std::string strTimeEndZero;
-
-	struct tm ttime;
-
-	localtime_s(&ttime, &range.start);
-	strftime((char *)strTimeStart.data(), 24, "%Y%m%d%H%M%S", &ttime);
-	strftime((char *)strTimeStartZero.data(), 24, "%Y%m%d0000", &ttime);
-	strftime((char *)strTimeEndZero.data(), 24, "%Y%m%d2359", &ttime);
-	localtime_s(&ttime, &range.end);
-	strftime((char *)strTimeEnd.data(), 24, "%Y%m%d%H%M%S", &ttime);
-
-	std::string strFileName = JXJ_SDK_INTERFACE::JXJ_MakeFileName(channel, strTimeStart, strTimeEnd);
-
-	if (m_files.size() == 0)
-	{
-		throw std::exception("Search File List Empty!");
-		return;
-	}
-
-	RecordFile file;
-	size_t i = 0;
-	for (; i < m_files.size(); i++)
-	{
-		file = m_files[i];
-		if (strFileName.compare(file.name) == 0)
-		{
-			break;
-		}
-	}
-
-	if (i >= m_files.size())
-	{
-		throw std::exception("Search File List Not Contain the Range!");
-		return;
-	}
-
-	// Init File Save Path 
-	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_JXJ, channel);
-	strPath += file.name.data();
-
-	// Set File Total Time
-	JXJ_SDK_INTERFACE::m_lDownLoadTotalTime = file.duration;
-	JXJ_SDK_INTERFACE::m_lDownloadHandle = JNetRecOpen4Time(loginHandle, "", channel, j_primary_stream, strTimeStart.c_str(), strTimeEnd.c_str(), 4096, IsPlay_Download, JXJ_SDK_INTERFACE::JXJ_JRecDownload, this, JXJ_SDK_INTERFACE::m_lRecHandle);
-	if (JXJ_SDK_INTERFACE::m_lDownloadHandle > 0)
-	{
-		Sleep(1000);
-		JNetRecCtrl(JXJ_SDK_INTERFACE::m_lRecHandle, JNET_PB_CTRL_START, NULL);
-
-		JXJ_SDK_INTERFACE::m_lDownloadFileHandle = AVP_CreateRecFile(strPath.c_str(), AVP_PROTOCOL_JPF, Encoder_DM365);
-		if (JXJ_SDK_INTERFACE::m_lDownloadFileHandle == -1)
-		{
-			throw std::exception("Create File Error!");
-		}
-	}
-	else
-	{
-		throw std::exception("Download File Error!");
-	}
-}
-
-//void CJxjVendor::DownloadByName(const std::string& filename)
-void CJXJVendor::Download(const long loginHandle, const size_t channel, const std::string& filename)
-{
-	if (m_files.size() == 0)
-	{
-		throw std::exception("Search File List Empty!");
-		return;
-	}
-
-	RecordFile file;
-	size_t i = 0;
-	for (; i < m_files.size(); i++)
-	{
-		file = m_files[i];
-		if (filename.compare(file.name) == 0)
-		{
-			break;
-		}
-	}
-
-	if (i >= m_files.size())
-	{
-		throw std::exception("Search File List Not Contain the Filename!");
-		return;
-	}
-
 	// Init File Starttime and Endtime
 	std::string strTimeStart;
 	std::string strTimeEnd;
@@ -404,12 +313,18 @@ void CJXJVendor::Download(const long loginHandle, const size_t channel, const st
 
 	std::string strFileName = JXJ_SDK_INTERFACE::JXJ_MakeFileName(channel, strTimeStart, strTimeEnd);
 
+	if (m_files.size() == 0)
+	{
+		throw std::exception("Search File List Empty!");
+		return;
+	}
+
 	// Init File Save Path 
 	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_JXJ, channel);
 	strPath += file.name.data();
 
 	// Set File Total Time
-	JXJ_SDK_INTERFACE::m_lDownLoadTotalTime = file.duration;
+	JXJ_SDK_INTERFACE::m_lDownLoadTotalTime = file.endTime - file.beginTime;
 	JXJ_SDK_INTERFACE::m_lDownloadHandle = JNetRecOpen4Time(loginHandle, "", channel, j_primary_stream, strTimeStart.c_str(), strTimeEnd.c_str(), 4096, IsPlay_Download, JXJ_SDK_INTERFACE::JXJ_JRecDownload, this, JXJ_SDK_INTERFACE::m_lRecHandle);
 	if (JXJ_SDK_INTERFACE::m_lDownloadHandle > 0)
 	{
@@ -427,9 +342,7 @@ void CJXJVendor::Download(const long loginHandle, const size_t channel, const st
 		throw std::exception("Download File Error!");
 	}
 }
-
-//void CJxjVendor::PlayVideo(const std::string& filename)
-void CJXJVendor::PlayVideo(const long loginHandle, const size_t channel, const time_range& range)
+void CJXJVendor::PlayVideo(const long loginHandle, const size_t channel, const RecordFile& file)
 {
 	// Init File Starttime and Endtime
 	std::string strTimeStart;
@@ -437,35 +350,13 @@ void CJXJVendor::PlayVideo(const long loginHandle, const size_t channel, const t
 
 	struct tm ttime;
 
-	localtime_s(&ttime, &range.start);
+	localtime_s(&ttime, &file.beginTime);
 	strftime((char *)strTimeStart.c_str(), 24, "%Y%m%d%H%M%S", &ttime);
-	localtime_s(&ttime, &range.end);
+	localtime_s(&ttime, &file.endTime);
 	strftime((char *)strTimeEnd.c_str(), 24, "%Y%m%d%H%M%S", &ttime);
 
 	std::string strFileName = JXJ_SDK_INTERFACE::JXJ_MakeFileName(channel, strTimeStart, strTimeEnd);
 
-	if (m_files.size() == 0)
-	{
-		throw std::exception("Search File List Empty!");
-		return;
-	}
-
-	RecordFile file;
-	size_t i = 0;
-	for (; i < m_files.size(); i++)
-	{
-		file = m_files[i];
-		if (strFileName.compare(file.name) == 0)
-		{
-			break;
-		}
-	}
-
-	if (i >= m_files.size())
-	{
-		throw std::exception("Search File List Not Contain the Range!");
-		return;
-	}
 
 	JXJ_SDK_INTERFACE::m_iPlayVideoChannel = AVP_GetFreePort();
 
@@ -494,71 +385,7 @@ void CJXJVendor::PlayVideo(const long loginHandle, const size_t channel, const t
 	// 开启解码
 	AVP_Play(JXJ_SDK_INTERFACE::m_iPlayVideoChannel);
 }
-void CJXJVendor::PlayVideo(const long loginHandle, const size_t channel, const std::string& filename)
-{
-	if (m_files.size() == 0)
-	{
-		throw std::exception("Search File List Empty!");
-		return;
-	}
 
-	RecordFile file;
-	size_t i = 0;
-	for (; i < m_files.size(); i++)
-	{
-		file = m_files[i];
-		if (filename.compare(file.name) == 0)
-		{
-			break;
-		}
-	}
-
-	if (i >= m_files.size())
-	{
-		throw std::exception("Search File List Not Contain the Filename!");
-		return;
-	}
-
-	// Init File Starttime and Endtime
-	std::string strTimeStart;
-	std::string strTimeEnd;
-
-	struct tm ttime;
-
-	localtime_s(&ttime, &file.beginTime);
-	strftime((char *)strTimeStart.c_str(), 24, "%Y%m%d%H%M%S", &ttime);
-	localtime_s(&ttime, &file.endTime);
-	strftime((char *)strTimeEnd.c_str(), 24, "%Y%m%d%H%M%S", &ttime);
-
-	JXJ_SDK_INTERFACE::m_iPlayVideoChannel = AVP_GetFreePort();
-
-	JXJ_SDK_INTERFACE::m_lRecHandle = JNetRecOpen4Time(loginHandle, "", channel, 0, strTimeStart.c_str(), strTimeEnd.c_str(), 4096, IsPlay_Play, JXJ_SDK_INTERFACE::JXJ_JRecStream, this, JXJ_SDK_INTERFACE::m_lRecHandle);
-	if (JXJ_SDK_INTERFACE::m_lRecHandle > 0)
-	{
-		Sleep(1000);
-		JNetRecCtrl(JXJ_SDK_INTERFACE::m_lRecHandle, JNET_PB_CTRL_START, NULL);
-	}
-
-	int iRet = -1;
-	AVP_SetPlayPriority(JXJ_SDK_INTERFACE::m_iPlayVideoChannel, AVPPlaySmooth);
-	AVP_SetDataProtocol(JXJ_SDK_INTERFACE::m_iPlayVideoChannel, AVP_PROTOCOL_JPF);
-
-	//AVP_EnableYUVDraw(gChannel,TRUE);
-	// 设置通道使用的解码器
-	iRet = AVP_SetCoder(JXJ_SDK_INTERFACE::m_iPlayVideoChannel, AVP_CODER_JXJ);
-	if (iRet != AVPErrSuccess)
-	{
-		throw std::exception("AVP_SetCoder Error!");
-		return;
-	}
-
-	AVP_AddPlayWnd(JXJ_SDK_INTERFACE::m_iPlayVideoChannel, NULL, m_hWnd, NULL, NULL);
-
-	// 开启解码
-	AVP_Play(JXJ_SDK_INTERFACE::m_iPlayVideoChannel);
-
-	return;
-}
 void CJXJVendor::SetDownloadPath(const std::string& Root)
 {
 	m_sRoot = Root;
@@ -764,12 +591,12 @@ void JXJ_SDK_INTERFACE::JXJ_AddSearchFileList(int channel, RECORD_FILE_LIST& rec
 		sprintf((char *)strEndTime.data(), "%d%02d%02d%02d%02d%02d", jTime.year + 1900, jTime.month, jTime.date, jTime.hour, jTime.minute, jTime.second);
 
 		// File Belong Time Secton 
-		recordFile.strTimeSection = strStartTime.data();
-		recordFile.strTimeSection.append("-");
-		recordFile.strTimeSection += strEndTime.data();
+		//recordFile.strTimeSection = strStartTime.data();
+		//recordFile.strTimeSection.append("-");
+		//recordFile.strTimeSection += strEndTime.data();
 
 		// File Duration
-		recordFile.duration = recordFile.endTime - recordFile.beginTime;
+		//recordFile.duration = recordFile.endTime - recordFile.beginTime;
 
 		// File Channel and File Size
 		recordFile.channel = channel;

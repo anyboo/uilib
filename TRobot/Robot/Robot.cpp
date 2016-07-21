@@ -11,6 +11,7 @@
 #include "SearchDevice.h"
 #include "DeviceManager.h"
 #include "portscan.h"
+#include "SearchFileWorker.h"
 
 #include "JXJVendor.h"
 #include "DZPVendor.h"
@@ -77,37 +78,37 @@ TEST_CASE("This is a demo", "[demo]")
 		/************************* 初始化SDK厂商 **********************/
 		VENDOR_LIST pVendorList;
 		CJXJVendor* jxjVendor = new CJXJVendor();
-		CDZPVendor* dzpVendor = new CDZPVendor();
+		//CDZPVendor* dzpVendor = new CDZPVendor();
 		//DHVendor* dhVendor = new DHVendor();
 		//HKVendor* hkVendor = new HKVendor();
 
 		pVendorList.push_back(jxjVendor);
-		pVendorList.push_back(dzpVendor);
+		//pVendorList.push_back(dzpVendor);
 		/*	pVendorList.push_back(dhVendor);
 			pVendorList.push_back(hkVendor);*/
 
 		/************************* 初始化IP列表 **********************/
-		std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Start!" << std::endl;
-		NotificationQueue queuePortScan;
-		PortScan portScan(queuePortScan);
-		//开始扫描
-		ThreadPool::defaultPool().start(portScan);
+		//std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Start!" << std::endl;
+		//NotificationQueue queuePortScan;
+		//PortScan portScan(queuePortScan);
+		////开始扫描
+		//ThreadPool::defaultPool().start(portScan);
 
 		DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
-		while (true)
-		{
-			Notification::Ptr pNf(queuePortScan.waitDequeueNotification());
-			if (pNf)
-			{
-				ScanNotification::Ptr pWorkNf = pNf.cast<ScanNotification>();
-				if (pWorkNf)
-				{
-					listDeviceSimpleInfo = GetDeviceInfoSimpleList();
-					std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Stop!" << std::endl;
-					break;
-				}
-			}
-		}
+		//while (true)
+		//{
+		//	Notification::Ptr pNf(queuePortScan.waitDequeueNotification());
+		//	if (pNf)
+		//	{
+		//		ScanNotification::Ptr pWorkNf = pNf.cast<ScanNotification>();
+		//		if (pWorkNf)
+		//		{
+		//			listDeviceSimpleInfo = GetDeviceInfoSimpleList();
+		//			std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Stop!" << std::endl;
+		//			break;
+		//		}
+		//	}
+		//}
 
 		/************************* 设备发现类测试 **********************/
 		std::cout << CCommonUtrl::getInstance().GetCurTime() << "Search Device Start!" << std::endl;
@@ -149,8 +150,8 @@ TEST_CASE("This is a demo", "[demo]")
 			// 获取设备信息
 			NET_DEVICE_INFO* devInfo = devInfoList[i];
 			std::string ip(devInfo->szIp);
-			if (ip.compare("10.168.0.66") == 0)
-			//if (ip.compare("192.168.0.89") == 0)
+			//if (ip.compare("10.168.0.66") == 0)
+			if (ip.compare("192.168.0.89") == 0)
 			{
 				// 登陆设备
 				if (CLoginDevice::getInstance().Login(devInfo->pVendor, devInfo->szIp, devInfo->nPort))
@@ -158,16 +159,31 @@ TEST_CASE("This is a demo", "[demo]")
 					::Sleep(100);
 
 					Device* pDev = CLoginDevice::getInstance().GetDevice(ip);
+									
 					time_range timeSearch;
 					timeSearch.start = 1468771200; //DZP - 1468771200
 					timeSearch.end = 1468857599; //DZP - 1468857598
+
 					pDev->Search(2, timeSearch);
 					RECORD_FILE_LIST list = pDev->GetRecordFileList();
 
-					time_range timePlay;
-					timePlay.start = list[0].beginTime; //DZP - 1468771200
-					timePlay.end = list[0].endTime; //DZP - 1468857599
-					//pDev->PlayVideo(TestWindows::getInstance().GetHWnd(), 2, timePlay);
+					std::vector<readSearchVideo> RSVObj;
+					std::string strSql = SELECT_ALL_SEARCH_VIDEO;
+					pDb->GetData(strSql, RSVObj);
+
+					readSearchVideo rsv = RSVObj[0];
+					RecordFile file;
+					file.name = rsv.get<0>();
+					file.channel = rsv.get<1>();
+					file.beginTime = rsv.get<2>();
+					file.endTime = rsv.get<3>();
+					file.size = rsv.get<4>();
+
+					//time_range timePlay;
+					//timePlay.start = list[0].beginTime; //DZP - 1468771200
+					//timePlay.end = list[0].endTime; //DZP - 1468857599
+					pDev->PlayVideo(TestWindows::getInstance().GetHWnd(), 2, file);
+					//pDev->Download(2, file);
 				}
 			}
 		}

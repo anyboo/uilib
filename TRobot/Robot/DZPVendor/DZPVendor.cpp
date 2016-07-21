@@ -509,12 +509,12 @@ void DZP_SDK_INTERFACE::DZP_SearchUnit(const long loginHandle, const size_t chan
 					sprintf((char *)strEndTime.data(), "%d%02d%02d%02d%02d%02d", h264_time.year, h264_time.month, h264_time.day, h264_time.hour, h264_time.minute, h264_time.second);
 
 					// File Belong Time Secton 
-					record.strTimeSection = strStartTime.data();
-					record.strTimeSection.append("-");
-					record.strTimeSection += strEndTime.data();
+					//record.strTimeSection = strStartTime.data();
+					//record.strTimeSection.append("-");
+					//record.strTimeSection += strEndTime.data();
 
 					// File Duration
-					record.duration = record.endTime - record.beginTime;
+					//record.duration = record.endTime - record.beginTime;
 
 					// File Channel and so on
 					record.channel = channel;

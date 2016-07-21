@@ -145,32 +145,18 @@ void Device::Search(const size_t channel, const time_range& range)
 	m_pVendor->Search(m_lLoginHandle, channel, range);
 }
 
-void Device::Download(const size_t channel, const time_range& range)
+void Device::Download(const size_t channel, const RecordFile& recordFile)
 {
 	assert(m_pVendor);
-	m_pVendor->Download(m_lLoginHandle, channel, range);
+	m_pVendor->Download(m_lLoginHandle, channel, recordFile);
 }
 
-void Device::PlayVideo(const HWND hWnd, const size_t channel, const time_range& range)
+void Device::PlayVideo(const HWND hWnd, const size_t channel, const RecordFile& recordFile)
 {
 	assert(m_pVendor);
 	m_pVendor->SetHWnd(hWnd);
 	ShowWindow(hWnd, SW_SHOW);
-	m_pVendor->PlayVideo(m_lLoginHandle, channel, range);
-}
-
-void Device::Download(const size_t channel, const std::string& fileName)
-{
-	assert(m_pVendor);
-	m_pVendor->Download(m_lLoginHandle, channel, fileName);
-}
-
-void Device::PlayVideo(const HWND hWnd, const size_t channel, const std::string& fileName)
-{
-	assert(m_pVendor);
-	m_pVendor->SetHWnd(hWnd);
-	ShowWindow(hWnd, SW_SHOW);
-	m_pVendor->PlayVideo(m_lLoginHandle, channel, fileName);
+	m_pVendor->PlayVideo(m_lLoginHandle, channel, recordFile);
 }
 
 void Device::SetDownloadPath(const std::string& root)

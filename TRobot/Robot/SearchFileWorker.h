@@ -7,6 +7,7 @@
 #include "Poco/Thread.h"
 
 #include "CommonUtrl.h"
+#include "SearchFileException.h"
 
 #include <vector>
 #include <ctime>
