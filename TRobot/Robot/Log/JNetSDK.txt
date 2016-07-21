@@ -7855,3 +7855,215 @@
 2016-07-21 11:41:31	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:000004B0
 2016-07-21 11:41:31	CJConnSock::RemoveWaitTask iSeq:5 success, TaskSize:0
 2016-07-21 11:41:31	CJRecStreamTcpJPF::RecStreamOpen:rtsp://192.168.0.89:7554/dev=JXJ-DVR-11110001/media=2/channel=2&level=0/recordType=4096&startTime=20160718120537&endTime=20160718121052
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 13:13:00 --------
+2016-07-21 13:13:00	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 13:14:18 --------
+2016-07-21 13:14:18	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 13:15:30 --------
+2016-07-21 13:15:30	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 13:17:59 --------
+2016-07-21 13:17:59	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 13:18:43 --------
+2016-07-21 13:18:43	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 13:19:55 --------
+2016-07-21 13:19:55	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 13:20:52 --------
+2016-07-21 13:20:52	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 13:22:12 --------
+2016-07-21 13:22:12	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 13:25:11 --------
+2016-07-21 13:25:11	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 13:27:00 --------
+2016-07-21 13:27:00	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 13:29:04 --------
+2016-07-21 13:29:04	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 13:58:41 --------
+2016-07-21 13:58:41	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 13:59:22 --------
+2016-07-21 13:59:22	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 14:02:10 --------
+2016-07-21 14:02:10	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 14:03:05 --------
+2016-07-21 14:03:05	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 14:03:55 --------
+2016-07-21 14:03:55	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 14:07:54 --------
+2016-07-21 14:07:54	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 14:08:44 --------
+2016-07-21 14:08:44	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 14:09:16 --------
+2016-07-21 14:09:16	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 14:10:55 --------
+2016-07-21 14:10:55	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 14:14:38 --------
+2016-07-21 14:14:38	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 14:15:51 --------
+2016-07-21 14:15:51	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 14:18:09 --------
+2016-07-21 14:18:09	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 14:18:33 --------
+2016-07-21 14:18:33	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 14:19:04 --------
+2016-07-21 14:19:04	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 14:22:09 --------
+2016-07-21 14:22:09	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 14:24:43 --------
+2016-07-21 14:24:43	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 14:25:27 --------
+2016-07-21 14:25:27	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 14:26:00 --------
+2016-07-21 14:26:00	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 14:26:51 --------
+2016-07-21 14:26:51	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 14:28:39 --------
+2016-07-21 14:28:39	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 14:29:29 --------
+2016-07-21 14:29:29	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-07-21 14:29:35	Success new lpConn:048D2F58 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-07-21 14:29:35	CJConnSock::Login 192.168.0.89,3321,admin,admin begin
+2016-07-21 14:29:35	CJConnSock::Login end success
+2016-07-21 14:29:35	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-07-21 14:29:35	CJConnJPF(192.168.0.89)::OnSendLogin():192.168.0.89,3321
+2016-07-21 14:29:35	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:5,len=212
+2016-07-21 14:29:35	CJConnSock::AddWaitTask iSeq:2 lpWaitData:0046D094 iwaitDataLen:212 hWaitEvent:000004CC TaskSize:0
+2016-07-21 14:29:35	CJConnSock::FindWaitTask iSeq:2 success
+2016-07-21 14:29:35	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:000004CC
+2016-07-21 14:29:35	CJConnSock::RemoveWaitTask iSeq:2 success, TaskSize:0
+2016-07-21 14:29:35	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:31,len=2152
+2016-07-21 14:29:35	CJConnSock::AddWaitTask iSeq:3 lpWaitData:01282098 iwaitDataLen:2152 hWaitEvent:000004CC TaskSize:0
+2016-07-21 14:29:35	CJConnSock::FindWaitTask iSeq:3 success
+2016-07-21 14:29:35	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:000004CC
+2016-07-21 14:29:35	CJConnSock::RemoveWaitTask iSeq:3 success, TaskSize:0
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 14:29:56 --------
+2016-07-21 14:29:56	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-07-21 14:30:02	Success new lpConn:04BD2F30 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-07-21 14:30:02	CJConnSock::Login 192.168.0.89,3321,admin,admin begin
+2016-07-21 14:30:02	CJConnSock::Login end success
+2016-07-21 14:30:02	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-07-21 14:30:02	CJConnJPF(192.168.0.89)::OnSendLogin():192.168.0.89,3321
+2016-07-21 14:30:02	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:5,len=212
+2016-07-21 14:30:02	CJConnSock::AddWaitTask iSeq:2 lpWaitData:003ECE7C iwaitDataLen:212 hWaitEvent:000004CC TaskSize:0
+2016-07-21 14:30:02	CJConnSock::FindWaitTask iSeq:2 success
+2016-07-21 14:30:02	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:000004CC
+2016-07-21 14:30:02	CJConnSock::RemoveWaitTask iSeq:2 success, TaskSize:0
+2016-07-21 14:30:06	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:31,len=2152
+2016-07-21 14:30:06	CJConnSock::AddWaitTask iSeq:3 lpWaitData:011D2098 iwaitDataLen:2152 hWaitEvent:00000478 TaskSize:0
+2016-07-21 14:30:06	CJConnSock::FindWaitTask iSeq:3 success
+2016-07-21 14:30:06	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:00000478
+2016-07-21 14:30:06	CJConnSock::RemoveWaitTask iSeq:3 success, TaskSize:0
+
+
+-------- ./Log/JNetSDK.txt Create by JXJ at 2016-07-21 14:30:52 --------
+2016-07-21 14:30:52	JNetInit version:3.0.0.4, Last compiled at 17:19:47, Jan 20 2015
+
+2016-07-21 14:30:58	Success new lpConn:04A62F30 lpszIP:192.168.0.89 iDevPort:3321 m_iID:1
+2016-07-21 14:30:58	CJConnSock::Login 192.168.0.89,3321,admin,admin begin
+2016-07-21 14:30:58	CJConnSock::Login end success
+2016-07-21 14:30:58	CJAddrParse::AddTask devAddr:192.168.0.89 eJAddrGet.m_eType:1(0:UnDef 1:GetName 2:GetDevID), m_ltTask.size:0 
+2016-07-21 14:30:58	CJConnJPF(192.168.0.89)::OnSendLogin():192.168.0.89,3321
+2016-07-21 14:30:58	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:5,len=212
+2016-07-21 14:30:58	CJConnSock::AddWaitTask iSeq:2 lpWaitData:0033CF0C iwaitDataLen:212 hWaitEvent:000004D0 TaskSize:0
+2016-07-21 14:30:58	CJConnSock::FindWaitTask iSeq:2 success
+2016-07-21 14:30:58	CJConnJPF(192.168.0.89)::OnRetGetParam, Result:0 len:0 hWaitEvent:000004D0
+2016-07-21 14:30:58	CJConnSock::RemoveWaitTask iSeq:2 success, TaskSize:0
+2016-07-21 14:30:58	CJConnJPF(192.168.0.89)::OnSendGetParam:ip:192.168.0.89,chn:0,cmd:31,len=2152
+2016-07-21 14:30:58	CJConnSock::AddWaitTask iSeq:3 lpWaitData:01442098 iwaitDataLen:2152 hWaitEvent:000004D0 TaskSize:0

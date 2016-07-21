@@ -78,12 +78,12 @@ TEST_CASE("This is a demo", "[demo]")
 		/************************* 初始化SDK厂商 **********************/
 		VENDOR_LIST pVendorList;
 		CJXJVendor* jxjVendor = new CJXJVendor();
-		//CDZPVendor* dzpVendor = new CDZPVendor();
+		CDZPVendor* dzpVendor = new CDZPVendor();
 		//DHVendor* dhVendor = new DHVendor();
 		//HKVendor* hkVendor = new HKVendor();
 
 		pVendorList.push_back(jxjVendor);
-		//pVendorList.push_back(dzpVendor);
+		pVendorList.push_back(dzpVendor);
 		/*	pVendorList.push_back(dhVendor);
 			pVendorList.push_back(hkVendor);*/
 
@@ -112,14 +112,14 @@ TEST_CASE("This is a demo", "[demo]")
 
 		/************************* 设备发现类测试 **********************/
 		std::cout << CCommonUtrl::getInstance().GetCurTime() << "Search Device Start!" << std::endl;
-		NotificationQueue queueSearchDevice; // 设备发现消息队列
-		CSearchDevice sd(pVendorList, listDeviceSimpleInfo, queueSearchDevice);
+		NotificationQueue* queueSearchDevice = new NotificationQueue(); // 设备发现消息队列
+		CSearchDevice sd(pVendorList, listDeviceSimpleInfo, *queueSearchDevice);
 		pool.start(sd);
 		//queueSearchDevice.enqueueNotification(new CNotificationSearchDevice(Notification_Type_Search_Device_Cancel));
 
 		/************************* 设备管理类测试 **********************/
-		NotificationQueue queueDeviceManager; // 设备管理消息队列
-		CDeviceManager dm(pVendorList, queueDeviceManager);
+		NotificationQueue* queueDeviceManager = new NotificationQueue(); // 设备管理消息队列
+		CDeviceManager dm(pVendorList, *queueDeviceManager);
 		pool.start(dm);
 		//queueDeviceManager.enqueueNotification(new CNotificationDeviceManager(Notification_Type_Device_Manager_Cancel));
 
@@ -159,31 +159,36 @@ TEST_CASE("This is a demo", "[demo]")
 					::Sleep(100);
 
 					Device* pDev = CLoginDevice::getInstance().GetDevice(ip);
+
+					int channel = 0;
 									
 					time_range timeSearch;
 					timeSearch.start = 1468771200; //DZP - 1468771200
 					timeSearch.end = 1468857599; //DZP - 1468857598
 
-					pDev->Search(2, timeSearch);
+					pDev->Search(channel, timeSearch);
 					RECORD_FILE_LIST list = pDev->GetRecordFileList();
 
 					std::vector<readSearchVideo> RSVObj;
 					std::string strSql = SELECT_ALL_SEARCH_VIDEO;
 					pDb->GetData(strSql, RSVObj);
 
-					readSearchVideo rsv = RSVObj[0];
-					RecordFile file;
-					file.name = rsv.get<0>();
-					file.channel = rsv.get<1>();
-					file.beginTime = rsv.get<2>();
-					file.endTime = rsv.get<3>();
-					file.size = rsv.get<4>();
+					if (RSVObj.size() > 0)
+					{
+						readSearchVideo rsv = RSVObj[0];
+						RecordFile file;
+						file.name = rsv.get<0>();
+						file.channel = rsv.get<1>();
+						file.beginTime = rsv.get<2>();
+						file.endTime = rsv.get<3>();
+						file.size = rsv.get<4>();
 
-					//time_range timePlay;
-					//timePlay.start = list[0].beginTime; //DZP - 1468771200
-					//timePlay.end = list[0].endTime; //DZP - 1468857599
-					pDev->PlayVideo(TestWindows::getInstance().GetHWnd(), 2, file);
-					//pDev->Download(2, file);
+						//time_range timePlay;
+						//timePlay.start = list[0].beginTime; //DZP - 1468771200
+						//timePlay.end = list[0].endTime; //DZP - 1468857599
+						pDev->PlayVideo(TestWindows::getInstance().GetHWnd(), channel, file);
+						//pDev->Download(channel, file);
+					}					
 				}
 			}
 		}
