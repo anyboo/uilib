@@ -35,7 +35,9 @@ public:
     static bool isOnLine();
 	static void getMacByArpTable(vector<string> Ips, vector<IPMAC>& IpMacs);
 	static string ConvertNICUUIDtoPcapName(pcap_if_t* devs, const string& uuid);
-	static void getLocalIPsMac(std::vector<string> &IPs, u_char *mac);
+	static void getLocalIPsMac(std::vector<string> &IPs, u_char *mac);	
+	static bool getDirectDevice(set<string>& ipList, set<string>& dstList);
+	static void getMacByArpTable(vector<string>Ips, set<string>& findIps);
 private:
     WindowUtils();
 };

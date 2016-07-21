@@ -14,7 +14,7 @@
 #include <memory>
 #include <mutex>
 using namespace std;
-//这里需要导入库 Ws2_32.lib，在不同的IDE下可能不太一样 
+//
 #pragma comment(lib, "Ws2_32.lib")
 
 #define DEF_PACKET_SIZE 32

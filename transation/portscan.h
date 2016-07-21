@@ -97,7 +97,7 @@ struct SendPacket
 		return *this;
 	}
 
-	//取得私有数据
+	//get private data
 	char* getPacket() const
 	{
 		return packet;

@@ -2,12 +2,15 @@
 #define IP_SET_H
 
 #include "Poco/Runnable.h"
+#include <iostream>
 
 class IPSet : public Poco::Runnable
 {
-	void deepConfig();
-	void ipsetting();
+public:
 	void run();
+private:
+	static bool sortByIp(std::string srFirst, std::string srSecond);	
+	void ipsetting();
 };
 
 
