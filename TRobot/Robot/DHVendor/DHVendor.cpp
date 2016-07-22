@@ -242,20 +242,25 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 		timeDHToStd(&item.endtime, &eTm);
 
 		ZeroMemory(szTime, 512);
-		if (channel < 10)
-		{
-			sprintf_s(szTime, "channel0%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d-%d", channel,
-				ntStime.dwYear, ntStime.dwMonth, ntStime.dwDay,
-				ntStime.dwHour, ntStime.dwMinute, ntStime.dwSecond,
-				ntEtime.dwYear, ntEtime.dwMonth, ntEtime.dwDay, ntEtime.dwHour, ntEtime.dwMinute, ntEtime.dwSecond, i);
-		}
-		else
-		{
-			sprintf_s(szTime, "channel%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d-%d", channel,
-				ntStime.dwYear, ntStime.dwMonth, ntStime.dwDay,
-				ntStime.dwHour, ntStime.dwMinute, ntStime.dwSecond,
-				ntEtime.dwYear, ntEtime.dwMonth, ntEtime.dwDay, ntEtime.dwHour, ntEtime.dwMinute, ntEtime.dwSecond, i);
-		}
+		//if (channel < 10)
+		//{
+		//	sprintf_s(szTime, "channel0%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d-%d", channel,
+		//		ntStime.dwYear, ntStime.dwMonth, ntStime.dwDay,
+		//		ntStime.dwHour, ntStime.dwMinute, ntStime.dwSecond,
+		//		ntEtime.dwYear, ntEtime.dwMonth, ntEtime.dwDay, ntEtime.dwHour, ntEtime.dwMinute, ntEtime.dwSecond, i);
+		//}
+		//else
+		//{
+		//	sprintf_s(szTime, "channel%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d-%d", channel,
+		//		ntStime.dwYear, ntStime.dwMonth, ntStime.dwDay,
+		//		ntStime.dwHour, ntStime.dwMinute, ntStime.dwSecond,
+		//		ntEtime.dwYear, ntEtime.dwMonth, ntEtime.dwDay, ntEtime.dwHour, ntEtime.dwMinute, ntEtime.dwSecond, i);
+		//}
+
+		sprintf_s(szTime, "channel%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d-%d", channel,
+			ntStime.dwYear, ntStime.dwMonth, ntStime.dwDay,
+			ntStime.dwHour, ntStime.dwMinute, ntStime.dwSecond,
+			ntEtime.dwYear, ntEtime.dwMonth, ntEtime.dwDay, ntEtime.dwHour, ntEtime.dwMinute, ntEtime.dwSecond, i);
 		
 		info.channel = item.ch;
 		info.size = item.size * 1024;
@@ -543,10 +548,10 @@ std::string DH_MakeFileName(int channel, const std::string& startTime, const std
 	std::string strFileName;
 
 	strFileName += "channel";
-	if (channel < 10)
-	{
-		strFileName += "0";
-	}
+	//if (channel < 10)
+	//{
+	//	strFileName += "0";
+	//}
 	strFileName += std::to_string(channel);
 	strFileName += "-";
 	strFileName += startTime.data();
@@ -565,14 +570,15 @@ std::string DH_CreatePath(const size_t channel, const std::string& Root)
 
 	char szChannel[10];
 	ZeroMemory(szChannel, 10);
-	if (channel < 10)
-	{
-		sprintf_s(szChannel, "通道0%d", channel);
-	}
-	else
-	{
-		sprintf_s(szChannel, "通道%d", channel);
-	}
+	//if (channel < 10)
+	//{
+	//	sprintf_s(szChannel, "通道0%d", channel);
+	//}
+	//else
+	//{
+	//	sprintf_s(szChannel, "通道%d", channel);
+	//}
+	sprintf_s(szChannel, "通道%d", channel);
 	
 	strPath.append(szChannel);
 	strPath.append("\\");

@@ -545,10 +545,10 @@ std::string HK_MakeFileName(int channel, const std::string& startTime, const std
 	std::string strFileName;
 
 	strFileName += "channel";
-	if (channel < 10)
-	{
-		strFileName += "0";
-	}
+	//if (channel < 10)
+	//{
+	//	strFileName += "0";
+	//}
 	strFileName += std::to_string(channel);
 	strFileName += "-";
 	strFileName += startTime.data();
@@ -567,15 +567,15 @@ std::string HK_CreatePath(const size_t channel, const std::string& Root)
 
 	char szChannel[10];
 	ZeroMemory(szChannel, 10);
-	if (channel < 10)
-	{
-		sprintf_s(szChannel, "通道0%d", channel);
-	}
-	else
-	{
-		sprintf_s(szChannel, "通道%d", channel);
-	}
-
+	//if (channel < 10)
+	//{
+	//	sprintf_s(szChannel, "通道0%d", channel);
+	//}
+	//else
+	//{
+	//	sprintf_s(szChannel, "通道%d", channel);
+	//}
+	sprintf_s(szChannel, "通道%d", channel);
 	strPath.append(szChannel);
 	strPath.append("\\");
 

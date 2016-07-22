@@ -18,6 +18,20 @@ CCommonUtrl& CCommonUtrl::getInstance()
 	return *shCommonUtrl.get();
 }
 
+std::string CCommonUtrl::MakeFileName(int channel, const std::string& startTime, const std::string& endTime, const std::string& extensions)
+{
+	std::string strFileName;
+
+	strFileName += "channel";
+	strFileName += std::to_string(channel);
+	strFileName += "-";
+	strFileName += startTime.data();
+	strFileName += "-";
+	strFileName += endTime.data();
+	strFileName.append(extensions);
+
+	return strFileName;
+}
 std::string CCommonUtrl::MakeDownloadFileFolder(const std::string basePath, const std::string& startTimeZero, const std::string& endTimeZero, const std::string& venderName, int channel)
 {
 	std::string strPath = basePath;
@@ -29,14 +43,6 @@ std::string CCommonUtrl::MakeDownloadFileFolder(const std::string basePath, cons
 	strPath += venderName.data();
 	strPath.append("\\");
 	strPath.append("Í¨µÀ");
-	if (venderName.compare(Vendor_DZP) == 0)
-	{
-		channel += 1;
-	}
-	if (channel < 10)
-	{
-		strPath += "0";
-	}
 	strPath += std::to_string(channel);
 	strPath.append("\\");
 

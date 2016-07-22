@@ -150,8 +150,8 @@ TEST_CASE("This is a demo", "[demo]")
 			// 获取设备信息
 			NET_DEVICE_INFO* devInfo = devInfoList[i];
 			std::string ip(devInfo->szIp);
-			//if (ip.compare("10.168.0.66") == 0)
-			if (ip.compare("192.168.0.89") == 0)
+			if (ip.compare("10.168.0.66") == 0)
+			//if (ip.compare("192.168.0.89") == 0)
 			{
 				// 登陆设备
 				if (CLoginDevice::getInstance().Login(devInfo->pVendor, devInfo->szIp, devInfo->nPort))
@@ -186,8 +186,8 @@ TEST_CASE("This is a demo", "[demo]")
 						//time_range timePlay;
 						//timePlay.start = list[0].beginTime; //DZP - 1468771200
 						//timePlay.end = list[0].endTime; //DZP - 1468857599
-						pDev->PlayVideo(TestWindows::getInstance().GetHWnd(), channel, file);
-						//pDev->Download(channel, file);
+						//pDev->PlayVideo(TestWindows::getInstance().GetHWnd(), channel, file);
+						pDev->Download(channel, file);
 					}					
 				}
 			}

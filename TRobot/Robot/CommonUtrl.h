@@ -36,7 +36,7 @@
 
 #define Vendor_DH	"´ó»ª"
 #define Vendor_JXJ	"¼ÑÐÅ½Ý"
-#define Vendor_DZP	"µÏÖÇÆÕ"
+#define Vendor_DZP	"µÏÖÇÆÖ"
 #define Vendor_HK	"º£¿µ"
 
 #define Vendor_DH_Abbr		"DH"
@@ -69,6 +69,7 @@ public:
 	static CCommonUtrl& getInstance();
 
 	// File Name & File Folder
+	std::string MakeFileName(int channel, const std::string& startTime, const std::string& endTime, const std::string& extensions);
 	std::string MakeDownloadFileFolder(const std::string basePath, const std::string& startTimeZero, const std::string& endTimeZero, const std::string& venderName, int channel);
 	void MakeFolder(std::string fileName);
 
