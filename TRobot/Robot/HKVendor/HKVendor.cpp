@@ -213,6 +213,17 @@ void HKVendor::Search(const long loginHandle, const size_t channel, const time_r
 	CCommonUtrl::getInstance().WriteFileListToDB(m_files);
 }
 
+void HKVendor::Download(const long loginHandle, const RecordFile& file)
+{
+
+}
+
+void HKVendor::PlayVideo(const long loginHandle, const RecordFile& file)
+{
+
+}
+
+/*
 void HKVendor::Download(const long loginHandle, const size_t channel, const time_range& range)
 {
 	if (-1 == loginHandle)
@@ -446,6 +457,7 @@ void HKVendor::PlayVideo(const long loginHandle, const size_t channel, const std
 	}
 
 }
+*/
 
 bool HKVendor::StopDownload()
 {

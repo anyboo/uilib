@@ -5,22 +5,26 @@
 
 #pragma comment(lib, "dhnetsdk")
 
-NET_DEVICEINFO m_deviceInfo;
 
-void CALLBACK DH_BTDownLoadPos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, int index, NET_RECORDFILE_INFO recordfileinfo, LDWORD dwUser);
-void CALLBACK DH_BTDownLoadFile(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser);
-void CALLBACK DH_PlayCallBack(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser);
-int CALLBACK DH_PBDataCallBack(LLONG lRealHandle, DWORD dwDataType, BYTE *pBuffer, DWORD dwBufSize, LDWORD dwUser);
+class DH_SDK_INTERFACE
+{
+public:
+	static void CALLBACK DH_BTDownLoadPos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, int index, NET_RECORDFILE_INFO recordfileinfo, LDWORD dwUser);
+	static void CALLBACK DH_BTDownLoadFile(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser);
+	static void CALLBACK DH_PlayCallBack(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser);
+	static int CALLBACK DH_PBDataCallBack(LLONG lRealHandle, DWORD dwDataType, BYTE *pBuffer, DWORD dwBufSize, LDWORD dwUser);
 
-std::string DH_MakeStrByInteger(int data);
-std::string DH_MakeStrTimeByTimestamp(time_t time);
+	static std::string DH_MakeStrByInteger(int data);
+	static std::string DH_MakeStrTimeByTimestamp(time_t time);
 
-std::string DH_GetLastErrorString();
-void DH_timeDHToStd(NET_TIME *pTimeDH, tm *pTimeStd);
-void DH_timeStdToDH(tm *pTimeStd, NET_TIME *pTimeDH);
-void DH_trTOnt(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_range range);
-std::string DH_CreatePath(const size_t channel, const std::string& Root);
-std::string DH_MakeFileName(int channel, const std::string& startTime, const std::string& endTime);
+	static std::string DH_GetLastErrorString();
+	static void DH_timeDHToStd(NET_TIME *pTimeDH, tm *pTimeStd);
+	static void DH_timeStdToDH(tm *pTimeStd, NET_TIME *pTimeDH);
+	static void DH_trTOnt(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_range range);
+	static std::string DH_CreatePath(const size_t channel, const std::string& Root);
+	static std::string DH_MakeFileName(int channel, const std::string& startTime, const std::string& endTime);
+};
+
 
 
 DHVendor::DHVendor()
@@ -68,18 +72,20 @@ long DHVendor::Login(const std::string& ip, size_t port, const std::string& user
 {
 	int nError = 0;
 	long lLoginHandle = -1;
-	lLoginHandle = CLIENT_Login((char *)ip.c_str(), port, (char *)(user.c_str()), (char *)(password.c_str()), &m_deviceInfo, &nError);
+	NET_DEVICEINFO deviceInfo;
+
+	lLoginHandle = CLIENT_Login((char *)ip.c_str(), port, (char *)(user.c_str()), (char *)(password.c_str()), &deviceInfo, &nError);
 
 	if (0 != nError)
 	{
-		std::cout << "µÇÂ¼´íÎó(nError)£º" << DH_GetLastErrorString().c_str() << std::endl;
+		std::cout << "µÇÂ¼´íÎó(nError)£º" << DH_SDK_INTERFACE::DH_GetLastErrorString().c_str() << std::endl;
 		throw std::exception("Login failed");
 		return -1;
 	}
 
 	if (0 == lLoginHandle)
 	{
-		std::cout << "µÇÂ¼´íÎó(lLogin)£º" << DH_GetLastErrorString().c_str() << std::endl;
+		std::cout << "µÇÂ¼´íÎó(lLogin)£º" << DH_SDK_INTERFACE::DH_GetLastErrorString().c_str() << std::endl;
 		return -1;
 	}
 
@@ -98,8 +104,8 @@ long DHVendor::Login(const std::string& ip, size_t port, const std::string& user
 		}
 		else
 		{
-			std::cout << "Get channel failed" << DH_GetLastErrorString() << std::endl;
-			//throw std::exception("Get channel failed");
+			std::cout << "Get channel failed" << DH_SDK_INTERFACE::DH_GetLastErrorString() << std::endl;
+			throw LoginException(DH_SDK_INTERFACE::DH_GetLastErrorString().c_str());
 			return -1;
 		}
 	}
@@ -111,7 +117,7 @@ void DHVendor::Logout(const long loginHandle)
 {
 	if (loginHandle > 0 && !CLIENT_Logout(loginHandle))
 	{
-		std::cout << "Logout Error£º" << DH_GetLastErrorString().c_str() << std::endl;
+		std::cout << "Logout Error£º" << DH_SDK_INTERFACE::DH_GetLastErrorString().c_str() << std::endl;
 		throw std::exception("Logout failed");
 		return;
 	}
@@ -126,7 +132,7 @@ void DHVendor::StartSearchDevice()
  
 	if (!bRet)
 	{
-		std::cout << "Search Device failure:" << DH_GetLastErrorString().c_str() << std::endl;
+		std::cout << "Search Device failure:" << DH_SDK_INTERFACE::DH_GetLastErrorString().c_str() << std::endl;
 		throw std::exception("Search Device failure");
 		return;
 	}
@@ -214,7 +220,7 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 	NET_TIME ntStime;
 	NET_TIME ntEtime;
 
-	DH_trTOnt(ntStime, ntEtime, range);
+	DH_SDK_INTERFACE::DH_trTOnt(ntStime, ntEtime, range);
 
 	NET_RECORDFILE_INFO ifileinfo[MAX_SEARCH_COUNT];
 	ZeroMemory(ifileinfo, sizeof(ifileinfo));
@@ -225,8 +231,8 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 
 	if (!bRet)
 	{
-		std::cout << "GetRecordFileList ²éÑ¯Â¼ÏñÊ§°Ü£¬´íÎóÔ­Òò£º" << DH_GetLastErrorString() << std::endl;
-		throw SearchFileException(DH_GetLastErrorString().c_str());
+		std::cout << "GetRecordFileList ²éÑ¯Â¼ÏñÊ§°Ü£¬´íÎóÔ­Òò£º" << DH_SDK_INTERFACE::DH_GetLastErrorString() << std::endl;
+		throw SearchFileException(DH_SDK_INTERFACE::DH_GetLastErrorString().c_str());
 	}
 
 	if (iMaxNum <= 0)
@@ -321,17 +327,17 @@ void DHVendor::Download(const long loginHandle, const RecordFile& file)
 	localtime_s(&ttime, &file.endTime);
 	strftime((char *)strTimeEnd.data(), 24, "%Y%m%d%H%M%S", &ttime);
 
-	//std::string strFileName = DH_MakeFileName(channel, strTimeStart, strTimeEnd);
 	std::string strFileName = CCommonUtrl::getInstance().MakeFileName(file.channel, strTimeStart, strTimeEnd, ".dav");
 
-	if (m_files.size() == 0)
+	if (0 == m_files.size())
 	{
 		throw std::exception("Search File List Empty!");
 		return;
 	}
 
 	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_DH, file.channel);
-	strPath += file.name.data();
+	
+	strPath += strFileName;
 
 
 	NET_TIME ntStime;
@@ -339,14 +345,11 @@ void DHVendor::Download(const long loginHandle, const RecordFile& file)
 	time_range range;
 	range.start = file.beginTime;
 	range.end = file.endTime;
-
 	
-	DH_trTOnt(ntStime, ntEtime, range);
+	DH_SDK_INTERFACE::DH_trTOnt(ntStime, ntEtime, range);
 
-// 	std::string strPath = DH_CreatePath(channel, m_sRoot);
-// 	strPath += file.name.data();
 
-	long bRet = CLIENT_DownloadByTime(loginHandle, file.channel, 0, &ntStime, &ntEtime, (char *)strPath.c_str(), DH_BTDownLoadPos, (DWORD)this);
+	long bRet = CLIENT_DownloadByTime(loginHandle, file.channel, 0, &ntStime, &ntEtime, (char *)strPath.c_str(), DH_SDK_INTERFACE::DH_BTDownLoadPos, (DWORD)this);
 	m_lDownloadHandle = bRet;
 
 	std::cout << "strName:" << strPath << std::endl;
@@ -364,7 +367,7 @@ void DHVendor::Download(const long loginHandle, const RecordFile& file)
 
 	if (0 == bRet)
 	{
-		std::cout << "Download videos failed, the reason for the error£º" << DH_GetLastErrorString() << std::endl;
+		std::cout << "Download videos failed, the reason for the error£º" << DH_SDK_INTERFACE::DH_GetLastErrorString() << std::endl;
 		throw std::exception("Download by Record file failed");
 		return;
 	}
@@ -377,7 +380,7 @@ void DHVendor::PlayVideo(const long loginHandle, const RecordFile& file)
 {
 	if (0 >= loginHandle)
 	{
-		std::cout << "Please Login frist:" << DH_GetLastErrorString() << std::endl;
+		std::cout << "Please Login frist:" << DH_SDK_INTERFACE::DH_GetLastErrorString() << std::endl;
 		throw std::exception("Login handle by Record file failed");
 		return;
 	}
@@ -388,18 +391,19 @@ void DHVendor::PlayVideo(const long loginHandle, const RecordFile& file)
 	range.start = file.beginTime;
 	range.end = file.endTime;
 
-	DH_trTOnt(ntStime, ntEtime, range);
+	DH_SDK_INTERFACE::DH_trTOnt(ntStime, ntEtime, range);
 
 	TestWindows Test;
 	Test.Init();
 
-	BOOL lPlayID = CLIENT_PlayBackByTimeEx(loginHandle, file.channel, &ntStime, &ntEtime, g_hWnd, DH_PlayCallBack, (DWORD)this, DH_PBDataCallBack, (DWORD)this);
+	BOOL lPlayID = CLIENT_PlayBackByTimeEx(loginHandle, file.channel, &ntStime, &ntEtime, Test.m_hWnd, DH_SDK_INTERFACE::DH_PlayCallBack, (DWORD)this, DH_SDK_INTERFACE::DH_PBDataCallBack, (DWORD)this);
 
 	if (!lPlayID)
 	{
-		std::cout << "²¥·ÅÊ§°ÜÔ­Òò£º" << DH_GetLastErrorString() << std::endl;
+		std::cout << "PlayVideo Error£º" << DH_SDK_INTERFACE::DH_GetLastErrorString() << std::endl;
 		throw std::exception("Play back by time failed");
 	}
+	//Test
 	//system("PAUSE");
 }
 
@@ -644,12 +648,12 @@ bool DHVendor::IsSearchDeviceAPIExist()
 	return m_bSearchDeviceAPI;
 }
 
-void CALLBACK DH_BTDownLoadPos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, int index, NET_RECORDFILE_INFO recordfileinfo, LDWORD dwUser)
+void CALLBACK DH_SDK_INTERFACE::DH_BTDownLoadPos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, int index, NET_RECORDFILE_INFO recordfileinfo, LDWORD dwUser)
 {
 	
 }
 
-void CALLBACK DH_BTDownLoadFile(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser)
+void CALLBACK DH_SDK_INTERFACE::DH_BTDownLoadFile(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser)
 {
 // 	DOWNLOADFILEINFO DownloadFileInfo;
 // 	DownloadFileInfo.nID = dwUser;
@@ -660,12 +664,12 @@ void CALLBACK DH_BTDownLoadFile(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDo
 //	NotificationQueue::defaultQueue().enqueueNotification(new SendDataNotification(DownloadFileInfo));
 }
 
-void CALLBACK DH_PlayCallBack(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser)
+void CALLBACK DH_SDK_INTERFACE::DH_PlayCallBack(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser)
 {
 	
 }
 
-int CALLBACK DH_PBDataCallBack(LLONG lRealHandle, DWORD dwDataType, BYTE *pBuffer, DWORD dwBufSize, LDWORD dwUser)
+int CALLBACK DH_SDK_INTERFACE::DH_PBDataCallBack(LLONG lRealHandle, DWORD dwDataType, BYTE *pBuffer, DWORD dwBufSize, LDWORD dwUser)
 {
 	if (dwUser == 0)
 	{
@@ -675,7 +679,7 @@ int CALLBACK DH_PBDataCallBack(LLONG lRealHandle, DWORD dwDataType, BYTE *pBuffe
 	return 1;
 }
 
-std::string DH_MakeFileName(int channel, const std::string& startTime, const std::string& endTime)
+std::string DH_SDK_INTERFACE::DH_MakeFileName(int channel, const std::string& startTime, const std::string& endTime)
 {
 	std::string strFileName;
 
@@ -694,7 +698,7 @@ std::string DH_MakeFileName(int channel, const std::string& startTime, const std
 	return strFileName;
 }
 
-std::string DH_CreatePath(const size_t channel, const std::string& Root)
+std::string DH_SDK_INTERFACE::DH_CreatePath(const size_t channel, const std::string& Root)
 {
 	std::string strPath = Root;
 
@@ -720,7 +724,7 @@ std::string DH_CreatePath(const size_t channel, const std::string& Root)
 
 }
 
-void DH_trTOnt(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_range range)
+void DH_SDK_INTERFACE::DH_trTOnt(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_range range)
 {
 	tm tmStartTime;
 	tm tmEndTime;
@@ -732,7 +736,7 @@ void DH_trTOnt(NET_TIME &ntStartTime, NET_TIME &ntEndTime, const time_range rang
 	timeStdToDH(&tmEndTime, &ntEndTime);
 }
 
-std::string DH_MakeStrTimeByTimestamp(time_t time)
+std::string DH_SDK_INTERFACE::DH_MakeStrTimeByTimestamp(time_t time)
 {
 	char cTime[50];
 	struct tm ttime;
@@ -744,7 +748,7 @@ std::string DH_MakeStrTimeByTimestamp(time_t time)
 
 	return strTime;
 }
-std::string DH_MakeStrByInteger(int data)
+std::string DH_SDK_INTERFACE::DH_MakeStrByInteger(int data)
 {
 	char cData[50];
 
@@ -755,7 +759,7 @@ std::string DH_MakeStrByInteger(int data)
 	return strTime;
 }
 
-std::string DH_GetLastErrorString()
+std::string DH_SDK_INTERFACE::DH_GetLastErrorString()
 {
 	DWORD dwError;
 	dwError = CLIENT_GetLastError();
