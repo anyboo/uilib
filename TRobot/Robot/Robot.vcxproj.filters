@@ -90,6 +90,12 @@
     <ClInclude Include="ReceiveUINotification.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="JxjVendor\JxjVendor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DZPVendor\DZPVendor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Robot.cpp">
@@ -156,6 +162,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ReceiveUINotification.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JxjVendor\JxjVendor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DZPVendor\DZPVendor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

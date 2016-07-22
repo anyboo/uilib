@@ -203,79 +203,79 @@ NotificationQueue& queue = NotificationQueue::defaultQueue();
 //ThreadPool::defaultPool().start(AcquireData);
 
 
-	DHVendor DHObj;
-	time_range range;
-	range.start = 1467302400;
-	range.end = 1467648000;
-	//初始化设备类
-	Device dObj(&DHObj);
-	//大华的登录
-	dObj.Login("192.168.0.55", 37777, "admin", "112233");
-	
-	std::vector<size_t> channelList;
-	channelList.push_back(0);
-	channelList.push_back(1);
-
-	ReciveUIQunue queue1;
- 	//bool b = true;
- 	//queue1.enqueueNotification(new ReciveUINotification(b));
-	SearchFileWorker SearchWork(&dObj, range, channelList, queue1);
-	
-	ThreadPool::defaultPool().start(SearchWork);
-
-	//NotificationQueue& queue = NotificationQueue::defaultQueue();
-	
-	//queue.enqueueNotification(new ReciveUINotification(b));
-	
-// 	while (!queue.empty())
+// 	DHVendor DHObj;
+// 	time_range range;
+// 	range.start = 1467302400;
+// 	range.end = 1467648000;
+// 	//初始化设备类
+// 	Device dObj(&DHObj);
+// 	//大华的登录
+// 	dObj.Login("192.168.0.55", 37777, "admin", "112233");
+// 	
+// 	std::vector<size_t> channelList;
+// 	channelList.push_back(0);
+// 	channelList.push_back(1);
+// 
+// 	ReciveUIQunue queue1;
+//  	//bool b = true;
+//  	//queue1.enqueueNotification(new ReciveUINotification(b));
+// 	SearchFileWorker SearchWork(&dObj, range, channelList, queue1);
+// 	
+// 	ThreadPool::defaultPool().start(SearchWork);
+// 
+// 	//NotificationQueue& queue = NotificationQueue::defaultQueue();
+// 	
+// 	//queue.enqueueNotification(new ReciveUINotification(b));
+// 	
+// // 	while (!queue.empty())
+// // 	{
+// // 		Thread::sleep(200);
+// // 	}
+// 
+// 	Poco::Random rnd;
+// 
+// 	NOTIFICATION_TYPE eNotify;
+// 	int nData;
+// 
+// 	FastMutex   m_mutex;
+// 	for (;;)
 // 	{
-// 		Thread::sleep(200);
-// 	}
-
-	Poco::Random rnd;
-
-	NOTIFICATION_TYPE eNotify;
-	int nData;
-
-	FastMutex   m_mutex;
-	for (;;)
-	{
-		Notification::Ptr pNf(queue.waitDequeueNotification());
-		if (pNf)
-		{
-			SearchFileNotification::Ptr pAcquireDataNf = pNf.cast<SearchFileNotification>();
-
-			if (pAcquireDataNf)
-			{
-				{
-					FastMutex::ScopedLock lock(m_mutex);
-					eNotify = pAcquireDataNf->GetNotify();
-					nData = pAcquireDataNf->GetData();
-				}
-
-				switch (eNotify)
-				{
-				case Notification_Type_Search_File_Process:
-					std::cout << "nPos:" << nData << std::endl;
-					break;
-				case Notification_Type_Search_File_TotalSize:
-					std::cout << "Total:" << nData << std::endl;
-					break;
-				case Notification_Type_Search_File_Finish:
-					std::cout << "Finish:" << nData << std::endl;
-				case Notification_Type_Search_File_Failure:
-					std::cout << "Fail:" << nData << std::endl;
-					break;
-				default:
-					std::cout << "Error:" << std::endl;
-					break;
-				}
-			}
-		}
-	} //for
-
-	queue.wakeUpAll();
-	ThreadPool::defaultPool().joinAll();
+// 		Notification::Ptr pNf(queue.waitDequeueNotification());
+// 		if (pNf)
+// 		{
+// 			SearchFileNotification::Ptr pAcquireDataNf = pNf.cast<SearchFileNotification>();
+// 
+// 			if (pAcquireDataNf)
+// 			{
+// 				{
+// 					FastMutex::ScopedLock lock(m_mutex);
+// 					eNotify = pAcquireDataNf->GetNotify();
+// 					nData = pAcquireDataNf->GetData();
+// 				}
+// 
+// 				switch (eNotify)
+// 				{
+// 				case Notification_Type_Search_File_Process:
+// 					std::cout << "nPos:" << nData << std::endl;
+// 					break;
+// 				case Notification_Type_Search_File_TotalSize:
+// 					std::cout << "Total:" << nData << std::endl;
+// 					break;
+// 				case Notification_Type_Search_File_Finish:
+// 					std::cout << "Finish:" << nData << std::endl;
+// 				case Notification_Type_Search_File_Failure:
+// 					std::cout << "Fail:" << nData << std::endl;
+// 					break;
+// 				default:
+// 					std::cout << "Error:" << std::endl;
+// 					break;
+// 				}
+// 			}
+// 		}
+// 	} //for
+// 
+// 	queue.wakeUpAll();
+// 	ThreadPool::defaultPool().joinAll();
 
 
 // /************************* 初始化线程池 **********************/

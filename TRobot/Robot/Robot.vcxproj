@@ -95,6 +95,8 @@
     <ClInclude Include="AbstractVendor.h" />
     <ClInclude Include="CommonUtrl.h" />
     <ClInclude Include="DHVendor\DHVendor.h" />
+    <ClInclude Include="DZPVendor\DZPVendor.h" />
+    <ClInclude Include="JxjVendor\JxjVendor.h" />
     <ClInclude Include="LoginDevice.h" />
     <ClInclude Include="LoginException.h" />
     <ClInclude Include="Network\netdefine.h" />
@@ -120,6 +122,8 @@
     <ClCompile Include="DeviceManager.cpp" />
     <ClCompile Include="CommonUtrl.cpp" />
     <ClCompile Include="DHVendor\DHVendor.cpp" />
+    <ClCompile Include="DZPVendor\DZPVendor.cpp" />
+    <ClCompile Include="JxjVendor\JxjVendor.cpp" />
     <ClCompile Include="LoginDevice.cpp" />
     <ClCompile Include="LoginException.cpp" />
     <ClCompile Include="Network\PING.cpp" />
