@@ -30,6 +30,8 @@ DHVendor::DHVendor()
 	m_sDefPassword = "";
 	m_iMaxChannel = 0;
 	m_lDownloadHandle = 0;
+	m_bSearchDeviceAPI = true;
+	m_iDefPort = 37777;
 
 	m_lSearchDeviceHandle = -1;
 
@@ -183,6 +185,11 @@ void timeStdToDH(tm *pTimeStd, NET_TIME *pTimeDH)
 	pTimeDH->dwSecond = pTimeStd->tm_sec;
 }
 
+void DHVendor::ClearLocalRecordFiles()
+{
+	m_files.clear();
+}
+
 void DHVendor::Search(const long loginHandle, const size_t channel, const time_range& range)
 {
 	if (0 >= loginHandle)
@@ -213,15 +220,15 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 	ZeroMemory(ifileinfo, sizeof(ifileinfo));
 	int iMaxNum = 0;
 
-	//BOOL bRet = CLIENT_QueryRecordFile(loginHandle, channel, 0, &ntStime, &ntEtime, 0, ifileinfo, sizeof(ifileinfo), &iMaxNum, 5000, true);
-	BOOL bRet = CLIENT_QueryRecordFile(loginHandle, channel, 0, 0, 0, 0, ifileinfo, sizeof(ifileinfo), &iMaxNum, 5000, true);
+	BOOL bRet = CLIENT_QueryRecordFile(loginHandle, channel, 0, &ntStime, &ntEtime, 0, ifileinfo, sizeof(ifileinfo), &iMaxNum, 5000, true);
+	//BOOL bRet = CLIENT_QueryRecordFile(loginHandle, channel, 0, 0, 0, 0, ifileinfo, sizeof(ifileinfo), &iMaxNum, 5000, true);
 
 	if (!bRet)
 	{
 		std::cout << "GetRecordFileList 查询录像失败，错误原因：" << DH_GetLastErrorString() << std::endl;
-		throw std::exception("Search file by time failed");
-		
+		throw SearchFileException(DH_GetLastErrorString().c_str());
 	}
+
 	if (iMaxNum <= 0)
 	{
 		std::cout << "GetRecordFileList 查询录像成功，录像个数为0" << std::endl;
@@ -242,25 +249,20 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 		timeDHToStd(&item.endtime, &eTm);
 
 		ZeroMemory(szTime, 512);
-		//if (channel < 10)
-		//{
-		//	sprintf_s(szTime, "channel0%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d-%d", channel,
-		//		ntStime.dwYear, ntStime.dwMonth, ntStime.dwDay,
-		//		ntStime.dwHour, ntStime.dwMinute, ntStime.dwSecond,
-		//		ntEtime.dwYear, ntEtime.dwMonth, ntEtime.dwDay, ntEtime.dwHour, ntEtime.dwMinute, ntEtime.dwSecond, i);
-		//}
-		//else
-		//{
-		//	sprintf_s(szTime, "channel%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d-%d", channel,
-		//		ntStime.dwYear, ntStime.dwMonth, ntStime.dwDay,
-		//		ntStime.dwHour, ntStime.dwMinute, ntStime.dwSecond,
-		//		ntEtime.dwYear, ntEtime.dwMonth, ntEtime.dwDay, ntEtime.dwHour, ntEtime.dwMinute, ntEtime.dwSecond, i);
-		//}
-
-		sprintf_s(szTime, "channel%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d-%d", channel,
-			ntStime.dwYear, ntStime.dwMonth, ntStime.dwDay,
-			ntStime.dwHour, ntStime.dwMinute, ntStime.dwSecond,
-			ntEtime.dwYear, ntEtime.dwMonth, ntEtime.dwDay, ntEtime.dwHour, ntEtime.dwMinute, ntEtime.dwSecond, i);
+		if (channel < 10)
+		{
+			sprintf_s(szTime, "channel0%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d-%d", channel,
+				ntStime.dwYear, ntStime.dwMonth, ntStime.dwDay,
+				ntStime.dwHour, ntStime.dwMinute, ntStime.dwSecond,
+				ntEtime.dwYear, ntEtime.dwMonth, ntEtime.dwDay, ntEtime.dwHour, ntEtime.dwMinute, ntEtime.dwSecond, i);
+		}
+		else
+		{
+			sprintf_s(szTime, "channel%d-%d%02d%02d%02d%02d%02d-%d%02d%02d%02d%02d%02d-%d", channel,
+				ntStime.dwYear, ntStime.dwMonth, ntStime.dwDay,
+				ntStime.dwHour, ntStime.dwMinute, ntStime.dwSecond,
+				ntEtime.dwYear, ntEtime.dwMonth, ntEtime.dwDay, ntEtime.dwHour, ntEtime.dwMinute, ntEtime.dwSecond, i);
+		}
 		
 		info.channel = item.ch;
 		info.size = item.size * 1024;
@@ -272,7 +274,7 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 		m_files.push_back(info);
 		m_FilesChange.push_back(info);
 
-		std::cout << "GetRecordFileList 文件名:" << info.name << std::endl << "  " << "文件大小:" << info.size << "  " << "通道:" << info.channel << std::endl;
+		std::cout << "FileName:" << info.name << std::endl << "  " << "FileSize:" << info.size << "  " << "Channel:" << info.channel << std::endl;
 	}
 
 	// Save Search Video List Result to Config File
@@ -296,6 +298,112 @@ bool DHVendor::StopDownload()
 	}
 }
 
+void DHVendor::Download(const long loginHandle, const size_t channel, const RecordFile& file)
+{
+	if (0 >= loginHandle)
+	{
+		std::cout << "Please Login frist!" << std::endl;
+		return;
+	}
+
+	// Init File Starttime and Endtime
+	std::string strTimeStart;
+	std::string strTimeEnd;
+	std::string strTimeStartZero;
+	std::string strTimeEndZero;
+
+	struct tm ttime;
+
+	localtime_s(&ttime, &file.beginTime);
+	strftime((char *)strTimeStart.data(), 24, "%Y%m%d%H%M%S", &ttime);
+	strftime((char *)strTimeStartZero.data(), 24, "%Y%m%d0000", &ttime);
+	strftime((char *)strTimeEndZero.data(), 24, "%Y%m%d2359", &ttime);
+	localtime_s(&ttime, &file.endTime);
+	strftime((char *)strTimeEnd.data(), 24, "%Y%m%d%H%M%S", &ttime);
+
+	//std::string strFileName = DH_MakeFileName(channel, strTimeStart, strTimeEnd);
+	std::string strFileName = CCommonUtrl::getInstance().MakeFileName(channel, strTimeStart, strTimeEnd, ".dav");
+
+	if (m_files.size() == 0)
+	{
+		throw std::exception("Search File List Empty!");
+		return;
+	}
+
+	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_JXJ, channel);
+	strPath += file.name.data();
+
+
+	NET_TIME ntStime;
+	NET_TIME ntEtime;
+	time_range range;
+	range.start = file.beginTime;
+	range.end = file.endTime;
+
+	
+	DH_trTOnt(ntStime, ntEtime, range);
+
+// 	std::string strPath = DH_CreatePath(channel, m_sRoot);
+// 	strPath += file.name.data();
+
+	long bRet = CLIENT_DownloadByTime(loginHandle, channel, 0, &ntStime, &ntEtime, (char *)strPath.c_str(), DH_BTDownLoadPos, (DWORD)this);
+	m_lDownloadHandle = bRet;
+
+	std::cout << "strName:" << strPath << std::endl;
+
+	// 	int total, cur;
+	// 	total = 0;
+	// 	cur = 0;
+	// 	BOOL bret = CLIENT_GetDownloadPos(bRet, &total, &cur);
+	// 	while ((cur / total) != 1)
+	// 	{
+	// 		std::cout << "进度：" << (double)(cur / total) << std::endl;
+	// 	}
+
+	//bool c = CLIENT_PauseLoadPic(bRet, true);
+
+	if (0 == bRet)
+	{
+		std::cout << "Download videos failed, the reason for the error：" << DH_GetLastErrorString() << std::endl;
+		throw std::exception("Download by Record file failed");
+		return;
+	}
+	else
+	{
+		std::cout << "downLoadByRecordFile 下载录像成功！" << std::endl;
+	}
+}
+void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const RecordFile& file)
+{
+	if (0 >= loginHandle)
+	{
+		std::cout << "Please Login frist:" << DH_GetLastErrorString() << std::endl;
+		throw std::exception("Login handle by Record file failed");
+		return;
+	}
+
+	NET_TIME ntStime;
+	NET_TIME ntEtime;
+	time_range range;
+	range.start = file.beginTime;
+	range.end = file.endTime;
+
+	DH_trTOnt(ntStime, ntEtime, range);
+
+	TestWindows Test;
+	Test.Init();
+
+	BOOL lPlayID = CLIENT_PlayBackByTimeEx(loginHandle, channel, &ntStime, &ntEtime, g_hWnd, DH_PlayCallBack, (DWORD)this, DH_PBDataCallBack, (DWORD)this);
+
+	if (!lPlayID)
+	{
+		std::cout << "播放失败原因：" << DH_GetLastErrorString() << std::endl;
+		throw std::exception("Play back by time failed");
+	}
+	//system("PAUSE");
+}
+
+/*
 void DHVendor::Download(const long loginHandle, const size_t channel, const time_range& range)
 {
 	if (0 >= loginHandle)
@@ -396,7 +504,25 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const std:
 		if (it->name == filename)
 		{
 			NET_RECORDFILE_INFO* pData = (NET_RECORDFILE_INFO*)it->getPrivateData();
+// 			NET_RECORDFILE_INFO info;
+// 			info.ch = 1;
+// 			info.size = 20048;
+// 			info.starttime.dwYear = 2016;
+// 			info.starttime.dwMonth = 7;
+// 			info.starttime.dwDay = 10;
+// 			info.starttime.dwHour = 0;
+// 			info.starttime.dwMinute = 0;
+// 			info.starttime.dwSecond = 0;
+// 
+// 			info.endtime.dwYear = 2016;
+// 			info.endtime.dwMonth = 7;
+// 			info.endtime.dwDay = 10;
+// 			info.endtime.dwHour = 0;
+// 			info.endtime.dwMinute = 45;
+// 			info.endtime.dwSecond = 45;
+
 			long lRet = CLIENT_DownloadByRecordFile(loginHandle, pData, (char *)strPath.c_str(), DH_BTDownLoadFile, 0);
+			//long lRet = CLIENT_DownloadByRecordFile(loginHandle, &info, (char *)strPath.c_str(), DH_BTDownLoadFile, 0);
 			m_lDownloadHandle = lRet;
 
 			// 			int total, cur;
@@ -501,6 +627,7 @@ void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const std
 		nSize++;
 	}
 }
+*/
 
 void DHVendor::SetDownloadPath(const std::string& Root)
 {
@@ -512,6 +639,11 @@ void DHVendor::throwException()
 
 }
 
+bool DHVendor::IsSearchDeviceAPIExist()
+{
+	return m_bSearchDeviceAPI;
+}
+
 void CALLBACK DH_BTDownLoadPos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, int index, NET_RECORDFILE_INFO recordfileinfo, LDWORD dwUser)
 {
 	
@@ -519,13 +651,13 @@ void CALLBACK DH_BTDownLoadPos(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDow
 
 void CALLBACK DH_BTDownLoadFile(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser)
 {
-	DOWNLOADFILEINFO DownloadFileInfo;
-	DownloadFileInfo.nID = dwUser;
-	DownloadFileInfo.dwDownLoadSize = dwDownLoadSize;
-	DownloadFileInfo.dwTotalSize = dwTotalSize;
+// 	DOWNLOADFILEINFO DownloadFileInfo;
+// 	DownloadFileInfo.nID = dwUser;
+// 	DownloadFileInfo.dwDownLoadSize = dwDownLoadSize;
+// 	DownloadFileInfo.dwTotalSize = dwTotalSize;
 
 //	DownloadFileNotificationQueue::GetInstance().GetQueue().enqueueNotification(new SendDataNotification(DownloadFileInfo));
-	NotificationQueue::defaultQueue().enqueueNotification(new SendDataNotification(DownloadFileInfo));
+//	NotificationQueue::defaultQueue().enqueueNotification(new SendDataNotification(DownloadFileInfo));
 }
 
 void CALLBACK DH_PlayCallBack(LLONG lPlayHandle, DWORD dwTotalSize, DWORD dwDownLoadSize, LDWORD dwUser)
@@ -548,10 +680,10 @@ std::string DH_MakeFileName(int channel, const std::string& startTime, const std
 	std::string strFileName;
 
 	strFileName += "channel";
-	//if (channel < 10)
-	//{
-	//	strFileName += "0";
-	//}
+	if (channel < 10)
+	{
+		strFileName += "0";
+	}
 	strFileName += std::to_string(channel);
 	strFileName += "-";
 	strFileName += startTime.data();
@@ -570,15 +702,14 @@ std::string DH_CreatePath(const size_t channel, const std::string& Root)
 
 	char szChannel[10];
 	ZeroMemory(szChannel, 10);
-	//if (channel < 10)
-	//{
-	//	sprintf_s(szChannel, "通道0%d", channel);
-	//}
-	//else
-	//{
-	//	sprintf_s(szChannel, "通道%d", channel);
-	//}
-	sprintf_s(szChannel, "通道%d", channel);
+	if (channel < 10)
+	{
+		sprintf_s(szChannel, "通道0%d", channel);
+	}
+	else
+	{
+		sprintf_s(szChannel, "通道%d", channel);
+	}
 	
 	strPath.append(szChannel);
 	strPath.append("\\");

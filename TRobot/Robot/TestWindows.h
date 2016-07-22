@@ -18,6 +18,7 @@ public:
 	HWND GetHWnd(){ return m_hWnd; }
 
 private:
+public:
 	HWND m_hWnd;
 	HINSTANCE m_hInst;
 };

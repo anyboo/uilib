@@ -54,7 +54,7 @@ BOOL TestWindows::InitInstance()
 		return FALSE;
 	}
 
-	/*ShowWindow(m_hWnd, SW_SHOW);*/
+	ShowWindow(m_hWnd, SW_SHOW);
 
 	return TRUE;
 }
