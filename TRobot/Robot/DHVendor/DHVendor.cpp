@@ -298,7 +298,7 @@ bool DHVendor::StopDownload()
 	}
 }
 
-void DHVendor::Download(const long loginHandle, const size_t channel, const RecordFile& file)
+void DHVendor::Download(const long loginHandle, const RecordFile& file)
 {
 	if (0 >= loginHandle)
 	{
@@ -322,7 +322,7 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const Reco
 	strftime((char *)strTimeEnd.data(), 24, "%Y%m%d%H%M%S", &ttime);
 
 	//std::string strFileName = DH_MakeFileName(channel, strTimeStart, strTimeEnd);
-	std::string strFileName = CCommonUtrl::getInstance().MakeFileName(channel, strTimeStart, strTimeEnd, ".dav");
+	std::string strFileName = CCommonUtrl::getInstance().MakeFileName(file.channel, strTimeStart, strTimeEnd, ".dav");
 
 	if (m_files.size() == 0)
 	{
@@ -330,7 +330,7 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const Reco
 		return;
 	}
 
-	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_JXJ, channel);
+	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_DH, file.channel);
 	strPath += file.name.data();
 
 
@@ -346,7 +346,7 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const Reco
 // 	std::string strPath = DH_CreatePath(channel, m_sRoot);
 // 	strPath += file.name.data();
 
-	long bRet = CLIENT_DownloadByTime(loginHandle, channel, 0, &ntStime, &ntEtime, (char *)strPath.c_str(), DH_BTDownLoadPos, (DWORD)this);
+	long bRet = CLIENT_DownloadByTime(loginHandle, file.channel, 0, &ntStime, &ntEtime, (char *)strPath.c_str(), DH_BTDownLoadPos, (DWORD)this);
 	m_lDownloadHandle = bRet;
 
 	std::cout << "strName:" << strPath << std::endl;
@@ -373,7 +373,7 @@ void DHVendor::Download(const long loginHandle, const size_t channel, const Reco
 		std::cout << "downLoadByRecordFile ÏÂÔØÂ¼Ïñ³É¹¦£¡" << std::endl;
 	}
 }
-void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const RecordFile& file)
+void DHVendor::PlayVideo(const long loginHandle, const RecordFile& file)
 {
 	if (0 >= loginHandle)
 	{
@@ -393,7 +393,7 @@ void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const Rec
 	TestWindows Test;
 	Test.Init();
 
-	BOOL lPlayID = CLIENT_PlayBackByTimeEx(loginHandle, channel, &ntStime, &ntEtime, g_hWnd, DH_PlayCallBack, (DWORD)this, DH_PBDataCallBack, (DWORD)this);
+	BOOL lPlayID = CLIENT_PlayBackByTimeEx(loginHandle, file.channel, &ntStime, &ntEtime, g_hWnd, DH_PlayCallBack, (DWORD)this, DH_PBDataCallBack, (DWORD)this);
 
 	if (!lPlayID)
 	{
