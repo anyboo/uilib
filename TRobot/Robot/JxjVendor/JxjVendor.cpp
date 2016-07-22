@@ -294,7 +294,7 @@ void CJXJVendor::ClearLocalRecordFiles()
 	m_files.clear();
 }
 
-void CJXJVendor::Download(const long loginHandle, const size_t channel, const RecordFile& file)
+void CJXJVendor::Download(const long loginHandle, const RecordFile& file)
 {
 	// Init File Starttime and Endtime
 	std::string strTimeStart;
@@ -312,7 +312,7 @@ void CJXJVendor::Download(const long loginHandle, const size_t channel, const Re
 	strftime((char *)strTimeEnd.data(), 24, "%Y%m%d%H%M%S", &ttime);
 
 	//std::string strFileName = JXJ_SDK_INTERFACE::JXJ_MakeFileName(channel, strTimeStart, strTimeEnd);
-	std::string strFileName = CCommonUtrl::getInstance().MakeFileName(channel, strTimeStart, strTimeEnd, ".jav");
+	std::string strFileName = CCommonUtrl::getInstance().MakeFileName(file.channel, strTimeStart, strTimeEnd, ".jav");
 
 	if (m_files.size() == 0)
 	{
@@ -321,12 +321,12 @@ void CJXJVendor::Download(const long loginHandle, const size_t channel, const Re
 	}
 
 	// Init File Save Path 
-	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_JXJ, channel);
+	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_JXJ, file.channel);
 	strPath += file.name.data();
 
 	// Set File Total Time
 	JXJ_SDK_INTERFACE::m_lDownLoadTotalTime = file.endTime - file.beginTime;
-	JXJ_SDK_INTERFACE::m_lDownloadHandle = JNetRecOpen4Time(loginHandle, "", channel, j_primary_stream, strTimeStart.c_str(), strTimeEnd.c_str(), 4096, IsPlay_Download, JXJ_SDK_INTERFACE::JXJ_JRecDownload, this, JXJ_SDK_INTERFACE::m_lRecHandle);
+	JXJ_SDK_INTERFACE::m_lDownloadHandle = JNetRecOpen4Time(loginHandle, "", file.channel, j_primary_stream, strTimeStart.c_str(), strTimeEnd.c_str(), 4096, IsPlay_Download, JXJ_SDK_INTERFACE::JXJ_JRecDownload, this, JXJ_SDK_INTERFACE::m_lRecHandle);
 	if (JXJ_SDK_INTERFACE::m_lDownloadHandle > 0)
 	{
 		Sleep(1000);
@@ -343,7 +343,7 @@ void CJXJVendor::Download(const long loginHandle, const size_t channel, const Re
 		throw std::exception("Download File Error!");
 	}
 }
-void CJXJVendor::PlayVideo(const long loginHandle, const size_t channel, const RecordFile& file)
+void CJXJVendor::PlayVideo(const long loginHandle, const RecordFile& file)
 {
 	// Init File Starttime and Endtime
 	std::string strTimeStart;
@@ -357,12 +357,12 @@ void CJXJVendor::PlayVideo(const long loginHandle, const size_t channel, const R
 	strftime((char *)strTimeEnd.c_str(), 24, "%Y%m%d%H%M%S", &ttime);
 
 	//std::string strFileName = JXJ_SDK_INTERFACE::JXJ_MakeFileName(channel, strTimeStart, strTimeEnd);
-	std::string strFileName = CCommonUtrl::getInstance().MakeFileName(channel, strTimeStart, strTimeEnd, ".jav");
+	std::string strFileName = CCommonUtrl::getInstance().MakeFileName(file.channel, strTimeStart, strTimeEnd, ".jav");
 
 
 	JXJ_SDK_INTERFACE::m_iPlayVideoChannel = AVP_GetFreePort();
 
-	JXJ_SDK_INTERFACE::m_lRecHandle = JNetRecOpen4Time(loginHandle, "", channel, 0, strTimeStart.c_str(), strTimeEnd.c_str(), 4096, IsPlay_Play, JXJ_SDK_INTERFACE::JXJ_JRecStream, this, JXJ_SDK_INTERFACE::m_lRecHandle);
+	JXJ_SDK_INTERFACE::m_lRecHandle = JNetRecOpen4Time(loginHandle, "", file.channel, 0, strTimeStart.c_str(), strTimeEnd.c_str(), 4096, IsPlay_Play, JXJ_SDK_INTERFACE::JXJ_JRecStream, this, JXJ_SDK_INTERFACE::m_lRecHandle);
 	if (JXJ_SDK_INTERFACE::m_lRecHandle > 0)
 	{
 		Sleep(1000);

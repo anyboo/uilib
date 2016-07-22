@@ -171,8 +171,8 @@ public:
 	virtual void Search(const long loginHandle, const size_t channel, const time_range& range) = 0;
 	virtual void ClearLocalRecordFiles() = 0;
 
-	virtual void Download(const long loginHandle, const size_t channel, const RecordFile& file) = 0;
-	virtual void PlayVideo(const long loginHandle, const size_t channel, const RecordFile& file) = 0;
+	virtual void Download(const long loginHandle, const RecordFile& file) = 0;
+	virtual void PlayVideo(const long loginHandle, const RecordFile& file) = 0;
 	virtual bool StopDownload() = 0;
 
 	virtual void SetHWnd(const HWND& hWnd) = 0;

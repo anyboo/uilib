@@ -40,8 +40,8 @@ public:
 	void Search(const size_t channel, const time_range& range);
 	void ClearLocalRecordFiles(){ return m_pVendor->ClearLocalRecordFiles(); }
 
-	void Download(const size_t channel, const RecordFile& recordFile);
-	void PlayVideo(const HWND hWnd, const size_t channel, const RecordFile& recordFile);
+	void Download(const RecordFile& recordFile);
+	void PlayVideo(const HWND hWnd, const RecordFile& recordFile);
 
 	bool StopDownload(){ assert(m_pVendor); return m_pVendor->StopDownload(); }
 

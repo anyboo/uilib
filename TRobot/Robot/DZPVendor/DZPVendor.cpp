@@ -281,11 +281,11 @@ void CDZPVendor::ClearLocalRecordFiles()
 	m_files.clear();
 }
 
-void CDZPVendor::Download(const long loginHandle, const size_t channel, const RecordFile& file)
+void CDZPVendor::Download(const long loginHandle, const RecordFile& file)
 {
 	H264_DVR_FINDINFO info;
 
-	info.nChannelN0 = channel;
+	info.nChannelN0 = file.channel;
 	info.nFileType = SDK_RECORD_ALL;
 
 	struct tm Tm;
@@ -311,10 +311,10 @@ void CDZPVendor::Download(const long loginHandle, const size_t channel, const Re
 	strftime((char *)strTimeEnd.data(), 24, "%Y%m%d%H%M%S", &ttime);
 
 	//std::string strFileName = DZP_SDK_INTERFACE::DZP_MakeFileName(channel, strTimeStart);
-	std::string strFileName = CCommonUtrl::getInstance().MakeFileName(channel, strTimeStart, strTimeEnd, ".h264");
+	std::string strFileName = CCommonUtrl::getInstance().MakeFileName(file.channel, strTimeStart, strTimeEnd, ".h264");
 
 	// Init File Save Path 
-	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_DZP, channel);
+	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_DZP, file.channel);
 
 	//DZP_SDK_INTERFACE::m_lFileHandle = H264_DVR_GetFileByTime(loginHandle, &info, (char *)strPath.c_str(), true, DZP_SDK_INTERFACE::DZP_DownLoadPosCallBack, 0);
 	//if (DZP_SDK_INTERFACE::m_lFileHandle <= 0)
@@ -333,7 +333,7 @@ void CDZPVendor::Download(const long loginHandle, const size_t channel, const Re
 	}
 }
 
-void CDZPVendor::PlayVideo(const long loginHandle, const size_t channel, const RecordFile& file)
+void CDZPVendor::PlayVideo(const long loginHandle, const RecordFile& file)
 {
 	H264_DVR_FILE_DATA fileData = DZP_SDK_INTERFACE::DZP_MakeRecordFileToH264Data(file);
 	fileData.hWnd = m_hWnd;

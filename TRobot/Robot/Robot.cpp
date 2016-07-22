@@ -187,7 +187,7 @@ TEST_CASE("This is a demo", "[demo]")
 						//timePlay.start = list[0].beginTime; //DZP - 1468771200
 						//timePlay.end = list[0].endTime; //DZP - 1468857599
 						//pDev->PlayVideo(TestWindows::getInstance().GetHWnd(), channel, file);
-						pDev->Download(channel, file);
+						pDev->Download(file);
 					}					
 				}
 			}
