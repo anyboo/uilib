@@ -274,7 +274,7 @@ void DHVendor::Search(const long loginHandle, const size_t channel, const time_r
 		m_files.push_back(info);
 		m_FilesChange.push_back(info);
 
-		std::cout << "GetRecordFileList 文件名:" << info.name << std::endl << "  " << "文件大小:" << info.size << "  " << "通道:" << info.channel << std::endl;
+		std::cout << "FileName:" << info.name << std::endl << "  " << "FileSize:" << info.size << "  " << "Channel:" << info.channel << std::endl;
 	}
 
 	// Save Search Video List Result to Config File
@@ -298,6 +298,112 @@ bool DHVendor::StopDownload()
 	}
 }
 
+void DHVendor::Download(const long loginHandle, const size_t channel, const RecordFile& file)
+{
+	if (0 >= loginHandle)
+	{
+		std::cout << "Please Login frist!" << std::endl;
+		return;
+	}
+
+	// Init File Starttime and Endtime
+	std::string strTimeStart;
+	std::string strTimeEnd;
+	std::string strTimeStartZero;
+	std::string strTimeEndZero;
+
+	struct tm ttime;
+
+	localtime_s(&ttime, &file.beginTime);
+	strftime((char *)strTimeStart.data(), 24, "%Y%m%d%H%M%S", &ttime);
+	strftime((char *)strTimeStartZero.data(), 24, "%Y%m%d0000", &ttime);
+	strftime((char *)strTimeEndZero.data(), 24, "%Y%m%d2359", &ttime);
+	localtime_s(&ttime, &file.endTime);
+	strftime((char *)strTimeEnd.data(), 24, "%Y%m%d%H%M%S", &ttime);
+
+	//std::string strFileName = DH_MakeFileName(channel, strTimeStart, strTimeEnd);
+	std::string strFileName = CCommonUtrl::getInstance().MakeFileName(channel, strTimeStart, strTimeEnd, ".dav");
+
+	if (m_files.size() == 0)
+	{
+		throw std::exception("Search File List Empty!");
+		return;
+	}
+
+	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_JXJ, channel);
+	strPath += file.name.data();
+
+
+	NET_TIME ntStime;
+	NET_TIME ntEtime;
+	time_range range;
+	range.start = file.beginTime;
+	range.end = file.endTime;
+
+	
+	DH_trTOnt(ntStime, ntEtime, range);
+
+// 	std::string strPath = DH_CreatePath(channel, m_sRoot);
+// 	strPath += file.name.data();
+
+	long bRet = CLIENT_DownloadByTime(loginHandle, channel, 0, &ntStime, &ntEtime, (char *)strPath.c_str(), DH_BTDownLoadPos, (DWORD)this);
+	m_lDownloadHandle = bRet;
+
+	std::cout << "strName:" << strPath << std::endl;
+
+	// 	int total, cur;
+	// 	total = 0;
+	// 	cur = 0;
+	// 	BOOL bret = CLIENT_GetDownloadPos(bRet, &total, &cur);
+	// 	while ((cur / total) != 1)
+	// 	{
+	// 		std::cout << "进度：" << (double)(cur / total) << std::endl;
+	// 	}
+
+	//bool c = CLIENT_PauseLoadPic(bRet, true);
+
+	if (0 == bRet)
+	{
+		std::cout << "Download videos failed, the reason for the error：" << DH_GetLastErrorString() << std::endl;
+		throw std::exception("Download by Record file failed");
+		return;
+	}
+	else
+	{
+		std::cout << "downLoadByRecordFile 下载录像成功！" << std::endl;
+	}
+}
+void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const RecordFile& file)
+{
+	if (0 >= loginHandle)
+	{
+		std::cout << "Please Login frist:" << DH_GetLastErrorString() << std::endl;
+		throw std::exception("Login handle by Record file failed");
+		return;
+	}
+
+	NET_TIME ntStime;
+	NET_TIME ntEtime;
+	time_range range;
+	range.start = file.beginTime;
+	range.end = file.endTime;
+
+	DH_trTOnt(ntStime, ntEtime, range);
+
+	TestWindows Test;
+	Test.Init();
+
+	BOOL lPlayID = CLIENT_PlayBackByTimeEx(loginHandle, channel, &ntStime, &ntEtime, g_hWnd, DH_PlayCallBack, (DWORD)this, DH_PBDataCallBack, (DWORD)this);
+
+	if (!lPlayID)
+	{
+		std::cout << "播放失败原因：" << DH_GetLastErrorString() << std::endl;
+		throw std::exception("Play back by time failed");
+	}
+	//system("PAUSE");
+}
+
+/*
 void DHVendor::Download(const long loginHandle, const size_t channel, const time_range& range)
 {
 	if (0 >= loginHandle)
@@ -521,6 +627,7 @@ void DHVendor::PlayVideo(const long loginHandle, const size_t channel, const std
 		nSize++;
 	}
 }
+*/
 
 void DHVendor::SetDownloadPath(const std::string& Root)
 {

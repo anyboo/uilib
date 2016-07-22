@@ -1,6 +1,7 @@
 #pragma once
 
 #include "QMFileSqlite.h"
+#include "LoginException.h"
 
 class Device;
 class AbstractVendor;

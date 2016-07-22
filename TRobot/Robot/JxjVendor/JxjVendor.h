@@ -1,22 +1,21 @@
-#ifndef __DHVENDOR_H__
-#define __DHVENDOR_H__
-
-#include "SearchFileNotification.h"
-
-#include "Poco/NotificationQueue.h"
+#pragma once
 
 #include "CommonUtrl.h"
-#include "SearchFileException.h"
 
+typedef enum
+{
+	Err_No = 0,
+	Err_LoginSuccess, // Login Success
+	Err_LoginFail,	// Login Fail
+	Err_DownloadSuccess, // Download Success
+}eErrCode;
 
-using Poco::NotificationQueue;
-
-class DHVendor :
+class CJXJVendor :
 	public AbstractVendor
 {
 public:
-	DHVendor();
-	~DHVendor();
+	CJXJVendor();
+	~CJXJVendor();
 
 	void Init();
 	long Login(const std::string& ip, size_t port, const std::string& user, const std::string& password);
@@ -25,23 +24,21 @@ public:
 	void SearchAll(const long loginHandle);
 	void Search(const long loginHandle, const size_t channel, const time_range& range);
 	void ClearLocalRecordFiles();
+
 	void Download(const long loginHandle, const size_t channel, const RecordFile& file);
 	void PlayVideo(const long loginHandle, const size_t channel, const RecordFile& file);
-// 	void Download(const long loginHandle, const size_t channel, const time_range& range);
-// 	void PlayVideo(const long loginHandle, const size_t channel, const time_range& range);
-// 	void Download(const long loginHandle, const size_t channel, const std::string& filename);
-// 	void PlayVideo(const long loginHandle, const size_t channel, const std::string& filename);
-	bool StopDownload();
+	bool StopDownload(){ return true; }
 
-	void SetHWnd(const HWND& hWnd){ g_hWnd = hWnd; }
+	void SetHWnd(const HWND& hWnd){ m_hWnd = hWnd; }
 	void SetDownloadPath(const std::string& Root);
 	void throwException();
 
 	std::string GetDefUsearName(){ return m_sDefUserName; }
 	std::string GetDefPassword(){ return m_sDefPassword; }
-	
-	bool IsSearchDeviceAPIExist();
+	int GetDefPort() { return m_iDefPort; }
+
 	NET_SDK_TYPE GetSDKType(){ return m_eSDKType; }
+	bool IsSearchDeviceAPIExist(){ return m_bSearchDeviceAPI; }
 	void StartSearchDevice();
 	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_listDeviceInfo; }
 	void StopSearchDevice();
@@ -51,7 +48,7 @@ public:
 
 private:
 	/* Init */
-	HWND g_hWnd;
+	HWND m_hWnd;
 	std::string m_sRoot;
 	NET_SDK_TYPE m_eSDKType;
 	bool m_bSearchDeviceAPI;
@@ -68,11 +65,7 @@ private:
 
 	/* Search */
 	RECORD_FILE_LIST m_files;
-	RECORD_FILE_LIST m_FilesChange;
-	//int m_nPos;
+	RECORD_FILE_LIST m_files_Unit;
 
-	/*Download*/
-	long m_lDownloadHandle;
+	void* handle;
 };
-
-#endif 

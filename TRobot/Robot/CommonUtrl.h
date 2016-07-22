@@ -27,12 +27,16 @@
 #include "ostreamwrapper.h"
 #include "istreamwrapper.h"
 
+// Exception
+#include "LoginException.h"
+#include "SearchFileException.h"
+
 #define Test_Bug
 #define Test_Filename
 
 #define Vendor_DH	"´ó»ª"
 #define Vendor_JXJ	"¼ÑÐÅ½Ý"
-#define Vendor_DZP	"µÏÖÇÆÕ"
+#define Vendor_DZP	"µÏÖÇÆÖ"
 #define Vendor_HK	"º£¿µ"
 
 #define Vendor_DH_Abbr		"DH"
@@ -44,14 +48,6 @@
 #define ONE_DAY		 (24 * 60 * 60)
 #define ONE_HOUR	 (60 * 60)
 #define ONE_MINUTE	 (60)
-
-typedef enum
-{
-	Err_No = 0,
-	Err_LoginSuccess, // Login Success
-	Err_LoginFail,	// Login Fail
-	Err_DownloadSuccess, // Download Success
-}eErrCode;
 
 typedef struct __ComTime
 {
@@ -73,6 +69,7 @@ public:
 	static CCommonUtrl& getInstance();
 
 	// File Name & File Folder
+	std::string MakeFileName(int channel, const std::string& startTime, const std::string& endTime, const std::string& extensions);
 	std::string MakeDownloadFileFolder(const std::string basePath, const std::string& startTimeZero, const std::string& endTimeZero, const std::string& venderName, int channel);
 	void MakeFolder(std::string fileName);
 
