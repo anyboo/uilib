@@ -38,17 +38,19 @@ public:
 	void SetDownloadPath(const std::string& root);
 	void SearchAll();
 	void Search(const size_t channel, const time_range& range);
-	void ClearLocalRecordFiles(){ return m_pVendor->ClearLocalRecordFiles(); }
+	void ClearLocalRecordFiles(){ assert(m_pVendor); return m_pVendor->ClearLocalRecordFiles(); }
 
 	void Download(const RecordFile& recordFile);
-	void PlayVideo(const HWND hWnd, const RecordFile& recordFile);
+	void PlayVideo(HWND hWnd, const RecordFile& recordFile);
 
 	bool StopDownload(){ assert(m_pVendor); return m_pVendor->StopDownload(); }
+	void SetPlayVideoPos(int pos){ assert(m_pVendor); m_pVendor->SetPlayVideoPos(pos); }
+	void StopPlayVideo(){ assert(m_pVendor); m_pVendor->StopPlayVideo(); }
 
 	// Device Search Model
 	void StartSearchDevice();
 	void StopSearchDevice();
-	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_pVendor->GetDeviceInfoList(); }
+	DEVICE_INFO_LIST& GetDeviceInfoList(){ assert(m_pVendor); return m_pVendor->GetDeviceInfoList(); }
 
 	std::string getIP(){ return m_sIP; }
 	size_t getPort(){ return m_iPort; }
@@ -62,12 +64,12 @@ public:
 	void SetNextDevice(Device* pDev) { m_pNextDev = pDev; }
 	Device* GetNextDevice() { return m_pNextDev; }
 	
-	NET_SDK_TYPE GetSDKType(){ return m_pVendor->GetSDKType(); }
+	NET_SDK_TYPE GetSDKType(){ assert(m_pVendor); return m_pVendor->GetSDKType(); }
 	AbstractVendor* GetSDK(){ return m_pVendor; }
-	bool IsSearchDeviceAPIExist(){ return m_pVendor->IsSearchDeviceAPIExist(); }
+	bool IsSearchDeviceAPIExist(){ assert(m_pVendor); return m_pVendor->IsSearchDeviceAPIExist(); }
 
 //protected:
-	RECORD_FILE_LIST GetRecordFileList(){ return m_pVendor->GetRecordFileList(); }
+	//RECORD_FILE_LIST GetRecordFileList(){ return m_pVendor->GetRecordFileList(); }
 	
 private:
 	AbstractVendor* m_pVendor;

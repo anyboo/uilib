@@ -151,11 +151,10 @@ void Device::Download(const RecordFile& recordFile)
 	m_pVendor->Download(m_lLoginHandle, recordFile);
 }
 
-void Device::PlayVideo(const HWND hWnd, const RecordFile& recordFile)
+void Device::PlayVideo(HWND hWnd, const RecordFile& recordFile)
 {
 	assert(m_pVendor);
 	m_pVendor->SetHWnd(hWnd);
-	ShowWindow(hWnd, SW_SHOW);
 	m_pVendor->PlayVideo(m_lLoginHandle, recordFile);
 }
 

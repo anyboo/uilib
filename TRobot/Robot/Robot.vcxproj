@@ -103,7 +103,7 @@
     <ClInclude Include="Network\PING.h" />
     <ClInclude Include="Network\portscan.h" />
     <ClInclude Include="Network\utils.h" />
-    <ClInclude Include="Network\windowutils.h" />
+    <ClInclude Include="PlayVideoWorker.h" />
     <ClInclude Include="QMFileSqlite.h" />
     <ClInclude Include="ReceiveUINotification.h" />
     <ClInclude Include="ReciveUIQunue.h" />
@@ -130,6 +130,7 @@
     <ClCompile Include="Network\portscan.cpp" />
     <ClCompile Include="Network\utils.cpp" />
     <ClCompile Include="Network\windowutils.cpp" />
+    <ClCompile Include="PlayVideoWorker.cpp" />
     <ClCompile Include="QMFileSqlite.cpp" />
     <ClCompile Include="ReceiveUINotification.cpp" />
     <ClCompile Include="ReciveUIQunue.cpp" />
@@ -142,6 +143,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Robot.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,14 +1,17 @@
 #pragma once
 
-#include "Device.h"
-
 #include "Poco/Runnable.h"
 #include "Poco/Mutex.h"
 #include "Poco/NotificationQueue.h"
+#include "Poco/AutoPtr.h"
+
+#include "Device.h"
+#include "NotificationPlayVideo.h"
 
 using Poco::Runnable;
 using Poco::FastMutex;
 using Poco::NotificationQueue;
+using Poco::AutoPtr;
 
 class CPlayVideoWorker :
 	public Runnable

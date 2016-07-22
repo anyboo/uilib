@@ -12,6 +12,7 @@
 #include "DeviceManager.h"
 #include "portscan.h"
 #include "SearchFileWorker.h"
+#include "PlayVideoWorker.h"
 
 #include "JXJVendor.h"
 #include "DZPVendor.h"
@@ -53,13 +54,7 @@ TEST_CASE("This is a demo", "[demo]")
 {
 #if 1
 	SECTION("Test login the device")
-	{
-		/************************* 初始化线程池 **********************/
-		Poco::ThreadPool pool;
-
-		/************************* 初始化播放窗口句柄 **********************/
-		TestWindows::getInstance().Init();
-
+	{		
 		/************************* 初始化数据库 **********************/
 		//获取指针
 		QFileSqlite *pFileDb = QFileSqlite::getInstance();
@@ -88,13 +83,13 @@ TEST_CASE("This is a demo", "[demo]")
 			pVendorList.push_back(hkVendor);*/
 
 		/************************* 初始化IP列表 **********************/
+		DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
 		//std::cout << CCommonUtrl::getInstance().GetCurTime() << "Scan Port Start!" << std::endl;
 		//NotificationQueue queuePortScan;
 		//PortScan portScan(queuePortScan);
 		////开始扫描
 		//ThreadPool::defaultPool().start(portScan);
-
-		DEVICE_INFO_SIMPLE_LIST listDeviceSimpleInfo;
+		
 		//while (true)
 		//{
 		//	Notification::Ptr pNf(queuePortScan.waitDequeueNotification());
@@ -114,13 +109,13 @@ TEST_CASE("This is a demo", "[demo]")
 		std::cout << CCommonUtrl::getInstance().GetCurTime() << "Search Device Start!" << std::endl;
 		NotificationQueue* queueSearchDevice = new NotificationQueue(); // 设备发现消息队列
 		CSearchDevice sd(pVendorList, listDeviceSimpleInfo, *queueSearchDevice);
-		pool.start(sd);
+		ThreadPool::defaultPool().start(sd);
 		//queueSearchDevice.enqueueNotification(new CNotificationSearchDevice(Notification_Type_Search_Device_Cancel));
 
 		/************************* 设备管理类测试 **********************/
 		NotificationQueue* queueDeviceManager = new NotificationQueue(); // 设备管理消息队列
 		CDeviceManager dm(pVendorList, *queueDeviceManager);
-		pool.start(dm);
+		ThreadPool::defaultPool().start(dm);
 		//queueDeviceManager.enqueueNotification(new CNotificationDeviceManager(Notification_Type_Device_Manager_Cancel));
 
 		while (true)
@@ -128,12 +123,12 @@ TEST_CASE("This is a demo", "[demo]")
 			Notification::Ptr pNf(NotificationQueue::defaultQueue().waitDequeueNotification());
 			if (pNf)
 			{			
-				CNotificationSearchDevice::Ptr pWorkNf = pNf.cast<CNotificationSearchDevice>();
-				//CNotificationDeviceManager::Ptr pWorkNf = pNf.cast<CNotificationDeviceManager>();
+				CNotificationSearchDevice::Ptr pWorkNf = pNf.cast<CNotificationSearchDevice>();				
 				if (pWorkNf)
 				{
 					if (pWorkNf->GetNotificationType() == Notification_Type_Search_Device_Finish)
 					{
+						std::cout << CCommonUtrl::getInstance().GetCurTime() << "Search Device Stop!" << std::endl;
 						break;
 					}
 				}
@@ -141,9 +136,7 @@ TEST_CASE("This is a demo", "[demo]")
 		}
 
 		/************************* 设备登陆、登出测试 **********************/
-#if 1
-		std::cout << CCommonUtrl::getInstance().GetCurTime() << "Search Device Stop!" << std::endl;
-
+#if 1		
 		DEVICE_INFO_LIST devInfoList = CSearchDevice::GetDeviceInfoList();
 		for (size_t i = 0; i < devInfoList.size(); i++)
 		{
@@ -155,20 +148,15 @@ TEST_CASE("This is a demo", "[demo]")
 			{
 				// 登陆设备
 				if (CLoginDevice::getInstance().Login(devInfo->pVendor, devInfo->szIp, devInfo->nPort))
-				{
-					::Sleep(100);
-
+				{					
 					Device* pDev = CLoginDevice::getInstance().GetDevice(ip);
 
+					// Search File
 					int channel = 0;
-									
 					time_range timeSearch;
-					timeSearch.start = 1468771200; //DZP - 1468771200
-					timeSearch.end = 1468857599; //DZP - 1468857598
-
-					pDev->Search(channel, timeSearch);
-					RECORD_FILE_LIST list = pDev->GetRecordFileList();
-
+					timeSearch.start = 1468771200; //DZP - 1468771200  JXJ - 1469116800
+					timeSearch.end = 1468857598; //DZP - 1468857598  JXJ - 1469203199					
+					pDev->Search(channel, timeSearch);					
 					std::vector<readSearchVideo> RSVObj;
 					std::string strSql = SELECT_ALL_SEARCH_VIDEO;
 					pDb->GetData(strSql, RSVObj);
@@ -176,26 +164,26 @@ TEST_CASE("This is a demo", "[demo]")
 					if (RSVObj.size() > 0)
 					{
 						readSearchVideo rsv = RSVObj[0];
-						RecordFile file;
-						file.name = rsv.get<0>();
-						file.channel = rsv.get<1>();
-						file.beginTime = rsv.get<2>();
-						file.endTime = rsv.get<3>();
-						file.size = rsv.get<4>();
-
-						//time_range timePlay;
-						//timePlay.start = list[0].beginTime; //DZP - 1468771200
-						//timePlay.end = list[0].endTime; //DZP - 1468857599
-						//pDev->PlayVideo(TestWindows::getInstance().GetHWnd(), channel, file);
-						pDev->Download(file);
+						RecordFile file = CCommonUtrl::getInstance().MakeDBFileToRecordFile(rsv);													
+					
+						/************************* 文件播放类测试 **********************/
+						TestWindows::getInstance().Init();
+						NotificationQueue* queuePlayVideo = new NotificationQueue(); // 设备管理消息队列
+						CPlayVideoWorker pv(pDev, file, TestWindows::getInstance().GetHWnd(), *queuePlayVideo);
+						ThreadPool::defaultPool().start(pv);
+	/*					::Sleep(10000);
+						queuePlayVideo->enqueueNotification(new CNotificationPlayVideo(Notification_Type_Play_Video_Pos, 50));
+						::Sleep(10000);
+						queuePlayVideo->enqueueNotification(new CNotificationPlayVideo(Notification_Type_Play_Video_Stop));	*/
+						while (true)
+						{
+							::Sleep(3000);
+							queuePlayVideo->enqueueNotification(new CNotificationPlayVideo(Notification_Type_Play_Video_Pos, 10));
+							//::Sleep(100);
+						}
 					}					
 				}
 			}
-		}
-
-		while (true)
-		{
-			::Sleep(100);
 		}
 		return;
 #endif

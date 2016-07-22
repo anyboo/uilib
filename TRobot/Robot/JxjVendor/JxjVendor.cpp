@@ -41,6 +41,8 @@ public:
 	static int  __stdcall JXJ_JRecStream(long lHandle, LPBYTE pBuff, DWORD dwRevLen, void* pUserParam);
 	static DWORD JXJ_PlayThreadFun(LPVOID lpThreadParameter);
 
+	static const char* GetErrorString(int error);
+
 public:
 	static eErrCode m_errCode; // Error Code
 	static JStoreLog m_storeLog;
@@ -56,6 +58,7 @@ public:
 	static long m_lDownLoadTotalTime;
 	//int m_iDownLoadPos = 0;
 	static int m_iPlayVideoChannel;
+	static int m_iPlayTotalTime;
 };
 
 eErrCode JXJ_SDK_INTERFACE::m_errCode = Err_No; // Error Code
@@ -72,6 +75,7 @@ long JXJ_SDK_INTERFACE::m_lDownLoadStartTime = -1;
 long JXJ_SDK_INTERFACE::m_lDownLoadTotalTime = -1;
 //int m_iDownLoadPos = 0;
 int JXJ_SDK_INTERFACE::m_iPlayVideoChannel = -1;
+int JXJ_SDK_INTERFACE::m_iPlayTotalTime = 0;
 
 
 typedef enum
@@ -103,35 +107,6 @@ typedef enum
 	Encoder_3531_3532,
 }eEncoderType;
 
-const char* GetErrorString(int error)
-{
-	switch (error)
-	{
-	case JNETErrSuccess: return "成功";
-	case JNETErrUnInit: return "未初始化";
-	case JNETErrHandle: return "句柄不存在";
-	case JNETErrParam: return "参数错误";
-	case JNETErrBuffSize: return "缓存满";
-	case JNETErrNoMem: return "内存不足";
-	case JNETErrRecv: return "接收错误";
-	case JNETErrSend: return "发送错误";
-	case JNETErrOperate: return "操作错误";
-	case JNETErrURL: return "URL有误";
-	case JNETErrLogining: return "用户正在登录";
-	case JNETErrLogout: return "已经登出";
-	case JNETErrNoFreePort: return "没有空闲通道";
-	case JNETErrProtocol: return "协议错误";
-	case JNETErrXMLFormat: return "错误的XML数据";
-	case JNETErrNotSupport: return "不支持的操作";
-	case JNETErrGetParam: return "获取参数错误";
-	case JNETErrSetParam: return "设置参数错误";
-	case JNETErrOpenFile: return "打开文件出错";
-	case JNETErrUpgOpen: return "升级出错";
-
-	}
-
-	return "未定义";
-}
 
 CJXJVendor::CJXJVendor()
 {
@@ -156,7 +131,7 @@ void CJXJVendor::Init()
 	int iRet = JNetInit(NULL);
 	if (0 != iRet)
 	{
-		std::string m_sLastError = GetErrorString(iRet);
+		std::string m_sLastError = JXJ_SDK_INTERFACE::GetErrorString(iRet);
 		throw std::exception(m_sLastError.c_str());
 	}
 
@@ -183,7 +158,7 @@ long CJXJVendor::Login(const std::string& ip, size_t port, const std::string& us
 		std::string strLoginFail = "JXJ 登陆 失败！";
 		std::cout << strLoginFail << std::endl;
 
-		std::string m_sLastError = GetErrorString(iRet);
+		std::string m_sLastError = JXJ_SDK_INTERFACE::GetErrorString(iRet);
 		throw LoginException(m_sLastError.c_str());
 		return -1;
 	}
@@ -224,7 +199,7 @@ void CJXJVendor::Logout(const long loginHandle)
 		int iRet = JNetMBClose(loginHandle);
 		if (JNETErrSuccess != iRet)
 		{
-			std::string m_sLastError = GetErrorString(iRet);
+			std::string m_sLastError = JXJ_SDK_INTERFACE::GetErrorString(iRet);
 			std::cout << "JXJ 退出登陆 失败！" << std::endl;
 			throw std::exception(m_sLastError.c_str());
 		}
@@ -361,6 +336,7 @@ void CJXJVendor::PlayVideo(const long loginHandle, const RecordFile& file)
 
 
 	JXJ_SDK_INTERFACE::m_iPlayVideoChannel = AVP_GetFreePort();
+	JXJ_SDK_INTERFACE::m_iPlayTotalTime = file.endTime - file.beginTime;
 
 	JXJ_SDK_INTERFACE::m_lRecHandle = JNetRecOpen4Time(loginHandle, "", file.channel, 0, strTimeStart.c_str(), strTimeEnd.c_str(), 4096, IsPlay_Play, JXJ_SDK_INTERFACE::JXJ_JRecStream, this, JXJ_SDK_INTERFACE::m_lRecHandle);
 	if (JXJ_SDK_INTERFACE::m_lRecHandle > 0)
@@ -386,6 +362,19 @@ void CJXJVendor::PlayVideo(const long loginHandle, const RecordFile& file)
 
 	// 开启解码
 	AVP_Play(JXJ_SDK_INTERFACE::m_iPlayVideoChannel);
+}
+
+void CJXJVendor::SetPlayVideoPos(int pos)
+{
+	AVP_Seek(JXJ_SDK_INTERFACE::m_iPlayVideoChannel, JXJ_SDK_INTERFACE::m_iPlayTotalTime * pos / 100);
+	JNetRecCtrl(JXJ_SDK_INTERFACE::m_lRecHandle, JNET_PB_CTRL_SET_TIME, (void *)(JXJ_SDK_INTERFACE::m_iPlayTotalTime * pos / 100));
+}
+void CJXJVendor::StopPlayVideo()
+{
+	AVP_Stop(JXJ_SDK_INTERFACE::m_iPlayVideoChannel);
+	AVP_ReleasePort(JXJ_SDK_INTERFACE::m_iPlayVideoChannel);
+
+	JNetRecClose(JXJ_SDK_INTERFACE::m_lRecHandle);
 }
 
 void CJXJVendor::SetDownloadPath(const std::string& Root)
@@ -732,4 +721,33 @@ int __stdcall JXJ_SDK_INTERFACE::JXJ_JRecStream(long lHandle, LPBYTE pBuff, DWOR
 DWORD JXJ_SDK_INTERFACE::JXJ_PlayThreadFun(LPVOID lpThreadParameter)
 {
 	return 0;
+}
+const char* JXJ_SDK_INTERFACE::GetErrorString(int error)
+{
+	switch (error)
+	{
+	case JNETErrSuccess: return "成功";
+	case JNETErrUnInit: return "未初始化";
+	case JNETErrHandle: return "句柄不存在";
+	case JNETErrParam: return "参数错误";
+	case JNETErrBuffSize: return "缓存满";
+	case JNETErrNoMem: return "内存不足";
+	case JNETErrRecv: return "接收错误";
+	case JNETErrSend: return "发送错误";
+	case JNETErrOperate: return "操作错误";
+	case JNETErrURL: return "URL有误";
+	case JNETErrLogining: return "用户正在登录";
+	case JNETErrLogout: return "已经登出";
+	case JNETErrNoFreePort: return "没有空闲通道";
+	case JNETErrProtocol: return "协议错误";
+	case JNETErrXMLFormat: return "错误的XML数据";
+	case JNETErrNotSupport: return "不支持的操作";
+	case JNETErrGetParam: return "获取参数错误";
+	case JNETErrSetParam: return "设置参数错误";
+	case JNETErrOpenFile: return "打开文件出错";
+	case JNETErrUpgOpen: return "升级出错";
+
+	}
+
+	return "未定义";
 }

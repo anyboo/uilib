@@ -292,6 +292,19 @@ void CCommonUtrl::WriteFileListToDB(RECORD_FILE_LIST& recordFiles)
 	}
 }
 
+RecordFile CCommonUtrl::MakeDBFileToRecordFile(const readSearchVideo& rsv)
+{
+	RecordFile file;
+
+	file.name = rsv.get<0>();
+	file.channel = rsv.get<1>();
+	file.beginTime = rsv.get<2>();
+	file.endTime = rsv.get<3>();
+	file.size = rsv.get<4>();
+
+	return file;
+}
+
 std::string CCommonUtrl::GetCurTime()
 {
 	time_t t = time(0);

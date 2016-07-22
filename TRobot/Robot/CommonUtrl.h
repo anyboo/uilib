@@ -31,6 +31,7 @@
 #include "LoginException.h"
 #include "SearchFileException.h"
 
+
 #define Test_Bug
 #define Test_Filename
 
@@ -83,6 +84,9 @@ public:
 
 	// DB Operation
 	void WriteFileListToDB(RECORD_FILE_LIST& recordFiles);
+
+	// Search File to RecordFile
+	RecordFile MakeDBFileToRecordFile(const readSearchVideo& rsv);
 
 	std::string GetCurTime();
 

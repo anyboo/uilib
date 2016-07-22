@@ -69,9 +69,6 @@
     <ClInclude Include="Network\portscan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Network\windowutils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Network\PING.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -94,6 +91,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DZPVendor\DZPVendor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayVideoWorker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -143,9 +143,6 @@
     <ClCompile Include="Network\portscan.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Network\windowutils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Network\PING.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -170,10 +167,19 @@
     <ClCompile Include="DZPVendor\DZPVendor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PlayVideoWorker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\windowutils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Robot.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

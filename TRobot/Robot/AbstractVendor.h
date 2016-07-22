@@ -45,6 +45,8 @@ typedef enum
 	Notification_Type_Download_File_Process,
 	Notification_Type_Download_File_Finish,
 	Notification_Type_Download_File_Cancel,
+	Notification_Type_Play_Video_Pos,
+	Notification_Type_Play_Video_Stop,
 	Notification_Type_Port_Scan_Finish,
 	Notification_Type_Exception_Login,
 
@@ -171,9 +173,12 @@ public:
 	virtual void Search(const long loginHandle, const size_t channel, const time_range& range) = 0;
 	virtual void ClearLocalRecordFiles() = 0;
 
-	virtual void Download(const long loginHandle, const RecordFile& file) = 0;
-	virtual void PlayVideo(const long loginHandle, const RecordFile& file) = 0;
+	virtual void Download(const long loginHandle, const RecordFile& file) = 0;	
 	virtual bool StopDownload() = 0;
+
+	virtual void PlayVideo(const long loginHandle, const RecordFile& file) = 0;
+	virtual void SetPlayVideoPos(int pos) = 0;
+	virtual void StopPlayVideo() = 0;
 
 	virtual void SetHWnd(const HWND& hWnd) = 0;
 	virtual void SetDownloadPath(const std::string& Root) = 0;
@@ -190,6 +195,6 @@ public:
 	virtual void StopSearchDevice() = 0;
 	virtual size_t GetMaxChannel() = 0;
 
-	virtual RECORD_FILE_LIST GetRecordFileList() = 0;
+	//virtual RECORD_FILE_LIST GetRecordFileList() = 0;
 
 };

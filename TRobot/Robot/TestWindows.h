@@ -16,9 +16,10 @@ public:
 	BOOL InitInstance();
 
 	HWND GetHWnd(){ return m_hWnd; }
+	void HideWindow(){ ShowWindow(m_hWnd, SW_HIDE); }
+	void DisplayWindow(){ ShowWindow(m_hWnd, SW_SHOW); }
 
 private:
-public:
 	HWND m_hWnd;
 	HINSTANCE m_hInst;
 };

@@ -25,9 +25,12 @@ public:
 	void Search(const long loginHandle, const size_t channel, const time_range& range);
 	void ClearLocalRecordFiles();
 
-	void Download(const long loginHandle, const RecordFile& file);
-	void PlayVideo(const long loginHandle, const RecordFile& file);
+	void Download(const long loginHandle, const RecordFile& file);	
 	bool StopDownload(){ return true; }
+
+	void PlayVideo(const long loginHandle, const RecordFile& file);
+	void SetPlayVideoPos(int pos);
+	void StopPlayVideo();
 
 	void SetHWnd(const HWND& hWnd){ m_hWnd = hWnd; }
 	void SetDownloadPath(const std::string& Root);
