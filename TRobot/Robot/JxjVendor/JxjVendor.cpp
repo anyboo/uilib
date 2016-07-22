@@ -289,12 +289,6 @@ void CJXJVendor::Download(const long loginHandle, const RecordFile& file)
 	//std::string strFileName = JXJ_SDK_INTERFACE::JXJ_MakeFileName(channel, strTimeStart, strTimeEnd);
 	std::string strFileName = CCommonUtrl::getInstance().MakeFileName(file.channel, strTimeStart, strTimeEnd, ".jav");
 
-	if (m_files.size() == 0)
-	{
-		throw std::exception("Search File List Empty!");
-		return;
-	}
-
 	// Init File Save Path 
 	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_JXJ, file.channel);
 	strPath += file.name.data();
