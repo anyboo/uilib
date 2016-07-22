@@ -24,10 +24,10 @@ void SearchFileWorker::run()
 	std::vector<time_range> trInfor = CCommonUtrl::getInstance().MakeTimeRangeList(m_range);
 
 	int nDay = trInfor.size();
-	int nChannelList = m_channelList.size();
+	int nChannelSize = m_channelList.size();
 
 	NotificationQueue& queue = NotificationQueue::defaultQueue();
-	queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_TotalSize, nDay*nChannelList));
+	queue.enqueueNotification(new SearchFileNotification(Notification_Type_Search_File_TotalSize, nDay*nChannelSize));
 
 	m_pDevice->ClearLocalRecordFiles();
 
@@ -57,7 +57,7 @@ void SearchFileWorker::run()
 				Notification::Ptr pNf(m_queue.waitDequeueNotification());
 				if (pNf)
 				{
-					ReciveUINotification::Ptr pReciveDataNf = pNf.cast<ReciveUINotification>();
+					ReceiveUINotification::Ptr pReciveDataNf = pNf.cast<ReceiveUINotification>();
 					if (pReciveDataNf)
 					{
 						{

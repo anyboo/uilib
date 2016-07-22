@@ -15,7 +15,7 @@
 
 #include "Device.h"
 #include "SearchFileNotification.h"
-#include "ReciveUINotification.h"
+#include "ReceiveUINotification.h"
 #include "ReciveUIQunue.h"
 
 using Poco::NotificationQueue;
