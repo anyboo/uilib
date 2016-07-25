@@ -1,0 +1,49 @@
+Demo 
+需要包含的头文件：
+#include "SearchFileRunable.h"
+#include "SearchFileWorker.h"
+#include "AcquireSerachFileData.h"
+#include "SearchVideo.h"
+#include "ReciveUIQunue.h"
+
+//以大华的SDK测试为例子
+
+int main()
+{
+	//默认队列--业务层向界面发送数据
+	NotificationQueue& queue = NotificationQueue::defaultQueue();
+
+	//创建可以从队列获取数据的类
+	AcquireSerachFileData AcquireData(queue);
+	
+	//开启线程
+	ThreadPool::defaultPool().start(AcquireData);
+
+	//前期配置环境
+	DHVendor DHObj;
+	time_range range;
+	range.start = 1467302400;
+	range.end = 1467648000;
+	//初始化设备类
+	Device dObj(&DHObj);
+	//大华的登录
+	dObj.Login("192.168.0.55", 37777, "admin", "112233");
+	
+	//模拟数据--通道数
+	std::vector<size_t> channelList;
+	channelList.push_back(0);
+	channelList.push_back(1);
+
+	//另外一个队列--UI层向视频查询业务类发送取消的通知数据
+	ReciveUIQunue queue1;
+	bool b = true;
+	queue1.enqueueNotification(new ReciveUINotification(b));
+	//绑定数据和队列
+	SearchFileWorker SearchWork(&dObj, range, channelList, queue1);
+	
+	//开启另外一个线程
+	ThreadPool::defaultPool().start(SearchWork);
+
+	queue.wakeUpAll();
+	ThreadPool::defaultPool().joinAll();
+}

@@ -1,14 +1,33 @@
-#include <Windows.h>
 #include "DZPVendor.h"
 
+#include "Poco/NotificationQueue.h"
+
+// JXJ DZP
 #include "netsdk.h"
 #include "H264Play.h"
 
-#pragma comment(lib, "DZPVendor\\sdk\\NetSdk")
-#pragma comment(lib, "DZPVendor\\sdk\\H264Play")
+using Poco::NotificationQueue;
 
-//#define Test_Bug
-#define Test_Filename
+#pragma comment(lib, "NetSdk")
+#pragma comment(lib, "H264Play")
+
+
+class DZP_SDK_INTERFACE
+{
+public:
+	static void DZP_SearchUnit(const long loginHandle, const size_t channel, const time_range& range, RECORD_FILE_LIST& recordFiles);
+	static void __stdcall DZP_DownLoadPosCallBack(long lPlayHandle, long lTotalSize, long lDownLoadSize, long dwUser);
+	static int __stdcall DZP_RealDataCallBack(long lRealHandle, long dwDataType, unsigned char *pBuffer, long lbufsize, long dwUser);
+	static int DZP_GetDownloadPos(const int fileHandle);
+	static H264_DVR_FILE_DATA DZP_MakeRecordFileToH264Data(const RecordFile& file);
+	static SDK_SYSTEM_TIME DZP_MakeH264TimeToSDKTime(H264_DVR_TIME h264_time);
+
+	static int m_lFileHandle;
+	static int m_playbackHandle;
+};
+
+int DZP_SDK_INTERFACE::m_lFileHandle = 0;
+int DZP_SDK_INTERFACE::m_playbackHandle = 0;
 
 std::string GZLL_GetLastErrorString(int error)
 {
@@ -81,19 +100,42 @@ std::string GZLL_GetLastErrorString()
 	return GZLL_GetLastErrorString(H264_DVR_GetLastError());
 }
 
+void NetTimeToTM(const SDK_SYSTEM_TIME& nt, tm& t)
+{
+	t.tm_year = nt.year - 1900;
+	t.tm_mon = nt.month - 1;
+	t.tm_mday = nt.day;
+	t.tm_hour = nt.hour;
+	t.tm_min = nt.minute;
+	t.tm_sec = nt.second;
+}
+
+void TMToNetTime(const tm& t, H264_DVR_TIME& nt)
+{
+	nt.dwYear = t.tm_year + 1900;
+	nt.dwMonth = t.tm_mon + 1;
+	nt.dwDay = t.tm_mday;
+	nt.dwHour = t.tm_hour;
+	nt.dwMinute = t.tm_min;
+	nt.dwSecond = t.tm_sec;
+
+}
+
 CDZPVendor::CDZPVendor()
 {
-
+	m_eSDKType = DZP_SDK;
+	m_bSearchDeviceAPI = true;
+	m_sDefUserName = "admin";
+	m_sDefPassword = "";
+	m_iDefPort = 34567;
+	m_iMaxChannel = 0;
+	m_lSearchDeviceHandle = -1;
+	m_iPlayVideoPos = 0;
 }
 
 CDZPVendor::~CDZPVendor()
 {
-	//if (m_lLoginHandle != 0 && !H264_DVR_Logout(m_lLoginHandle))
-	//{
-	//	m_sLastError = GZLL_GetLastErrorString();
-	//	throw std::exception(m_sLastError.c_str());
-	//	return;
-	//}
+	H264_DVR_Cleanup();
 }
 
 void CDZPVendor::Init()
@@ -101,11 +143,13 @@ void CDZPVendor::Init()
 	int iRet = iRet = H264_DVR_Init(nullptr, 0);
 	if (!iRet)
 	{
-		m_sLastError = GZLL_GetLastErrorString();
+		std::string m_sLastError = GZLL_GetLastErrorString();
 		throw std::exception(m_sLastError.c_str());
 	}
 
 	H264_DVR_SetConnectTime(5000, 3);
+
+	std::cout << "DZP 初始化SDK 成功！" << std::endl;
 }
 
 long CDZPVendor::Login(const std::string& ip, size_t port, const std::string& user, const std::string& password)
@@ -116,107 +160,214 @@ long CDZPVendor::Login(const std::string& ip, size_t port, const std::string& us
 
 	H264_DVR_SetConnectTime(3000, 1);
 
-	int loginHandle = H264_DVR_Login((char *)ip.c_str(), port, (char*)user.c_str(), (char*)password.c_str(), &OutDev, &nError, TCPSOCKET);
+	long loginHandle = -1;
+	loginHandle = H264_DVR_Login((char *)ip.c_str(), port, (char*)user.c_str(), (char*)password.c_str(), &OutDev, &nError, TCPSOCKET);
 	if (loginHandle <= 0)
 	{
-		m_sLastError = GZLL_GetLastErrorString(nError);
-		throw std::exception(m_sLastError.c_str());
-		return loginHandle;
+		std::string m_sLastError = GZLL_GetLastErrorString(nError);
+		throw LoginException(m_sLastError.c_str());
+		std::cout << "DZP 登陆 失败！" << std::endl;
+		return -1;
 	}
+
+	m_iMaxChannel = OutDev.byChanNum + OutDev.iDigChannel;
+
+	std::cout << "DZP 登陆 成功！" << std::endl;
 
 	return loginHandle;
 }
+
 void CDZPVendor::Logout(const long loginHandle)
 {
-	if (loginHandle != 0 && !H264_DVR_Logout(loginHandle))
+	if (loginHandle > 0)
 	{
-		m_sLastError = GZLL_GetLastErrorString();
-		throw std::exception(m_sLastError.c_str());
-		return;
+		if (H264_DVR_Logout(loginHandle))
+		{
+			std::cout << "DZP 退出登陆 成功！" << std::endl;
+		}
+		else
+		{
+			std::string m_sLastError = GZLL_GetLastErrorString();
+			std::cout << "DZP 退出登陆 失败！" << std::endl;
+			throw std::exception(m_sLastError.c_str());
+		}
 	}
+}
+
+void CDZPVendor::StartSearchDevice()
+{
+	std::cout << "DZP 搜索设备 开始！" << std::endl;
+
+	m_listDeviceInfo.clear();
+
+	SDK_CONFIG_NET_COMMON_V2 Device[256] = { 0 };
+	int nRetLength = 0;
+
+	BOOL bRet = H264_DVR_SearchDevice((char*)Device, sizeof(SDK_CONFIG_NET_COMMON_V2)* 256, &nRetLength, 3000);
+	if (bRet)
+	{
+		int i;
+		for (i = 0; i < nRetLength / sizeof(SDK_CONFIG_NET_COMMON_V2); i++)
+		{
+			NET_DEVICE_INFO* ndiInfo = new NET_DEVICE_INFO();
+			int nLen = 0;
+			ndiInfo->nSDKType = DZP_SDK;
+
+			struct in_addr in1 = { 0 };
+			in1.s_addr = Device[i].HostIP.l;
+			nLen = (strlen(inet_ntoa(in1)) < MAX_IPADDR_LEN) ? strlen(inet_ntoa(in1)) : MAX_IPADDR_LEN;
+			memcpy(&ndiInfo->szIp, inet_ntoa(in1), nLen);
+
+
+			ndiInfo->nPort = Device[i].TCPPort;
+
+			struct in_addr in2 = { 0 };
+			in2.s_addr = Device[i].Submask.l;
+			nLen = (strlen(inet_ntoa(in2)) < MAX_IPADDR_LEN) ? strlen(inet_ntoa(in2)) : MAX_IPADDR_LEN;
+			memcpy(&ndiInfo->szSubmask, inet_ntoa(in2), nLen);
+
+			nLen = (strlen(Device[i].sMac) < MAX_MACADDR_LEN) ? strlen(Device[i].sMac) : MAX_MACADDR_LEN;
+			memcpy(&ndiInfo->szMac, &Device[i].sMac, nLen);
+
+			ndiInfo->pVendor = this;
+
+			m_listDeviceInfo.push_back(ndiInfo);
+		}
+	}
+}
+
+void CDZPVendor::StopSearchDevice()
+{
+	std::cout << "DZP 搜索设备 结束！" << std::endl;
 }
 
 void CDZPVendor::SearchAll(const long loginHandle)
 {
 
 }
+
 void CDZPVendor::Search(const long loginHandle, const size_t channel, const time_range& range)
 {
-	m_files.clear();
-
+	assert(range.end - range.start <= 24 * 3600);
 	if (range.start > range.end)
 	{
 		throw std::exception("Time Range Error!");
 		return;
 	}
 
-	std::vector<time_range> timeRangeList = CCommonUtrl::getInstance().MakeTimeRangeList(range);
-	for (size_t i = 0; i < timeRangeList.size(); i++)
+	std::cout << "DZP 搜索文件 开始！" << std::endl;	
+	m_files_Unit.clear();
+	DZP_SDK_INTERFACE::DZP_SearchUnit(loginHandle, channel, range, m_files_Unit);
+	std::cout << "DZP 搜索文件 结束！" << std::endl;
+
+	// Save Search Video List Result to Config File
+	//std::cout << "DZP 写Json数据到文件 开始！" << std::endl;
+	//CCommonUtrl::getInstance().SaveSearchFileListToFile(m_files_Unit, Vendor_DZP_Abbr);
+	//std::cout << "DZP 写Json数据到文件 结束！" << std::endl;
+
+	// Write File List to DB
+	std::cout << "DZP 写文件数据到数据库 开始！" << std::endl;
+	CCommonUtrl::getInstance().WriteFileListToDB(m_files_Unit);
+	std::cout << "DZP 写文件数据到数据库 结束！" << std::endl;
+
+	for (size_t i = 0; i < m_files_Unit.size(); i++)
 	{
-		SearchUnit(loginHandle, channel, timeRangeList[i]);
+		m_files.push_back(m_files_Unit[i]);
+	}
+	
+	return;
+}
+
+void CDZPVendor::ClearLocalRecordFiles()
+{
+	m_files.clear();
+}
+
+void CDZPVendor::Download(const long loginHandle, const RecordFile& file)
+{
+	H264_DVR_FINDINFO info;
+
+	info.nChannelN0 = file.channel;
+	info.nFileType = SDK_RECORD_ALL;
+
+	struct tm Tm;
+	_localtime64_s(&Tm, (const time_t*)&file.beginTime);
+	memset(&info, 0, sizeof(info));
+	TMToNetTime(Tm, info.startTime);
+	_localtime64_s(&Tm, (const time_t*)&file.endTime);
+	TMToNetTime(Tm, info.endTime);
+
+	// Init File Starttime and Endtime
+	std::string strTimeStart;
+	std::string strTimeEnd;
+	std::string strTimeStartZero;
+	std::string strTimeEndZero;
+
+	struct tm ttime;
+
+	localtime_s(&ttime, &file.beginTime);
+	strftime((char *)strTimeStart.data(), 24, "%Y%m%d%H%M%S", &ttime);
+	strftime((char *)strTimeStartZero.data(), 24, "%Y%m%d0000", &ttime);
+	strftime((char *)strTimeEndZero.data(), 24, "%Y%m%d2359", &ttime);
+	localtime_s(&ttime, &file.endTime);
+	strftime((char *)strTimeEnd.data(), 24, "%Y%m%d%H%M%S", &ttime);
+
+	std::string strFileName = CCommonUtrl::getInstance().MakeFileName(file.channel, strTimeStart, strTimeEnd, ".h264");
+
+	// Init File Save Path 
+	std::string strPath = CCommonUtrl::getInstance().MakeDownloadFileFolder(m_sRoot, strTimeStartZero, strTimeEndZero, Vendor_DZP, file.channel);
+
+	strPath.append(strFileName);
+	H264_DVR_FILE_DATA pData = DZP_SDK_INTERFACE::DZP_MakeRecordFileToH264Data(file);
+	DZP_SDK_INTERFACE::m_lFileHandle = H264_DVR_GetFileByName(loginHandle, &pData, (char*)strPath.c_str(), DZP_SDK_INTERFACE::DZP_DownLoadPosCallBack, 0);
+	if (DZP_SDK_INTERFACE::m_lFileHandle <= 0)
+	{
+		std::string m_sLastError = std::string("下载失败！错误为:") + GZLL_GetLastErrorString();
+		return;
+	}
+}
+
+void CDZPVendor::PlayVideo(const long loginHandle, const RecordFile& file)
+{
+	H264_DVR_FILE_DATA fileData = DZP_SDK_INTERFACE::DZP_MakeRecordFileToH264Data(file);
+	fileData.hWnd = m_hWnd;
+	DZP_SDK_INTERFACE::m_playbackHandle = H264_DVR_PlayBackByName(loginHandle, &fileData, nullptr, NULL, 0);
+	if (DZP_SDK_INTERFACE::m_playbackHandle == 0)
+	{
+		H264_DVR_StopPlayBack(DZP_SDK_INTERFACE::m_playbackHandle);
+		std::string m_sLastError = GZLL_GetLastErrorString();
+		throw std::exception(m_sLastError.c_str());
 	}
 
 	return;
 }
-void CDZPVendor::Download(const long loginHandle, const size_t channel, const time_range& range)
+
+void CDZPVendor::SetPlayVideoPos(int pos)
 {
-	//if (0 == m_lLoginHandle)
-	//{
-	//	m_sLastError = std::string("请先登录!");
-	//	return false;
-	//}
-
-
-	////qDebug()<<codec->toUnicode("当前下载的文件信息:")<<H264_DVR_FILE_DATA(nFileinfo[fileInfoIndex]).ch <<H264_DVR_FILE_DATA(nFileinfo[fileInfoIndex]).size<<H264_DVR_FILE_DATA(nFileinfo[fileInfoIndex]).sFileName;
-	//H264_DVR_FILE_DATA* pData = (H264_DVR_FILE_DATA*)file.getPrivateData();
-	//hdl = H264_DVR_GetFileByName(m_lLoginHandle, pData, (char *)saveFileName);
-	//if (0 == hdl)
-	//{
-	//	m_sLastError = GZLL_GetLastErrorString();
-	//	return false;
-	//}
+	H264_DVR_SetPlayPos(DZP_SDK_INTERFACE::m_playbackHandle, pos);
 }
-void CDZPVendor::PlayVideo(const long loginHandle, const size_t channel, const time_range& range)
+void CDZPVendor::StopPlayVideo()
 {
-
+	H264_DVR_StopPlayBack(DZP_SDK_INTERFACE::m_playbackHandle);
 }
-void CDZPVendor::Download(const long loginHandle, const size_t channel, const std::string& filename)
+int CDZPVendor::GetPlayVideoPos()
 {
+	m_iPlayVideoPos = H264_DVR_GetPlayPos(DZP_SDK_INTERFACE::m_playbackHandle) * 100;
 
+	return m_iPlayVideoPos;
 }
-void CDZPVendor::PlayVideo(const long loginHandle, const size_t channel, const std::string& filename)
-{
 
-}
 void CDZPVendor::SetDownloadPath(const std::string& Root)
 {
-
+	m_sRoot = Root;
 }
+
 void CDZPVendor::throwException()
 {
 
 }
 /****************************************************************************************/
-void NetTimeToTM(const SDK_SYSTEM_TIME& nt, tm& t)
-{
-	t.tm_year = nt.year - 1900;
-	t.tm_mon = nt.month - 1;
-	t.tm_mday = nt.day;
-	t.tm_hour = nt.hour;
-	t.tm_min = nt.minute;
-	t.tm_sec = nt.second;
-}
-void TMToNetTime(const tm& t, H264_DVR_TIME& nt)
-{
-	nt.dwYear = t.tm_year + 1900;
-	nt.dwMonth = t.tm_mon + 1;
-	nt.dwDay = t.tm_mday;
-	nt.dwHour = t.tm_hour;
-	nt.dwMinute = t.tm_min;
-	nt.dwSecond = t.tm_sec;
-}
-
-void CDZPVendor::SearchUnit(const long loginHandle, const size_t channel, const time_range& range)
+void DZP_SDK_INTERFACE::DZP_SearchUnit(const long loginHandle, const size_t channel, const time_range& range, RECORD_FILE_LIST& recordFiles)
 {
 	H264_DVR_FINDINFO info;
 	memset(&info, 0, sizeof(info));
@@ -234,8 +385,8 @@ void CDZPVendor::SearchUnit(const long loginHandle, const size_t channel, const 
 	long hdl = H264_DVR_FindFile(loginHandle, &info, nriFileinfo, sizeof(nriFileinfo) / sizeof(H264_DVR_FILE_DATA), &fileCount);
 	if (hdl <= 0)
 	{
-		m_sLastError = std::string("查询失败！错误为:") + GZLL_GetLastErrorString();
-		throw std::exception(m_sLastError.c_str());
+		std::string m_sLastError = std::string("查询失败！错误为:") + GZLL_GetLastErrorString();
+		throw SearchFileException(m_sLastError.c_str());
 		return;
 	}
 	else
@@ -246,7 +397,7 @@ void CDZPVendor::SearchUnit(const long loginHandle, const size_t channel, const 
 			{
 				if (nriFileinfo[i].size>0)//视频文件必须大于0(测试中有发现文件大小为0情况,所以必须过滤掉改部分)
 				{
-					Record record;
+					RecordFile record;
 
 					struct tm Tm;
 					NetTimeToTM(nriFileinfo[i].stBeginTime, Tm);
@@ -254,7 +405,7 @@ void CDZPVendor::SearchUnit(const long loginHandle, const size_t channel, const 
 
 					NetTimeToTM(nriFileinfo[i].stEndTime, Tm);
 					record.endTime = _mktime64(&Tm);
- 
+
 					// File Start Time
 					SDK_SYSTEM_TIME h264_time = nriFileinfo[i].stBeginTime;
 					std::string strStartTime;
@@ -265,23 +416,15 @@ void CDZPVendor::SearchUnit(const long loginHandle, const size_t channel, const 
 					std::string strEndTime;
 					sprintf((char *)strEndTime.data(), "%d%02d%02d%02d%02d%02d", h264_time.year, h264_time.month, h264_time.day, h264_time.hour, h264_time.minute, h264_time.second);
 
-					// File Belong Time Secton 
-					record.strTimeSection = strStartTime.data();
-					record.strTimeSection.append("-");
-					record.strTimeSection += strEndTime.data();
-
-					// File Duration
-					record.duration = record.endTime - record.beginTime;
-
 					// File Channel and so on
 					record.channel = channel;
 					record.name = nriFileinfo[i].sFileName;
-					record.alias = CCommonUtrl::getInstance().MakeFileName(channel, strStartTime, strEndTime);
+					//record.name = DZP_MakeFileName(channel, strStartTime);
 
-					record.size = nriFileinfo[i].size * 1024;
+					record.size = nriFileinfo[i].size;
 					record.setPrivateData(&nriFileinfo[i], sizeof(H264_DVR_FILE_DATA));
-			
-					m_files.push_back(record);
+
+					recordFiles.push_back(record);
 					record.deletePrivateData();
 				}
 			}
@@ -289,44 +432,70 @@ void CDZPVendor::SearchUnit(const long loginHandle, const size_t channel, const 
 	}
 }
 
+void __stdcall DZP_SDK_INTERFACE::DZP_DownLoadPosCallBack(long lPlayHandle, long lTotalSize, long lDownLoadSize, long dwUser)
+{
+	static int prePos = 0;
+	int curPos = 0;
 
-#include "catch.hpp"
+	curPos = DZP_GetDownloadPos(m_lFileHandle);
 
-//TEST_CASE_METHOD(CDZPVendor, "Init SDK", "[Init]")
-//{
-//	REQUIRE_NOTHROW(Init("192.168.0.15", 34567));
-//	REQUIRE(handle != nullptr);
-//}
+	if (curPos != prePos)
+	{
+		std::cout << lDownLoadSize << "/" << lTotalSize << " - " << curPos << std::endl;
+		prePos = curPos;
+	}
+	
+	if (lDownLoadSize == -1)
+	{
+		prePos = 0;
+	}
+}
 
-//TEST_CASE_METHOD(CDZPVendor, "Login Device", "[Login]")
-//{
-//	REQUIRE_NOTHROW(Init("192.168.0.39", 34567));
-//
-//	REQUIRE_NOTHROW(Login("admin", ""));
-//}
+int __stdcall DZP_SDK_INTERFACE::DZP_RealDataCallBack(long lRealHandle, long dwDataType, unsigned char *pBuffer, long lbufsize, long dwUser)
+{
+	return 0;
+}
 
-//TEST_CASE_METHOD(CDZPVendor, "Search videos by time_range from device", "[Search]")
-//{
-//	REQUIRE_NOTHROW(Init("192.168.0.39", 34567));
-//
-//	REQUIRE_NOTHROW(Login("admin", ""));
-//
-//	time_range timeRange;
-//
-//	time_t gTimeStart = 1466265600; // 2016-6-19 00:00:00 1466352000
-//	time_t gTimeEnd = 1466697599; // 2016-6-23 23:59:59
-//	timeRange.start = gTimeStart;
-//	timeRange.end = gTimeEnd;
-//	REQUIRE_NOTHROW(Search(0, timeRange));
-//
-//#ifdef Test_Filename
-//	std::string filename = "channel00-20160619235245-20160620001144";
-//	REQUIRE_NOTHROW(Download(0, filename));
-//#else
-//	//time_t start = 1466351565;
-//	//time_t end = 1466352704;
-//	//timeRange.start = start;
-//	//timeRange.end = end;
-//	//REQUIRE_NOTHROW(Download(0, timeRange));
-//#endif
-//}
+int DZP_SDK_INTERFACE::DZP_GetDownloadPos(const int fileHandle)
+{
+	int pos = H264_DVR_GetDownloadPos(fileHandle);
+
+	return pos;
+}
+
+H264_DVR_FILE_DATA DZP_SDK_INTERFACE::DZP_MakeRecordFileToH264Data(const RecordFile& file)
+{
+	H264_DVR_FILE_DATA h264_file;
+
+	h264_file.ch = file.channel;
+	h264_file.size = file.size;
+	strcpy(h264_file.sFileName, file.name.c_str());
+
+	struct tm *ttime;
+	H264_DVR_TIME h264_time;
+
+	ttime = gmtime(&file.beginTime);
+	TMToNetTime(*ttime, h264_time);
+	h264_file.stBeginTime = DZP_MakeH264TimeToSDKTime(h264_time);
+
+	ttime = gmtime(&file.endTime);
+	TMToNetTime(*ttime, h264_time);
+	h264_file.stEndTime = DZP_MakeH264TimeToSDKTime(h264_time);
+
+	return h264_file;
+	
+}
+
+SDK_SYSTEM_TIME DZP_SDK_INTERFACE::DZP_MakeH264TimeToSDKTime(H264_DVR_TIME h264_time)
+{
+	SDK_SYSTEM_TIME time;
+
+	time.year = h264_time.dwYear;
+	time.month = h264_time.dwMonth;
+	time.day = h264_time.dwDay;
+	time.hour = h264_time.dwHour;
+	time.minute = h264_time.dwMinute;
+	time.second = h264_time.dwSecond;
+
+	return time;
+}

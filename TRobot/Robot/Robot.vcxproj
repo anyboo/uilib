@@ -56,12 +56,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)poco\Data\include;$(SolutionDir)poco\Foundation\include;$(SolutionDir)poco\Data\SQLite\include;$(SolutionDir)\bin;$(SolutionDir)\dll;$(SolutionDir)\TRobot\Robot\DZPVendor\sdk;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\TRobot\Robot\inc;$(SolutionDir)\TRobot\Robot;$(SolutionDir)\TRobot\Robot\JxjVendor;$(SolutionDir)\Test\single_include;$(SolutionDir)\TRobot\Robot\DZPVendor;$(SolutionDir)\poco\Foundation\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)poco\Data\include;$(SolutionDir)poco\Foundation\include;$(SolutionDir)poco\Data\SQLite\include;$(SolutionDir)\JSON\include\rapidjson;$(SolutionDir)\bin;$(SolutionDir)\bin\poco_bin;$(SolutionDir)\dll;$(SolutionDir)\Test\single_include;$(SolutionDir)\TRobot\Robot;$(SolutionDir)\TRobot\Robot\inc;$(SolutionDir)\TRobot\Robot\Depend;$(SolutionDir)\TRobot\Robot\JxjVendor;$(SolutionDir)\TRobot\Robot\JxjVendor\sdk;$(SolutionDir)\TRobot\Robot\DHVendor;$(SolutionDir)\TRobot\Robot\DHVendor\sdk;$(SolutionDir)\TRobot\Robot\DZPVendor;$(SolutionDir)\TRobot\Robot\DZPVendor\sdk;$(SolutionDir)\TRobot\Robot\HKVendor;$(SolutionDir)\TRobot\Robot\HKVendor\sdk;$(SolutionDir)\TRobot\Robot\Network;$(SolutionDir)\TRobot\Robot\Network\wpcap;$(SolutionDir)\TRobot\Robot\Network\wpcap\pcap</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)poco\lib;$(SolutionDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)poco\lib;$(SolutionDir)\lib;$(SolutionDir)\lib\poco_lib;$(SolutionDir)\TRobot\Robot\DHVendor\sdk;$(SolutionDir)\TRobot\Robot\JxjVendor\sdk;$(SolutionDir)\TRobot\Robot\DZPVendor\sdk;$(SolutionDir)\TRobot\Robot\HKVendor\sdk;$(SolutionDir)\TRobot\Robot\HKVendor\sdk\HCNetSDKCom;$(SolutionDir)\TRobot\Robot\Network\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>wpcap.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -86,44 +87,65 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\transation\DatabaseException.h" />
     <ClInclude Include="..\..\transation\QMSqlite.h" />
+    <ClInclude Include="AcquireSerachFileData.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="DeviceManager.h" />
-    <ClInclude Include="DHVendor.h" />
-    <ClInclude Include="DH_Head.h" />
     <ClInclude Include="AbstractVendor.h" />
     <ClInclude Include="CommonUtrl.h" />
-    <ClInclude Include="DownloadTest.h" />
+    <ClInclude Include="DHVendor\DHVendor.h" />
     <ClInclude Include="DZPVendor\DZPVendor.h" />
-    <ClInclude Include="inc\AVPlayer.h" />
-    <ClInclude Include="inc\JNetSDK.h" />
-    <ClInclude Include="inc\Jtype.h" />
-    <ClInclude Include="inc\j_sdk.h" />
-    <ClInclude Include="inc\mb_api.h" />
-    <ClInclude Include="inc\stdint.h" />
     <ClInclude Include="JxjVendor\JxjVendor.h" />
-    <ClInclude Include="JxjVendor\TestWindows.h" />
-    <ClInclude Include="MyVendor.h" />
-    <ClInclude Include="RearchFile\SearchHead.h" />
-    <ClInclude Include="RearchFile\SearchVideo.h" />
+    <ClInclude Include="LoginDevice.h" />
+    <ClInclude Include="LoginException.h" />
+    <ClInclude Include="Network\netdefine.h" />
+    <ClInclude Include="Network\PING.h" />
+    <ClInclude Include="Network\portscan.h" />
+    <ClInclude Include="Network\utils.h" />
+    <ClInclude Include="PlayVideoWorker.h" />
+    <ClInclude Include="QMFileSqlite.h" />
+    <ClInclude Include="ReceiveUINotification.h" />
+    <ClInclude Include="ReciveUIQunue.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SearchDevice.h" />
+    <ClInclude Include="SearchFileNotification.h" />
+    <ClInclude Include="SearchFileWorker.h" />
+    <ClInclude Include="SearchFileException.h" />
+    <ClInclude Include="TestWindows.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\transation\DatabaseException.cpp" />
     <ClCompile Include="..\..\transation\QMSqlite.cpp" />
+    <ClCompile Include="AcquireSerachFileData.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="DeviceManager.cpp" />
-    <ClCompile Include="DHVendor.cpp" />
     <ClCompile Include="CommonUtrl.cpp" />
-    <ClCompile Include="DownloadTest.cpp" />
+    <ClCompile Include="DHVendor\DHVendor.cpp" />
     <ClCompile Include="DZPVendor\DZPVendor.cpp" />
     <ClCompile Include="JxjVendor\JxjVendor.cpp" />
-    <ClCompile Include="JxjVendor\TestWindows.cpp" />
-    <ClCompile Include="MyVendor.cpp" />
-    <ClCompile Include="RearchFile\SearchVideo.cpp" />
+    <ClCompile Include="LoginDevice.cpp" />
+    <ClCompile Include="LoginException.cpp" />
+    <ClCompile Include="Network\PING.cpp" />
+    <ClCompile Include="Network\portscan.cpp" />
+    <ClCompile Include="Network\utils.cpp" />
+    <ClCompile Include="Network\windowutils.cpp" />
+    <ClCompile Include="PlayVideoWorker.cpp" />
+    <ClCompile Include="QMFileSqlite.cpp" />
+    <ClCompile Include="ReceiveUINotification.cpp" />
+    <ClCompile Include="ReciveUIQunue.cpp" />
     <ClCompile Include="Robot.cpp" />
+    <ClCompile Include="SearchDevice.cpp" />
+    <ClCompile Include="SearchFileNotification.cpp" />
+    <ClCompile Include="SearchFileWorker.cpp" />
+    <ClCompile Include="SearchFileException.cpp" />
+    <ClCompile Include="TestWindows.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Robot.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

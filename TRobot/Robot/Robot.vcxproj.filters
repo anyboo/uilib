@@ -13,90 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\sdk">
-      <UniqueIdentifier>{90c7e9b0-d068-4e58-8a5c-0c285925c057}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\sdk">
-      <UniqueIdentifier>{e1574f80-21ee-495c-9dad-142b7709b50e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AVPlayer">
-      <UniqueIdentifier>{4de47ce6-157c-4774-b8ca-bc73238d8fc7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="JNetSDK">
-      <UniqueIdentifier>{733bac46-badc-4916-8e6f-4586ff926d2c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="inc">
-      <UniqueIdentifier>{a150abbd-936e-4897-a3b6-8cf40aaaa153}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DH_Head.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AbstractVendor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyVendor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="JxjVendor\JxjVendor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\stdint.h">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\mb_api.h">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\Jtype.h">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\j_sdk.h">
-      <Filter>inc</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\AVPlayer.h">
-      <Filter>AVPlayer</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\JNetSDK.h">
-      <Filter>JNetSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="JxjVendor\TestWindows.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DZPVendor\DZPVendor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CommonUtrl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DHVendor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\AVPlayer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\JNetSDK.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\Jtype.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\j_sdk.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\mb_api.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\stdint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DownloadTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Device.h">
@@ -108,10 +36,64 @@
     <ClInclude Include="..\..\transation\QMSqlite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RearchFile\SearchHead.h">
+    <ClInclude Include="SearchFileWorker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RearchFile\SearchVideo.h">
+    <ClInclude Include="SearchFileNotification.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AcquireSerachFileData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ReciveUIQunue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\transation\DatabaseException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DHVendor\DHVendor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestWindows.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QMFileSqlite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\netdefine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\portscan.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\PING.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchFileException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ReceiveUINotification.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JxjVendor\JxjVendor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DZPVendor\DZPVendor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayVideoWorker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -119,25 +101,7 @@
     <ClCompile Include="Robot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MyVendor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="JxjVendor\JxjVendor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="JxjVendor\TestWindows.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DZPVendor\DZPVendor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CommonUtrl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DHVendor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DownloadTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Device.cpp">
@@ -149,7 +113,64 @@
     <ClCompile Include="..\..\transation\QMSqlite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RearchFile\SearchVideo.cpp">
+    <ClCompile Include="SearchFileWorker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchFileNotification.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AcquireSerachFileData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ReciveUIQunue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\transation\DatabaseException.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DHVendor\DHVendor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestWindows.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QMFileSqlite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\portscan.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\PING.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchFileException.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginException.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ReceiveUINotification.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JxjVendor\JxjVendor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DZPVendor\DZPVendor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayVideoWorker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\windowutils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -157,5 +178,8 @@
     <ResourceCompile Include="Robot.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>
