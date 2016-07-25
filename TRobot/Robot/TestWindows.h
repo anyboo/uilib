@@ -19,7 +19,8 @@ public:
 	void HideWindow(){ ShowWindow(m_hWnd, SW_HIDE); }
 	void DisplayWindow(){ ShowWindow(m_hWnd, SW_SHOW); }
 
-private:
+//private:
+public:
 	HWND m_hWnd;
 	HINSTANCE m_hInst;
 };

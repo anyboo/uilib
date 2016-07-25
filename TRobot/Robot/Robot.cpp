@@ -143,8 +143,8 @@ TEST_CASE("This is a demo", "[demo]")
 			// 获取设备信息
 			NET_DEVICE_INFO* devInfo = devInfoList[i];
 			std::string ip(devInfo->szIp);
-			if (ip.compare("10.168.0.66") == 0)
-			//if (ip.compare("192.168.0.89") == 0)
+			//if (ip.compare("10.168.0.66") == 0)
+			if (ip.compare("192.168.0.89") == 0)
 			{
 				// 登陆设备
 				if (CLoginDevice::getInstance().Login(devInfo->pVendor, devInfo->szIp, devInfo->nPort))
@@ -152,10 +152,10 @@ TEST_CASE("This is a demo", "[demo]")
 					Device* pDev = CLoginDevice::getInstance().GetDevice(ip);
 
 					// Search File
-					int channel = 0;
+					int channel = 2;
 					time_range timeSearch;
-					timeSearch.start = 1468771200; //DZP - 1468771200  JXJ - 1469116800
-					timeSearch.end = 1468857598; //DZP - 1468857598  JXJ - 1469203199					
+					timeSearch.start = 1469116800; //DZP - 1468771200  JXJ - 1469116800
+					timeSearch.end = 1469203199; //DZP - 1468857598  JXJ - 1469203199					
 					pDev->Search(channel, timeSearch);					
 					std::vector<readSearchVideo> RSVObj;
 					std::string strSql = SELECT_ALL_SEARCH_VIDEO;
@@ -178,7 +178,7 @@ TEST_CASE("This is a demo", "[demo]")
 						while (true)
 						{
 							::Sleep(3000);
-							queuePlayVideo->enqueueNotification(new CNotificationPlayVideo(Notification_Type_Play_Video_Pos, 10));
+							//queuePlayVideo->enqueueNotification(new CNotificationPlayVideo(Notification_Type_Play_Video_Pos, 10));
 							//::Sleep(100);
 						}
 					}					
