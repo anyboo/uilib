@@ -15,12 +15,9 @@ public:
 
 	void SearchAll(const long loginHandle);
 	void Search(const long loginHandle, const size_t channel, const time_range& range);
+	void ClearLocalRecordFiles();
 	void Download(const long loginHandle, const RecordFile& file);
 	void PlayVideo(const long loginHandle, const RecordFile& file);
-// 	void Download(const long loginHandle, const size_t channel, const time_range& range);
-// 	void PlayVideo(const long loginHandle, const size_t channel, const time_range& range);
-// 	void Download(const long loginHandle, const size_t channel, const std::string& filename);
-// 	void PlayVideo(const long loginHandle, const size_t channel, const std::string& filename);
 	bool StopDownload();
 
 	void SetHWnd(const HWND& hWnd){ g_hWnd = hWnd; }
@@ -35,6 +32,7 @@ public:
 	DEVICE_INFO_LIST& GetDeviceInfoList(){ return m_listDeviceInfo; }
 	void StopSearchDevice();
 	size_t GetMaxChannel(){ return m_iMaxChannel; }
+	bool IsSearchDeviceAPIExist();
 
 	RECORD_FILE_LIST GetRecordFileList(){ return m_files; }
 
@@ -43,6 +41,7 @@ private:
 	HWND g_hWnd;
 	std::string m_sRoot;
 	NET_SDK_TYPE m_eSDKType;
+	bool m_bSearchDeviceAPI;
 
 	/* Login */
 	size_t m_iMaxChannel;
@@ -55,6 +54,7 @@ private:
 
 	/* Search */
 	RECORD_FILE_LIST m_files;
+	RECORD_FILE_LIST m_FilesChange;
 
 	//std::string m_strName;
 	//int m_dwPort;

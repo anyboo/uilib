@@ -1,13 +1,11 @@
 #ifndef __DHVENDOR_H__
 #define __DHVENDOR_H__
 
+#include "CommonUtrl.h"
+
 #include "SearchFileNotification.h"
 
 #include "Poco/NotificationQueue.h"
-
-#include "CommonUtrl.h"
-#include "SearchFileException.h"
-
 
 using Poco::NotificationQueue;
 
@@ -27,10 +25,6 @@ public:
 	void ClearLocalRecordFiles();
 	void Download(const long loginHandle, const RecordFile& file);
 	void PlayVideo(const long loginHandle, const RecordFile& file);
-// 	void Download(const long loginHandle, const size_t channel, const time_range& range);
-// 	void PlayVideo(const long loginHandle, const size_t channel, const time_range& range);
-// 	void Download(const long loginHandle, const size_t channel, const std::string& filename);
-// 	void PlayVideo(const long loginHandle, const size_t channel, const std::string& filename);
 	bool StopDownload();
 
 	void SetHWnd(const HWND& hWnd){ g_hWnd = hWnd; }
