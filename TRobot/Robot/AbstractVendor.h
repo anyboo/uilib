@@ -45,8 +45,10 @@ typedef enum
 	Notification_Type_Download_File_Process,
 	Notification_Type_Download_File_Finish,
 	Notification_Type_Download_File_Cancel,
+	Notification_Type_Play_Video_Play,
 	Notification_Type_Play_Video_Pos,
 	Notification_Type_Play_Video_Stop,
+	Notification_Type_Play_Video_Replay,
 	Notification_Type_Port_Scan_Finish,
 	Notification_Type_Exception_Login,
 
@@ -179,6 +181,7 @@ public:
 	virtual void PlayVideo(const long loginHandle, const RecordFile& file) = 0;
 	virtual void SetPlayVideoPos(int pos) = 0;
 	virtual void StopPlayVideo() = 0;
+	virtual int GetPlayVideoPos() = 0;
 
 	virtual void SetHWnd(const HWND& hWnd) = 0;
 	virtual void SetDownloadPath(const std::string& Root) = 0;

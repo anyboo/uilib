@@ -45873,3 +45873,461 @@
 2016-07-25 11:45:56	DrawFrame ret -3.
 2016-07-25 11:45:56	CJDDraw::DrawBack Lock error DDERR_INVALIDPARAMS			: One or more of the parameters passed to the method are incorrect.  
 2016-07-25 11:45:56	DrawFrame ret -3.
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-25 14:15:23 --------
+2016-07-25 14:15:23	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-25 14:15:23	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-25 14:15:23	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-25 14:15:23	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-25 14:15:23	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-25 14:15:23	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+2016-07-25 14:15:32	0 CJAVPlayer::SetCoder:jxjcodec.dll
+2016-07-25 14:15:32	0 CJAVPlayer::SetCoder OK
+2016-07-25 14:15:32	0 DecBuff()::frame lost [0]-[2455]
+2016-07-25 14:15:32	int CJDDraw::InitBackSurface 1280,720,1,0x95d27fc1...OK
+2016-07-25 14:15:32	CJDDraw::InitBackSurface m_bUseYUV=1
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-25 14:15:52 --------
+2016-07-25 14:15:52	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-25 14:15:52	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-25 14:15:52	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-25 14:15:52	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-25 14:15:52	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-25 14:15:52	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-25 14:16:20 --------
+2016-07-25 14:16:20	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-25 14:16:20	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-25 14:16:20	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-25 14:16:20	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-25 14:16:20	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-25 14:16:20	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+2016-07-25 14:16:29	0 CJAVPlayer::SetCoder:jxjcodec.dll
+2016-07-25 14:16:29	0 CJAVPlayer::SetCoder OK
+2016-07-25 14:16:29	0 DecBuff()::frame lost [0]-[2455]
+2016-07-25 14:16:29	int CJDDraw::InitBackSurface 1280,720,1,0x95d27fc1...OK
+2016-07-25 14:16:29	CJDDraw::InitBackSurface m_bUseYUV=1
+2016-07-25 14:16:36	1 CJAVPlayer::SetCoder:jxjcodec.dll
+2016-07-25 14:16:36	1 CJAVPlayer::SetCoder OK
+2016-07-25 14:16:37	1 DecBuff()::frame lost [0]-[2553]
+2016-07-25 14:16:37	int CJDDraw::InitBackSurface 1280,720,1,0x95d27fc1...OK
+2016-07-25 14:16:37	CJDDraw::InitBackSurface m_bUseYUV=1
+2016-07-25 14:16:37	1 DecBuff()::frame lost [2457]-[2554]
+2016-07-25 14:16:37	1 DecBuff()::frame lost [2458]-[2556]
+2016-07-25 14:16:37	1 DecBuff()::frame lost [2459]-[2557]
+2016-07-25 14:16:37	1 DecBuff()::frame lost [2460]-[2558]
+2016-07-25 14:16:37	1 DecBuff()::frame lost [2461]-[2559]
+2016-07-25 14:16:37	1 DecBuff()::frame lost [2462]-[2560]
+2016-07-25 14:16:37	1 DecBuff()::frame lost [2463]-[2561]
+2016-07-25 14:16:37	1 DecBuff()::frame lost [2465]-[2562]
+2016-07-25 14:16:37	1 DecBuff()::frame lost [2467]-[2564]
+2016-07-25 14:16:38	1 DecBuff()::frame lost [2469]-[2566]
+2016-07-25 14:16:38	1 DecBuff()::frame lost [2470]-[2567]
+2016-07-25 14:16:38	1 DecBuff()::frame lost [2471]-[2568]
+2016-07-25 14:16:38	1 DecBuff()::frame lost [2473]-[2570]
+2016-07-25 14:16:38	1 DecBuff()::frame lost [2474]-[2571]
+2016-07-25 14:16:38	1 DecBuff()::frame lost [2476]-[2573]
+2016-07-25 14:16:38	1 DecBuff()::frame lost [2477]-[2574]
+2016-07-25 14:16:38	1 DecBuff()::frame lost [2478]-[2575]
+2016-07-25 14:16:38	1 DecBuff()::frame lost [2479]-[2576]
+2016-07-25 14:16:38	1 DecBuff()::frame lost [2481]-[2578]
+2016-07-25 14:16:39	1 DecBuff()::frame lost [2482]-[2579]
+2016-07-25 14:16:39	1 DecBuff()::frame lost [2484]-[2581]
+2016-07-25 14:16:39	1 DecBuff()::frame lost [2486]-[2583]
+2016-07-25 14:16:39	1 DecBuff()::frame lost [2487]-[2584]
+2016-07-25 14:16:39	1 DecBuff()::frame lost [2489]-[2586]
+2016-07-25 14:16:39	1 DecBuff()::frame lost [2490]-[2587]
+2016-07-25 14:16:39	1 DecBuff()::frame lost [2491]-[2589]
+2016-07-25 14:16:39	1 DecBuff()::frame lost [2493]-[2590]
+2016-07-25 14:16:39	1 DecBuff()::frame lost [2494]-[2591]
+2016-07-25 14:16:40	1 DecBuff()::frame lost [2495]-[2592]
+2016-07-25 14:16:40	1 DecBuff()::frame lost [2497]-[2594]
+2016-07-25 14:16:40	1 DecBuff()::frame lost [2498]-[2596]
+2016-07-25 14:16:40	1 DecBuff()::frame lost [2499]-[2597]
+2016-07-25 14:16:40	1 DecBuff()::frame lost [2500]-[2598]
+2016-07-25 14:16:40	1 DecBuff()::frame lost [2501]-[2599]
+2016-07-25 14:16:40	1 DecBuff()::frame lost [2502]-[2600]
+2016-07-25 14:16:40	1 DecBuff()::frame lost [2504]-[2601]
+2016-07-25 14:16:40	1 DecBuff()::frame lost [2506]-[2603]
+2016-07-25 14:16:41	1 DecBuff()::frame lost [2508]-[2605]
+2016-07-25 14:16:41	1 DecBuff()::frame lost [2509]-[2606]
+2016-07-25 14:16:41	1 DecBuff()::frame lost [2510]-[2607]
+2016-07-25 14:16:41	1 DecBuff()::frame lost [2511]-[2608]
+2016-07-25 14:16:41	1 DecBuff()::frame lost [2513]-[2610]
+2016-07-25 14:16:41	1 DecBuff()::frame lost [2514]-[2611]
+2016-07-25 14:16:41	1 DecBuff()::frame lost [2515]-[2612]
+2016-07-25 14:16:41	1 DecBuff()::frame lost [2516]-[2613]
+2016-07-25 14:16:41	1 DecBuff()::frame lost [2517]-[2614]
+2016-07-25 14:16:41	1 DecBuff()::frame lost [2518]-[2615]
+2016-07-25 14:16:41	1 DecBuff()::frame lost [2519]-[2617]
+2016-07-25 14:16:42	1 DecBuff()::frame lost [2520]-[2618]
+2016-07-25 14:16:42	1 DecBuff()::frame lost [2521]-[2619]
+2016-07-25 14:16:42	1 DecBuff()::frame lost [2522]-[2620]
+2016-07-25 14:16:42	1 DecBuff()::frame lost [2523]-[2621]
+2016-07-25 14:16:42	1 DecBuff()::frame lost [2524]-[2622]
+2016-07-25 14:16:42	1 DecBuff()::frame lost [2525]-[2623]
+2016-07-25 14:16:42	1 DecBuff()::frame lost [2526]-[2624]
+2016-07-25 14:16:42	1 DecBuff()::frame lost [2527]-[2625]
+2016-07-25 14:16:42	1 DecBuff()::frame lost [2528]-[2626]
+2016-07-25 14:16:42	1 DecBuff()::frame lost [2530]-[2627]
+2016-07-25 14:16:42	1 DecBuff()::frame lost [2532]-[2629]
+2016-07-25 14:16:43	1 DecBuff()::frame lost [2533]-[2631]
+2016-07-25 14:16:43	1 DecBuff()::frame lost [2535]-[2632]
+2016-07-25 14:16:43	1 DecBuff()::frame lost [2536]-[2633]
+2016-07-25 14:16:43	1 DecBuff()::frame lost [2537]-[2634]
+2016-07-25 14:16:43	1 DecBuff()::frame lost [2538]-[2635]
+2016-07-25 14:16:43	1 DecBuff()::frame lost [2539]-[2636]
+2016-07-25 14:16:43	1 DecBuff()::frame lost [2540]-[2637]
+2016-07-25 14:16:43	1 DecBuff()::frame lost [2541]-[2638]
+2016-07-25 14:16:43	1 DecBuff()::frame lost [2542]-[2639]
+2016-07-25 14:16:43	1 DecBuff()::frame lost [2543]-[2640]
+2016-07-25 14:16:43	1 DecBuff()::frame lost [2544]-[2641]
+2016-07-25 14:16:43	1 DecBuff()::frame lost [2545]-[2642]
+2016-07-25 14:16:43	1 DecBuff()::frame lost [2546]-[2643]
+2016-07-25 14:16:44	1 DecBuff()::frame lost [2547]-[2644]
+2016-07-25 14:16:44	1 DecBuff()::frame lost [2548]-[2645]
+2016-07-25 14:16:44	1 DecBuff()::frame lost [2549]-[2646]
+2016-07-25 14:16:44	1 DecBuff()::frame lost [2550]-[2647]
+2016-07-25 14:16:44	1 DecBuff()::frame lost [2551]-[2648]
+2016-07-25 14:16:44	1 DecBuff()::frame lost [2552]-[2649]
+2016-07-25 14:16:44	1 DecBuff()::frame lost [2553]-[2650]
+2016-07-25 14:16:44	1 DecBuff()::frame lost [2554]-[2651]
+2016-07-25 14:16:44	1 DecBuff()::frame lost [2555]-[2652]
+2016-07-25 14:16:44	1 DecBuff()::frame lost [2556]-[2653]
+2016-07-25 14:16:44	1 DecBuff()::frame lost [2557]-[2654]
+2016-07-25 14:16:44	1 DecBuff()::frame lost [2558]-[2655]
+2016-07-25 14:16:44	1 DecBuff()::frame lost [2559]-[2656]
+2016-07-25 14:16:45	1 DecBuff()::frame lost [2560]-[2657]
+2016-07-25 14:16:45	1 DecBuff()::frame lost [2561]-[2658]
+2016-07-25 14:16:45	1 DecBuff()::frame lost [2562]-[2659]
+2016-07-25 14:16:45	1 DecBuff()::frame lost [2563]-[2660]
+2016-07-25 14:16:45	1 DecBuff()::frame lost [2564]-[2661]
+2016-07-25 14:16:45	1 DecBuff()::frame lost [2565]-[2662]
+2016-07-25 14:16:45	1 DecBuff()::frame lost [2566]-[2663]
+2016-07-25 14:16:45	1 DecBuff()::frame lost [2567]-[2664]
+2016-07-25 14:16:45	1 DecBuff()::frame lost [2568]-[2665]
+2016-07-25 14:16:45	1 DecBuff()::frame lost [2569]-[2666]
+2016-07-25 14:16:45	1 DecBuff()::frame lost [2570]-[2667]
+2016-07-25 14:16:45	1 DecBuff()::frame lost [2571]-[2668]
+2016-07-25 14:16:46	1 DecBuff()::frame lost [2572]-[2669]
+2016-07-25 14:16:46	1 DecBuff()::frame lost [2573]-[2670]
+2016-07-25 14:16:46	1 DecBuff()::frame lost [2574]-[2671]
+2016-07-25 14:16:46	1 DecBuff()::frame lost [2575]-[2672]
+2016-07-25 14:16:46	1 DecBuff()::frame lost [2576]-[2673]
+2016-07-25 14:16:46	1 DecBuff()::frame lost [2578]-[2675]
+2016-07-25 14:16:46	1 DecBuff()::frame lost [2579]-[2676]
+2016-07-25 14:16:46	1 DecBuff()::frame lost [2581]-[2678]
+2016-07-25 14:16:46	1 DecBuff()::frame lost [2582]-[2679]
+2016-07-25 14:16:46	1 DecBuff()::frame lost [2584]-[2681]
+2016-07-25 14:16:47	1 DecBuff()::frame lost [2585]-[2683]
+2016-07-25 14:16:47	1 DecBuff()::frame lost [2587]-[2684]
+2016-07-25 14:16:47	1 DecBuff()::frame lost [2588]-[2685]
+2016-07-25 14:16:47	1 DecBuff()::frame lost [2590]-[2687]
+2016-07-25 14:16:47	1 DecBuff()::frame lost [2591]-[2688]
+2016-07-25 14:16:47	1 DecBuff()::frame lost [2592]-[2689]
+2016-07-25 14:16:47	1 DecBuff()::frame lost [2593]-[2690]
+2016-07-25 14:16:47	1 DecBuff()::frame lost [2594]-[2691]
+2016-07-25 14:16:47	1 DecBuff()::frame lost [2595]-[2692]
+2016-07-25 14:16:47	1 DecBuff()::frame lost [2596]-[2693]
+2016-07-25 14:16:47	1 DecBuff()::frame lost [2597]-[2694]
+2016-07-25 14:16:47	1 DecBuff()::frame lost [2598]-[2695]
+2016-07-25 14:16:48	1 DecBuff()::frame lost [2599]-[2696]
+2016-07-25 14:16:48	1 DecBuff()::frame lost [2600]-[2697]
+2016-07-25 14:16:48	1 DecBuff()::frame lost [2601]-[2698]
+2016-07-25 14:16:48	1 DecBuff()::frame lost [2602]-[2699]
+2016-07-25 14:16:48	1 DecBuff()::frame lost [2603]-[2700]
+2016-07-25 14:16:48	1 DecBuff()::frame lost [2604]-[2701]
+2016-07-25 14:16:48	1 DecBuff()::frame lost [2605]-[2702]
+2016-07-25 14:16:48	1 DecBuff()::frame lost [2606]-[2703]
+2016-07-25 14:16:48	1 DecBuff()::frame lost [2607]-[2704]
+2016-07-25 14:16:48	1 DecBuff()::frame lost [2608]-[2705]
+2016-07-25 14:16:48	1 DecBuff()::frame lost [2609]-[2706]
+2016-07-25 14:16:48	1 DecBuff()::frame lost [2610]-[2707]
+2016-07-25 14:16:48	1 DecBuff()::frame lost [2611]-[2708]
+2016-07-25 14:16:49	1 DecBuff()::frame lost [2612]-[2709]
+2016-07-25 14:16:49	1 DecBuff()::frame lost [2613]-[2710]
+2016-07-25 14:16:49	1 DecBuff()::frame lost [2614]-[2711]
+2016-07-25 14:16:49	1 DecBuff()::frame lost [2615]-[2712]
+2016-07-25 14:16:49	1 DecBuff()::frame lost [2616]-[2713]
+2016-07-25 14:16:49	1 DecBuff()::frame lost [2617]-[2714]
+2016-07-25 14:16:49	1 DecBuff()::frame lost [2618]-[2715]
+2016-07-25 14:16:49	1 DecBuff()::frame lost [2619]-[2716]
+2016-07-25 14:16:49	1 DecBuff()::frame lost [2620]-[2717]
+2016-07-25 14:16:49	1 DecBuff()::frame lost [2621]-[2718]
+2016-07-25 14:16:49	1 DecBuff()::frame lost [2622]-[2719]
+2016-07-25 14:16:49	1 DecBuff()::frame lost [2623]-[2720]
+2016-07-25 14:16:49	1 DecBuff()::frame lost [2624]-[2721]
+2016-07-25 14:16:50	1 DecBuff()::frame lost [2625]-[2722]
+2016-07-25 14:16:50	1 DecBuff()::frame lost [2626]-[2723]
+2016-07-25 14:16:50	1 DecBuff()::frame lost [2627]-[2724]
+2016-07-25 14:16:50	1 DecBuff()::frame lost [2628]-[2725]
+2016-07-25 14:16:50	1 DecBuff()::frame lost [2629]-[2726]
+2016-07-25 14:16:50	1 DecBuff()::frame lost [2630]-[2727]
+2016-07-25 14:16:50	1 DecBuff()::frame lost [2632]-[2729]
+2016-07-25 14:16:50	1 DecBuff()::frame lost [2634]-[2731]
+2016-07-25 14:16:50	1 DecBuff()::frame lost [2635]-[2732]
+2016-07-25 14:16:50	1 DecBuff()::frame lost [2636]-[2733]
+2016-07-25 14:16:51	1 DecBuff()::frame lost [2637]-[2735]
+2016-07-25 14:16:51	1 DecBuff()::frame lost [2638]-[2736]
+2016-07-25 14:16:51	1 DecBuff()::frame lost [2639]-[2737]
+2016-07-25 14:16:51	1 DecBuff()::frame lost [2640]-[2738]
+2016-07-25 14:16:51	1 DecBuff()::frame lost [2641]-[2739]
+2016-07-25 14:16:51	1 DecBuff()::frame lost [2642]-[2740]
+2016-07-25 14:16:51	1 DecBuff()::frame lost [2643]-[2741]
+2016-07-25 14:16:51	1 DecBuff()::frame lost [2644]-[2742]
+2016-07-25 14:16:51	1 DecBuff()::frame lost [2645]-[2743]
+2016-07-25 14:16:51	1 DecBuff()::frame lost [2646]-[2744]
+2016-07-25 14:16:51	1 DecBuff()::frame lost [2647]-[2745]
+2016-07-25 14:16:51	1 DecBuff()::frame lost [2648]-[2746]
+2016-07-25 14:16:51	1 DecBuff()::frame lost [2649]-[2747]
+2016-07-25 14:16:52	1 DecBuff()::frame lost [2651]-[2748]
+2016-07-25 14:16:52	1 DecBuff()::frame lost [2652]-[2749]
+2016-07-25 14:16:52	1 DecBuff()::frame lost [2653]-[2750]
+2016-07-25 14:16:52	1 DecBuff()::frame lost [2654]-[2752]
+2016-07-25 14:16:52	1 DecBuff()::frame lost [2656]-[2753]
+2016-07-25 14:16:52	1 DecBuff()::frame lost [2657]-[2754]
+2016-07-25 14:16:52	1 DecBuff()::frame lost [2659]-[2756]
+2016-07-25 14:16:52	1 DecBuff()::frame lost [2661]-[2758]
+2016-07-25 14:16:52	1 DecBuff()::frame lost [2663]-[2760]
+2016-07-25 14:16:53	1 DecBuff()::frame lost [2664]-[2761]
+2016-07-25 14:16:53	1 DecBuff()::frame lost [2665]-[2762]
+2016-07-25 14:16:53	1 DecBuff()::frame lost [2666]-[2763]
+2016-07-25 14:16:53	1 DecBuff()::frame lost [2667]-[2764]
+2016-07-25 14:16:53	1 DecBuff()::frame lost [2668]-[2765]
+2016-07-25 14:16:53	1 DecBuff()::frame lost [2669]-[2766]
+2016-07-25 14:16:53	1 DecBuff()::frame lost [2670]-[2768]
+2016-07-25 14:16:53	1 DecBuff()::frame lost [2671]-[2769]
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-25 14:17:00 --------
+2016-07-25 14:17:00	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-25 14:17:00	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-25 14:17:00	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-25 14:17:00	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-25 14:17:00	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-25 14:17:00	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+2016-07-25 14:17:11	0 CJAVPlayer::SetCoder:jxjcodec.dll
+2016-07-25 14:17:11	0 CJAVPlayer::SetCoder OK
+2016-07-25 14:17:11	0 DecBuff()::frame lost [0]-[2455]
+2016-07-25 14:17:11	int CJDDraw::InitBackSurface 1280,720,1,0x95d27fc1...OK
+2016-07-25 14:17:11	CJDDraw::InitBackSurface m_bUseYUV=1
+2016-07-25 14:17:16	1 CJAVPlayer::SetCoder:jxjcodec.dll
+2016-07-25 14:17:16	1 CJAVPlayer::SetCoder OK
+2016-07-25 14:17:16	1 DecBuff()::frame lost [0]-[2455]
+2016-07-25 14:17:16	int CJDDraw::InitBackSurface 1280,720,1,0x95d27fc1...OK
+2016-07-25 14:17:16	CJDDraw::InitBackSurface m_bUseYUV=1
+2016-07-25 14:17:16	1 DecBuff()::frame lost [2456]-[2523]
+2016-07-25 14:17:16	1 DecBuff()::frame lost [2457]-[2524]
+2016-07-25 14:17:16	1 DecBuff()::frame lost [2458]-[2525]
+2016-07-25 14:17:16	1 DecBuff()::frame lost [2459]-[2526]
+2016-07-25 14:17:16	1 DecBuff()::frame lost [2460]-[2527]
+2016-07-25 14:17:16	1 DecBuff()::frame lost [2461]-[2528]
+2016-07-25 14:17:16	1 DecBuff()::frame lost [2462]-[2529]
+2016-07-25 14:17:17	1 DecBuff()::frame lost [2463]-[2530]
+2016-07-25 14:17:17	1 DecBuff()::frame lost [2465]-[2532]
+2016-07-25 14:17:17	1 DecBuff()::frame lost [2466]-[2533]
+2016-07-25 14:17:17	1 DecBuff()::frame lost [2467]-[2534]
+2016-07-25 14:17:17	1 DecBuff()::frame lost [2468]-[2535]
+2016-07-25 14:17:17	1 DecBuff()::frame lost [2469]-[2536]
+2016-07-25 14:17:17	1 DecBuff()::frame lost [2470]-[2537]
+2016-07-25 14:17:17	1 DecBuff()::frame lost [2471]-[2538]
+2016-07-25 14:17:17	1 DecBuff()::frame lost [2472]-[2539]
+2016-07-25 14:17:17	1 DecBuff()::frame lost [2473]-[2540]
+2016-07-25 14:17:17	1 DecBuff()::frame lost [2474]-[2541]
+2016-07-25 14:17:17	1 DecBuff()::frame lost [2475]-[2542]
+2016-07-25 14:17:18	1 DecBuff()::frame lost [2476]-[2543]
+2016-07-25 14:17:18	1 DecBuff()::frame lost [2477]-[2544]
+2016-07-25 14:17:18	1 DecBuff()::frame lost [2478]-[2545]
+2016-07-25 14:17:18	1 DecBuff()::frame lost [2479]-[2546]
+2016-07-25 14:17:18	1 DecBuff()::frame lost [2480]-[2547]
+2016-07-25 14:17:18	1 DecBuff()::frame lost [2481]-[2548]
+2016-07-25 14:17:18	1 DecBuff()::frame lost [2482]-[2549]
+2016-07-25 14:17:18	1 DecBuff()::frame lost [2483]-[2550]
+2016-07-25 14:17:18	1 DecBuff()::frame lost [2484]-[2551]
+2016-07-25 14:17:18	1 DecBuff()::frame lost [2485]-[2552]
+2016-07-25 14:17:18	1 DecBuff()::frame lost [2486]-[2553]
+2016-07-25 14:17:18	1 DecBuff()::frame lost [2488]-[2554]
+2016-07-25 14:17:19	1 DecBuff()::frame lost [2489]-[2556]
+2016-07-25 14:17:19	1 DecBuff()::frame lost [2490]-[2557]
+2016-07-25 14:17:19	1 DecBuff()::frame lost [2491]-[2558]
+2016-07-25 14:17:19	1 DecBuff()::frame lost [2493]-[2559]
+2016-07-25 14:17:19	1 DecBuff()::frame lost [2494]-[2560]
+2016-07-25 14:17:19	1 DecBuff()::frame lost [2495]-[2562]
+2016-07-25 14:17:19	1 DecBuff()::frame lost [2497]-[2563]
+2016-07-25 14:17:19	1 DecBuff()::frame lost [2498]-[2565]
+2016-07-25 14:17:19	1 DecBuff()::frame lost [2500]-[2566]
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-25 14:17:41 --------
+2016-07-25 14:17:41	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-25 14:17:41	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-25 14:17:41	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-25 14:17:41	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-25 14:17:41	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-25 14:17:41	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+2016-07-25 14:17:50	0 CJAVPlayer::SetCoder:jxjcodec.dll
+2016-07-25 14:17:50	0 CJAVPlayer::SetCoder OK
+2016-07-25 14:17:50	0 DecBuff()::frame lost [0]-[2455]
+2016-07-25 14:17:50	int CJDDraw::InitBackSurface 1280,720,1,0x95d27fc1...OK
+2016-07-25 14:17:50	CJDDraw::InitBackSurface m_bUseYUV=1
+2016-07-25 14:17:54	0 CJAVPlayer::Stop().
+2016-07-25 14:17:55	0 CJAVPlayer::SetCoder:jxjcodec.dll
+2016-07-25 14:17:55	0 CJAVPlayer::SetCoder OK
+2016-07-25 14:17:55	0 DecBuff()::frame lost [0]-[2455]
+2016-07-25 14:17:55	int CJDDraw::InitBackSurface 1280,720,1,0x95d27fc1...OK
+2016-07-25 14:17:55	CJDDraw::InitBackSurface m_bUseYUV=1
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-25 14:18:15 --------
+2016-07-25 14:18:15	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-25 14:18:15	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-25 14:18:15	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-25 14:18:15	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-25 14:18:15	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-25 14:18:15	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+2016-07-25 14:18:27	0 CJAVPlayer::SetCoder:jxjcodec.dll
+2016-07-25 14:18:27	0 CJAVPlayer::SetCoder OK
+2016-07-25 14:18:27	0 DecBuff()::frame lost [0]-[2455]
+2016-07-25 14:18:27	int CJDDraw::InitBackSurface 1280,720,1,0x95d27fc1...OK
+2016-07-25 14:18:27	CJDDraw::InitBackSurface m_bUseYUV=1
+2016-07-25 14:18:31	0 CJAVPlayer::Stop().
+2016-07-25 14:18:32	0 CJAVPlayer::SetCoder:jxjcodec.dll
+2016-07-25 14:18:32	0 CJAVPlayer::SetCoder OK
+2016-07-25 14:18:32	0 DecBuff()::frame lost [0]-[2455]
+2016-07-25 14:18:32	int CJDDraw::InitBackSurface 1280,720,1,0x95d27fc1...OK
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-25 14:19:01 --------
+2016-07-25 14:19:01	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-25 14:19:01	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-25 14:19:01	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-25 14:19:01	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-25 14:19:01	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-25 14:19:01	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+2016-07-25 14:19:09	0 CJAVPlayer::SetCoder:jxjcodec.dll
+2016-07-25 14:19:09	0 CJAVPlayer::SetCoder OK
+2016-07-25 14:19:09	0 DecBuff()::frame lost [0]-[2455]
+2016-07-25 14:19:09	int CJDDraw::InitBackSurface 1280,720,1,0x95d27fc1...OK
+2016-07-25 14:19:09	CJDDraw::InitBackSurface m_bUseYUV=1
+2016-07-25 14:19:13	0 CJAVPlayer::Stop().
+2016-07-25 14:19:14	0 CJAVPlayer::SetCoder:jxjcodec.dll
+2016-07-25 14:19:14	0 CJAVPlayer::SetCoder OK
+2016-07-25 14:19:14	0 DecBuff()::frame lost [0]-[2455]
+2016-07-25 14:19:14	int CJDDraw::InitBackSurface 1280,720,1,0x95d27fc1...OK
+2016-07-25 14:19:14	CJDDraw::InitBackSurface m_bUseYUV=1
+2016-07-25 14:19:18	0 CJAVPlayer::Stop().
+2016-07-25 14:19:19	0 CJAVPlayer::SetCoder:jxjcodec.dll
+2016-07-25 14:19:19	0 CJAVPlayer::SetCoder OK
+2016-07-25 14:19:19	0 DecBuff()::frame lost [0]-[2455]
+2016-07-25 14:19:19	int CJDDraw::InitBackSurface 1280,720,1,0x95d27fc1...OK
+2016-07-25 14:19:19	CJDDraw::InitBackSurface m_bUseYUV=1
+2016-07-25 14:19:23	0 CJAVPlayer::Stop().
+2016-07-25 14:19:24	0 CJAVPlayer::SetCoder:jxjcodec.dll
+2016-07-25 14:19:24	0 CJAVPlayer::SetCoder OK
+2016-07-25 14:19:24	0 DecBuff()::frame lost [0]-[2455]
+2016-07-25 14:19:24	int CJDDraw::InitBackSurface 1280,720,1,0x95d27fc1...OK
+2016-07-25 14:19:24	CJDDraw::InitBackSurface m_bUseYUV=1
+2016-07-25 14:19:28	0 CJAVPlayer::Stop().
+2016-07-25 14:19:29	0 CJAVPlayer::SetCoder:jxjcodec.dll
+2016-07-25 14:19:29	0 CJAVPlayer::SetCoder OK
+2016-07-25 14:19:29	0 DecBuff()::frame lost [0]-[2455]
+2016-07-25 14:19:29	int CJDDraw::InitBackSurface 1280,720,1,0x95d27fc1...OK
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-25 15:26:58 --------
+2016-07-25 15:26:58	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-25 15:26:58	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-25 15:26:58	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-25 15:26:58	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-25 15:26:58	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-25 15:26:58	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+2016-07-25 15:27:06	0 CJAVPlayer::SetCoder:jxjcodec.dll
+2016-07-25 15:27:06	0 CJAVPlayer::SetCoder OK
+2016-07-25 15:27:06	0 DecBuff()::frame lost [0]-[2455]
+2016-07-25 15:27:06	int CJDDraw::InitBackSurface 1280,720,1,0x95d27fc1...OK
+2016-07-25 15:27:06	CJDDraw::InitBackSurface m_bUseYUV=1
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-25 15:27:27 --------
+2016-07-25 15:27:27	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-25 15:27:27	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-25 15:27:27	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-25 15:27:27	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-25 15:27:27	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-25 15:27:27	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+2016-07-25 15:27:35	0 CJAVPlayer::SetCoder:jxjcodec.dll
+2016-07-25 15:27:35	0 CJAVPlayer::SetCoder OK
+2016-07-25 15:27:35	0 DecBuff()::frame lost [0]-[2455]
+2016-07-25 15:27:35	int CJDDraw::InitBackSurface 1280,720,1,0x95d27fc1...OK
+2016-07-25 15:27:35	CJDDraw::InitBackSurface m_bUseYUV=1
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-25 15:29:12 --------
+2016-07-25 15:29:12	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-25 15:29:12	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-25 15:29:12	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-25 15:29:12	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-25 15:29:12	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-25 15:29:12	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+2016-07-25 15:29:20	0 CJAVPlayer::SetCoder:jxjcodec.dll
+2016-07-25 15:29:20	0 CJAVPlayer::SetCoder OK
+2016-07-25 15:29:20	0 DecBuff()::frame lost [0]-[2455]
+2016-07-25 15:29:20	int CJDDraw::InitBackSurface 1280,720,1,0x95d27fc1...OK
+2016-07-25 15:29:20	CJDDraw::InitBackSurface m_bUseYUV=1
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-25 15:30:28 --------
+2016-07-25 15:30:28	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-25 15:30:28	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-25 15:30:28	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-25 15:30:28	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-25 15:30:28	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-25 15:30:28	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-25 15:32:28 --------
+2016-07-25 15:32:28	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-25 15:32:28	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-25 15:32:28	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-25 15:32:28	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-25 15:32:28	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-25 15:32:28	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-25 15:32:49 --------
+2016-07-25 15:32:49	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-25 15:32:49	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-25 15:32:49	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-25 15:32:49	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-25 15:32:49	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-25 15:32:49	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-25 15:33:40 --------
+2016-07-25 15:33:40	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-25 15:33:40	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-25 15:33:40	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-25 15:33:40	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-25 15:33:40	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-25 15:33:40	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-25 15:37:32 --------
+2016-07-25 15:37:32	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-25 15:37:32	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-25 15:37:32	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-25 15:37:32	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-25 15:37:32	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-25 15:37:32	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}
+
+
+-------- .\Log\JAVDec.txt Create by JXJ at 2016-07-25 15:40:09 --------
+2016-07-25 15:40:09	CAVMng::DDEnumCallbackEx Intel(R) HD Graphics 4600 -- \\.\DISPLAY1
+2016-07-25 15:40:09	CAVMng::DSInEnumCallback 主声音捕获驱动程序 -- 
+2016-07-25 15:40:09	CAVMng::DSInEnumCallback 麦克风 (Realtek High Definition Au -- {0.0.1.00000000}.{44c94a79-5d82-401c-8fc8-85fd0df692c9}
+2016-07-25 15:40:09	CAVMng::DSOutEnumCallback 主声音驱动程序 -- 
+2016-07-25 15:40:09	CAVMng::DSOutEnumCallback 扬声器 (Realtek High Definition Audio) -- {0.0.0.00000000}.{104aadba-7ed0-4ada-be03-b79d5f782b59}
+2016-07-25 15:40:09	CAVMng::DSOutEnumCallback Realtek Digital Output (Realtek High Definition Audio) -- {0.0.0.00000000}.{a7c12847-651c-41c0-b84d-82f56391c408}

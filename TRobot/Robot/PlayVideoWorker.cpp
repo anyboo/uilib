@@ -22,7 +22,15 @@ void CPlayVideoWorker::run()
 
 	for (;;)
 	{
-		::Sleep(100);
+		::Sleep(1000);
+
+		int pos = m_pDev->GetPlayVideoPos();
+		NotificationQueue& queue = NotificationQueue::defaultQueue();
+		queue.enqueueNotification(new CNotificationPlayVideo(Notification_Type_Play_Video_Play, pos));
+
+		std::cout << "pos : " << pos << "\tTotalTime : " << m_file.endTime - m_file.beginTime << std::endl;
+
+
 		if (!m_queue.empty())
 		{
 			Notification::Ptr pNf(m_queue.waitDequeueNotification());
@@ -41,6 +49,12 @@ void CPlayVideoWorker::run()
 						FastMutex::ScopedLock lock(m_mutex);
 						m_pDev->StopPlayVideo();
 						break;
+					}
+					else if (pPlayVideoNf->GetNotificationType() == Notification_Type_Play_Video_Replay)
+					{
+						FastMutex::ScopedLock lock(m_mutex);
+						m_pDev->StopPlayVideo();
+						m_pDev->PlayVideo(m_hWnd, m_file);
 					}
 				}
 			}

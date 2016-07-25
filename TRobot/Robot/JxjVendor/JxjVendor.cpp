@@ -118,6 +118,7 @@ CJXJVendor::CJXJVendor()
 	m_iDefPort = 3321;
 	m_iMaxChannel = 0;
 	m_lSearchDeviceHandle = -1;
+	m_iPlayVideoPos = 0;
 }
 
 CJXJVendor::~CJXJVendor()
@@ -314,6 +315,8 @@ void CJXJVendor::Download(const long loginHandle, const RecordFile& file)
 }
 void CJXJVendor::PlayVideo(const long loginHandle, const RecordFile& file)
 {
+	m_filePlay = file;
+
 	// Init File Starttime and Endtime
 	std::string strTimeStart;
 	std::string strTimeEnd;
@@ -703,11 +706,16 @@ int __stdcall JXJ_SDK_INTERFACE::JXJ_JRecStream(long lHandle, LPBYTE pBuff, DWOR
 {
 	j_frame_t *pFrame = (j_frame_t *)pBuff;
 
+	CJXJVendor* jxjVendor = (CJXJVendor*)pUserParam;
+
 	char cPlayInfo[100];
-	sprintf_s(cPlayInfo, 100, "Play Video - %d\t%d\r\n", pFrame->timestamp_sec, pFrame->timestamp_usec);
-	std::cout << cPlayInfo << std::endl;
+	sprintf_s(cPlayInfo, 100, "Play Video - %d", pFrame->timestamp_sec);
+	//std::cout << cPlayInfo << std::endl;
 
 	AVP_PutFrame(m_iPlayVideoChannel, pBuff);
+
+	int pos = pFrame->timestamp_sec * 100 / (jxjVendor->GetPlayFile().endTime - jxjVendor->GetPlayFile().beginTime);
+	jxjVendor->SetPlayVideoPosSub(pos);
 
 	return 0;
 }

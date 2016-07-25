@@ -130,6 +130,7 @@ CDZPVendor::CDZPVendor()
 	m_iDefPort = 34567;
 	m_iMaxChannel = 0;
 	m_lSearchDeviceHandle = -1;
+	m_iPlayVideoPos = 0;
 }
 
 CDZPVendor::~CDZPVendor()
@@ -349,6 +350,12 @@ void CDZPVendor::StopPlayVideo()
 {
 	H264_DVR_StopPlayBack(DZP_SDK_INTERFACE::m_playbackHandle);
 }
+int CDZPVendor::GetPlayVideoPos()
+{
+	m_iPlayVideoPos = H264_DVR_GetPlayPos(DZP_SDK_INTERFACE::m_playbackHandle);
+
+	return m_iPlayVideoPos;
+}
 
 void CDZPVendor::SetDownloadPath(const std::string& Root)
 {
@@ -463,8 +470,6 @@ H264_DVR_FILE_DATA DZP_SDK_INTERFACE::DZP_MakeRecordFileToH264Data(const RecordF
 	h264_file.ch = file.channel;
 	h264_file.size = file.size;
 	strcpy(h264_file.sFileName, file.name.c_str());
-	//memcpy(h264_file.sFileName, file.name.c_str(), file.name.length());
-	//file.name.copy(h264_file.sFileName, file.name.length(), 0);
 
 	struct tm *ttime;
 	H264_DVR_TIME h264_time;

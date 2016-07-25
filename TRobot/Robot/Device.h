@@ -46,6 +46,7 @@ public:
 	bool StopDownload(){ assert(m_pVendor); return m_pVendor->StopDownload(); }
 	void SetPlayVideoPos(int pos){ assert(m_pVendor); m_pVendor->SetPlayVideoPos(pos); }
 	void StopPlayVideo(){ assert(m_pVendor); m_pVendor->StopPlayVideo(); }
+	int GetPlayVideoPos(){ assert(m_pVendor); return m_pVendor->GetPlayVideoPos(); }
 
 	// Device Search Model
 	void StartSearchDevice();
